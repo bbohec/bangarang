@@ -1,1 +1,0 @@
-{"version":3,"file":"retreiveBallotBySubject.js","sourceRoot":"","sources":["../../../src/core/usecases/retreiveBallotBySubject.ts"],"names":[],"mappings":";;;AAAA,6DAA0D;AAI7C,QAAA,uBAAuB,GAAG,CAAC,OAAc,EAAS,EAAE;IAC7D,IAAI,CAAC,6BAAa,CAAC,aAAa,CAAC,OAAO,CAAC;QAAE,6BAAa,CAAC,cAAc,CAAC,OAAO,CAAC,CAAC;IACjF,OAAO,EAAE,OAAO,EAAE,CAAC;AACvB,CAAC,CAAA"}
