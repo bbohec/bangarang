@@ -1,0 +1,1 @@
+Bangarang allows people to vote.
