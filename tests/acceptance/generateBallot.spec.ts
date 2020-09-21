@@ -13,14 +13,14 @@ Feature : Retreive Ballot
 =====================`, () => {
     describe(`Scenario: Retreive a ballot that doesn't exist`, () => {
         const subject = "US Presidentials 99999"
-        const individualName = "Bob"
+        const individualIdentifier = "Bob"
         it(`Given the ballot with subject '${subject}' doesn't exist`, () => {
             expect(ballotFactory.isBallotExist(subject)).is.false
         })
         let ballot: Ballot;
-        it(`When the individual nammed '${individualName}' want to retreive the ballot with the subject '${subject}'`, (done) => {
-            const individual = new individualFactory(fakeIndividualRepository).retreiveIndividual(individualName)
-            expect(individual.identifier).equal(individualName)
+        it(`When the individual identified by '${individualIdentifier}' want to retreive the ballot with the subject '${subject}'`, (done) => {
+            const individual = new individualFactory(fakeIndividualRepository).retreiveIndividual(individualIdentifier)
+            expect(individual.identifier).equal(individualIdentifier)
             ballot = individual.individualUseCases.retreiveBallotBySubject(subject)
             done()
         })
