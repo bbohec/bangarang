@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "mocha tests/**/*.spec.ts"
+    "test": "mocha src/tests/**/*.spec.ts"
   },
   "repository": {
     "type": "git",

@@ -1,10 +1,11 @@
 import "mocha"
 import chai = require("chai");
-import { individualFactory } from "../../src/core/entities/individualFactory";
-import { ballotFactory } from "../../src/core/entities/ballotFactory";
-import { fakeIndividualRepository } from "../../src/adapters/secondary/fakeIndividualRepository"
-import { Ballot } from "../../src/core/ports/Ballot";
 const expect = chai.expect;
+import { FakeIdentityProvider } from "../../adapters/secondary/FakeIdentityProvider"
+import { Ballot } from "../../core/ports/Ballot";
+import { UserServiceProvider } from "../../core/serviceProviders/UserServiceProvider";
+import { BallotServiceProvider } from "../../core/serviceProviders/BallotServiceProvider";
+import { FakeBallotRepositoryInteractor } from "../../adapters/secondary/FakeBallotProvider";
 describe(`=====================
 Feature : Retreive Ballot
     As an individual,
@@ -13,15 +14,17 @@ Feature : Retreive Ballot
 =====================`, () => {
     describe(`Scenario: Retreive a ballot that doesn't exist`, () => {
         const subject = "US Presidentials 99999"
-        const individualIdentifier = "Bob"
+        const individualIdentifier = "user65563563453"
+        const ballotFactory = new BallotServiceProvider(new FakeBallotRepositoryInteractor([]));
+        const userServiceProvider = new UserServiceProvider(new FakeIdentityProvider([{identifier:"user65563563453"}]),ballotFactory)
         it(`Given the ballot with subject '${subject}' doesn't exist`, () => {
             expect(ballotFactory.isBallotExist(subject)).is.false
         })
         let ballot: Ballot;
         it(`When the individual identified by '${individualIdentifier}' want to retreive the ballot with the subject '${subject}'`, (done) => {
-            const individual = new individualFactory(fakeIndividualRepository).retreiveIndividual(individualIdentifier)
-            expect(individual.identifier).equal(individualIdentifier)
-            ballot = individual.individualUseCases.retreiveBallotBySubject(subject)
+            const user = userServiceProvider.retreiveIndividual(individualIdentifier)
+            expect(user.individual.identifier).equal(individualIdentifier)
+            ballot = user.useCases.retreiveBallotBySubject(subject)
             done()
         })
         it(`Then the ballot with subject '${subject}' exist`, () => {
