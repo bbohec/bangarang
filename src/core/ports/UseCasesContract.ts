@@ -1,5 +1,5 @@
 import { BallotServiceProvider } from "../serviceProviders/BallotServiceProvider";
-import { Ballot } from "./Ballot";
+import { BallotContract } from "./BallotContract";
 export interface UseCasesContract {
-    retreiveBallotBySubject(subject: string): Ballot;
+    retreiveBallotBySubject(subject: string): BallotContract;
 }

@@ -1,12 +1,10 @@
 import "mocha"
 import chai = require("chai");
 const expect = chai.expect;
-import { userDontExist } from "../../core/ports/Errors";
+import { Bangarang } from "../../adapters/primary/Bangarang";
 import { FakeIdentityProvider } from "../../adapters/secondary/FakeIdentityProvider";
 import { FakeBallotRepositoryInteractor } from "../../adapters/secondary/FakeBallotProvider";
-import { Bangarang } from "../../adapters/primary/Bangarang";
-
-
+import { userDontExist } from "../../core/ports/Errors";
 describe(`=====================
 Feature : Identify individual as User.
     As an individual,

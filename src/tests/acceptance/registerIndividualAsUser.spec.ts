@@ -1,12 +1,11 @@
 import "mocha"
 import chai = require("chai");
+const expect = chai.expect;
+import { Bangarang } from "../../adapters/primary/Bangarang";
 import { FakeIdentityProvider } from "../../adapters/secondary/FakeIdentityProvider"
-import { Ballot } from "../../core/ports/Ballot";
-import { UserServiceProvider } from "../../core/serviceProviders/UserServiceProvider";
-import { BallotServiceProvider } from "../../core/serviceProviders/BallotServiceProvider";
 import { FakeBallotRepositoryInteractor } from "../../adapters/secondary/FakeBallotProvider";
 import { userDontExist } from "../../core/ports/Errors";
-const expect = chai.expect;
+import { individualAlreadySubscribed } from "../../core/ports/individualAlreadySubscribed";
 describe(`=====================
 Feature : Register individual as User.
     As an individual,
@@ -15,35 +14,28 @@ Feature : Register individual as User.
 =====================`, () => {
     describe(`Scenario: Suscribe as a new user.`, () => {
         const individualIdentifier = "John Doe"
-        const userServiceProvider = new UserServiceProvider(new FakeIdentityProvider([]),new BallotServiceProvider(new FakeBallotRepositoryInteractor([])))
+        const bangarang = new Bangarang(new FakeIdentityProvider([]),new FakeBallotRepositoryInteractor([]))
         it(`Given the individual identified by '${individualIdentifier}' don't exist on user service provider.'`, () => {
-            expect(()=>userServiceProvider.retreiveIndividual(individualIdentifier).individual.identifier).to.throw(userDontExist(individualIdentifier))
+            expect(()=>bangarang.userServiceProvider.retreiveIndividual(individualIdentifier).individual.identifier).to.throw(userDontExist(individualIdentifier))
         })
         it(`When the individual identified by '${individualIdentifier}' subscribe to the service.'`, (done) => {
-            userServiceProvider.suscribeIndividual(individualIdentifier)
+            bangarang.userServiceProvider.suscribeIndividual(individualIdentifier)
             done()
         })
         it(`Then the individual identified by '${individualIdentifier}' exist on user service provider.'`, () => {
-            const userServiceProvider = new UserServiceProvider(new FakeIdentityProvider([{identifier:individualIdentifier}]),new BallotServiceProvider(new FakeBallotRepositoryInteractor([])))
-            expect(userServiceProvider.retreiveIndividual(individualIdentifier).individual.identifier).equal(individualIdentifier)
+            expect(bangarang.userServiceProvider.retreiveIndividual(individualIdentifier).individual.identifier).equal(individualIdentifier)
         })
     })
     describe(`Scenario: Cannot suscribe. User already exist.`, () => {
         const individualIdentifier = "John Doe"
-        const userServiceProvider = new UserServiceProvider(new FakeIdentityProvider([{identifier:individualIdentifier}]),new BallotServiceProvider(new FakeBallotRepositoryInteractor([])))
+        const bangarang = new Bangarang(new FakeIdentityProvider([{identifier:individualIdentifier}]),new FakeBallotRepositoryInteractor([]))
         it(`Given the individual identified by '${individualIdentifier}' exist on user service provider.'`, () => {
-            expect(userServiceProvider.retreiveIndividual(individualIdentifier).individual.identifier).equal(individualIdentifier)
+            expect(bangarang.userServiceProvider.retreiveIndividual(individualIdentifier).individual.identifier).equal(individualIdentifier)
         })
-        /*
-        it(`When the individual identified by '${individualIdentifier}' subscribe to the service.'`, (done) => {
-            userServiceProvider.suscribeIndividual(individualIdentifier)
-            done()
+        it(`When the individual identified by '${individualIdentifier}' try to subscribe to the service, 
+        then he receive an error message that inform him that he has already subscribed with the service.'`, () => {
+            expect(()=>bangarang.userServiceProvider.suscribeIndividual(individualIdentifier)).to.throw(individualAlreadySubscribed)
         })
-        it(`Then the individual identified by '${individualIdentifier}' exist on user service provider.'`, () => {
-            const userServiceProvider = new UserServiceProvider(new FakeIdentityProvider([{identifier:individualIdentifier}]),new BallotServiceProvider(new FakeBallotRepositoryInteractor([])))
-            expect(userServiceProvider.retreiveIndividual(individualIdentifier).individual.identifier).equal(individualIdentifier)
-        })
-        */
     })
 })
 

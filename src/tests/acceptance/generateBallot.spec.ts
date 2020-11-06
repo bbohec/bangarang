@@ -1,11 +1,10 @@
 import "mocha"
 import chai = require("chai");
 const expect = chai.expect;
+import { Bangarang } from "../../adapters/primary/Bangarang";
 import { FakeIdentityProvider } from "../../adapters/secondary/FakeIdentityProvider"
-import { Ballot } from "../../core/ports/Ballot";
-import { UserServiceProvider } from "../../core/serviceProviders/UserServiceProvider";
-import { BallotServiceProvider } from "../../core/serviceProviders/BallotServiceProvider";
 import { FakeBallotRepositoryInteractor } from "../../adapters/secondary/FakeBallotProvider";
+import { BallotContract } from "../../core/ports/BallotContract";
 describe(`=====================
 Feature : Retreive Ballot
     As an individual,
@@ -15,20 +14,19 @@ Feature : Retreive Ballot
     describe(`Scenario: Retreive a ballot that doesn't exist`, () => {
         const subject = "US Presidentials 99999"
         const individualIdentifier = "user65563563453"
-        const ballotFactory = new BallotServiceProvider(new FakeBallotRepositoryInteractor([]));
-        const userServiceProvider = new UserServiceProvider(new FakeIdentityProvider([{identifier:"user65563563453"}]),ballotFactory)
+        const bangarang = new Bangarang(new FakeIdentityProvider([{identifier:"user65563563453"}]),new FakeBallotRepositoryInteractor([]))
         it(`Given the ballot with subject '${subject}' doesn't exist`, () => {
-            expect(ballotFactory.isBallotExist(subject)).is.false
+            expect(bangarang.ballotServiceProvider.isBallotExist(subject)).is.false
         })
-        let ballot: Ballot;
+        let ballot: BallotContract;
         it(`When the individual identified by '${individualIdentifier}' want to retreive the ballot with the subject '${subject}'`, (done) => {
-            const user = userServiceProvider.retreiveIndividual(individualIdentifier)
+            const user = bangarang.userServiceProvider.retreiveIndividual(individualIdentifier)
             expect(user.individual.identifier).equal(individualIdentifier)
             ballot = user.useCases.retreiveBallotBySubject(subject)
             done()
         })
         it(`Then the ballot with subject '${subject}' exist`, () => {
-            expect(ballotFactory.isBallotExist(subject)).is.true
+            expect(bangarang.ballotServiceProvider.isBallotExist(subject)).is.true
         })
         it(`And the retreived ballot subject is '${subject}'`, () => {
             expect(ballot.subject).equal(subject)

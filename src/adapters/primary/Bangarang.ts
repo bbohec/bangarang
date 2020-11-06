@@ -4,7 +4,9 @@ import { InteractWithBallotProvider } from "../../core/ports/InteractWithBallotP
 import { InteractWithIdentityProvider } from "../../core/ports/InteractWithIdentityProvider";
 export class Bangarang {
     constructor(interactWithIdentityProvider: InteractWithIdentityProvider, interactWithBallotProvider: InteractWithBallotProvider) {
-        this.userServiceProvider = new UserServiceProvider(interactWithIdentityProvider, new BallotServiceProvider(interactWithBallotProvider));
+        this.ballotServiceProvider = new BallotServiceProvider(interactWithBallotProvider);
+        this.userServiceProvider = new UserServiceProvider(interactWithIdentityProvider, this.ballotServiceProvider);
     }
     readonly userServiceProvider: UserServiceProvider;
+    readonly ballotServiceProvider: BallotServiceProvider;
 }
