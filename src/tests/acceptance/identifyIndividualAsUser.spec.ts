@@ -14,14 +14,14 @@ Feature : Identify individual as User.
     describe(`Scenario: Individual exist as a user.`, () => {
         const individualIdentifier = "user65563563453"
         const bangarang = new Bangarang(new FakeIdentityProvider([{identifier:individualIdentifier}]),new FakeBallotRepositoryInteractor([]))
-        it(`The individual identified by '${individualIdentifier}' exist from user service provider.'`, () => {
+        it(`The individual identified by '${individualIdentifier}' exist from user service provider.`, () => {
             expect(bangarang.userServiceProvider.retreiveIndividual(individualIdentifier).individual.identifier).equal(individualIdentifier)
         })
     })
     describe(`Scenario: Individual don't exist as a user.`, () => {
         const individualIdentifier = "user65563563453"
         const bangarang = new Bangarang(new FakeIdentityProvider([]),new FakeBallotRepositoryInteractor([]))
-        it(`The individual identified by '${individualIdentifier}' don't exist from user service provider.'`, () => {
+        it(`The individual identified by '${individualIdentifier}' don't exist from user service provider.`, () => {
             expect(()=>bangarang.userServiceProvider.retreiveIndividual(individualIdentifier).individual.identifier).to.throw(userDontExist(individualIdentifier))
         })
     })
