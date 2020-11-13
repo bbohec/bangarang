@@ -1,6 +1,6 @@
 import React = require("react");
 import { IndividualContract } from "../../../../core/ports/IndividualContract";
-import { formatName } from "../../formatName";
+import { formatName } from "../formatName";
 import { showUserGif } from "./insertEmbededGiphy";
 
 export const welcomeUserMessage = (individual: IndividualContract) => (

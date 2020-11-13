@@ -1,4 +1,4 @@
-import { IndividualContract } from "../../core/ports/IndividualContract";
+import { IndividualContract } from "../../../core/ports/IndividualContract";
 export const users: Array<IndividualContract|undefined> = [
     {
         identifier:"sd654fsd6f4",
