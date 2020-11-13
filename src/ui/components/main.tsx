@@ -1,3 +1,3 @@
+import { IndividualContract } from "../../core/ports/IndividualContract";
 import { retrieveWelcomeMessage } from "./welcomePanel/retrieveWelcomeMessage";
-import { UserContract } from './UserContract';
-export const main = (user:UserContract):JSX.Element => (retrieveWelcomeMessage(user));
+export const main = (individual:IndividualContract|undefined):JSX.Element => (retrieveWelcomeMessage(individual));

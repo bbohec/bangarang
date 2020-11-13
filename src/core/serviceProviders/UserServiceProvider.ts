@@ -4,11 +4,17 @@ import { BallotServiceProvider } from "./BallotServiceProvider";
 import { User } from "../entities/User";
 import { UseCaseServiceProvider } from "./UseCaseServiceProvider";
 import { individualAlreadySubscribed } from "../ports/individualAlreadySubscribed";
+import { IndividualContract } from "../ports/IndividualContract";
 export class UserServiceProvider {
     constructor(private interactWithIdentityProvider: InteractWithIdentityProvider,private ballotServiceProvider:BallotServiceProvider) {}
-    public suscribeIndividual(individualIdentifier: string):void {
-        if(this.interactWithIdentityProvider.isIndividualSubscribed(individualIdentifier)) throw individualAlreadySubscribed
-        return this.interactWithIdentityProvider.subscribeIndividual(individualIdentifier)
+    public suscribeIndividual(individual: IndividualContract):void {
+        if(this.interactWithIdentityProvider.isIndividualSubscribed(individual.identifier)) throw individualAlreadySubscribed
+        return this.interactWithIdentityProvider.subscribeIndividual(individual)
     }
-    public retreiveIndividual(individualName: string):UserContract {return new User(this.interactWithIdentityProvider.retreiveIndividual(individualName),new UseCaseServiceProvider(this.ballotServiceProvider))}
+    public retreiveUserByIdentifer(individualIdentifier: string):UserContract {
+        return new User(
+            this.interactWithIdentityProvider.retreiveIndividual(individualIdentifier),
+            new UseCaseServiceProvider(this.ballotServiceProvider)
+        )
+    }
 }

@@ -2,11 +2,15 @@ import { UserServiceProvider } from "../../core/serviceProviders/UserServiceProv
 import { BallotServiceProvider } from "../../core/serviceProviders/BallotServiceProvider";
 import { InteractWithBallotProvider } from "../../core/ports/InteractWithBallotProvider";
 import { InteractWithIdentityProvider } from "../../core/ports/InteractWithIdentityProvider";
-export class Bangarang {
+export class Bangarang implements BangarangContract {
     constructor(interactWithIdentityProvider: InteractWithIdentityProvider, interactWithBallotProvider: InteractWithBallotProvider) {
         this.ballotServiceProvider = new BallotServiceProvider(interactWithBallotProvider);
         this.userServiceProvider = new UserServiceProvider(interactWithIdentityProvider, this.ballotServiceProvider);
     }
     readonly userServiceProvider: UserServiceProvider;
     readonly ballotServiceProvider: BallotServiceProvider;
+}
+interface BangarangContract {
+    userServiceProvider:UserServiceProvider
+    ballotServiceProvider:BallotServiceProvider
 }

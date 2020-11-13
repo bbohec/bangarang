@@ -1,5 +1,5 @@
-import { UserContract } from '../UserContract';
+import { IndividualContract } from "../../../core/ports/IndividualContract";
 import { welcomeStangerMessage } from "./messages/welcomeStangerMessage";
 import { welcomeUserMessage } from "./messages/welcomeUserMessage";
 
-export const retrieveWelcomeMessage = (user: UserContract) => (user) ? welcomeUserMessage(user) : welcomeStangerMessage;
+export const retrieveWelcomeMessage = (individual: IndividualContract|undefined) => (individual) ? welcomeUserMessage(individual) : welcomeStangerMessage;

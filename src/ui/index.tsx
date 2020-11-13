@@ -1,10 +1,11 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { main } from './components/main';
-import { retreiveRandomUser } from './components/user';
-import { users } from './components/users';
+import { retrieveUser } from './components/retrieveUser';
+import { defineCurrentIndividual } from './components/defineCurrentIndividual';
+import { uiBangarang } from './uiBangarang';
 ReactDOM.render(
-    main(retreiveRandomUser(users)),
+    main(retrieveUser(uiBangarang,defineCurrentIndividual())),
     document.getElementById('root')
 );
 export const body = (<body>
@@ -12,3 +13,5 @@ export const body = (<body>
     {/* scripts */}
     <script src="./index.ts"></script>
 </body>);
+
+

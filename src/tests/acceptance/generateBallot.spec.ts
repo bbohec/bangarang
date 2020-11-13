@@ -3,7 +3,7 @@ import chai = require("chai");
 const expect = chai.expect;
 import { Bangarang } from "../../adapters/primary/Bangarang";
 import { FakeIdentityProvider } from "../../adapters/secondary/FakeIdentityProvider"
-import { FakeBallotRepositoryInteractor } from "../../adapters/secondary/FakeBallotProvider";
+import { FakeBallotRepositoryProvider } from "../../adapters/secondary/FakeBallotProvider";
 import { BallotContract } from "../../core/ports/BallotContract";
 describe(`=====================
 Feature : Retreive Ballot
@@ -14,13 +14,13 @@ Feature : Retreive Ballot
     describe(`Scenario: Retreive a ballot that doesn't exist`, () => {
         const subject = "US Presidentials 99999"
         const individualIdentifier = "user65563563453"
-        const bangarang = new Bangarang(new FakeIdentityProvider([{identifier:"user65563563453"}]),new FakeBallotRepositoryInteractor([]))
+        const bangarang = new Bangarang(new FakeIdentityProvider([{identifier:"user65563563453",firstName:"",lastName:"",gifLink:""}]),new FakeBallotRepositoryProvider([]))
         it(`Given the ballot with subject '${subject}' doesn't exist`, () => {
             expect(bangarang.ballotServiceProvider.isBallotExist(subject)).is.false
         })
         let ballot: BallotContract;
         it(`When the individual identified by '${individualIdentifier}' want to retreive the ballot with the subject '${subject}'`, (done) => {
-            const user = bangarang.userServiceProvider.retreiveIndividual(individualIdentifier)
+            const user = bangarang.userServiceProvider.retreiveUserByIdentifer(individualIdentifier)
             expect(user.individual.identifier).equal(individualIdentifier)
             ballot = user.useCases.retreiveBallotBySubject(subject)
             done()

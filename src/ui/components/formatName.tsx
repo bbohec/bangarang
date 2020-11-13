@@ -1,2 +1,3 @@
-import { UserContract } from "./UserContract";
-export const formatName=(user: UserContract):string => user.firstName + ' ' + user.lastName;
+import { IndividualContract } from "../../core/ports/IndividualContract";
+
+export const formatName=(individual: IndividualContract):string => individual.firstName + ' ' + individual.lastName;
