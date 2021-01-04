@@ -12,8 +12,6 @@
 - By providing lead to individuals and garantee this lead with equality, this should provide global amazement and systemic breakthrough
 
 ## Lean Canvas
-### Free Mode
-
 <table>
   <tr>
     <td rowspan="2">
@@ -30,27 +28,31 @@
       <b>Solution</b>
       <p>Top 3 features</p>
       <ul>
-            <li></li>
-            <li></li>
-            <li></li>
+            <li>Users can interact with Ballots & Votes</li>
+            <li>User actions are only tracked at the user level</li>
+            <li>Anyone can subscribe</li>
+            <li>Free</li>
       </ul>
     </td>
     <td rowspan="2" colspan="2">
       <b>Unique Value Proposition</b>
       <p>Single, clear, compelling message that states why you are different and worth paying attention</p>
       <ul>
-            <li></li>
-            <li></li>
-            <li></li>
+            <li>Provide people sovereignty</li>
+            <li>Improve human rights equality & justice</li>
+            <li>Remove power & authority</li>
+            <li>Solution with energy efficiency by design</li>
       </ul>
     </td>
     <td>
         <b>Unfair Advantage</b>
         <p>Can't be easily copied or bought</P>
         <ul>
-            <li></li>
-            <li></li>
-            <li></li>
+            <li>Open Source / Transparancy</li>
+            <li>Free of use</li>
+            <li>Not fully skilled but can do it</li>
+            <li>Crazy Dude with crazy ideas :)</li>
+            <li>Cost effective</li>
         </ul>
     </td>
     <td rowspan="2">
@@ -73,18 +75,19 @@
       <b>Key Metrics</b>
       <p>Key activities you measure</p>
       <ul>
-          <li></li>
-          <li></li>
-          <li></li>
+          <li>Daily votes/ballot</li>
+          <li>HOT votes/ballot</li>
+          <li>Organisations that are not supporting us :)</li>
+          <li>People not already registered/voting for HOT vote :)</li>
       </ul>
     </td>
     <td>
       <b>Channels</b>
       <p>List your path to customers</p>
       <ul>
-          <li></li>
-          <li></li>
-          <li></li>
+          <li>YouTube - Daily Marketing Videos</li>
+          <li>Responce to daily news</li>
+          <li>Dev/Marketing Transparant Streaming</li>
       </ul>
     </td>
   </tr>
@@ -93,18 +96,19 @@
       <b>Cost Structure</b>
       <p>List your fixed and variable costs</p>
       <ul>
-          <li></li>
-          <li></li>
-          <li></li>
+          <li>One producter > Me > self financing for 7 months 2 days per week > full time 80k/yr and decreasing</li>
+          <li>Additionnal producters > bonus or maybe free help > not needed on early stage</li>
+          <li>Infrastructure cost > not needed on early stage</li>
+          <li>Organizations financial/political/marketing aggressivity</li>
       </ul>
     </td>
     <td colspan="3">
       <b>Revenue Streams</b>
       <p>List your sources of revenue</p>
       <ul>
-          <li></li>
-          <li></li>
-          <li></li>
+          <li>++ User Support in exchange of being part of credits</li>
+          <li>-- Organisation Support in exchange of being part of credits</li>
+          <li>---- Paid features (money give advantage / power)</li>
       </ul>
     </td>
   </tr>

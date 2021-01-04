@@ -1,0 +1,82 @@
+Find your niche
+===================
+
+Workshop based on the [french document](mature-dev-trouver-ta-niche.pdf) provided by Anthony Heukmes @ The Mature Developer.
+
+Introduction
+-----------------
+- Focus on people needs
+    - understand their problems uncountered daily
+    - provide a solution according to these problemes
+- More problems to solve > More ideas in order to solve these problems
+    - More ideas to work / adapt in order to fit people problems
+    - this can provide capability to 
+        - shift the solution in order to comply customers expectations
+        - work on new idea if the first idea is not working
+- Start by a niche, discuss with niche members, listen them, find feedback/comments on web ...
+    - discover the needs
+    - but
+        - how can we find a niche?
+        - how can we find members to interview / retreive feedback
+
+Exercice
+---------------
+- objectives
+    - discover niches where you are competitive
+        - because you know them and/or because you have a hype for them
+    - > find people to contact on this niche
+        - discuss with them
+        - understand their needs / their problems
+- Do the exercice alone or with your stakeholders you have trust and can speak freely
+    - Your stakeholders will listen your niches and will also expose their niches
+    - Exponential problems / hype / ideas
+    - first test against people
+    - by discovering new niches, one can improve your hype
+- niche where i'm from
+    - Who I am? What are my roles in life?
+    - What group I am part of?
+    - What should be my biography?
+    - Outcome
+        - 34yr french dude
+        - developper
+        - love democracy : people's sovereignty
+        - hate power / autority
+        - hate violence
+        - have good financial independancy
+        - have 2 days available to do something good actually until july 2021
+        - love open source
+        - love community property
+        - group of WTF friends
+        - group of dev community
+        - group of IT guys
+        - humanity
+        - french
+        - citizen
+        - not a perfect dude but I want to help
+- niche where I was
+    - employee
+    - hard moving worker
+    - money maker
+    - IT infrastructure guy
+    - Cloud guy
+    - gamer
+- niche I'm dreaming / whould like to help
+    - activist
+    - human rights
+    - NGOs
+    - right equality
+    - negative carbon effect
+    - solidarity house maker
+    - solidarity food maker
+    - solidarity energy maker
+    - solidarity tool maker
+- TOP 3 select
+    - I want people sovereignty
+    - I want to improve human rights equality & justice
+    - I want to remove power & authority
+    - Mandatory - I want to reduce energy consumption
+- Find people
+    - right activists
+    - social activists
+    - agile teams that are looking for autonomy
+    - constrained people
