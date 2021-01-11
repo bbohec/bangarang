@@ -1,6 +1,11 @@
 04/01/2021 - Day 2
 ====================
 - Day 1 - Video summary
+    - Video goal > day 1 summary & review
+    - no / small preparation
+    - start instant & transparant communication
+    - present the day 1 deliverables
+    - thanks your community and ask for feedback
 
 04/01/2021 - Day 1
 ====================
