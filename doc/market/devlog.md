@@ -1,4 +1,4 @@
-04/01/2021 - Day 2
+11/01/2021 - Day 2
 ====================
 - Day 1 - Video summary
     - Video goal > day 1 summary & review
