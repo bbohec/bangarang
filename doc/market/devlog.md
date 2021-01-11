@@ -1,4 +1,4 @@
-11/01/2021 - Day 2
+2021/01/11 - Day 2
 ====================
 - Day 1 - Video summary
     - Video goal > day 1 summary & review
@@ -7,7 +7,7 @@
     - present the day 1 deliverables
     - thanks your community and ask for feedback
 
-04/01/2021 - Day 1
+2021/01/04 - Day 1
 ====================
 - Clean & Prepare working & streaming deck
     - Missing good mic > ordered
