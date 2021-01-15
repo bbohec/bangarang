@@ -1,4 +1,4 @@
-# Product Market Fit - Bangarang
+# Business Model - Bangarang
 ## Solution Name
 ### Definition
 - Battle cry of the Lost Boys in the movie Hook.
@@ -6,10 +6,10 @@
 - General exclamation meant to signify approval or amazement.
 
 ### Why this name?
-- Individuals act like Lost Boys. They are a family within each other. They also have strong spiritual and social beliefs. They are hard workers and want to help not only themselves but each other.
-- Organizations and leaders act like Pirates. They are looking for power and profit. They also have strong growth and control main beliefs. They are delegating work and want to help themselves and their partners.
+- Individuals act like Lost Boys. They are a family within each other. They also have strong spiritual and social beliefs. Furthermore, they are hard workers and want to help not only themselves but each other.
+- Organizations and leaders act like Pirates. They are looking for power and profit. They also have strong growth and control main beliefs. Not only that, but they are delegating work and want to help themselves and their partners.
 - The solution must act as a disturbance of current systems by providing lead to individuals. But individuals must not have more lead each other.
-- By providing lead to individuals and garantee this lead with equality, this should provide global amazement and systemic breakthrough
+- By providing lead to individuals and guarantee this lead with equality, this should provide global amazement and systemic breakthrough
 
 ## Lean Canvas
 <table>
