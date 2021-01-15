@@ -17,8 +17,7 @@
 - ✔️ Prepare Dev Methodology
 - ✔️ Prepare Dev Technology
 - 👉 UX Story Activist + UI...
-- UX Story Agile Dev
-- Day 3 Summary
+- ✔️ Day 3 Summary
 
 2021/01/11 — Day 2
 ====================
