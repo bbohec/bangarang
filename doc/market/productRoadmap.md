@@ -1,4 +1,4 @@
-# Dev Roadmap
+# Product Roadmap
 The developer roadmap should be used as a guideline in order to store and prioritize stuff that need to be done for the product.
 
 > Communicate every time

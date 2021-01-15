@@ -2,8 +2,11 @@
 ==================
 - ✔️ Day 1 — Videos' feedback
 - ✔️ Install LTeX VS Code extension
-- 👉 Prepare Dev Roadmap
-- UX Story 1
+- ✔️ Prepare Product Roadmap
+- ✔️ Prepare Product Iteration
+- ✔️ Prepare Dev Methodology
+- ✔️ Prepare Dev Technology
+- 👉 UX Story 1
 - UX Story 2
 - Day 3 Summary
 
