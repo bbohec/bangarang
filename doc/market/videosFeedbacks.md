@@ -1,5 +1,12 @@
 Videos Feedbacks
 =================
+Video Dev Log Day 3
+-------------------
+- Missing video previous/next links on description
+    - Links available on video at the end
+    - Playlist Bangarang created and up to date
+
+
 
 Videos Dev Log Day 1
 --------------------
