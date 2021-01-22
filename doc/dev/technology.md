@@ -4,8 +4,11 @@
 - Secondary Adapter > HTTP/REST
 
 svelte + tailwind / Template (+ snowpack?)
-https://github.com/muhajirdev/svelte-tailwind-template
 https://github.com/colinbate/svelte-ts-tailwind-template
+
+
+https://github.com/muhajirdev/svelte-tailwind-template
+
 https://github.com/Rich-Harris/degit ????
 https://createapp.dev/snowpack
 
