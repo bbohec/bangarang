@@ -1,16 +1,30 @@
-Videos Feedbacks
-=================
-Video Dev Log Day 3
--------------------
+# Videos Feedbacks
+## Day 5
+- Video Analytics
+    - Views 515 (233 unique)
+    - Total hours of play 32.7h
+    - Average viewing time 3:48m
+    - +6 subs > 12 subs
+    - 12 like / 1 dislike
+    - 2+ comments > UI 
+        - back button on top for smartphone views
+            > must be at bottom of the views for accessibility
+        - tool UI > [draw.io](https://draw.io)
+- Feedback population type
+    - Developer communities (10)
+    - IT Professional communities (10)
+    - Friends/Family (10)
+    - Product > thumbnails ++
+- RIC > check Bangarang videos
+- Facebook Pages "Gilets Jaunes" / RIC / Militant
+- Pros
+    - Good idea / Very interesting
+    - Comment++
+
+## Video Dev Log Day 3
 - Missing video previous/next links on description
     - Links available on video at the end
     - Playlist Bangarang created and up to date
-
-
-
-Videos Dev Log Day 1
---------------------
-
 - Video Analytics
     - Views 126 (87 unique)
     - Total hours of play 15.2h

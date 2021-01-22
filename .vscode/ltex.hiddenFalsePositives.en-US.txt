@@ -1,0 +1,4 @@
+{"rule":"DASH_RULE","sentence":"^\\Q> - QR code.\\E$"}
+{"rule":"DASH_RULE","sentence":"^\\Q> - Link.\\E$"}
+{"rule":"DASH_RULE","sentence":"^\\Q> - Notification (mail / SMS / ....).\\E$"}
+{"rule":"DASH_RULE","sentence":"^\\Q> - Simple Option\\E$"}

@@ -1,9 +1,21 @@
-# Bangarang - Product Development Log
-## 2021/01/22 — Day 5
-- Email page? >> Google Form
-- UX Story Agile Dev + UI
+# Bangarang — Product Development Log
+- Email page? >> Google Form? GitHub Page?
+- Cleaning UI stories
+- Techno
 - Views
 - Components (Design System)
+
+## 2021/01/25 — Day 6
+- Email page? >> Google Form? GitHub Page?
+- Official video >> subscribe to form in order to be informed about demo & launch
+- Views
+- Components (Design System)
+
+## 2021/01/22 — Day 5
+- ✔️ Stand Up
+- ✔️ Feedback
+- ✔️ UX Story Agile Dev UI
+- ✔️ Day 5 Summary
 
 ## 2021/01/18 — Day 4
 - ✔️ Mic/sound settings

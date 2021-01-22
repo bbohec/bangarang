@@ -3,7 +3,7 @@
 - Primary Adapter > TS/ReactJs/Hooks
 - Secondary Adapter > HTTP/REST
 
-svelte + tailwind / Template (+ snowpack?)
+svelte + tailwind / Template (+ snowpack?) + Github Page
 https://github.com/colinbate/svelte-ts-tailwind-template
 
 
