@@ -9,7 +9,7 @@
 - ✔️ Stand Up
 - ✔️ Finish UI stories cleaning
 - ✔️ First Demo with expected UI
-- ✔️ Email page? >> Google Form? GitHub Page?
+- ✔️ Email page? [Link to form FR](https://forms.gle/H7FWYyG4HcHYthy99)
 - Initiate Dev Env with Front Tech
 - UI Welcome
 - Day 6 Summary
