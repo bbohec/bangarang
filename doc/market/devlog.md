@@ -1,15 +1,18 @@
 # Bangarang — Product Development Log
 - Email page? >> Google Form? GitHub Page?
-- Cleaning UI stories
+- Official video >> subscribe to form in order to be informed about demo & launch
 - Techno
 - Views
 - Components (Design System)
 
 ## 2021/01/25 — Day 6
-- Email page? >> Google Form? GitHub Page?
-- Official video >> subscribe to form in order to be informed about demo & launch
-- Views
-- Components (Design System)
+- ✔️ Stand Up
+- ✔️ Finish UI stories cleaning
+- ✔️ First Demo with expected UI
+- ✔️ Email page? >> Google Form? GitHub Page?
+- Initiate Dev Env with Front Tech
+- UI Welcome
+- Day 6 Summary
 
 ## 2021/01/22 — Day 5
 - ✔️ Stand Up
