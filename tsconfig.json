@@ -1,13 +1,5 @@
 {
-  "compilerOptions": {
-    "jsx": "react",
-    "target": "es5",
-    "module": "commonjs",
-    "outDir": "dist",
-    "strict": true,
-    "sourceMap": true,
-    "moduleResolution": "node",
-    "lib": ["esnext", "dom", "es6"]
-  },
+  "extends": "@tsconfig/svelte/tsconfig.json",
   "include": ["src/**/*"],
+  "exclude": ["node_modules/*", "__sapper__/*", "public/*"],
 }
