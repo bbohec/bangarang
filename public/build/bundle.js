@@ -386,7 +386,10 @@ var app = (function () {
     	let tailwindcss;
     	let t0;
     	let main;
-    	let div;
+    	let h1;
+    	let t1;
+    	let br;
+    	let t2;
     	let current;
     	tailwindcss = new Tailwindcss({ $$inline: true });
 
@@ -395,10 +398,13 @@ var app = (function () {
     			create_component(tailwindcss.$$.fragment);
     			t0 = space();
     			main = element("main");
-    			div = element("div");
-    			div.textContent = "BANGARANG";
-    			attr_dev(div, "class", "m-8");
-    			add_location(div, file, 5, 1, 228);
+    			h1 = element("h1");
+    			t1 = text("Welcome to");
+    			br = element("br");
+    			t2 = text("BANGARANG");
+    			add_location(br, file, 5, 32, 259);
+    			attr_dev(h1, "class", "text-4xl");
+    			add_location(h1, file, 5, 1, 228);
     			attr_dev(main, "class", "text-center min-w-screen min-h-screen flex items-center justify-center text-black bg-white");
     			add_location(main, file, 4, 0, 121);
     		},
@@ -409,7 +415,10 @@ var app = (function () {
     			mount_component(tailwindcss, target, anchor);
     			insert_dev(target, t0, anchor);
     			insert_dev(target, main, anchor);
-    			append_dev(main, div);
+    			append_dev(main, h1);
+    			append_dev(h1, t1);
+    			append_dev(h1, br);
+    			append_dev(h1, t2);
     			current = true;
     		},
     		p: noop,

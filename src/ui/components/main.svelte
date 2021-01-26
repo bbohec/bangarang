@@ -5,7 +5,5 @@
 </style>
 <Tailwindcss />
 <main class="text-center min-w-screen min-h-screen flex items-center justify-center text-black bg-white">
-	<div class="m-8">
-		BANGARANG
-	</div>
+	<h1 class="text-4xl">Welcome to<br>BANGARANG</h1>
 </main>
