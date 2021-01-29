@@ -1,8 +1,6 @@
-import MainMenu from './views/MainMenu.svelte';
+import MainMenu from './pages/MainMenu.svelte';
 const app = new MainMenu({
 	target: document.body,
-	props: {
-		name: 'world'
-	}
+	props: {}
 });
 export default app;

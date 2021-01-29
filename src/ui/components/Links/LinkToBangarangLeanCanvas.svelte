@@ -1,1 +1,1 @@
-<a class="text-sm text-gray-600 underline " href="/">What is Bangarang?</a>
+<a class="text-xs text-bangarang-darkEmphasis underline " href="/">What is Bangarang?</a>

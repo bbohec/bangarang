@@ -6,7 +6,7 @@
 - Components (Design System)
 
 ## 2021/01/29 — Day 8
-- Stand Up
+- Present Bonus + Stand Up
 - UI Search claim
 - Lean Canvas
 - Landing Page
@@ -18,6 +18,8 @@
 - ✔️ UI Welcome/Main Menu
 - ❌ UI Search claim
 - ✔️ Day 7 Summary
+- ✔️ Bonus UI refactoring with store
+- ✔️ Bonus Update Components color with Tailwind Bangarang Color Palette
 
 ## 2021/01/25 — Day 6
 - ✔️ Stand Up
