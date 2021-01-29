@@ -1,4 +1,12 @@
-# Business Model - Bangarang
+# Business Model — Bangarang
+## What is Bangarang?
+
+Bangarang is an open source and free democratic claim system that allow anybody to:
+- create a claim
+- search for claims
+- claiming anonymously
+
+
 ## Solution Name
 ### Definition
 - Battle cry of the Lost Boys in the movie Hook.
@@ -28,7 +36,7 @@
       <b>Solution</b>
       <p>Top 3 features</p>
       <ul>
-            <li>Users can interact with Ballots & Votes</li>
+            <li>Users can interact with Claims</li>
             <li>User actions are only tracked at the user level</li>
             <li>Anyone can subscribe</li>
             <li>Free</li>

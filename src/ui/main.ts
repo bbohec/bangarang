@@ -1,5 +1,5 @@
-import Main from './components/main.svelte';
-const app = new Main({
+import MainMenu from './views/MainMenu.svelte';
+const app = new MainMenu({
 	target: document.body,
 	props: {
 		name: 'world'

@@ -5,10 +5,11 @@
 - Views
 - Components (Design System)
 
-## 2021/01/29
-- update dev env with Sapper for routes > https://github.com/sarioglu/sapper-tailwindcss-template
+## 2021/01/29 — Day 7
+- 👉 Stand Up
 - UI Welcome/Main Menu
 - UI Search claim
+- Day 7 Summary
 
 ## 2021/01/25 — Day 6
 - ✔️ Stand Up
@@ -17,7 +18,7 @@
 - ✔️ Email page? [Link to form FR](https://forms.gle/H7FWYyG4HcHYthy99)
 - ✔️ Initiate Dev Env with Front Tech
 - ❌ UI Welcome/Main Menu
-- 👉 Day 6 Summary
+- ✔️ Day 6 Summary.
 
 ## 2021/01/22 — Day 5
 - ✔️ Stand Up
