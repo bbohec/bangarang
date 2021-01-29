@@ -1,0 +1,1 @@
+<button class= "text-xl mx-5 my-1 min-w-max text-gray-900 border-gray-600 border rounded bg-gray-100">Declare a new claim</button>

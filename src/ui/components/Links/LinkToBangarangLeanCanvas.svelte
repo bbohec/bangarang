@@ -1,0 +1,1 @@
+<a class="text-sm text-gray-600 underline " href="/">What is Bangarang?</a>

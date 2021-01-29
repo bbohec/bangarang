@@ -5,11 +5,19 @@
 - Views
 - Components (Design System)
 
-## 2021/01/29 — Day 7
-- 👉 Stand Up
-- UI Welcome/Main Menu
+## 2021/01/29 — Day 8
+- Stand Up
 - UI Search claim
-- Day 7 Summary
+- Lean Canvas
+- Landing Page
+- Deploy
+- Day 8 Summary
+
+## 2021/01/29 — Day 7
+- ✔️ Stand Up
+- ✔️ UI Welcome/Main Menu
+- ❌ UI Search claim
+- ✔️ Day 7 Summary
 
 ## 2021/01/25 — Day 6
 - ✔️ Stand Up
