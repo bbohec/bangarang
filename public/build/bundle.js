@@ -1,1 +1,1739 @@
-var app=function(){"use strict";function t(){}function n(t){return t()}function e(){return Object.create(null)}function r(t){t.forEach(n)}function o(t){return"function"==typeof t}function s(t,n){return t!=t?n==n:t!==n||t&&"object"==typeof t||"function"==typeof t}function c(n,e,r){n.$$.on_destroy.push(function(n,...e){if(null==n)return t;const r=n.subscribe(...e);return r.unsubscribe?()=>r.unsubscribe():r}(e,r))}function a(t,n){t.appendChild(n)}function u(t,n,e){t.insertBefore(n,e||null)}function i(t){t.parentNode.removeChild(t)}function l(t){return document.createElement(t)}function f(t){return document.createElementNS("http://www.w3.org/2000/svg",t)}function d(t){return document.createTextNode(t)}function m(){return d(" ")}function g(t,n,e,r){return t.addEventListener(n,e,r),()=>t.removeEventListener(n,e,r)}function $(t,n,e){null==e?t.removeAttribute(n):t.getAttribute(n)!==e&&t.setAttribute(n,e)}function p(t,n){t.value=null==n?"":n}let h;function x(t){h=t}function b(t){(function(){if(!h)throw new Error("Function called outside component initialization");return h})().$$.after_update.push(t)}const w=[],y=[],k=[],v=[],_=Promise.resolve();let E=!1;function C(t){k.push(t)}let A=!1;const B=new Set;function N(){if(!A){A=!0;do{for(let t=0;t<w.length;t+=1){const n=w[t];x(n),O(n.$$)}for(x(null),w.length=0;y.length;)y.pop()();for(let t=0;t<k.length;t+=1){const n=k[t];B.has(n)||(B.add(n),n())}k.length=0}while(w.length);for(;v.length;)v.pop()();E=!1,A=!1,B.clear()}}function O(t){if(null!==t.fragment){t.update(),r(t.before_update);const n=t.dirty;t.dirty=[-1],t.fragment&&t.fragment.p(t.ctx,n),t.after_update.forEach(C)}}const j=new Set;let S;function T(t,n){t&&t.i&&(j.delete(t),t.i(n))}function D(t,n,e,r){if(t&&t.o){if(j.has(t))return;j.add(t),S.c.push((()=>{j.delete(t),r&&(e&&t.d(1),r())})),t.o(n)}}function F(t){t&&t.c()}function G(t,e,s){const{fragment:c,on_mount:a,on_destroy:u,after_update:i}=t.$$;c&&c.m(e,s),C((()=>{const e=a.map(n).filter(o);u?u.push(...e):r(e),t.$$.on_mount=[]})),i.forEach(C)}function L(t,n){const e=t.$$;null!==e.fragment&&(r(e.on_destroy),e.fragment&&e.fragment.d(n),e.on_destroy=e.fragment=null,e.ctx=[])}function M(t,n){-1===t.$$.dirty[0]&&(w.push(t),E||(E=!0,_.then(N)),t.$$.dirty.fill(0)),t.$$.dirty[n/31|0]|=1<<n%31}function W(n,o,s,c,a,u,l=[-1]){const f=h;x(n);const d=o.props||{},m=n.$$={fragment:null,ctx:null,props:u,update:t,not_equal:a,bound:e(),on_mount:[],on_destroy:[],before_update:[],after_update:[],context:new Map(f?f.$$.context:[]),callbacks:e(),dirty:l,skip_bound:!1};let g=!1;if(m.ctx=s?s(n,d,((t,e,...r)=>{const o=r.length?r[0]:e;return m.ctx&&a(m.ctx[t],m.ctx[t]=o)&&(!m.skip_bound&&m.bound[t]&&m.bound[t](o),g&&M(n,t)),e})):[],m.update(),g=!0,r(m.before_update),m.fragment=!!c&&c(m.ctx),o.target){if(o.hydrate){const t=function(t){return Array.from(t.childNodes)}(o.target);m.fragment&&m.fragment.l(t),t.forEach(i)}else m.fragment&&m.fragment.c();o.intro&&T(n.$$.fragment),G(n,o.target,o.anchor),N()}x(f)}class q{$destroy(){L(this,1),this.$destroy=t}$on(t,n){const e=this.$$.callbacks[t]||(this.$$.callbacks[t]=[]);return e.push(n),()=>{const t=e.indexOf(n);-1!==t&&e.splice(t,1)}}$set(t){var n;this.$$set&&(n=t,0!==Object.keys(n).length)&&(this.$$.skip_bound=!0,this.$$set(t),this.$$.skip_bound=!1)}}class z extends q{constructor(t){super(),W(this,t,null,null,s,{})}}function I(n){let e;return{c(){e=l("button"),e.textContent="Declare a new claim",$(e,"class","text-xl mx-5 my-1 min-w-max text-bangarang-dark border border-bangarang-darkEmphasis rounded bg-bangarang-lightEmphasis"),e.disabled=!0},m(t,n){u(t,e,n)},p:t,i:t,o:t,d(t){t&&i(e)}}}class P extends q{constructor(t){super(),W(this,t,null,I,s,{})}}function R(n){let e;return{c(){e=l("a"),e.textContent="What is Bangarang?",$(e,"class","text-xs text-bangarang-darkEmphasis underline "),$(e,"href","/")},m(t,n){u(t,e,n)},p:t,i:t,o:t,d(t){t&&i(e)}}}class H extends q{constructor(t){super(),W(this,t,null,R,s,{})}}function J(n){let e,r,o;return{c(){e=l("p"),e.textContent="Welcome to",r=m(),o=l("h1"),o.textContent="BANGARANG",$(e,"class","text-2xl text-bangarang-darkEmphasis my-1"),$(o,"class","text-4xl text-bangarang-darkEmphasis my-1")},m(t,n){u(t,e,n),u(t,r,n),u(t,o,n)},p:t,i:t,o:t,d(t){t&&i(e),t&&i(r),t&&i(o)}}}class K extends q{constructor(t){super(),W(this,t,null,J,s,{})}}function Q(n){let e;return{c(){e=l("p"),e.textContent="Bangarang is an open source and free direct democratic claim system. It allows anybody to declare or search for claim and claiming for them anonymously.",$(e,"class","text-xs text-bangarang-darkEmphasis my-1")},m(t,n){u(t,e,n)},p:t,i:t,o:t,d(t){t&&i(e)}}}class U extends q{constructor(t){super(),W(this,t,null,Q,s,{})}}const V=[];const X=function(n,e=t){let r;const o=[];function c(t){if(s(n,t)&&(n=t,r)){const t=!V.length;for(let t=0;t<o.length;t+=1){const e=o[t];e[1](),V.push(e,n)}if(t){for(let t=0;t<V.length;t+=2)V[t][0](V[t+1]);V.length=0}}}return{set:c,update:function(t){c(t(n))},subscribe:function(s,a=t){const u=[s,a];return o.push(u),1===o.length&&(r=e(c)||t),s(n),()=>{const t=o.indexOf(u);-1!==t&&o.splice(t,1),0===o.length&&(r(),r=null)}}}}("");function Y(n){let e,r,o;return{c(){e=l("input"),$(e,"class","text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded "),$(e,"type","text"),$(e,"placeholder","Find a claim...")},m(t,s){u(t,e,s),p(e,n[1]),n[3](e),r||(o=g(e,"input",n[2]),r=!0)},p(t,[n]){2&n&&e.value!==t[1]&&p(e,t[1])},i:t,o:t,d(t){t&&i(e),n[3](null),r=!1,o()}}}function Z(t,n,e){let r,o;return c(t,X,(t=>e(1,r=t))),b((()=>{1===r.length&&o.focus()})),[o,r,function(){r=this.value,X.set(r)},function(t){y[t?"unshift":"push"]((()=>{o=t,e(0,o)}))}]}class tt extends q{constructor(t){super(),W(this,t,Z,Y,s,{})}}function nt(n){let e,r,o,s,c,f,d,g,p,h,x,b;return r=new K({}),s=new U({}),d=new tt({}),p=new P({}),x=new H({}),{c(){e=l("div"),F(r.$$.fragment),o=m(),F(s.$$.fragment),c=m(),f=l("div"),F(d.$$.fragment),g=m(),F(p.$$.fragment),h=m(),F(x.$$.fragment),$(e,"class","row-span-5 grid content-center"),$(f,"class","row-span-1 grid content-evenly")},m(t,n){u(t,e,n),G(r,e,null),a(e,o),G(s,e,null),u(t,c,n),u(t,f,n),G(d,f,null),a(f,g),G(p,f,null),a(f,h),G(x,f,null),b=!0},p:t,i(t){b||(T(r.$$.fragment,t),T(s.$$.fragment,t),T(d.$$.fragment,t),T(p.$$.fragment,t),T(x.$$.fragment,t),b=!0)},o(t){D(r.$$.fragment,t),D(s.$$.fragment,t),D(d.$$.fragment,t),D(p.$$.fragment,t),D(x.$$.fragment,t),b=!1},d(t){t&&i(e),L(r),L(s),t&&i(c),t&&i(f),L(d),L(p),L(x)}}}class et extends q{constructor(t){super(),W(this,t,null,nt,s,{})}}function rt(n){let e,r;return{c(){e=f("svg"),r=f("path"),$(r,"stroke-linecap","round"),$(r,"stroke-linejoin","round"),$(r,"stroke-width","2"),$(r,"d","M10 19l-7-7m0 0l7-7m-7 7h18"),$(e,"class","w-4 h-4 mr-1 stroke-current text-bangarang-darkEmphasis"),$(e,"xmlns","http://www.w3.org/2000/svg"),$(e,"fill","none"),$(e,"viewBox","0 0 24 24"),$(e,"stroke","currentColor")},m(t,n){u(t,e,n),a(e,r)},p:t,i:t,o:t,d(t){t&&i(e)}}}class ot extends q{constructor(t){super(),W(this,t,null,rt,s,{})}}function st(n){let e,r,o,s,c,f;return r=new ot({}),{c(){e=l("span"),F(r.$$.fragment),o=l("p"),o.textContent="Back to main menu.",$(o,"class","text-xs text-bangarang-darkEmphasis underline"),$(e,"class","inline-flex items-center px-3")},m(t,i){u(t,e,i),G(r,e,null),a(e,o),s=!0,c||(f=g(o,"click",n[0]),c=!0)},p:t,i(t){s||(T(r.$$.fragment,t),s=!0)},o(t){D(r.$$.fragment,t),s=!1},d(t){t&&i(e),L(r),c=!1,f()}}}function ct(t,n,e){let r;c(t,X,(t=>e(1,r=t)));return[()=>function(t,n,e=n){return t.set(e),n}(X,r="",r)]}class at extends q{constructor(t){super(),W(this,t,ct,st,s,{})}}function ut(t){let n,e,r,o,s,c,f,g,p,h;return f=new tt({}),p=new at({}),{c(){n=l("div"),e=d("TODO\r\n    "),r=l("p"),o=d(t[0]),s=m(),c=l("div"),F(f.$$.fragment),g=m(),F(p.$$.fragment),$(n,"class","row-span-5 grid content-end"),$(c,"class","row-span-1 grid content-end")},m(t,i){u(t,n,i),a(n,e),a(n,r),a(r,o),u(t,s,i),u(t,c,i),G(f,c,null),a(c,g),G(p,c,null),h=!0},p(t,[n]){(!h||1&n)&&function(t,n){n=""+n,t.wholeText!==n&&(t.data=n)}(o,t[0])},i(t){h||(T(f.$$.fragment,t),T(p.$$.fragment,t),h=!0)},o(t){D(f.$$.fragment,t),D(p.$$.fragment,t),h=!1},d(t){t&&i(n),t&&i(s),t&&i(c),L(f),L(p)}}}function it(t,n,e){let r;return c(t,X,(t=>e(0,r=t))),[r]}class lt extends q{constructor(t){super(),W(this,t,it,ut,s,{})}}function ft(t){let n,e;return n=new lt({}),{c(){F(n.$$.fragment)},m(t,r){G(n,t,r),e=!0},i(t){e||(T(n.$$.fragment,t),e=!0)},o(t){D(n.$$.fragment,t),e=!1},d(t){L(n,t)}}}function dt(t){let n,e;return n=new et({}),{c(){F(n.$$.fragment)},m(t,r){G(n,t,r),e=!0},i(t){e||(T(n.$$.fragment,t),e=!0)},o(t){D(n.$$.fragment,t),e=!1},d(t){L(n,t)}}}function mt(t){let n,e,o,s,c,a;n=new z({});const f=[dt,ft],d=[];function g(t,n){return""===t[0]?0:1}return s=g(t),c=d[s]=f[s](t),{c(){F(n.$$.fragment),e=m(),o=l("main"),c.c(),$(o,"class","text-center p-1 min-w-screen min-h-screen grid grid-cols-1 items-stretch grid-rows-6 bg-white")},m(t,r){G(n,t,r),u(t,e,r),u(t,o,r),d[s].m(o,null),a=!0},p(t,[n]){let e=s;s=g(t),s!==e&&(S={r:0,c:[],p:S},D(d[e],1,1,(()=>{d[e]=null})),S.r||r(S.c),S=S.p,c=d[s],c||(c=d[s]=f[s](t),c.c()),T(c,1),c.m(o,null))},i(t){a||(T(n.$$.fragment,t),T(c),a=!0)},o(t){D(n.$$.fragment,t),D(c),a=!1},d(t){L(n,t),t&&i(e),t&&i(o),d[s].d()}}}function gt(t,n,e){let r;return c(t,X,(t=>e(0,r=t))),[r]}return new class extends q{constructor(t){super(),W(this,t,gt,mt,s,{})}}({target:document.body,props:{}})}();
+
+(function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(window.document);
+var app = (function () {
+    'use strict';
+
+    function noop() { }
+    function add_location(element, file, line, column, char) {
+        element.__svelte_meta = {
+            loc: { file, line, column, char }
+        };
+    }
+    function run(fn) {
+        return fn();
+    }
+    function blank_object() {
+        return Object.create(null);
+    }
+    function run_all(fns) {
+        fns.forEach(run);
+    }
+    function is_function(thing) {
+        return typeof thing === 'function';
+    }
+    function safe_not_equal(a, b) {
+        return a != a ? b == b : a !== b || ((a && typeof a === 'object') || typeof a === 'function');
+    }
+    function is_empty(obj) {
+        return Object.keys(obj).length === 0;
+    }
+    function validate_store(store, name) {
+        if (store != null && typeof store.subscribe !== 'function') {
+            throw new Error(`'${name}' is not a store with a 'subscribe' method`);
+        }
+    }
+    function subscribe(store, ...callbacks) {
+        if (store == null) {
+            return noop;
+        }
+        const unsub = store.subscribe(...callbacks);
+        return unsub.unsubscribe ? () => unsub.unsubscribe() : unsub;
+    }
+    function component_subscribe(component, store, callback) {
+        component.$$.on_destroy.push(subscribe(store, callback));
+    }
+    function set_store_value(store, ret, value = ret) {
+        store.set(value);
+        return ret;
+    }
+
+    function append(target, node) {
+        target.appendChild(node);
+    }
+    function insert(target, node, anchor) {
+        target.insertBefore(node, anchor || null);
+    }
+    function detach(node) {
+        node.parentNode.removeChild(node);
+    }
+    function destroy_each(iterations, detaching) {
+        for (let i = 0; i < iterations.length; i += 1) {
+            if (iterations[i])
+                iterations[i].d(detaching);
+        }
+    }
+    function element(name) {
+        return document.createElement(name);
+    }
+    function svg_element(name) {
+        return document.createElementNS('http://www.w3.org/2000/svg', name);
+    }
+    function text(data) {
+        return document.createTextNode(data);
+    }
+    function space() {
+        return text(' ');
+    }
+    function empty() {
+        return text('');
+    }
+    function listen(node, event, handler, options) {
+        node.addEventListener(event, handler, options);
+        return () => node.removeEventListener(event, handler, options);
+    }
+    function attr(node, attribute, value) {
+        if (value == null)
+            node.removeAttribute(attribute);
+        else if (node.getAttribute(attribute) !== value)
+            node.setAttribute(attribute, value);
+    }
+    function children(element) {
+        return Array.from(element.childNodes);
+    }
+    function set_input_value(input, value) {
+        input.value = value == null ? '' : value;
+    }
+    function custom_event(type, detail) {
+        const e = document.createEvent('CustomEvent');
+        e.initCustomEvent(type, false, false, detail);
+        return e;
+    }
+
+    let current_component;
+    function set_current_component(component) {
+        current_component = component;
+    }
+    function get_current_component() {
+        if (!current_component)
+            throw new Error('Function called outside component initialization');
+        return current_component;
+    }
+    function afterUpdate(fn) {
+        get_current_component().$$.after_update.push(fn);
+    }
+
+    const dirty_components = [];
+    const binding_callbacks = [];
+    const render_callbacks = [];
+    const flush_callbacks = [];
+    const resolved_promise = Promise.resolve();
+    let update_scheduled = false;
+    function schedule_update() {
+        if (!update_scheduled) {
+            update_scheduled = true;
+            resolved_promise.then(flush);
+        }
+    }
+    function add_render_callback(fn) {
+        render_callbacks.push(fn);
+    }
+    let flushing = false;
+    const seen_callbacks = new Set();
+    function flush() {
+        if (flushing)
+            return;
+        flushing = true;
+        do {
+            // first, call beforeUpdate functions
+            // and update components
+            for (let i = 0; i < dirty_components.length; i += 1) {
+                const component = dirty_components[i];
+                set_current_component(component);
+                update(component.$$);
+            }
+            set_current_component(null);
+            dirty_components.length = 0;
+            while (binding_callbacks.length)
+                binding_callbacks.pop()();
+            // then, once components are updated, call
+            // afterUpdate functions. This may cause
+            // subsequent updates...
+            for (let i = 0; i < render_callbacks.length; i += 1) {
+                const callback = render_callbacks[i];
+                if (!seen_callbacks.has(callback)) {
+                    // ...so guard against infinite loops
+                    seen_callbacks.add(callback);
+                    callback();
+                }
+            }
+            render_callbacks.length = 0;
+        } while (dirty_components.length);
+        while (flush_callbacks.length) {
+            flush_callbacks.pop()();
+        }
+        update_scheduled = false;
+        flushing = false;
+        seen_callbacks.clear();
+    }
+    function update($$) {
+        if ($$.fragment !== null) {
+            $$.update();
+            run_all($$.before_update);
+            const dirty = $$.dirty;
+            $$.dirty = [-1];
+            $$.fragment && $$.fragment.p($$.ctx, dirty);
+            $$.after_update.forEach(add_render_callback);
+        }
+    }
+    const outroing = new Set();
+    let outros;
+    function group_outros() {
+        outros = {
+            r: 0,
+            c: [],
+            p: outros // parent group
+        };
+    }
+    function check_outros() {
+        if (!outros.r) {
+            run_all(outros.c);
+        }
+        outros = outros.p;
+    }
+    function transition_in(block, local) {
+        if (block && block.i) {
+            outroing.delete(block);
+            block.i(local);
+        }
+    }
+    function transition_out(block, local, detach, callback) {
+        if (block && block.o) {
+            if (outroing.has(block))
+                return;
+            outroing.add(block);
+            outros.c.push(() => {
+                outroing.delete(block);
+                if (callback) {
+                    if (detach)
+                        block.d(1);
+                    callback();
+                }
+            });
+            block.o(local);
+        }
+    }
+    function create_component(block) {
+        block && block.c();
+    }
+    function mount_component(component, target, anchor) {
+        const { fragment, on_mount, on_destroy, after_update } = component.$$;
+        fragment && fragment.m(target, anchor);
+        // onMount happens before the initial afterUpdate
+        add_render_callback(() => {
+            const new_on_destroy = on_mount.map(run).filter(is_function);
+            if (on_destroy) {
+                on_destroy.push(...new_on_destroy);
+            }
+            else {
+                // Edge case - component was destroyed immediately,
+                // most likely as a result of a binding initialising
+                run_all(new_on_destroy);
+            }
+            component.$$.on_mount = [];
+        });
+        after_update.forEach(add_render_callback);
+    }
+    function destroy_component(component, detaching) {
+        const $$ = component.$$;
+        if ($$.fragment !== null) {
+            run_all($$.on_destroy);
+            $$.fragment && $$.fragment.d(detaching);
+            // TODO null out other refs, including component.$$ (but need to
+            // preserve final state?)
+            $$.on_destroy = $$.fragment = null;
+            $$.ctx = [];
+        }
+    }
+    function make_dirty(component, i) {
+        if (component.$$.dirty[0] === -1) {
+            dirty_components.push(component);
+            schedule_update();
+            component.$$.dirty.fill(0);
+        }
+        component.$$.dirty[(i / 31) | 0] |= (1 << (i % 31));
+    }
+    function init(component, options, instance, create_fragment, not_equal, props, dirty = [-1]) {
+        const parent_component = current_component;
+        set_current_component(component);
+        const prop_values = options.props || {};
+        const $$ = component.$$ = {
+            fragment: null,
+            ctx: null,
+            // state
+            props,
+            update: noop,
+            not_equal,
+            bound: blank_object(),
+            // lifecycle
+            on_mount: [],
+            on_destroy: [],
+            before_update: [],
+            after_update: [],
+            context: new Map(parent_component ? parent_component.$$.context : []),
+            // everything else
+            callbacks: blank_object(),
+            dirty,
+            skip_bound: false
+        };
+        let ready = false;
+        $$.ctx = instance
+            ? instance(component, prop_values, (i, ret, ...rest) => {
+                const value = rest.length ? rest[0] : ret;
+                if ($$.ctx && not_equal($$.ctx[i], $$.ctx[i] = value)) {
+                    if (!$$.skip_bound && $$.bound[i])
+                        $$.bound[i](value);
+                    if (ready)
+                        make_dirty(component, i);
+                }
+                return ret;
+            })
+            : [];
+        $$.update();
+        ready = true;
+        run_all($$.before_update);
+        // `false` as a special case of no DOM component
+        $$.fragment = create_fragment ? create_fragment($$.ctx) : false;
+        if (options.target) {
+            if (options.hydrate) {
+                const nodes = children(options.target);
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                $$.fragment && $$.fragment.l(nodes);
+                nodes.forEach(detach);
+            }
+            else {
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                $$.fragment && $$.fragment.c();
+            }
+            if (options.intro)
+                transition_in(component.$$.fragment);
+            mount_component(component, options.target, options.anchor);
+            flush();
+        }
+        set_current_component(parent_component);
+    }
+    /**
+     * Base class for Svelte components. Used when dev=false.
+     */
+    class SvelteComponent {
+        $destroy() {
+            destroy_component(this, 1);
+            this.$destroy = noop;
+        }
+        $on(type, callback) {
+            const callbacks = (this.$$.callbacks[type] || (this.$$.callbacks[type] = []));
+            callbacks.push(callback);
+            return () => {
+                const index = callbacks.indexOf(callback);
+                if (index !== -1)
+                    callbacks.splice(index, 1);
+            };
+        }
+        $set($$props) {
+            if (this.$$set && !is_empty($$props)) {
+                this.$$.skip_bound = true;
+                this.$$set($$props);
+                this.$$.skip_bound = false;
+            }
+        }
+    }
+
+    function dispatch_dev(type, detail) {
+        document.dispatchEvent(custom_event(type, Object.assign({ version: '3.31.2' }, detail)));
+    }
+    function append_dev(target, node) {
+        dispatch_dev('SvelteDOMInsert', { target, node });
+        append(target, node);
+    }
+    function insert_dev(target, node, anchor) {
+        dispatch_dev('SvelteDOMInsert', { target, node, anchor });
+        insert(target, node, anchor);
+    }
+    function detach_dev(node) {
+        dispatch_dev('SvelteDOMRemove', { node });
+        detach(node);
+    }
+    function listen_dev(node, event, handler, options, has_prevent_default, has_stop_propagation) {
+        const modifiers = options === true ? ['capture'] : options ? Array.from(Object.keys(options)) : [];
+        if (has_prevent_default)
+            modifiers.push('preventDefault');
+        if (has_stop_propagation)
+            modifiers.push('stopPropagation');
+        dispatch_dev('SvelteDOMAddEventListener', { node, event, handler, modifiers });
+        const dispose = listen(node, event, handler, options);
+        return () => {
+            dispatch_dev('SvelteDOMRemoveEventListener', { node, event, handler, modifiers });
+            dispose();
+        };
+    }
+    function attr_dev(node, attribute, value) {
+        attr(node, attribute, value);
+        if (value == null)
+            dispatch_dev('SvelteDOMRemoveAttribute', { node, attribute });
+        else
+            dispatch_dev('SvelteDOMSetAttribute', { node, attribute, value });
+    }
+    function set_data_dev(text, data) {
+        data = '' + data;
+        if (text.wholeText === data)
+            return;
+        dispatch_dev('SvelteDOMSetData', { node: text, data });
+        text.data = data;
+    }
+    function validate_each_argument(arg) {
+        if (typeof arg !== 'string' && !(arg && typeof arg === 'object' && 'length' in arg)) {
+            let msg = '{#each} only iterates over array-like objects.';
+            if (typeof Symbol === 'function' && arg && Symbol.iterator in arg) {
+                msg += ' You can use a spread to convert this iterable into an array.';
+            }
+            throw new Error(msg);
+        }
+    }
+    function validate_slots(name, slot, keys) {
+        for (const slot_key of Object.keys(slot)) {
+            if (!~keys.indexOf(slot_key)) {
+                console.warn(`<${name}> received an unexpected slot "${slot_key}".`);
+            }
+        }
+    }
+    /**
+     * Base class for Svelte components with some minor dev-enhancements. Used when dev=true.
+     */
+    class SvelteComponentDev extends SvelteComponent {
+        constructor(options) {
+            if (!options || (!options.target && !options.$$inline)) {
+                throw new Error("'target' is a required option");
+            }
+            super();
+        }
+        $destroy() {
+            super.$destroy();
+            this.$destroy = () => {
+                console.warn('Component was already destroyed'); // eslint-disable-line no-console
+            };
+        }
+        $capture_state() { }
+        $inject_state() { }
+    }
+
+    /* src\ui\components\Styles\tailwindcss.svelte generated by Svelte v3.31.2 */
+
+    function create_fragment(ctx) {
+    	const block = {
+    		c: noop,
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: noop,
+    		p: noop,
+    		i: noop,
+    		o: noop,
+    		d: noop
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance($$self, $$props) {
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	validate_slots("Tailwindcss", slots, []);
+    	const writable_props = [];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<Tailwindcss> was created with unknown prop '${key}'`);
+    	});
+
+    	return [];
+    }
+
+    class Tailwindcss extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance, create_fragment, safe_not_equal, {});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "Tailwindcss",
+    			options,
+    			id: create_fragment.name
+    		});
+    	}
+    }
+
+    /* src\ui\components\Buttons\DeclareNewClaimButton.svelte generated by Svelte v3.31.2 */
+
+    const file = "src\\ui\\components\\Buttons\\DeclareNewClaimButton.svelte";
+
+    function create_fragment$1(ctx) {
+    	let button;
+
+    	const block = {
+    		c: function create() {
+    			button = element("button");
+    			button.textContent = "Declare a new claim";
+    			attr_dev(button, "class", "text-xl mx-5 my-1 min-w-max text-bangarang-dark border border-bangarang-darkEmphasis rounded bg-bangarang-lightEmphasis");
+    			button.disabled = true;
+    			add_location(button, file, 0, 0, 0);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, button, anchor);
+    		},
+    		p: noop,
+    		i: noop,
+    		o: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(button);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$1.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$1($$self, $$props) {
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	validate_slots("DeclareNewClaimButton", slots, []);
+    	const writable_props = [];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<DeclareNewClaimButton> was created with unknown prop '${key}'`);
+    	});
+
+    	return [];
+    }
+
+    class DeclareNewClaimButton extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$1, create_fragment$1, safe_not_equal, {});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "DeclareNewClaimButton",
+    			options,
+    			id: create_fragment$1.name
+    		});
+    	}
+    }
+
+    /* src\ui\components\Links\LinkToBangarangLeanCanvas.svelte generated by Svelte v3.31.2 */
+
+    const file$1 = "src\\ui\\components\\Links\\LinkToBangarangLeanCanvas.svelte";
+
+    function create_fragment$2(ctx) {
+    	let a;
+
+    	const block = {
+    		c: function create() {
+    			a = element("a");
+    			a.textContent = "What is Bangarang?";
+    			attr_dev(a, "class", "text-xs text-bangarang-darkEmphasis underline ");
+    			attr_dev(a, "href", "/");
+    			add_location(a, file$1, 0, 0, 0);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, a, anchor);
+    		},
+    		p: noop,
+    		i: noop,
+    		o: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(a);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$2.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$2($$self, $$props) {
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	validate_slots("LinkToBangarangLeanCanvas", slots, []);
+    	const writable_props = [];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<LinkToBangarangLeanCanvas> was created with unknown prop '${key}'`);
+    	});
+
+    	return [];
+    }
+
+    class LinkToBangarangLeanCanvas extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$2, create_fragment$2, safe_not_equal, {});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "LinkToBangarangLeanCanvas",
+    			options,
+    			id: create_fragment$2.name
+    		});
+    	}
+    }
+
+    /* src\ui\components\Titles\WelcomeTitle.svelte generated by Svelte v3.31.2 */
+
+    const file$2 = "src\\ui\\components\\Titles\\WelcomeTitle.svelte";
+
+    function create_fragment$3(ctx) {
+    	let p;
+    	let t1;
+    	let h1;
+
+    	const block = {
+    		c: function create() {
+    			p = element("p");
+    			p.textContent = "Welcome to";
+    			t1 = space();
+    			h1 = element("h1");
+    			h1.textContent = "BANGARANG";
+    			attr_dev(p, "class", "text-2xl text-bangarang-darkEmphasis my-1");
+    			add_location(p, file$2, 0, 0, 0);
+    			attr_dev(h1, "class", "text-4xl text-bangarang-darkEmphasis my-1");
+    			add_location(h1, file$2, 1, 0, 69);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, p, anchor);
+    			insert_dev(target, t1, anchor);
+    			insert_dev(target, h1, anchor);
+    		},
+    		p: noop,
+    		i: noop,
+    		o: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(p);
+    			if (detaching) detach_dev(t1);
+    			if (detaching) detach_dev(h1);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$3.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$3($$self, $$props) {
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	validate_slots("WelcomeTitle", slots, []);
+    	const writable_props = [];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<WelcomeTitle> was created with unknown prop '${key}'`);
+    	});
+
+    	return [];
+    }
+
+    class WelcomeTitle extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$3, create_fragment$3, safe_not_equal, {});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "WelcomeTitle",
+    			options,
+    			id: create_fragment$3.name
+    		});
+    	}
+    }
+
+    /* src\ui\components\Descriptions\BangarangDescription.svelte generated by Svelte v3.31.2 */
+
+    const file$3 = "src\\ui\\components\\Descriptions\\BangarangDescription.svelte";
+
+    function create_fragment$4(ctx) {
+    	let p;
+
+    	const block = {
+    		c: function create() {
+    			p = element("p");
+    			p.textContent = "Bangarang is an open source and free direct democratic claim system. It allows anybody to declare or search for claim and claiming for them anonymously.";
+    			attr_dev(p, "class", "text-xs text-bangarang-darkEmphasis my-1");
+    			add_location(p, file$3, 0, 0, 0);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, p, anchor);
+    		},
+    		p: noop,
+    		i: noop,
+    		o: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(p);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$4.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$4($$self, $$props) {
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	validate_slots("BangarangDescription", slots, []);
+    	const writable_props = [];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<BangarangDescription> was created with unknown prop '${key}'`);
+    	});
+
+    	return [];
+    }
+
+    class BangarangDescription extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$4, create_fragment$4, safe_not_equal, {});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "BangarangDescription",
+    			options,
+    			id: create_fragment$4.name
+    		});
+    	}
+    }
+
+    const subscriber_queue = [];
+    /**
+     * Create a `Writable` store that allows both updating and reading by subscription.
+     * @param {*=}value initial value
+     * @param {StartStopNotifier=}start start and stop notifications for subscriptions
+     */
+    function writable(value, start = noop) {
+        let stop;
+        const subscribers = [];
+        function set(new_value) {
+            if (safe_not_equal(value, new_value)) {
+                value = new_value;
+                if (stop) { // store is ready
+                    const run_queue = !subscriber_queue.length;
+                    for (let i = 0; i < subscribers.length; i += 1) {
+                        const s = subscribers[i];
+                        s[1]();
+                        subscriber_queue.push(s, value);
+                    }
+                    if (run_queue) {
+                        for (let i = 0; i < subscriber_queue.length; i += 2) {
+                            subscriber_queue[i][0](subscriber_queue[i + 1]);
+                        }
+                        subscriber_queue.length = 0;
+                    }
+                }
+            }
+        }
+        function update(fn) {
+            set(fn(value));
+        }
+        function subscribe(run, invalidate = noop) {
+            const subscriber = [run, invalidate];
+            subscribers.push(subscriber);
+            if (subscribers.length === 1) {
+                stop = start(set) || noop;
+            }
+            run(value);
+            return () => {
+                const index = subscribers.indexOf(subscriber);
+                if (index !== -1) {
+                    subscribers.splice(index, 1);
+                }
+                if (subscribers.length === 0) {
+                    stop();
+                    stop = null;
+                }
+            };
+        }
+        return { set, update, subscribe };
+    }
+
+    const initialClaimSearchValue = 'a';
+    const claimSearchStore = writable(initialClaimSearchValue);
+
+    /* src\ui\components\SearchBars\ClaimSearchBar.svelte generated by Svelte v3.31.2 */
+    const file$4 = "src\\ui\\components\\SearchBars\\ClaimSearchBar.svelte";
+
+    function create_fragment$5(ctx) {
+    	let input;
+    	let mounted;
+    	let dispose;
+
+    	const block = {
+    		c: function create() {
+    			input = element("input");
+    			attr_dev(input, "class", "text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded ");
+    			attr_dev(input, "type", "text");
+    			attr_dev(input, "placeholder", "Find a claim...");
+    			add_location(input, file$4, 6, 0, 236);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, input, anchor);
+    			set_input_value(input, /*$claimSearchStore*/ ctx[1]);
+    			/*input_binding*/ ctx[3](input);
+
+    			if (!mounted) {
+    				dispose = listen_dev(input, "input", /*input_input_handler*/ ctx[2]);
+    				mounted = true;
+    			}
+    		},
+    		p: function update(ctx, [dirty]) {
+    			if (dirty & /*$claimSearchStore*/ 2 && input.value !== /*$claimSearchStore*/ ctx[1]) {
+    				set_input_value(input, /*$claimSearchStore*/ ctx[1]);
+    			}
+    		},
+    		i: noop,
+    		o: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(input);
+    			/*input_binding*/ ctx[3](null);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$5.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$5($$self, $$props, $$invalidate) {
+    	let $claimSearchStore;
+    	validate_store(claimSearchStore, "claimSearchStore");
+    	component_subscribe($$self, claimSearchStore, $$value => $$invalidate(1, $claimSearchStore = $$value));
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	validate_slots("ClaimSearchBar", slots, []);
+    	let searchBar;
+
+    	afterUpdate(() => {
+    		if ($claimSearchStore.length === 1) searchBar.focus();
+    	});
+
+    	const writable_props = [];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<ClaimSearchBar> was created with unknown prop '${key}'`);
+    	});
+
+    	function input_input_handler() {
+    		$claimSearchStore = this.value;
+    		claimSearchStore.set($claimSearchStore);
+    	}
+
+    	function input_binding($$value) {
+    		binding_callbacks[$$value ? "unshift" : "push"](() => {
+    			searchBar = $$value;
+    			$$invalidate(0, searchBar);
+    		});
+    	}
+
+    	$$self.$capture_state = () => ({
+    		afterUpdate,
+    		claimSearchStore,
+    		searchBar,
+    		$claimSearchStore
+    	});
+
+    	$$self.$inject_state = $$props => {
+    		if ("searchBar" in $$props) $$invalidate(0, searchBar = $$props.searchBar);
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	return [searchBar, $claimSearchStore, input_input_handler, input_binding];
+    }
+
+    class ClaimSearchBar extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$5, create_fragment$5, safe_not_equal, {});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "ClaimSearchBar",
+    			options,
+    			id: create_fragment$5.name
+    		});
+    	}
+    }
+
+    /* src\ui\views\MainMenu\WelcomePageView.svelte generated by Svelte v3.31.2 */
+    const file$5 = "src\\ui\\views\\MainMenu\\WelcomePageView.svelte";
+
+    function create_fragment$6(ctx) {
+    	let div0;
+    	let welcometitle;
+    	let t0;
+    	let bangarangdescription;
+    	let t1;
+    	let div1;
+    	let claimsearchbar;
+    	let t2;
+    	let declarenewclaimbutton;
+    	let t3;
+    	let linktobangarangleancanvas;
+    	let current;
+    	welcometitle = new WelcomeTitle({ $$inline: true });
+    	bangarangdescription = new BangarangDescription({ $$inline: true });
+    	claimsearchbar = new ClaimSearchBar({ $$inline: true });
+    	declarenewclaimbutton = new DeclareNewClaimButton({ $$inline: true });
+    	linktobangarangleancanvas = new LinkToBangarangLeanCanvas({ $$inline: true });
+
+    	const block = {
+    		c: function create() {
+    			div0 = element("div");
+    			create_component(welcometitle.$$.fragment);
+    			t0 = space();
+    			create_component(bangarangdescription.$$.fragment);
+    			t1 = space();
+    			div1 = element("div");
+    			create_component(claimsearchbar.$$.fragment);
+    			t2 = space();
+    			create_component(declarenewclaimbutton.$$.fragment);
+    			t3 = space();
+    			create_component(linktobangarangleancanvas.$$.fragment);
+    			attr_dev(div0, "class", "row-span-5 grid content-center");
+    			add_location(div0, file$5, 6, 0, 468);
+    			attr_dev(div1, "class", "row-span-1 grid content-evenly");
+    			add_location(div1, file$5, 10, 0, 572);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div0, anchor);
+    			mount_component(welcometitle, div0, null);
+    			append_dev(div0, t0);
+    			mount_component(bangarangdescription, div0, null);
+    			insert_dev(target, t1, anchor);
+    			insert_dev(target, div1, anchor);
+    			mount_component(claimsearchbar, div1, null);
+    			append_dev(div1, t2);
+    			mount_component(declarenewclaimbutton, div1, null);
+    			append_dev(div1, t3);
+    			mount_component(linktobangarangleancanvas, div1, null);
+    			current = true;
+    		},
+    		p: noop,
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(welcometitle.$$.fragment, local);
+    			transition_in(bangarangdescription.$$.fragment, local);
+    			transition_in(claimsearchbar.$$.fragment, local);
+    			transition_in(declarenewclaimbutton.$$.fragment, local);
+    			transition_in(linktobangarangleancanvas.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(welcometitle.$$.fragment, local);
+    			transition_out(bangarangdescription.$$.fragment, local);
+    			transition_out(claimsearchbar.$$.fragment, local);
+    			transition_out(declarenewclaimbutton.$$.fragment, local);
+    			transition_out(linktobangarangleancanvas.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div0);
+    			destroy_component(welcometitle);
+    			destroy_component(bangarangdescription);
+    			if (detaching) detach_dev(t1);
+    			if (detaching) detach_dev(div1);
+    			destroy_component(claimsearchbar);
+    			destroy_component(declarenewclaimbutton);
+    			destroy_component(linktobangarangleancanvas);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$6.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$6($$self, $$props, $$invalidate) {
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	validate_slots("WelcomePageView", slots, []);
+    	const writable_props = [];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<WelcomePageView> was created with unknown prop '${key}'`);
+    	});
+
+    	$$self.$capture_state = () => ({
+    		DeclareNewClaimButton,
+    		LinkToBangarangLeanCanvas,
+    		WelcomeTitle,
+    		BangarangDescription,
+    		ClaimSearchBar
+    	});
+
+    	return [];
+    }
+
+    class WelcomePageView extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$6, create_fragment$6, safe_not_equal, {});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "WelcomePageView",
+    			options,
+    			id: create_fragment$6.name
+    		});
+    	}
+    }
+
+    /* src\ui\components\Icons\BackIcon.svelte generated by Svelte v3.31.2 */
+
+    const file$6 = "src\\ui\\components\\Icons\\BackIcon.svelte";
+
+    function create_fragment$7(ctx) {
+    	let svg;
+    	let path;
+
+    	const block = {
+    		c: function create() {
+    			svg = svg_element("svg");
+    			path = svg_element("path");
+    			attr_dev(path, "stroke-linecap", "round");
+    			attr_dev(path, "stroke-linejoin", "round");
+    			attr_dev(path, "stroke-width", "2");
+    			attr_dev(path, "d", "M10 19l-7-7m0 0l7-7m-7 7h18");
+    			add_location(path, file$6, 1, 4, 164);
+    			attr_dev(svg, "class", "w-4 h-4 mr-1 stroke-current text-bangarang-darkEmphasis");
+    			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
+    			attr_dev(svg, "fill", "none");
+    			attr_dev(svg, "viewBox", "0 0 24 24");
+    			attr_dev(svg, "stroke", "currentColor");
+    			add_location(svg, file$6, 0, 0, 0);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, svg, anchor);
+    			append_dev(svg, path);
+    		},
+    		p: noop,
+    		i: noop,
+    		o: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(svg);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$7.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$7($$self, $$props) {
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	validate_slots("BackIcon", slots, []);
+    	const writable_props = [];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<BackIcon> was created with unknown prop '${key}'`);
+    	});
+
+    	return [];
+    }
+
+    class BackIcon extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$7, create_fragment$7, safe_not_equal, {});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "BackIcon",
+    			options,
+    			id: create_fragment$7.name
+    		});
+    	}
+    }
+
+    /* src\ui\components\Links\BackToMainMenuLink.svelte generated by Svelte v3.31.2 */
+    const file$7 = "src\\ui\\components\\Links\\BackToMainMenuLink.svelte";
+
+    function create_fragment$8(ctx) {
+    	let span;
+    	let backicon;
+    	let p;
+    	let current;
+    	let mounted;
+    	let dispose;
+    	backicon = new BackIcon({ $$inline: true });
+
+    	const block = {
+    		c: function create() {
+    			span = element("span");
+    			create_component(backicon.$$.fragment);
+    			p = element("p");
+    			p.textContent = "Back to main menu.";
+    			attr_dev(p, "class", "text-xs text-bangarang-darkEmphasis underline");
+    			add_location(p, file$7, 5, 56, 274);
+    			attr_dev(span, "class", "inline-flex items-center px-3");
+    			add_location(span, file$7, 5, 0, 218);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, span, anchor);
+    			mount_component(backicon, span, null);
+    			append_dev(span, p);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = listen_dev(p, "click", /*resetClaimSearch*/ ctx[0], false, false, false);
+    				mounted = true;
+    			}
+    		},
+    		p: noop,
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(backicon.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(backicon.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(span);
+    			destroy_component(backicon);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$8.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$8($$self, $$props, $$invalidate) {
+    	let $claimSearchStore;
+    	validate_store(claimSearchStore, "claimSearchStore");
+    	component_subscribe($$self, claimSearchStore, $$value => $$invalidate(1, $claimSearchStore = $$value));
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	validate_slots("BackToMainMenuLink", slots, []);
+    	const resetClaimSearch = () => set_store_value(claimSearchStore, $claimSearchStore = "", $claimSearchStore);
+    	const writable_props = [];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<BackToMainMenuLink> was created with unknown prop '${key}'`);
+    	});
+
+    	$$self.$capture_state = () => ({
+    		BackIcon,
+    		claimSearchStore,
+    		resetClaimSearch,
+    		$claimSearchStore
+    	});
+
+    	return [resetClaimSearch];
+    }
+
+    class BackToMainMenuLink extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$8, create_fragment$8, safe_not_equal, {});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "BackToMainMenuLink",
+    			options,
+    			id: create_fragment$8.name
+    		});
+    	}
+    }
+
+    const retreiveClaimsByClaimSearchValue = (claimSearchValue) => {
+        return claims.filter(claim => claim.title.includes(claimSearchValue));
+    };
+    const claims = new Array();
+    claims.push({ title: "MonResto only offers meat in its menus, he needs at least one menu with only Vegan ingredients." });
+    claims.push({ title: "Does MonResto offer too much meat in its menus?" });
+    claims.push({ title: "PasMonResto does not offer meat." });
+    claims.push({ title: "What are the conditions of validity of an article of the constitution of the Awesome App team?" });
+    claims.push({ title: "Thundercats are on the move, Thundercats are loose. Feel the magic, hear the roar, Thundercats are loose. Thunder, thunder, thunder, Thundercats! Thunder, thunder, thunder, Thundercats! Thunder, thunder, thunder, Thundercats! Thunder, thunder, thunder, Thundercats! Thundercats! " });
+    claims.push({ title: "Top Cat! The most effectual Top Cat! Who’s intellectual close friends get to call him T.C., providing it’s with dignity. Top Cat! The indisputable leader of the gang. He’s the boss, he’s a pip, he’s the championship. He’s the most tip top, Top Cat. " });
+    claims.push({ title: "PasMonResto does not offer meat." });
+    claims.push({ title: "PasMonResto does not offer meat." });
+    claims.push({ title: "PasMonResto does not offer meat." });
+    claims.push({ title: "PasMonResto does not offer meat." });
+    claims.push({ title: "PasMonResto does not offer meat." });
+    claims.push({ title: "PasMonResto does not offer meat." });
+    claims.push({ title: "PasMonResto does not offer meat." });
+    claims.push({ title: "PasMonResto does not offer meat." });
+    claims.push({ title: "PasMonResto does not offer meat." });
+    claims.push({ title: "PasMonResto does not offer meat." });
+    claims.push({ title: "PasMonResto does not offer meat." });
+
+    /* src\ui\components\Lists\SearchedClaims.svelte generated by Svelte v3.31.2 */
+    const file$8 = "src\\ui\\components\\Lists\\SearchedClaims.svelte";
+
+    function get_each_context(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[1] = list[i];
+    	return child_ctx;
+    }
+
+    // (7:0) {#each searchedClaims as searchedClaim}
+    function create_each_block(ctx) {
+    	let p;
+    	let t_value = /*searchedClaim*/ ctx[1].title + "";
+    	let t;
+
+    	const block = {
+    		c: function create() {
+    			p = element("p");
+    			t = text(t_value);
+    			attr_dev(p, "class", "border");
+    			add_location(p, file$8, 7, 4, 413);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, p, anchor);
+    			append_dev(p, t);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*searchedClaims*/ 1 && t_value !== (t_value = /*searchedClaim*/ ctx[1].title + "")) set_data_dev(t, t_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(p);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_each_block.name,
+    		type: "each",
+    		source: "(7:0) {#each searchedClaims as searchedClaim}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$9(ctx) {
+    	let each_1_anchor;
+    	let each_value = /*searchedClaims*/ ctx[0];
+    	validate_each_argument(each_value);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+    	}
+
+    	const block = {
+    		c: function create() {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			each_1_anchor = empty();
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(target, anchor);
+    			}
+
+    			insert_dev(target, each_1_anchor, anchor);
+    		},
+    		p: function update(ctx, [dirty]) {
+    			if (dirty & /*searchedClaims*/ 1) {
+    				each_value = /*searchedClaims*/ ctx[0];
+    				validate_each_argument(each_value);
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+    		},
+    		i: noop,
+    		o: noop,
+    		d: function destroy(detaching) {
+    			destroy_each(each_blocks, detaching);
+    			if (detaching) detach_dev(each_1_anchor);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$9.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$9($$self, $$props, $$invalidate) {
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	validate_slots("SearchedClaims", slots, []);
+    	
+    	let searchedClaims = new Array();
+
+    	claimSearchStore.subscribe(claimSearchValue => {
+    		$$invalidate(0, searchedClaims = retreiveClaimsByClaimSearchValue(claimSearchValue));
+    	});
+
+    	const writable_props = [];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<SearchedClaims> was created with unknown prop '${key}'`);
+    	});
+
+    	$$self.$capture_state = () => ({
+    		retreiveClaimsByClaimSearchValue,
+    		claimSearchStore,
+    		searchedClaims
+    	});
+
+    	$$self.$inject_state = $$props => {
+    		if ("searchedClaims" in $$props) $$invalidate(0, searchedClaims = $$props.searchedClaims);
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	return [searchedClaims];
+    }
+
+    class SearchedClaims extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$9, create_fragment$9, safe_not_equal, {});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "SearchedClaims",
+    			options,
+    			id: create_fragment$9.name
+    		});
+    	}
+    }
+
+    /* src\ui\views\MainMenu\ClaimSearchView.svelte generated by Svelte v3.31.2 */
+    const file$9 = "src\\ui\\views\\MainMenu\\ClaimSearchView.svelte";
+
+    function create_fragment$a(ctx) {
+    	let div0;
+    	let searchedclaims;
+    	let t0;
+    	let div1;
+    	let claimsearchbar;
+    	let t1;
+    	let backtomainmenulink;
+    	let current;
+    	searchedclaims = new SearchedClaims({ $$inline: true });
+    	claimsearchbar = new ClaimSearchBar({ $$inline: true });
+    	backtomainmenulink = new BackToMainMenuLink({ $$inline: true });
+
+    	const block = {
+    		c: function create() {
+    			div0 = element("div");
+    			create_component(searchedclaims.$$.fragment);
+    			t0 = space();
+    			div1 = element("div");
+    			create_component(claimsearchbar.$$.fragment);
+    			t1 = space();
+    			create_component(backtomainmenulink.$$.fragment);
+    			attr_dev(div0, "class", "row-span-5 grid content-end");
+    			add_location(div0, file$9, 4, 0, 270);
+    			attr_dev(div1, "class", "row-span-1 grid content-end");
+    			add_location(div1, file$9, 7, 0, 344);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div0, anchor);
+    			mount_component(searchedclaims, div0, null);
+    			insert_dev(target, t0, anchor);
+    			insert_dev(target, div1, anchor);
+    			mount_component(claimsearchbar, div1, null);
+    			append_dev(div1, t1);
+    			mount_component(backtomainmenulink, div1, null);
+    			current = true;
+    		},
+    		p: noop,
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(searchedclaims.$$.fragment, local);
+    			transition_in(claimsearchbar.$$.fragment, local);
+    			transition_in(backtomainmenulink.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(searchedclaims.$$.fragment, local);
+    			transition_out(claimsearchbar.$$.fragment, local);
+    			transition_out(backtomainmenulink.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div0);
+    			destroy_component(searchedclaims);
+    			if (detaching) detach_dev(t0);
+    			if (detaching) detach_dev(div1);
+    			destroy_component(claimsearchbar);
+    			destroy_component(backtomainmenulink);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$a.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$a($$self, $$props, $$invalidate) {
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	validate_slots("ClaimSearchView", slots, []);
+    	const writable_props = [];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<ClaimSearchView> was created with unknown prop '${key}'`);
+    	});
+
+    	$$self.$capture_state = () => ({
+    		ClaimSearchBar,
+    		BackToMainMenuLink,
+    		SearchedClaims
+    	});
+
+    	return [];
+    }
+
+    class ClaimSearchView extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$a, create_fragment$a, safe_not_equal, {});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "ClaimSearchView",
+    			options,
+    			id: create_fragment$a.name
+    		});
+    	}
+    }
+
+    /* src\ui\pages\MainMenu.svelte generated by Svelte v3.31.2 */
+    const file$a = "src\\ui\\pages\\MainMenu.svelte";
+
+    // (11:1) {:else}
+    function create_else_block(ctx) {
+    	let claimsearchview;
+    	let current;
+    	claimsearchview = new ClaimSearchView({ $$inline: true });
+
+    	const block = {
+    		c: function create() {
+    			create_component(claimsearchview.$$.fragment);
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(claimsearchview, target, anchor);
+    			current = true;
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(claimsearchview.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(claimsearchview.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(claimsearchview, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block.name,
+    		type: "else",
+    		source: "(11:1) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (9:1) {#if $claimSearchStore === ''}
+    function create_if_block(ctx) {
+    	let welcomepageview;
+    	let current;
+    	welcomepageview = new WelcomePageView({ $$inline: true });
+
+    	const block = {
+    		c: function create() {
+    			create_component(welcomepageview.$$.fragment);
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(welcomepageview, target, anchor);
+    			current = true;
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(welcomepageview.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(welcomepageview.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(welcomepageview, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block.name,
+    		type: "if",
+    		source: "(9:1) {#if $claimSearchStore === ''}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$b(ctx) {
+    	let tailwindcss;
+    	let t;
+    	let main;
+    	let current_block_type_index;
+    	let if_block;
+    	let current;
+    	tailwindcss = new Tailwindcss({ $$inline: true });
+    	const if_block_creators = [create_if_block, create_else_block];
+    	const if_blocks = [];
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*$claimSearchStore*/ ctx[0] === "") return 0;
+    		return 1;
+    	}
+
+    	current_block_type_index = select_block_type(ctx);
+    	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+
+    	const block = {
+    		c: function create() {
+    			create_component(tailwindcss.$$.fragment);
+    			t = space();
+    			main = element("main");
+    			if_block.c();
+    			attr_dev(main, "class", "text-center p-1 min-w-screen min-h-screen grid grid-cols-1 items-stretch grid-rows-6 bg-white");
+    			add_location(main, file$a, 7, 0, 338);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(tailwindcss, target, anchor);
+    			insert_dev(target, t, anchor);
+    			insert_dev(target, main, anchor);
+    			if_blocks[current_block_type_index].m(main, null);
+    			current = true;
+    		},
+    		p: function update(ctx, [dirty]) {
+    			let previous_block_index = current_block_type_index;
+    			current_block_type_index = select_block_type(ctx);
+
+    			if (current_block_type_index !== previous_block_index) {
+    				group_outros();
+
+    				transition_out(if_blocks[previous_block_index], 1, 1, () => {
+    					if_blocks[previous_block_index] = null;
+    				});
+
+    				check_outros();
+    				if_block = if_blocks[current_block_type_index];
+
+    				if (!if_block) {
+    					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+    					if_block.c();
+    				}
+
+    				transition_in(if_block, 1);
+    				if_block.m(main, null);
+    			}
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(tailwindcss.$$.fragment, local);
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(tailwindcss.$$.fragment, local);
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(tailwindcss, detaching);
+    			if (detaching) detach_dev(t);
+    			if (detaching) detach_dev(main);
+    			if_blocks[current_block_type_index].d();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$b.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$b($$self, $$props, $$invalidate) {
+    	let $claimSearchStore;
+    	validate_store(claimSearchStore, "claimSearchStore");
+    	component_subscribe($$self, claimSearchStore, $$value => $$invalidate(0, $claimSearchStore = $$value));
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	validate_slots("MainMenu", slots, []);
+    	const writable_props = [];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<MainMenu> was created with unknown prop '${key}'`);
+    	});
+
+    	$$self.$capture_state = () => ({
+    		Tailwindcss,
+    		WelcomePageView,
+    		ClaimSearchView,
+    		claimSearchStore,
+    		$claimSearchStore
+    	});
+
+    	return [$claimSearchStore];
+    }
+
+    class MainMenu extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$b, create_fragment$b, safe_not_equal, {});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "MainMenu",
+    			options,
+    			id: create_fragment$b.name
+    		});
+    	}
+    }
+
+    const app = new MainMenu({
+        target: document.body,
+        props: {}
+    });
+
+    return app;
+
+}());
+//# sourceMappingURL=bundle.js.map

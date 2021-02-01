@@ -6,11 +6,10 @@
 - Components (Design System)
 
 ## 2021/01/29 — Day 8
-- Present Bonus + Stand Up
-- UI Search claim
+- ✔️ Present Bonus + Stand Up
+- 👉 UI Search claim
 - Lean Canvas
 - Landing Page
-- Deploy
 - Day 8 Summary
 
 ## 2021/01/29 — Day 7
@@ -20,6 +19,7 @@
 - ✔️ Day 7 Summary
 - ✔️ Bonus UI refactoring with store
 - ✔️ Bonus Update Components color with Tailwind Bangarang Color Palette
+- ✔️ Bonus Dev Live on GitHub Pages
 
 ## 2021/01/25 — Day 6
 - ✔️ Stand Up
