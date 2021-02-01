@@ -8,7 +8,8 @@
     import EarlyAdoptersSyndicalist from "../pages/EarlyAdoptersSyndicalist.svelte"
     import EarlyAdoptersAgileTeamMember from "../pages/EarlyAdoptersAgileTeamMember.svelte"
 </script>
-<Router url={links.mainMenu}>
+<Router url={"/"}>
+    <Route path={"/"}><MainMenu/></Route>
     <Route path={links.mainMenu}><MainMenu/></Route>
     <Route path={links.businessModel}><BusinessModel/></Route>
     <Route path={links.leanCanvas}><LeanCanvas/></Route>
