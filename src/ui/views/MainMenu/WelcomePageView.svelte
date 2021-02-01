@@ -5,12 +5,12 @@
     import BangarangDescription from '../../components/Descriptions/BangarangDescription.svelte'
     import ClaimSearchBar from '../../components/SearchBars/ClaimSearchBar.svelte'
 </script>
-<div class="row-span-5 grid content-center">
+<main class="flex-grow overflow-y-auto">
     <WelcomeTitle/>
     <BangarangDescription/>
-</div>
-<div class="row-span-1 grid content-evenly">
+</main>
+<footer class="row-span-1 grid content-evenly">
     <ClaimSearchBar/>
     <DeclareNewClaimButton/>
     <LinkToBangarangLeanCanvas/>
-</div>
+</footer>

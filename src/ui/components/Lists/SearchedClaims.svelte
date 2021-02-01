@@ -2,9 +2,10 @@
     import type { ClaimContract } from '../../interfaces/ClaimContract';
     import { retreiveClaimsByClaimSearchValue } from '../../logic/src/ui/logic/retreiveClaimsByClaimSearchValue';
     import {claimSearchStore} from '../../stores/claimSearchStore'
+    import SearchedClaim from '../Cards/SearchedClaim.svelte'
     let searchedClaims = new Array<ClaimContract>()
     claimSearchStore.subscribe(claimSearchValue =>{searchedClaims= retreiveClaimsByClaimSearchValue(claimSearchValue)}) 
 </script>
 {#each searchedClaims as searchedClaim}
-    <p class="border">{searchedClaim.title}</p>
+    <SearchedClaim title={searchedClaim.title}/>
 {/each}

@@ -3,5 +3,4 @@
     import {claimSearchStore} from '../../stores/claimSearchStore'
     const resetClaimSearch = () => $claimSearchStore = '';
 </script>
-
-<span class="inline-flex items-center px-3" ><BackIcon/><p class="text-xs text-bangarang-darkEmphasis underline" on:click={resetClaimSearch}>Back to main menu.</p></span>
+<span class="flex items-center px-2" ><BackIcon/><p class="text-xs text-bangarang-darkEmphasis underline" on:click={resetClaimSearch}>Back to main menu.</p></span>
