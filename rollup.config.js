@@ -42,6 +42,7 @@ export default {
 		svelte({
 			// enable run-time checks when not in production
 			compilerOptions: {
+				hydratable:true,
 				dev: !production,
 			},
 			preprocess: sveltePreprocess({

@@ -1,6 +1,7 @@
 <script lang="ts">
     import DeclareNewClaimButton from '../../components/Buttons/DeclareNewClaimButton.svelte'
-    import LinkToBangarangLeanCanvas from '../../components/Links/LinkToBangarangLeanCanvas.svelte'
+    import {links} from "../../routing/links"
+    import Link from '../../components/Links/Link.svelte'
     import WelcomeTitle from '../../components/Titles/WelcomeTitle.svelte'
     import BangarangDescription from '../../components/Descriptions/BangarangDescription.svelte'
     import ClaimSearchBar from '../../components/SearchBars/ClaimSearchBar.svelte'
@@ -12,5 +13,5 @@
 <footer class="flex flex-col">
     <ClaimSearchBar/>
     <DeclareNewClaimButton/>
-    <LinkToBangarangLeanCanvas/>
+    <Link size="small" linkName="What is Bangarang?" linkHref={links.businessModel}/>
 </footer>

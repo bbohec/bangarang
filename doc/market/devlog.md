@@ -1,15 +1,24 @@
 # Bangarang — Product Development Log
-- Email page? >> Google Form? GitHub Page?
 - Official video >> subscribe to form in order to be informed about demo & launch
-- Techno
-- Views
-- Components (Design System)
+- Retrieve Claim
+- Claiming
+- Sign In
+- Register
+- Declare
+
+## 2021/01/05 — Day 9
+- Early Adopters
+- Landing Pages
+- svelte SSR/Hydrate <-- question with svelte community
 
 ## 2021/01/29 — Day 8
 - ✔️ Present Bonus + Stand Up
-- 👉 UI Search claim
-- Lean Canvas
-- Landing Page
+- ✔️ UI Search claim
+- ✔️ Business Model
+- ✔️ Lean Canvas
+- ❌ Early Adopters
+- ❌ Landing Pages
+- ❌ svelte SSR/Hydrate <-- question with svelte community
 - Day 8 Summary
 
 ## 2021/01/29 — Day 7
