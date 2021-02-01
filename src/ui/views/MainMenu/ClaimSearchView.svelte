@@ -6,7 +6,7 @@
 <main class="flex-grow overflow-y-auto">
     <SearchedClaims/>
 </main>
-<footer class="grid content-end">
+<footer class="flex flex-col">
     <ClaimSearchBar/>
     <BackToMainMenuLink/>
 </footer>

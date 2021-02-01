@@ -4,4 +4,10 @@
     let searchBar:{focus():void};
     afterUpdate(()=> {if ($claimSearchStore.length === 1) searchBar.focus()})
 </script>
-<input class="text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded " type="text" placeholder="Find a claim..." bind:value={$claimSearchStore} bind:this={searchBar}>
+<input 
+    class="text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md" 
+    type="text" 
+    placeholder="Find a claim..." 
+    bind:value={$claimSearchStore} 
+    bind:this={searchBar}
+>

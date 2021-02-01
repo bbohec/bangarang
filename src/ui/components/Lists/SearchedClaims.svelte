@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { ClaimContract } from '../../interfaces/ClaimContract';
-    import { retreiveClaimsByClaimSearchValue } from '../../logic/src/ui/logic/retreiveClaimsByClaimSearchValue';
+    import { retreiveClaimsByClaimSearchValue } from '../../logic/retreiveClaimsByClaimSearchValue';
     import {claimSearchStore} from '../../stores/claimSearchStore'
     import SearchedClaim from '../Cards/SearchedClaim.svelte'
     let searchedClaims = new Array<ClaimContract>()

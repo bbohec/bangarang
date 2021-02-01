@@ -1,3 +1,3 @@
 import {writable} from 'svelte/store'
-const initialClaimSearchValue:string = 'a'
+const initialClaimSearchValue:string = ''
 export const claimSearchStore = writable(initialClaimSearchValue)
