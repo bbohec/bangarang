@@ -1,2 +1,5 @@
-node_modules
-dist
+/node_modules/
+/src/node_modules/@sapper/
+.DS_Store
+yarn-error.log
+/__sapper__/

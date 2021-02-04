@@ -1,10 +1,15 @@
 module.exports = {
-  darkMode: 'class', // This can be 'media' if preferred.
-  purge: [
-    './src/**/*.svelte',
-    './src/**/*.html',
-    './public/**/*.html',
-  ],
+  purge: {
+    mode: 'all',
+    content: ['./**/**/*.html', './**/**/*.svelte'],
+
+    options: {
+      whitelistPatterns: [/svelte-/],
+      defaultExtractor: (content) =>
+        [...content.matchAll(/(?:class:)*([\w\d-/:%.]+)/gm)].map(([_match, group, ..._rest]) => group),
+    },
+  },
+  darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
       colors: {
@@ -19,6 +24,8 @@ module.exports = {
       },
     },
   },
-  variants: {},
+  variants: {
+    extend: {},
+  },
   plugins: [],
-}
+};

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import BackIcon from '../../components/Icons/BackIcon.svelte'
+    import BackIcon from '../Icons/BackIcon.svelte'
     import {claimSearchStore} from '../../stores/claimSearchStore'
     const resetClaimSearch = () => $claimSearchStore = '';
 </script>

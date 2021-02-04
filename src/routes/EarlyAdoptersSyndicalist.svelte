@@ -1,10 +1,10 @@
 <script lang="ts">
-    import Link from "../components/Links/Link.svelte"
-    import { links } from "../routing/links";
-    import ViewTitle from "../components/Titles/ViewTitle.svelte"
+    import Link from "../components/unit/Links/Link.svelte"
+    import { links } from "../components/routing/links";
+    import ViewTitle from "../components/unit/Titles/ViewTitle.svelte"
 </script>
 <header class="flex flex-col">
-    <ViewTitle title="ACTIVIST EARLY ADOPTER"/>
+    <ViewTitle title="SYNDICALIST EARLY ADOPTER"/>
 </header>
 <main class="flex-grow overflow-y-auto">
 

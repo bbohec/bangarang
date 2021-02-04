@@ -1,9 +1,9 @@
 <script lang="ts">
-    import Link from "../components/Links/Link.svelte"
-    import {links} from "../routing/links"
-    import ViewTitle from "../components/Titles/ViewTitle.svelte"
-    import DescriptionCard from "../components/Cards/DescriptionCard.svelte"
-import type { DescriptionCardContract } from "../interfaces/DescriptionCardContract";
+    import Link from "../components/unit/Links/Link.svelte"
+    import {links} from "../components/routing/links"
+    import ViewTitle from "../components/unit/Titles/ViewTitle.svelte"
+    import DescriptionCard from "../components/unit/Cards/DescriptionCard.svelte"
+    import type { DescriptionCardContract } from "../components/interfaces/DescriptionCardContract";
     const leanCanvas:Array<{partName:string,sections:Array<DescriptionCardContract>}> = [
         {
             partName:"Customers",
