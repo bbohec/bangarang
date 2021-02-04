@@ -2434,7 +2434,7 @@ var app = (function () {
     		h: function hydrate() {
     			attr_dev(main, "class", "flex-grow overflow-y-auto flex flex-col items-center justify-center");
     			add_location(main, file$5, 7, 0, 472);
-    			attr_dev(footer, "class", "flex flex-col");
+    			attr_dev(footer, "class", "flex flex-col mb-1");
     			add_location(footer, file$5, 11, 0, 615);
     		},
     		m: function mount(target, anchor) {
@@ -3262,7 +3262,7 @@ var app = (function () {
     		h: function hydrate() {
     			attr_dev(main, "class", "flex-grow overflow-y-auto");
     			add_location(main, file$a, 4, 0, 270);
-    			attr_dev(footer, "class", "flex flex-col");
+    			attr_dev(footer, "class", "flex flex-col mb-1");
     			add_location(footer, file$a, 7, 0, 344);
     		},
     		m: function mount(target, anchor) {
@@ -4328,7 +4328,7 @@ var app = (function () {
     			add_location(header, file$d, 28, 0, 1744);
     			attr_dev(main, "class", "flex-grow overflow-y-auto");
     			add_location(main, file$d, 31, 0, 1838);
-    			attr_dev(footer, "class", "flex flex-col");
+    			attr_dev(footer, "class", "flex flex-col mb-1");
     			add_location(footer, file$d, 36, 0, 2036);
     		},
     		m: function mount(target, anchor) {

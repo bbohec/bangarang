@@ -35,7 +35,7 @@
         <BusinessValueSection descriptionCardContract={businessModelValue}/>
     {/each}
 </main>
-<footer class="flex flex-col">
+<footer class="flex flex-col mb-1">
     <Link size="small" linkName="The Lean Canvas" linkHref={links.leanCanvas}/>
     <Link  size="small" linkName="Use Bangarang!" linkHref={links.mainMenu}/>
 </footer>

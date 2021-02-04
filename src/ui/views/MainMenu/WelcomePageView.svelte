@@ -10,7 +10,7 @@
     <WelcomeTitle/>
     <BangarangDescription/>
 </main>
-<footer class="flex flex-col">
+<footer class="flex flex-col mb-1">
     <ClaimSearchBar/>
     <DeclareNewClaimButton/>
     <Link size="small" linkName="What is Bangarang?" linkHref={links.businessModel}/>
