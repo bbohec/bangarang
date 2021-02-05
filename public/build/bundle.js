@@ -7110,7 +7110,7 @@ var app = (function () {
     	return block;
     }
 
-    // (10:0) <Router url={"/ActivistLanding0"}>
+    // (10:0) <Router url={"/"}>
     function create_default_slot(ctx) {
     	let route0;
     	let t0;
@@ -7394,7 +7394,7 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(10:0) <Router url={\\\"/ActivistLanding0\\\"}>",
+    		source: "(10:0) <Router url={\\\"/\\\"}>",
     		ctx
     	});
 
@@ -7407,7 +7407,7 @@ var app = (function () {
 
     	router = new Router({
     			props: {
-    				url: "/ActivistLanding0",
+    				url: "/",
     				$$slots: { default: [create_default_slot] },
     				$$scope: { ctx }
     			},

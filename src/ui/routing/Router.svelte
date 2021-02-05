@@ -8,7 +8,7 @@
     import LandingPageModel from "../pages/LandingPageModel.svelte"
     import {valuePropositionsDesignCanvas} from "../logic/valuePropositions"
 </script>
-<Router url={"/ActivistLanding0"}>
+<Router url={"/"}>
     <Route path={"/"}><MainMenu/></Route>
     <Route path={links.mainMenu}><MainMenu/></Route>
     <Route path={links.businessModel}><BusinessModel/></Route>
