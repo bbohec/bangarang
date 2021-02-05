@@ -1,4 +1,25 @@
 # Videos Feedbacks
+## Day 9
+- Video Analytics
+    - Views 784 (338 unique)
+    - Total hours of play 46.4h
+    - Average viewing time 3:33m
+    - 12 > +7 subs > 19 subs
+    - 18 like / 1 dislike
+    - 1+ troll comments
+- Feedback population type
+    - Developer communities (++++)
+    - IT Professional communities (+)
+    - Friends/Family (++)
+- RIC > check Bangarang videos
+- Facebook Pages "Gilets Jaunes" / RIC / Militant
+- Pros
+    - Metric ++ > Share
+    - Comments - (quality)
+- Cons
+    - Require video entertainment
+    - troll
+
 ## Day 5
 - Video Analytics
     - Views 515 (233 unique)

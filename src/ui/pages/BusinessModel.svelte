@@ -1,7 +1,7 @@
 <script lang="ts">
     import Link from "../components/Links/Link.svelte"
     import {links} from "../routing/links"
-    import ViewTitle from "../components/Titles/ViewTitle.svelte"
+    import HeaderTitle from "../components/Titles/HeaderTitle.svelte"
     import BusinessValueSection from "../components/Cards/DescriptionCard.svelte"
     import type { DescriptionCardContract } from "../interfaces/DescriptionCardContract";
     const BusinessModelValues:Array<DescriptionCardContract> = [
@@ -28,7 +28,7 @@
     ];
 </script>
 <header class="flex flex-col">
-    <ViewTitle title="Bangarang Business Model"/>
+    <HeaderTitle title="Bangarang Business Model"/>
 </header>
 <main class="flex-grow overflow-y-auto">
     {#each BusinessModelValues as businessModelValue }

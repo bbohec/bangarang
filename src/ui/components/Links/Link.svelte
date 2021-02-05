@@ -2,10 +2,15 @@
     import {link} from "svelte-routing"
     export let linkName:string = "link name not provided to component!"
     export let linkHref:string = "missing"
-    export let size:'small'|'medium'
+    export let size:'small'|'medium'|'large'
+    const textSizeFromSize = (size:string):string => {
+        if (size === "small") return "text-xs"
+        if (size === "large") return "text-2xl"
+        return ""
+    }
 </script>
 <a 
-    class="{(size === "small")?"text-xs":""} text-bangarang-darkEmphasis underline text-center mb-1" 
+    class="{textSizeFromSize(size)} text-bangarang-darkEmphasis underline text-center mb-1" 
     href={linkHref}
     use:link
 >{linkName}</a>

@@ -4,16 +4,21 @@
     import MainMenu from "../pages/MainMenu.svelte"
     import BusinessModel from "../pages/BusinessModel.svelte"
     import LeanCanvas from "../pages/LeanCanvas.svelte"
-    import EarlyAdoptersActivist from "../pages/EarlyAdoptersActivist.svelte"
-    import EarlyAdoptersSyndicalist from "../pages/EarlyAdoptersSyndicalist.svelte"
-    import EarlyAdoptersAgileTeamMember from "../pages/EarlyAdoptersAgileTeamMember.svelte"
+    import ValuePropositionModel from "../pages/ValuePropositionModel.svelte"
+    import LandingPageModel from "../pages/LandingPageModel.svelte"
+    import {valuePropositionsDesignCanvas} from "../logic/valuePropositions"
 </script>
-<Router url={"/"}>
+<Router url={"/ActivistLanding0"}>
     <Route path={"/"}><MainMenu/></Route>
     <Route path={links.mainMenu}><MainMenu/></Route>
     <Route path={links.businessModel}><BusinessModel/></Route>
     <Route path={links.leanCanvas}><LeanCanvas/></Route>
-    <Route path={links.activistEarlyAdopters}><EarlyAdoptersActivist/></Route>
-    <Route path={links.syndicalistEarlyAdopters}><EarlyAdoptersSyndicalist/></Route>
-    <Route path={links.agileTeamMemberEarlyAdopters}><EarlyAdoptersAgileTeamMember/></Route>
+    {#each valuePropositionsDesignCanvas as valuePropositionDesignCanvas}
+        {#each valuePropositionDesignCanvas.pains as pain,index }
+            <Route path={`${valuePropositionDesignCanvas.audience}Landing${index}`}><LandingPageModel mainHeadLine={pain} supportingHeadline={valuePropositionDesignCanvas.painRelievers[index]} /></Route>
+        {/each}  
+    {/each}
+    {#each valuePropositionsDesignCanvas as valuePropositionDesignCanvas}
+        <Route path={valuePropositionDesignCanvas.pageLink}><ValuePropositionModel valuePropositionDesignCanvas={valuePropositionDesignCanvas}/></Route>
+    {/each}
 </Router>

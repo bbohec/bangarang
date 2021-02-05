@@ -1,0 +1,54 @@
+{
+  "bundler": "rollup",
+  "shimport": "2.0.4",
+  "assets": {
+    "main": "client.54612f3c.js"
+  },
+  "css": {
+    "main": [
+      "client-69490a83.css"
+    ]
+  },
+  "dependencies": {
+    "index.svelte": [
+      "index.b0acddfe.js",
+      "Link.c629bc78.js",
+      "inject_styles.5607aec6.js"
+    ],
+    "earlyAdoptersAgileTeamMember.svelte": [
+      "EarlyAdoptersAgileTeamMember.a56f05e8.js",
+      "Link.c629bc78.js",
+      "ViewTitle.140a44da.js",
+      "inject_styles.5607aec6.js"
+    ],
+    "earlyAdoptersSyndicalist.svelte": [
+      "EarlyAdoptersSyndicalist.0edb68b2.js",
+      "Link.c629bc78.js",
+      "ViewTitle.140a44da.js",
+      "inject_styles.5607aec6.js"
+    ],
+    "earlyAdoptersActivist.svelte": [
+      "EarlyAdoptersActivist.b644eed2.js",
+      "Link.c629bc78.js",
+      "ViewTitle.140a44da.js",
+      "inject_styles.5607aec6.js"
+    ],
+    "businessModel.svelte": [
+      "BusinessModel.94033504.js",
+      "Link.c629bc78.js",
+      "ViewTitle.140a44da.js",
+      "DescriptionCard.323e8e82.js",
+      "inject_styles.5607aec6.js"
+    ],
+    "leanCanvas.svelte": [
+      "LeanCanvas.31397525.js",
+      "Link.c629bc78.js",
+      "ViewTitle.140a44da.js",
+      "DescriptionCard.323e8e82.js",
+      "inject_styles.5607aec6.js"
+    ]
+  },
+  "legacy_assets": {
+    "main": "client.caffac16.js"
+  }
+}

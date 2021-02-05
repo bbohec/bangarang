@@ -1,15 +1,29 @@
 # Bangarang — Product Development Log
 - Official video >> subscribe to form in order to be informed about demo & launch
-- Retrieve Claim
 - Claiming
 - Sign In
 - Register
 - Declare
 
-## 2021/01/05 — Day 9
-- Early Adopters
-- Landing Pages
-- svelte SSR/Hydrate <-- question with svelte community
+- ❌ Todo/Not Finished
+- 👉 Doing
+- ✔️ Done
+
+## 2021/02/08 — Day 10
+ - Agile Team Member >>> Space to remove
+ - svelte SSR/Hydrate <-- question with svelte community
+ - hosting SSR -> vercel
+ - Main Menu >>> Demo warning + link Google Form
+ - Retrieve Claim
+
+
+## 2021/02/05 — Day 9
+- ✔️ Stand Up
+- ✔️ Feedback
+- ✔️ Value Propositions Design Canvas — Activist/Syndicalist/Agile Team Member
+- ✔️ Landing Pages
+- ✔️ Day 9 Summary
+
 
 ## 2021/01/29 — Day 8
 - ✔️ Present Bonus + Stand Up
@@ -19,7 +33,7 @@
 - ❌ Early Adopters
 - ❌ Landing Pages
 - ❌ svelte SSR/Hydrate <-- question with svelte community
-- Day 8 Summary
+- ✔️ Day 8 Summary
 
 ## 2021/01/29 — Day 7
 - ✔️ Stand Up

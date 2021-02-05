@@ -1,9 +1,11 @@
 <script lang="ts">
     import Link from "../components/Links/Link.svelte"
     import {links} from "../routing/links"
-    import ViewTitle from "../components/Titles/ViewTitle.svelte"
+    import HeaderTitle from "../components/Titles/HeaderTitle.svelte"
+    import MainTitle from "../components/Titles/MainTitle.svelte"
     import DescriptionCard from "../components/Cards/DescriptionCard.svelte"
-import type { DescriptionCardContract } from "../interfaces/DescriptionCardContract";
+    import type { DescriptionCardContract } from "../interfaces/DescriptionCardContract";
+    import {valuePropositionsDesignCanvas} from "../logic/valuePropositions"
     const leanCanvas:Array<{partName:string,sections:Array<DescriptionCardContract>}> = [
         {
             partName:"Customers",
@@ -17,11 +19,10 @@ import type { DescriptionCardContract } from "../interfaces/DescriptionCardContr
                     title:"Early Adopters",
                     description:"Characteristics list of ideal customers.",
                     bulletPoints:["Syndicates","Activits","Team members where there is lot of control"],
-                    links:[
-                        {name:"Are your a syndicalist?",href:links.syndicalistEarlyAdopters},
-                        {name:"Are your an activist?",href:links.activistEarlyAdopters},
-                        {name:"Are your an agile team member?",href:links.agileTeamMemberEarlyAdopters}
-                    ]
+                    links:valuePropositionsDesignCanvas.map(valuePropositionDesignCanvas => ({
+                        name:`Are you a ${valuePropositionDesignCanvas.audience.toLocaleLowerCase()}?`,
+                        href:valuePropositionDesignCanvas.pageLink
+                    }))
                 }
             ]
         },
@@ -149,11 +150,11 @@ import type { DescriptionCardContract } from "../interfaces/DescriptionCardContr
 </script>
 
 <header class="flex flex-col">
-    <ViewTitle title="Bangarang Lean Canvas"/>
+    <HeaderTitle title="Bangarang Lean Canvas"/>
 </header>
 <main class="flex-grow overflow-y-auto">
     {#each leanCanvas as leanCanvasPart}
-        <h1 class="text-xl mt-4 text-bangarang-dark font-semibold text-center">{leanCanvasPart.partName}</h1>
+        <MainTitle title={leanCanvasPart.partName}/>
         {#each leanCanvasPart.sections as section}
             <DescriptionCard descriptionCardContract={section}/>
         {/each}

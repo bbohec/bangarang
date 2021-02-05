@@ -4,20 +4,20 @@
     export let descriptionCardContract:DescriptionCardContract
 </script>
 <section class="mb-2 p-1">
-    <h2 class="text-bangarang-dark text-center font-semibold">{descriptionCardContract.title}</h2>
-    <p class="text-bangarang-darkEmphasis text-center text-sm">{descriptionCardContract.description}</p>
-    {#if descriptionCardContract.bulletPoints?.length > 0}
+    <h2 class="text-bangarang-dark text-center">{descriptionCardContract.title}</h2>
+    <p class="text-bangarang-darkEmphasis text-center font-light italic text-sm">{descriptionCardContract.description}</p>
+    {#if descriptionCardContract.bulletPoints?.length > 1}
         <ul class="list-disc list-inside">
             {#each descriptionCardContract.bulletPoints as bulletPoint }
                 <li class="text-bangarang-darkEmphasis text-sm">{bulletPoint}</li>
             {/each}
         </ul>  
+    {:else if descriptionCardContract.bulletPoints?.length === 1}
+    <p class="text-bangarang-darkEmphasis text-sm text-center">{descriptionCardContract.bulletPoints[0]}</p>
     {/if}
     {#if descriptionCardContract.links?.length > 0}
         {#each descriptionCardContract.links as link}
-            <span>
-                <Link linkHref={link.href} linkName={link.name} size="medium" />
-            </span>
+            <p class="text-center"><Link linkHref={link.href} linkName={link.name} size="small" /></p>
         {/each}
     {/if}
 </section>
