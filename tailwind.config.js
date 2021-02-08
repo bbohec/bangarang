@@ -13,8 +13,8 @@ module.exports = {
           lightEmphasis:'#E6E6E6',
           darkEmphasis:'#808080',
           dark:'#1A1A1A',
-          success:'#90FF90',
-          failed:'#FF9090'
+          success:'#48C948',
+          failed:'#CB3939'
         },
       },
     },

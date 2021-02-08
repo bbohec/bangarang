@@ -5,23 +5,25 @@
 - Register
 - Declare
 
-- ❌ Todo/Not Finished
+- ❌ To-do / Not Finished
 - 👉 Doing
 - ✔️ Done
 
-
-- Button Claim FOR/AGAINST identical size
+## 2021/02/12 — Day 11
+ - Stand Up
+ - Claiming (clean architecture)
+ - Sign In (clean architecture)
+ - svelte SSR/Hydrate ← question with svelte community
+ - hosting SSR → Vercel
+ - Day 11 Summary
 
 ## 2021/02/08 — Day 10
  - ✔️ Stand Up
  - ✔️ Main Menu >>> Demo warning + link Google Form
- - 👉 Retrieve Claim
- - svelte SSR/Hydrate <-- question with svelte community
- - hosting SSR -> vercel
- - Day 9 Summary
-
-
-
+ - ✔️ Retrieve Claim
+ - ❌ svelte SSR/Hydrate ← question with svelte community
+ - ❌ hosting SSR → Vercel
+ - ✔️ Day 10 Summary
 
 ## 2021/02/05 — Day 9
 - ✔️ Stand Up
@@ -30,7 +32,6 @@
 - ✔️ Landing Pages
 - ✔️ Day 9 Summary
 
-
 ## 2021/01/29 — Day 8
 - ✔️ Present Bonus + Stand Up
 - ✔️ UI Search claim
@@ -38,7 +39,7 @@
 - ✔️ Lean Canvas
 - ❌ Early Adopters
 - ❌ Landing Pages
-- ❌ svelte SSR/Hydrate <-- question with svelte community
+- ❌ svelte SSR/Hydrate ← question with svelte community
 - ✔️ Day 8 Summary
 
 ## 2021/01/29 — Day 7

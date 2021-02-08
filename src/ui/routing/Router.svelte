@@ -9,7 +9,7 @@
     import {valuePropositionsDesignCanvas} from "../logic/valuePropositions"
     import ClaimModel from "../pages/ClaimModel.svelte"
 </script>
-<Router url={"/claims/claim1"}>
+<Router url={"/"}>
     <Route path={links.mainMenu}><MainMenu/></Route>
     <Route path={links.businessModel}><BusinessModel/></Route>
     <Route path={links.leanCanvas}><LeanCanvas/></Route>

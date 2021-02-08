@@ -7,10 +7,7 @@
     import type { ClaimContract } from "../interfaces/ClaimContract";
     export let id:string
     let claim:ClaimContract
-    beforeUpdate(()=> {
-        console.log(id)
-        claim=retreiveClaimById(id)
-        })
+    beforeUpdate(()=> claim=retreiveClaimById(id))
 </script>
 <ClaimHeader title={claim.title}/>
 <ClaimMain 
