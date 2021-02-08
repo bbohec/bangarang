@@ -9,12 +9,18 @@
 - 👉 Doing
 - ✔️ Done
 
+
+- Button Claim FOR/AGAINST identical size
+
 ## 2021/02/08 — Day 10
- - Agile Team Member >>> Space to remove
+ - ✔️ Stand Up
+ - ✔️ Main Menu >>> Demo warning + link Google Form
+ - 👉 Retrieve Claim
  - svelte SSR/Hydrate <-- question with svelte community
  - hosting SSR -> vercel
- - Main Menu >>> Demo warning + link Google Form
- - Retrieve Claim
+ - Day 9 Summary
+
+
 
 
 ## 2021/02/05 — Day 9

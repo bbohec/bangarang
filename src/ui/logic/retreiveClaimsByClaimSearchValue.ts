@@ -1,22 +1,5 @@
 import type { ClaimContract } from "../interfaces/ClaimContract"
+import { claims } from "./claims"
 export const retreiveClaimsByClaimSearchValue = (claimSearchValue:string):Array<ClaimContract> => {
     return claims.filter(claim => claim.title.includes(claimSearchValue))
 }
-const claims = new Array<ClaimContract>()
-claims.push({title:"MonResto only offers meat in its menus, he needs at least one menu with only Vegan ingredients."})
-claims.push({title:"Does MonResto offer too much meat in its menus?"})
-claims.push({title:"PasMonResto does not offer meat."})
-claims.push({title:"What are the conditions of validity of an article of the constitution of the Awesome App team?"})
-claims.push({title:"Thundercats are on the move, Thundercats are loose. Feel the magic, hear the roar, Thundercats are loose. Thunder, thunder, thunder, Thundercats! Thunder, thunder, thunder, Thundercats! Thunder, thunder, thunder, Thundercats! Thunder, thunder, thunder, Thundercats! Thundercats! "})
-claims.push({title:"Top Cat! The most effectual Top Cat! Who’s intellectual close friends get to call him T.C., providing it’s with dignity. Top Cat! The indisputable leader of the gang. He’s the boss, he’s a pip, he’s the championship. He’s the most tip top, Top Cat. "})
-claims.push({title:"PasMonResto does not offer meat."})
-claims.push({title:"PasMonResto does not offer meat."})
-claims.push({title:"PasMonResto does not offer meat."})
-claims.push({title:"PasMonResto does not offer meat."})
-claims.push({title:"PasMonResto does not offer meat."})
-claims.push({title:"PasMonResto does not offer meat."})
-claims.push({title:"PasMonResto does not offer meat."})
-claims.push({title:"PasMonResto does not offer meat."})
-claims.push({title:"PasMonResto does not offer meat."})
-claims.push({title:"PasMonResto does not offer meat."})
-claims.push({title:"PasMonResto does not offer meat."})

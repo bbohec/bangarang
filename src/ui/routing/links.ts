@@ -3,3 +3,5 @@ export const links = {
     businessModel:"/businessModel",
     leanCanvas:"/leanCanvas"
 }
+
+export const claimLinkPrefix = "claims/"
