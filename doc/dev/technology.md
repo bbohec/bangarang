@@ -3,16 +3,21 @@
 - Primary Adapter > TS/ReactJs/Hooks
 - Secondary Adapter > HTTP/REST
 
+## SAPPER + TAILWIND
+https://andrasbacsai.com/straightforward-guide-to-use-tailwindcss-with-sapper
+
+## SVELTE + TAILWIND
 svelte + tailwind / Template (+ snowpack?) + Github Page
 https://github.com/colinbate/svelte-ts-tailwind-template
 
-
 https://github.com/muhajirdev/svelte-tailwind-template
 
-https://github.com/Rich-Harris/degit ????
+## Futur of Svelte > Sapper features + snowpack build system
 https://createapp.dev/snowpack
 
 
+
+## HOSTING
 Platform 1 Surge? Vercel? > /!\ Lock-in
 https://surge.sh/
 https://vercel.com/
