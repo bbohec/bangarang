@@ -1,10 +1,9 @@
 module.exports = {
   darkMode: 'class', // This can be 'media' if preferred.
-  purge: [
-    './src/**/*.svelte',
-    './src/**/*.html',
-    './public/**/*.html',
-  ],
+  purge: {
+    mode: 'all',
+    content: ['./src/**/*.svelte', './src/**/*.html'],
+  },
   theme: {
     extend: {
       colors: {

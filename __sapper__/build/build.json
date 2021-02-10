@@ -2,53 +2,68 @@
   "bundler": "rollup",
   "shimport": "2.0.4",
   "assets": {
-    "main": "client.54612f3c.js"
+    "main": "client.9a2a2550.js"
   },
-  "css": {
-    "main": [
-      "client-69490a83.css"
-    ]
-  },
+  "css": {},
   "dependencies": {
     "index.svelte": [
-      "index.b0acddfe.js",
-      "Link.c629bc78.js",
-      "inject_styles.5607aec6.js"
+      "index.7cfcd006.js",
+      "MainMenu.66c4d7a8.js",
+      "links.e56aeae5.js",
+      "Link.37b34eaf.js",
+      "claims.b4780f82.js"
     ],
-    "earlyAdoptersAgileTeamMember.svelte": [
-      "EarlyAdoptersAgileTeamMember.a56f05e8.js",
-      "Link.c629bc78.js",
-      "ViewTitle.140a44da.js",
-      "inject_styles.5607aec6.js"
-    ],
-    "earlyAdoptersSyndicalist.svelte": [
-      "EarlyAdoptersSyndicalist.0edb68b2.js",
-      "Link.c629bc78.js",
-      "ViewTitle.140a44da.js",
-      "inject_styles.5607aec6.js"
-    ],
-    "earlyAdoptersActivist.svelte": [
-      "EarlyAdoptersActivist.b644eed2.js",
-      "Link.c629bc78.js",
-      "ViewTitle.140a44da.js",
-      "inject_styles.5607aec6.js"
+    "valuePropositions/[valuePropositionPageLink].svelte": [
+      "[valuePropositionPageLink].ee6ca92f.js",
+      "Link.37b34eaf.js",
+      "links.e56aeae5.js",
+      "HeaderTitle.2ade911f.js",
+      "retreiveValuePropositionFromValuePropositionPageLink.64de19e0.js",
+      "valuePropositions.f31230f0.js"
     ],
     "businessModel.svelte": [
-      "BusinessModel.94033504.js",
-      "Link.c629bc78.js",
-      "ViewTitle.140a44da.js",
-      "DescriptionCard.323e8e82.js",
-      "inject_styles.5607aec6.js"
+      "BusinessModel.dcc2a6bf.js",
+      "Link.37b34eaf.js",
+      "links.e56aeae5.js",
+      "HeaderTitle.2ade911f.js",
+      "DescriptionCard.98fa71ff.js"
+    ],
+    "landingPages/LandingPageModel.svelte": [
+      "LandingPageModel.9793ede7.js",
+      "MainTitle.41912ae1.js",
+      "MainSubTitle.a0e351ab.js",
+      "GenericButton.d7c74883.js"
+    ],
+    "landingPages/[audience]/[landingPageId].svelte": [
+      "[landingPageId].9fa63543.js",
+      "MainTitle.41912ae1.js",
+      "MainSubTitle.a0e351ab.js",
+      "GenericButton.d7c74883.js",
+      "retreiveValuePropositionFromValuePropositionPageLink.64de19e0.js",
+      "valuePropositions.f31230f0.js",
+      "links.e56aeae5.js"
     ],
     "leanCanvas.svelte": [
-      "LeanCanvas.31397525.js",
-      "Link.c629bc78.js",
-      "ViewTitle.140a44da.js",
-      "DescriptionCard.323e8e82.js",
-      "inject_styles.5607aec6.js"
+      "LeanCanvas.21bc1b10.js",
+      "Link.37b34eaf.js",
+      "links.e56aeae5.js",
+      "HeaderTitle.2ade911f.js",
+      "MainTitle.41912ae1.js",
+      "DescriptionCard.98fa71ff.js",
+      "valuePropositions.f31230f0.js"
+    ],
+    "mainMenu.svelte": [
+      "MainMenu.66c4d7a8.js",
+      "links.e56aeae5.js",
+      "Link.37b34eaf.js",
+      "claims.b4780f82.js"
+    ],
+    "claims/[claimId].svelte": [
+      "[claimId].d25c81f7.js",
+      "Link.37b34eaf.js",
+      "links.e56aeae5.js",
+      "GenericButton.d7c74883.js",
+      "claims.b4780f82.js"
     ]
-  },
-  "legacy_assets": {
-    "main": "client.caffac16.js"
   }
 }

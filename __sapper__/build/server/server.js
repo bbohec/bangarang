@@ -1,9 +1,10 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
+var sirv = require('sirv');
 var polka = require('polka');
 var compression = require('compression');
+var fs = require('fs');
+var path = require('path');
 var Stream = require('stream');
 var http = require('http');
 var Url = require('url');
@@ -12,351 +13,18 @@ var zlib = require('zlib');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
-var fs__default = /*#__PURE__*/_interopDefaultLegacy(fs);
-var path__default = /*#__PURE__*/_interopDefaultLegacy(path);
+var sirv__default = /*#__PURE__*/_interopDefaultLegacy(sirv);
 var polka__default = /*#__PURE__*/_interopDefaultLegacy(polka);
 var compression__default = /*#__PURE__*/_interopDefaultLegacy(compression);
+var fs__default = /*#__PURE__*/_interopDefaultLegacy(fs);
+var path__default = /*#__PURE__*/_interopDefaultLegacy(path);
 var Stream__default = /*#__PURE__*/_interopDefaultLegacy(Stream);
 var http__default = /*#__PURE__*/_interopDefaultLegacy(http);
 var Url__default = /*#__PURE__*/_interopDefaultLegacy(Url);
 var https__default = /*#__PURE__*/_interopDefaultLegacy(https);
 var zlib__default = /*#__PURE__*/_interopDefaultLegacy(zlib);
 
-function list(dir, callback, pre='') {
-	dir = path.resolve('.', dir);
-	let arr = fs.readdirSync(dir);
-	let i=0, abs, stats;
-	for (; i < arr.length; i++) {
-		abs = path.join(dir, arr[i]);
-		stats = fs.statSync(abs);
-		stats.isDirectory()
-			? list(abs, callback, path.join(pre, arr[i]))
-			: callback(path.join(pre, arr[i]), abs, stats);
-	}
-}
-
-function parse(str) {
-	let i=0, j=0, k, v;
-	let out={}, arr=str.split('&');
-	for (; i < arr.length; i++) {
-		j = arr[i].indexOf('=');
-		v = !!~j && arr[i].substring(j+1) || '';
-		k = !!~j ? arr[i].substring(0, j) : arr[i];
-		out[k] = out[k] !== void 0 ? [].concat(out[k], v) : v;
-	}
-	return out;
-}
-
-function parser (req, toDecode) {
-	let url = req.url;
-	if (url == null) return;
-
-	let obj = req._parsedUrl;
-	if (obj && obj._raw === url) return obj;
-
-	obj = {
-		path: url,
-		pathname: url,
-		search: null,
-		query: null,
-		href: url,
-		_raw: url
-	};
-
-	if (url.length > 1) {
-		if (toDecode && !req._decoded && !!~url.indexOf('%', 1)) {
-			let nxt = url;
-			try { nxt = decodeURIComponent(url); } catch (e) {/* bad */}
-			url = req.url = obj.href = obj.path = obj.pathname = obj._raw = nxt;
-			req._decoded = true;
-		}
-
-		let idx = url.indexOf('?', 1);
-
-		if (idx !== -1) {
-			obj.search = url.substring(idx);
-			obj.query = obj.search.substring(1);
-			obj.pathname = url.substring(0, idx);
-			if (toDecode && obj.query.length > 0) {
-				obj.query = parse(obj.query);
-			}
-		}
-	}
-
-	return (req._parsedUrl = obj);
-}
-
-/**
- * @param typeMap [Object] Map of MIME type -> Array[extensions]
- * @param ...
- */
-function Mime() {
-  this._types = Object.create(null);
-  this._extensions = Object.create(null);
-
-  for (let i = 0; i < arguments.length; i++) {
-    this.define(arguments[i]);
-  }
-
-  this.define = this.define.bind(this);
-  this.getType = this.getType.bind(this);
-  this.getExtension = this.getExtension.bind(this);
-}
-
-/**
- * Define mimetype -> extension mappings.  Each key is a mime-type that maps
- * to an array of extensions associated with the type.  The first extension is
- * used as the default extension for the type.
- *
- * e.g. mime.define({'audio/ogg', ['oga', 'ogg', 'spx']});
- *
- * If a type declares an extension that has already been defined, an error will
- * be thrown.  To suppress this error and force the extension to be associated
- * with the new type, pass `force`=true.  Alternatively, you may prefix the
- * extension with "*" to map the type to extension, without mapping the
- * extension to the type.
- *
- * e.g. mime.define({'audio/wav', ['wav']}, {'audio/x-wav', ['*wav']});
- *
- *
- * @param map (Object) type definitions
- * @param force (Boolean) if true, force overriding of existing definitions
- */
-Mime.prototype.define = function(typeMap, force) {
-  for (let type in typeMap) {
-    let extensions = typeMap[type].map(function(t) {
-      return t.toLowerCase();
-    });
-    type = type.toLowerCase();
-
-    for (let i = 0; i < extensions.length; i++) {
-      const ext = extensions[i];
-
-      // '*' prefix = not the preferred type for this extension.  So fixup the
-      // extension, and skip it.
-      if (ext[0] === '*') {
-        continue;
-      }
-
-      if (!force && (ext in this._types)) {
-        throw new Error(
-          'Attempt to change mapping for "' + ext +
-          '" extension from "' + this._types[ext] + '" to "' + type +
-          '". Pass `force=true` to allow this, otherwise remove "' + ext +
-          '" from the list of extensions for "' + type + '".'
-        );
-      }
-
-      this._types[ext] = type;
-    }
-
-    // Use first extension as default
-    if (force || !this._extensions[type]) {
-      const ext = extensions[0];
-      this._extensions[type] = (ext[0] !== '*') ? ext : ext.substr(1);
-    }
-  }
-};
-
-/**
- * Lookup a mime type based on extension
- */
-Mime.prototype.getType = function(path) {
-  path = String(path);
-  let last = path.replace(/^.*[/\\]/, '').toLowerCase();
-  let ext = last.replace(/^.*\./, '').toLowerCase();
-
-  let hasPath = last.length < path.length;
-  let hasDot = ext.length < last.length - 1;
-
-  return (hasDot || !hasPath) && this._types[ext] || null;
-};
-
-/**
- * Return file extension associated with a mime type
- */
-Mime.prototype.getExtension = function(type) {
-  type = /^\s*([^;\s]*)/.test(type) && RegExp.$1;
-  return type && this._extensions[type.toLowerCase()] || null;
-};
-
-var Mime_1 = Mime;
-
-var standard = {"application/andrew-inset":["ez"],"application/applixware":["aw"],"application/atom+xml":["atom"],"application/atomcat+xml":["atomcat"],"application/atomdeleted+xml":["atomdeleted"],"application/atomsvc+xml":["atomsvc"],"application/atsc-dwd+xml":["dwd"],"application/atsc-held+xml":["held"],"application/atsc-rsat+xml":["rsat"],"application/bdoc":["bdoc"],"application/calendar+xml":["xcs"],"application/ccxml+xml":["ccxml"],"application/cdfx+xml":["cdfx"],"application/cdmi-capability":["cdmia"],"application/cdmi-container":["cdmic"],"application/cdmi-domain":["cdmid"],"application/cdmi-object":["cdmio"],"application/cdmi-queue":["cdmiq"],"application/cu-seeme":["cu"],"application/dash+xml":["mpd"],"application/davmount+xml":["davmount"],"application/docbook+xml":["dbk"],"application/dssc+der":["dssc"],"application/dssc+xml":["xdssc"],"application/ecmascript":["ecma","es"],"application/emma+xml":["emma"],"application/emotionml+xml":["emotionml"],"application/epub+zip":["epub"],"application/exi":["exi"],"application/fdt+xml":["fdt"],"application/font-tdpfr":["pfr"],"application/geo+json":["geojson"],"application/gml+xml":["gml"],"application/gpx+xml":["gpx"],"application/gxf":["gxf"],"application/gzip":["gz"],"application/hjson":["hjson"],"application/hyperstudio":["stk"],"application/inkml+xml":["ink","inkml"],"application/ipfix":["ipfix"],"application/its+xml":["its"],"application/java-archive":["jar","war","ear"],"application/java-serialized-object":["ser"],"application/java-vm":["class"],"application/javascript":["js","mjs"],"application/json":["json","map"],"application/json5":["json5"],"application/jsonml+json":["jsonml"],"application/ld+json":["jsonld"],"application/lgr+xml":["lgr"],"application/lost+xml":["lostxml"],"application/mac-binhex40":["hqx"],"application/mac-compactpro":["cpt"],"application/mads+xml":["mads"],"application/manifest+json":["webmanifest"],"application/marc":["mrc"],"application/marcxml+xml":["mrcx"],"application/mathematica":["ma","nb","mb"],"application/mathml+xml":["mathml"],"application/mbox":["mbox"],"application/mediaservercontrol+xml":["mscml"],"application/metalink+xml":["metalink"],"application/metalink4+xml":["meta4"],"application/mets+xml":["mets"],"application/mmt-aei+xml":["maei"],"application/mmt-usd+xml":["musd"],"application/mods+xml":["mods"],"application/mp21":["m21","mp21"],"application/mp4":["mp4s","m4p"],"application/mrb-consumer+xml":["*xdf"],"application/mrb-publish+xml":["*xdf"],"application/msword":["doc","dot"],"application/mxf":["mxf"],"application/n-quads":["nq"],"application/n-triples":["nt"],"application/node":["cjs"],"application/octet-stream":["bin","dms","lrf","mar","so","dist","distz","pkg","bpk","dump","elc","deploy","exe","dll","deb","dmg","iso","img","msi","msp","msm","buffer"],"application/oda":["oda"],"application/oebps-package+xml":["opf"],"application/ogg":["ogx"],"application/omdoc+xml":["omdoc"],"application/onenote":["onetoc","onetoc2","onetmp","onepkg"],"application/oxps":["oxps"],"application/p2p-overlay+xml":["relo"],"application/patch-ops-error+xml":["*xer"],"application/pdf":["pdf"],"application/pgp-encrypted":["pgp"],"application/pgp-signature":["asc","sig"],"application/pics-rules":["prf"],"application/pkcs10":["p10"],"application/pkcs7-mime":["p7m","p7c"],"application/pkcs7-signature":["p7s"],"application/pkcs8":["p8"],"application/pkix-attr-cert":["ac"],"application/pkix-cert":["cer"],"application/pkix-crl":["crl"],"application/pkix-pkipath":["pkipath"],"application/pkixcmp":["pki"],"application/pls+xml":["pls"],"application/postscript":["ai","eps","ps"],"application/provenance+xml":["provx"],"application/pskc+xml":["pskcxml"],"application/raml+yaml":["raml"],"application/rdf+xml":["rdf","owl"],"application/reginfo+xml":["rif"],"application/relax-ng-compact-syntax":["rnc"],"application/resource-lists+xml":["rl"],"application/resource-lists-diff+xml":["rld"],"application/rls-services+xml":["rs"],"application/route-apd+xml":["rapd"],"application/route-s-tsid+xml":["sls"],"application/route-usd+xml":["rusd"],"application/rpki-ghostbusters":["gbr"],"application/rpki-manifest":["mft"],"application/rpki-roa":["roa"],"application/rsd+xml":["rsd"],"application/rss+xml":["rss"],"application/rtf":["rtf"],"application/sbml+xml":["sbml"],"application/scvp-cv-request":["scq"],"application/scvp-cv-response":["scs"],"application/scvp-vp-request":["spq"],"application/scvp-vp-response":["spp"],"application/sdp":["sdp"],"application/senml+xml":["senmlx"],"application/sensml+xml":["sensmlx"],"application/set-payment-initiation":["setpay"],"application/set-registration-initiation":["setreg"],"application/shf+xml":["shf"],"application/sieve":["siv","sieve"],"application/smil+xml":["smi","smil"],"application/sparql-query":["rq"],"application/sparql-results+xml":["srx"],"application/srgs":["gram"],"application/srgs+xml":["grxml"],"application/sru+xml":["sru"],"application/ssdl+xml":["ssdl"],"application/ssml+xml":["ssml"],"application/swid+xml":["swidtag"],"application/tei+xml":["tei","teicorpus"],"application/thraud+xml":["tfi"],"application/timestamped-data":["tsd"],"application/toml":["toml"],"application/ttml+xml":["ttml"],"application/ubjson":["ubj"],"application/urc-ressheet+xml":["rsheet"],"application/urc-targetdesc+xml":["td"],"application/voicexml+xml":["vxml"],"application/wasm":["wasm"],"application/widget":["wgt"],"application/winhlp":["hlp"],"application/wsdl+xml":["wsdl"],"application/wspolicy+xml":["wspolicy"],"application/xaml+xml":["xaml"],"application/xcap-att+xml":["xav"],"application/xcap-caps+xml":["xca"],"application/xcap-diff+xml":["xdf"],"application/xcap-el+xml":["xel"],"application/xcap-error+xml":["xer"],"application/xcap-ns+xml":["xns"],"application/xenc+xml":["xenc"],"application/xhtml+xml":["xhtml","xht"],"application/xliff+xml":["xlf"],"application/xml":["xml","xsl","xsd","rng"],"application/xml-dtd":["dtd"],"application/xop+xml":["xop"],"application/xproc+xml":["xpl"],"application/xslt+xml":["*xsl","xslt"],"application/xspf+xml":["xspf"],"application/xv+xml":["mxml","xhvml","xvml","xvm"],"application/yang":["yang"],"application/yin+xml":["yin"],"application/zip":["zip"],"audio/3gpp":["*3gpp"],"audio/adpcm":["adp"],"audio/basic":["au","snd"],"audio/midi":["mid","midi","kar","rmi"],"audio/mobile-xmf":["mxmf"],"audio/mp3":["*mp3"],"audio/mp4":["m4a","mp4a"],"audio/mpeg":["mpga","mp2","mp2a","mp3","m2a","m3a"],"audio/ogg":["oga","ogg","spx"],"audio/s3m":["s3m"],"audio/silk":["sil"],"audio/wav":["wav"],"audio/wave":["*wav"],"audio/webm":["weba"],"audio/xm":["xm"],"font/collection":["ttc"],"font/otf":["otf"],"font/ttf":["ttf"],"font/woff":["woff"],"font/woff2":["woff2"],"image/aces":["exr"],"image/apng":["apng"],"image/avif":["avif"],"image/bmp":["bmp"],"image/cgm":["cgm"],"image/dicom-rle":["drle"],"image/emf":["emf"],"image/fits":["fits"],"image/g3fax":["g3"],"image/gif":["gif"],"image/heic":["heic"],"image/heic-sequence":["heics"],"image/heif":["heif"],"image/heif-sequence":["heifs"],"image/hej2k":["hej2"],"image/hsj2":["hsj2"],"image/ief":["ief"],"image/jls":["jls"],"image/jp2":["jp2","jpg2"],"image/jpeg":["jpeg","jpg","jpe"],"image/jph":["jph"],"image/jphc":["jhc"],"image/jpm":["jpm"],"image/jpx":["jpx","jpf"],"image/jxr":["jxr"],"image/jxra":["jxra"],"image/jxrs":["jxrs"],"image/jxs":["jxs"],"image/jxsc":["jxsc"],"image/jxsi":["jxsi"],"image/jxss":["jxss"],"image/ktx":["ktx"],"image/ktx2":["ktx2"],"image/png":["png"],"image/sgi":["sgi"],"image/svg+xml":["svg","svgz"],"image/t38":["t38"],"image/tiff":["tif","tiff"],"image/tiff-fx":["tfx"],"image/webp":["webp"],"image/wmf":["wmf"],"message/disposition-notification":["disposition-notification"],"message/global":["u8msg"],"message/global-delivery-status":["u8dsn"],"message/global-disposition-notification":["u8mdn"],"message/global-headers":["u8hdr"],"message/rfc822":["eml","mime"],"model/3mf":["3mf"],"model/gltf+json":["gltf"],"model/gltf-binary":["glb"],"model/iges":["igs","iges"],"model/mesh":["msh","mesh","silo"],"model/mtl":["mtl"],"model/obj":["obj"],"model/stl":["stl"],"model/vrml":["wrl","vrml"],"model/x3d+binary":["*x3db","x3dbz"],"model/x3d+fastinfoset":["x3db"],"model/x3d+vrml":["*x3dv","x3dvz"],"model/x3d+xml":["x3d","x3dz"],"model/x3d-vrml":["x3dv"],"text/cache-manifest":["appcache","manifest"],"text/calendar":["ics","ifb"],"text/coffeescript":["coffee","litcoffee"],"text/css":["css"],"text/csv":["csv"],"text/html":["html","htm","shtml"],"text/jade":["jade"],"text/jsx":["jsx"],"text/less":["less"],"text/markdown":["markdown","md"],"text/mathml":["mml"],"text/mdx":["mdx"],"text/n3":["n3"],"text/plain":["txt","text","conf","def","list","log","in","ini"],"text/richtext":["rtx"],"text/rtf":["*rtf"],"text/sgml":["sgml","sgm"],"text/shex":["shex"],"text/slim":["slim","slm"],"text/spdx":["spdx"],"text/stylus":["stylus","styl"],"text/tab-separated-values":["tsv"],"text/troff":["t","tr","roff","man","me","ms"],"text/turtle":["ttl"],"text/uri-list":["uri","uris","urls"],"text/vcard":["vcard"],"text/vtt":["vtt"],"text/xml":["*xml"],"text/yaml":["yaml","yml"],"video/3gpp":["3gp","3gpp"],"video/3gpp2":["3g2"],"video/h261":["h261"],"video/h263":["h263"],"video/h264":["h264"],"video/jpeg":["jpgv"],"video/jpm":["*jpm","jpgm"],"video/mj2":["mj2","mjp2"],"video/mp2t":["ts"],"video/mp4":["mp4","mp4v","mpg4"],"video/mpeg":["mpeg","mpg","mpe","m1v","m2v"],"video/ogg":["ogv"],"video/quicktime":["qt","mov"],"video/webm":["webm"]};
-
-var lite = new Mime_1(standard);
-
-const noop = () => {};
-
-function isMatch(uri, arr) {
-	for (let i=0; i < arr.length; i++) {
-		if (arr[i].test(uri)) return true;
-	}
-}
-
-function toAssume(uri, extns) {
-	let i=0, x, len=uri.length - 1;
-	if (uri.charCodeAt(len) === 47) {
-		uri = uri.substring(0, len);
-	}
-
-	let arr=[], tmp=`${uri}/index`;
-	for (; i < extns.length; i++) {
-		x = extns[i] ? `.${extns[i]}` : '';
-		if (uri) arr.push(uri + x);
-		arr.push(tmp + x);
-	}
-
-	return arr;
-}
-
-function viaCache(cache, uri, extns) {
-	let i=0, data, arr=toAssume(uri, extns);
-	for (; i < arr.length; i++) {
-		if (data = cache[arr[i]]) return data;
-	}
-}
-
-function viaLocal(dir, isEtag, uri, extns) {
-	let i=0, arr=toAssume(uri, extns);
-	let abs, stats, name, headers;
-	for (; i < arr.length; i++) {
-		abs = path.normalize(path.join(dir, name=arr[i]));
-		if (abs.startsWith(dir) && fs.existsSync(abs)) {
-			stats = fs.statSync(abs);
-			if (stats.isDirectory()) continue;
-			headers = toHeaders(name, stats, isEtag);
-			headers['Cache-Control'] = isEtag ? 'no-cache' : 'no-store';
-			return { abs, stats, headers };
-		}
-	}
-}
-
-function is404(req, res) {
-	return (res.statusCode=404,res.end());
-}
-
-function send(req, res, file, stats, headers) {
-	let code=200, tmp, opts={};
-	headers = { ...headers };
-
-	for (let key in headers) {
-		tmp = res.getHeader(key);
-		if (tmp) headers[key] = tmp;
-	}
-
-	if (tmp = res.getHeader('content-type')) {
-		headers['Content-Type'] = tmp;
-	}
-
-	if (req.headers.range) {
-		code = 206;
-		let [x, y] = req.headers.range.replace('bytes=', '').split('-');
-		let end = opts.end = parseInt(y, 10) || stats.size - 1;
-		let start = opts.start = parseInt(x, 10) || 0;
-
-		if (start >= stats.size || end >= stats.size) {
-			res.setHeader('Content-Range', `bytes */${stats.size}`);
-			res.statusCode = 416;
-			return res.end();
-		}
-
-		headers['Content-Range'] = `bytes ${start}-${end}/${stats.size}`;
-		headers['Content-Length'] = (end - start + 1);
-		headers['Accept-Ranges'] = 'bytes';
-	}
-
-	res.writeHead(code, headers);
-	fs.createReadStream(file, opts).pipe(res);
-}
-
-function isEncoding(name, type, headers) {
-	headers['Content-Encoding'] = type;
-	headers['Content-Type'] = lite.getType(name.replace(/\.([^.]*)$/, '')) || '';
-}
-
-function toHeaders(name, stats, isEtag) {
-	let headers = {
-		'Content-Length': stats.size,
-		'Content-Type': lite.getType(name) || '',
-		'Last-Modified': stats.mtime.toUTCString(),
-	};
-	if (isEtag) headers['ETag'] = `W/"${stats.size}-${stats.mtime.getTime()}"`;
-	if (/\.br$/.test(name)) isEncoding(name, 'br', headers);
-	if (/\.gz$/.test(name)) isEncoding(name, 'gzip', headers);
-	return headers;
-}
-
-function sirv (dir, opts={}) {
-	dir = path.resolve(dir || '.');
-
-	let isNotFound = opts.onNoMatch || is404;
-	let setHeaders = opts.setHeaders || noop;
-
-	let extensions = opts.extensions || ['html', 'htm'];
-	let gzips = opts.gzip && extensions.map(x => `${x}.gz`).concat('gz');
-	let brots = opts.brotli && extensions.map(x => `${x}.br`).concat('br');
-
-	const FILES = {};
-
-	let fallback = '/';
-	let isEtag = !!opts.etag;
-	let isSPA = !!opts.single;
-	if (typeof opts.single === 'string') {
-		let idx = opts.single.lastIndexOf('.');
-		fallback += !!~idx ? opts.single.substring(0, idx) : opts.single;
-	}
-
-	let ignores = [];
-	if (opts.ignores !== false) {
-		ignores.push(/[/]([A-Za-z\s\d~$._-]+\.\w+){1,}$/); // any extn
-		if (opts.dotfiles) ignores.push(/\/\.\w/);
-		else ignores.push(/\/\.well-known/);
-		[].concat(opts.ignores || []).forEach(x => {
-			ignores.push(new RegExp(x, 'i'));
-		});
-	}
-
-	let cc = opts.maxAge != null && `public,max-age=${opts.maxAge}`;
-	if (cc && opts.immutable) cc += ',immutable';
-	else if (cc && opts.maxAge === 0) cc += ',must-revalidate';
-
-	if (!opts.dev) {
-		list(dir, (name, abs, stats) => {
-			if (/\.well-known[\\+\/]/.test(name)) ; // keep
-			else if (!opts.dotfiles && /(^\.|[\\+|\/+]\.)/.test(name)) return;
-
-			let headers = toHeaders(name, stats, isEtag);
-			if (cc) headers['Cache-Control'] = cc;
-
-			FILES['/' + name.normalize().replace(/\\+/g, '/')] = { abs, stats, headers };
-		});
-	}
-
-	let lookup = opts.dev ? viaLocal.bind(0, dir, isEtag) : viaCache.bind(0, FILES);
-
-	return function (req, res, next) {
-		let extns = [''];
-		let val = req.headers['accept-encoding'] || '';
-		if (gzips && val.includes('gzip')) extns.unshift(...gzips);
-		if (brots && /(br|brotli)/i.test(val)) extns.unshift(...brots);
-		extns.push(...extensions); // [...br, ...gz, orig, ...exts]
-
-		let pathname = req.path || parser(req, true).pathname;
-		let data = lookup(pathname, extns) || isSPA && !isMatch(pathname, ignores) && lookup(fallback, extns);
-		if (!data) return next ? next() : isNotFound(req, res);
-
-		if (isEtag && req.headers['if-none-match'] === data.headers['ETag']) {
-			res.writeHead(304);
-			return res.end();
-		}
-
-		setHeaders(res, pathname, data.stats);
-		send(req, res, data.abs, data.stats, data.headers);
-	};
-}
-
-function noop$1() { }
+function noop() { }
 function run(fn) {
     return fn();
 }
@@ -371,7 +39,7 @@ function safe_not_equal(a, b) {
 }
 function subscribe(store, ...callbacks) {
     if (store == null) {
-        return noop$1;
+        return noop;
     }
     const unsub = store.subscribe(...callbacks);
     return unsub.unsubscribe ? () => unsub.unsubscribe() : unsub;
@@ -462,44 +130,52 @@ function add_attribute(name, value, boolean) {
     return ` ${name}${value === true ? '' : `=${typeof value === 'string' ? JSON.stringify(escape(value)) : `"${value}"`}`}`;
 }
 
-/* src\components\unit\Buttons\DeclareNewClaimButton.svelte generated by Svelte v3.31.2 */
-
-const DeclareNewClaimButton = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<button class="${"text-xl mx-5 my-1 px-1 text-bangarang-dark border border-bangarang-darkEmphasis rounded-md bg-bangarang-lightEmphasis"}" disabled>Declare a new claim</button>`;
-});
-
 const links = {
-    mainMenu: "/",
-    businessModel: "/BusinessModel",
-    leanCanvas: "/LeanCanvas",
-    syndicalistEarlyAdopters: "/EarlyAdoptersSyndicalist",
-    activistEarlyAdopters: "/EarlyAdoptersActivist",
-    agileTeamMemberEarlyAdopters: "/EarlyAdoptersAgileTeamMember"
+    MainMenu: "/MainMenu",
+    BusinessModel: "/BusinessModel",
+    LeanCanvas: "/LeanCanvas"
 };
+const claimLinkPrefix = "claims/";
+const valuePropositionLinkPrefix = "valuePropositions/";
 
-/* src\components\unit\Links\Link.svelte generated by Svelte v3.31.2 */
+/* src\client\components\Links\Link.svelte generated by Svelte v3.31.2 */
 
 const Link = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	let { linkName = "link name not provided to component!" } = $$props;
 	let { linkHref = "missing" } = $$props;
 	let { size } = $$props;
+	let { textAlign = "text-center" } = $$props;
+
+	const textSizeFromSize = size => {
+		if (size === "small") return "text-xs";
+		if (size === "large") return "text-2xl";
+		return "";
+	};
+
 	if ($$props.linkName === void 0 && $$bindings.linkName && linkName !== void 0) $$bindings.linkName(linkName);
 	if ($$props.linkHref === void 0 && $$bindings.linkHref && linkHref !== void 0) $$bindings.linkHref(linkHref);
 	if ($$props.size === void 0 && $$bindings.size && size !== void 0) $$bindings.size(size);
-	return `<a class="${escape(size === "small" ? "text-xs" : "") + " text-bangarang-darkEmphasis underline text-center mb-1"}"${add_attribute("href", linkHref, 0)}>${escape(linkName)}</a>`;
+	if ($$props.textAlign === void 0 && $$bindings.textAlign && textAlign !== void 0) $$bindings.textAlign(textAlign);
+	return `<a class="${escape(textSizeFromSize(size)) + " " + escape(textAlign) + " text-bangarang-darkEmphasis underline mb-1"}"${add_attribute("href", linkHref, 0)}>${escape(linkName)}</a>`;
 });
 
-/* src\components\unit\Titles\WelcomeTitle.svelte generated by Svelte v3.31.2 */
+/* src\client\components\Buttons\DeclareNewClaimButton.svelte generated by Svelte v3.31.2 */
+
+const DeclareNewClaimButton = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `<button class="${"text-xl mx-5 my-1 px-1 text-bangarang-dark border border-bangarang-darkEmphasis rounded-md bg-bangarang-lightEmphasis"}" disabled>Declare a new claim</button>`;
+});
+
+/* src\client\components\Titles\WelcomeTitle.svelte generated by Svelte v3.31.2 */
 
 const WelcomeTitle = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	return `<p class="${"text-2xl text-bangarang-darkEmphasis my-1"}">Welcome to</p>
 <h1 class="${"text-4xl text-bangarang-darkEmphasis my-1"}">BANGARANG</h1>`;
 });
 
-/* src\components\unit\Descriptions\BangarangDescription.svelte generated by Svelte v3.31.2 */
+/* src\client\components\Descriptions\BangarangDescription.svelte generated by Svelte v3.31.2 */
 
 const BangarangDescription = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<p class="${"text-xs text-center text-bangarang-darkEmphasis my-1"}">Bangarang is an open source and free direct democratic claim system. It allows anybody to declare or search for claim and claiming for them anonymously.</p>`;
+	return `<p class="${"text-sm text-center text-bangarang-lightEmphasis my-1"}">Bangarang is an open source and free direct democratic claim system. It allows anybody to declare or search for claim and claiming for them anonymously.</p>`;
 });
 
 const subscriber_queue = [];
@@ -508,7 +184,7 @@ const subscriber_queue = [];
  * @param {*=}value initial value
  * @param {StartStopNotifier=}start start and stop notifications for subscriptions
  */
-function writable(value, start = noop$1) {
+function writable(value, start = noop) {
     let stop;
     const subscribers = [];
     function set(new_value) {
@@ -533,11 +209,11 @@ function writable(value, start = noop$1) {
     function update(fn) {
         set(fn(value));
     }
-    function subscribe(run, invalidate = noop$1) {
+    function subscribe(run, invalidate = noop) {
         const subscriber = [run, invalidate];
         subscribers.push(subscriber);
         if (subscribers.length === 1) {
-            stop = start(set) || noop$1;
+            stop = start(set) || noop;
         }
         run(value);
         return () => {
@@ -557,7 +233,7 @@ function writable(value, start = noop$1) {
 const initialClaimSearchValue = '';
 const claimSearchStore = writable(initialClaimSearchValue);
 
-/* src\components\unit\SearchBars\ClaimSearchBar.svelte generated by Svelte v3.31.2 */
+/* src\client\components\SearchBars\ClaimSearchBar.svelte generated by Svelte v3.31.2 */
 
 const ClaimSearchBar = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	let $claimSearchStore, $$unsubscribe_claimSearchStore;
@@ -573,11 +249,24 @@ const ClaimSearchBar = create_ssr_component(($$result, $$props, $$bindings, slot
 	return `<input class="${"text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}" type="${"text"}" placeholder="${"Find a claim..."}"${add_attribute("value", $claimSearchStore, 1)}${add_attribute("this", searchBar, 1)}>`;
 });
 
-/* src\components\views\MainMenu\WelcomePageView.svelte generated by Svelte v3.31.2 */
+/* src\client\components\Cards\PreviewCard.svelte generated by Svelte v3.31.2 */
+
+const stage = "pre-alpha";
+const googleFormUrl = "https://forms.gle/H7FWYyG4HcHYthy99";
+
+const PreviewCard = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	const message = `Bangarang is currently on <b>${stage}</b> stage. If you want to be informed about the next stages, you can provide your email on the following Google Form.<br>Thanks.`;
+
+	return `<div class="${"border rounded my-6 border-bangarang-failed bg-bangarang-light flex flex-col items-center"}"><p class="${"m-1 text-bangarang-lightEmphasis flex-grow text-center text-xs"}">${message}</p>
+    <a${add_attribute("href", googleFormUrl, 0)} target="${"_blank"}" class="${" m-1 underline text-bangarang-darkEmphasis text-sm"}">Bangarang contact form.</a></div>`;
+});
+
+/* src\client\views\MainMenu\WelcomePageView.svelte generated by Svelte v3.31.2 */
 
 const WelcomePageView = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<main class="${"flex-grow overflow-y-auto flex flex-col items-center justify-center"}">${validate_component(WelcomeTitle, "WelcomeTitle").$$render($$result, {}, {}, {})}
-    ${validate_component(BangarangDescription, "BangarangDescription").$$render($$result, {}, {}, {})}</main>
+	return `<main class="${"flex-grow overflow-y-auto flex flex-col items-center justify-center p-1"}">${validate_component(WelcomeTitle, "WelcomeTitle").$$render($$result, {}, {}, {})}
+    ${validate_component(BangarangDescription, "BangarangDescription").$$render($$result, {}, {}, {})}
+    ${validate_component(PreviewCard, "PreviewCard").$$render($$result, {}, {}, {})}</main>
 <footer class="${"flex flex-col mb-1"}">${validate_component(ClaimSearchBar, "ClaimSearchBar").$$render($$result, {}, {}, {})}
     ${validate_component(DeclareNewClaimButton, "DeclareNewClaimButton").$$render($$result, {}, {}, {})}
     ${validate_component(Link, "Link").$$render(
@@ -585,20 +274,20 @@ const WelcomePageView = create_ssr_component(($$result, $$props, $$bindings, slo
 		{
 			size: "small",
 			linkName: "What is Bangarang?",
-			linkHref: links.businessModel
+			linkHref: links.BusinessModel
 		},
 		{},
 		{}
 	)}</footer>`;
 });
 
-/* src\components\unit\Icons\BackIcon.svelte generated by Svelte v3.31.2 */
+/* src\client\components\Icons\BackIcon.svelte generated by Svelte v3.31.2 */
 
 const BackIcon = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	return `<svg class="${"w-4 h-4 mr-1 stroke-current text-bangarang-darkEmphasis"}" xmlns="${"http://www.w3.org/2000/svg"}" fill="${"none"}" viewBox="${"0 0 24 24"}" stroke="${"currentColor"}"><path stroke-linecap="${"round"}" stroke-linejoin="${"round"}" stroke-width="${"2"}" d="${"M10 19l-7-7m0 0l7-7m-7 7h18"}"></path></svg>`;
 });
 
-/* src\components\unit\Links\BackToMainMenuLink.svelte generated by Svelte v3.31.2 */
+/* src\client\components\Links\BackToMainMenuLink.svelte generated by Svelte v3.31.2 */
 
 const BackToMainMenuLink = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	let $$unsubscribe_claimSearchStore;
@@ -608,43 +297,128 @@ const BackToMainMenuLink = create_ssr_component(($$result, $$props, $$bindings, 
 	return `<span class="${"flex items-center px-2"}">${validate_component(BackIcon, "BackIcon").$$render($$result, {}, {}, {})}<p class="${"text-xs text-bangarang-darkEmphasis underline"}">Back to main menu.</p></span>`;
 });
 
+const claims = new Array();
+claims.push({
+    peopleClaimed: 10,
+    peopleAgainst: 9,
+    peopleFor: 1,
+    title: "MonResto only offers meat in its menus, he needs at least one menu with only Vegan ingredients.",
+    id: "claim1"
+});
+claims.push({
+    peopleClaimed: 3215575,
+    peopleAgainst: 1227755,
+    peopleFor: 1987820,
+    title: "Does MonResto offer too much meat in its menus?",
+    id: "claim2"
+});
+claims.push({
+    peopleClaimed: 10,
+    peopleAgainst: 9,
+    peopleFor: 1,
+    title: "PasMonResto does not offer meat.",
+    id: "claim3"
+});
+claims.push({
+    peopleClaimed: 10,
+    peopleAgainst: 9,
+    peopleFor: 1,
+    title: "What are the conditions of validity of an article of the constitution of the Awesome App team?", id: "claim4"
+});
+claims.push({
+    peopleClaimed: 10,
+    peopleAgainst: 9,
+    peopleFor: 1,
+    title: "Thundercats are on the move, Thundercats are loose. Feel the magic, hear the roar, Thundercats are loose. Thunder, thunder, thunder, Thundercats! Thunder, thunder, thunder, Thundercats! Thunder, thunder, thunder, Thundercats! Thunder, thunder, thunder, Thundercats! Thundercats! ", id: "claim5"
+});
+claims.push({
+    peopleClaimed: 10,
+    peopleAgainst: 9,
+    peopleFor: 1,
+    title: "Top Cat! The most effectual Top Cat! Who’s intellectual close friends get to call him T.C., providing it’s with dignity. Top Cat! The indisputable leader of the gang. He’s the boss, he’s a pip, he’s the championship. He’s the most tip top, Top Cat. ", id: "claim6"
+});
+claims.push({
+    peopleClaimed: 10,
+    peopleAgainst: 9,
+    peopleFor: 1,
+    title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a lorem vitae sem viverra consequat. Nam a nisl volutpat, suscipit ipsum vitae, feugiat tellus. Vivamus in facilisis dolor. Proin id euismod nisl. Vestibulum a ligula arcu. Ut nec urna convallis, facilisis sem vel, viverra magna. Curabitur vitae augue non urna cursus iaculis.", id: "claim7"
+});
+claims.push({
+    peopleClaimed: 10,
+    peopleAgainst: 9,
+    peopleFor: 1,
+    title: "In eu nulla quam. Vestibulum vulputate vestibulum dolor, nec bibendum urna interdum nec. Nulla dapibus auctor odio eu finibus. Cras finibus ante ac leo suscipit, eget pulvinar libero dignissim. Cras pulvinar aliquet est. Etiam a facilisis augue. Donec sit amet nisl diam. Phasellus sed vehicula metus. Suspendisse magna purus, finibus et aliquet eget, mattis id velit. Aenean tincidunt nec neque nec semper. Integer rutrum ac sem vitae lobortis. Etiam vitae iaculis dui. Phasellus fringilla elit quis metus fringilla, vitae mollis neque finibus.", id: "claim8"
+});
+claims.push({
+    peopleClaimed: 10,
+    peopleAgainst: 9,
+    peopleFor: 1,
+    title: "Curabitur pulvinar pretium ex et accumsan. Nam fringilla ultrices sagittis. Suspendisse elementum nisi sed eros aliquet, ut congue nibh ornare. Nullam tincidunt eleifend libero, et iaculis libero pellentesque id. Integer sit amet urna vel leo malesuada ultrices. Aliquam vulputate, eros vel vestibulum mollis, tortor nulla laoreet purus, nec aliquam velit nunc vel quam. Cras vel ex dui. Duis ut nulla gravida, sodales lorem vitae, ornare enim. Cras sodales ligula sed eleifend ullamcorper. Aliquam tempus, libero eget consectetur laoreet, est purus facilisis sem, sit amet venenatis lorem massa vitae lorem. Etiam sit amet aliquet odio. Nulla et eros id nibh eleifend vestibulum nec vel dolor. Nulla commodo nulla vitae sem interdum, sit amet blandit velit elementum.", id: "claim9"
+});
+claims.push({
+    peopleClaimed: 10,
+    peopleAgainst: 9,
+    peopleFor: 1,
+    id: "claim11", title: "Etiam enim ligula, blandit in congue at, vulputate quis metus. Donec eu ullamcorper quam. Donec vitae lectus ac dolor finibus aliquet vel ac est. Quisque orci nibh, dictum in interdum ut, faucibus eu justo. Donec lobortis mauris id tellus ullamcorper, et porta mi varius. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer sodales felis a neque rutrum, sit amet pharetra nisl luctus. In vehicula iaculis risus nec tempus. Nunc interdum congue condimentum. Nulla sodales porta lectus nec pretium."
+});
+claims.push({
+    peopleClaimed: 10,
+    peopleAgainst: 9,
+    peopleFor: 1,
+    id: "claim12", title: "Sed lacinia nulla sed sapien mollis consequat. Nulla finibus eleifend metus, in dictum justo iaculis semper. Praesent sed est pellentesque, vulputate mi ut, vehicula leo. Aenean tempus egestas laoreet. Aenean rutrum placerat urna, non luctus est commodo sed. Mauris nec tristique ipsum. Nulla facilisi. Etiam a tristique quam, eu sagittis elit."
+});
+claims.push({
+    peopleClaimed: 10,
+    peopleAgainst: 9,
+    peopleFor: 1,
+    id: "claim13", title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vel leo quam. Integer sit amet tempor turpis. Aenean quis ex mollis, vulputate nunc quis, pulvinar ligula. Morbi luctus sem ac tortor mattis, sed semper magna rhoncus. Proin aliquam nisi eu mi feugiat blandit. Maecenas interdum eros tortor, sit amet posuere turpis dictum a. In ac arcu tincidunt, bibendum odio rutrum, mattis libero. Curabitur euismod, ipsum id tincidunt vehicula, justo metus lacinia dui, vel sodales tellus mi a leo."
+});
+claims.push({
+    peopleClaimed: 10,
+    peopleAgainst: 9,
+    peopleFor: 1,
+    id: "claim14", title: "Quisque porttitor, metus quis tincidunt convallis, mi dui tristique urna, eu ornare neque lorem nec libero. Nullam ut pharetra dui, eget sollicitudin arcu. Donec sollicitudin arcu eu faucibus fringilla. Integer vitae pellentesque nulla, eget feugiat turpis. Aliquam id porttitor ex, ut vulputate nibh. Morbi quam ante, aliquet a tellus in, molestie tempus massa. Integer mollis turpis quis felis fringilla, ut dapibus orci aliquam. Nullam faucibus, erat eu vehicula bibendum, est ipsum scelerisque magna, posuere tempor libero mauris ac purus. Vestibulum pulvinar ante lectus, sollicitudin congue mauris sodales id. Duis porttitor ultricies lorem at tincidunt. Sed iaculis aliquet consectetur."
+});
+claims.push({
+    peopleClaimed: 10,
+    peopleAgainst: 9,
+    peopleFor: 1,
+    id: "claim15", title: "Nulla eu magna augue. In mattis diam non felis efficitur, id semper libero aliquet. Nunc at ex nec orci pretium fringilla sed sit amet nibh. Duis id lobortis nulla. Aenean vitae purus tempus, tristique justo et, semper felis. Vestibulum in pretium dolor. Curabitur accumsan, nisi nec pretium dignissim, tellus augue luctus arcu, nec ultricies ligula lorem bibendum mauris. Phasellus at massa ante. Phasellus tincidunt placerat nisi, et accumsan dui consectetur aliquam. Etiam ultrices, velit ac euismod consectetur, ligula nunc imperdiet leo, ut laoreet erat velit ultrices ipsum. Proin non augue sapien. Phasellus sagittis ut elit at dictum. Nam malesuada eleifend cursus. Curabitur iaculis dolor vitae massa molestie, sed convallis velit dictum."
+});
+claims.push({
+    peopleClaimed: 10,
+    peopleAgainst: 9,
+    peopleFor: 1,
+    id: "claim16", title: "Donec ullamcorper ut arcu eget rutrum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Phasellus nec ipsum pretium, sagittis nisi ut, volutpat sem. Integer rhoncus, leo eu feugiat hendrerit, massa purus varius lectus, id pharetra augue purus id justo. Suspendisse est diam, scelerisque ut commodo et, sollicitudin quis elit. Donec vestibulum tristique consectetur. Suspendisse eleifend pellentesque ipsum, vel mollis lacus luctus in."
+});
+claims.push({
+    peopleClaimed: 10,
+    peopleAgainst: 9,
+    peopleFor: 1,
+    id: "claim17", title: "Donec ac euismod justo. Cras consequat, orci non pellentesque gravida, dolor urna porta nisi, ut luctus odio enim nec nibh. Phasellus vestibulum sapien non arcu porta suscipit. Duis consequat est dui, in rutrum diam varius vel. Cras iaculis, augue vel feugiat mollis, elit nulla imperdiet arcu, quis sagittis diam metus et lorem. Aenean sit amet finibus quam, ut sagittis dolor. Nulla ac hendrerit turpis, at lobortis risus. Phasellus nec magna ut sapien faucibus consequat. Interdum et malesuada fames ac ante ipsum primis in faucibus."
+});
+claims.push({
+    peopleClaimed: 10,
+    peopleAgainst: 9,
+    peopleFor: 1,
+    id: "claim18", title: "Sed ultrices, lorem eleifend sagittis ultrices, purus lorem fringilla neque, at vulputate magna augue id erat. Ut pulvinar lacus vel dui mattis eleifend. Donec sit amet arcu mattis, sagittis purus quis, consequat augue. Curabitur risus orci, malesuada id gravida et, maximus id arcu. Nullam tristique euismod diam non imperdiet. Donec congue auctor erat, sit amet blandit tortor condimentum at. Curabitur lacinia purus a libero laoreet tristique. Donec aliquam, augue sed efficitur porttitor, mauris massa blandit quam, id venenatis tortor massa ac lectus. Ut tempus rhoncus urna vitae pharetra. Sed ullamcorper pretium nibh, eget pharetra neque cursus nec. Aliquam quis nibh id orci euismod accumsan. Maecenas dictum neque odio. Morbi eget ante feugiat, rutrum metus nec, lacinia metus. Suspendisse mollis, libero quis placerat luctus, erat libero dapibus ante, sed fringilla nulla felis eu purus. Vivamus non consectetur ipsum, in ullamcorper est. Nunc odio arcu, auctor ut elit sed, suscipit vehicula nulla."
+});
+
 const retreiveClaimsByClaimSearchValue = (claimSearchValue) => {
     return claims.filter(claim => claim.title.includes(claimSearchValue));
 };
-const claims = new Array();
-claims.push({ title: "MonResto only offers meat in its menus, he needs at least one menu with only Vegan ingredients." });
-claims.push({ title: "Does MonResto offer too much meat in its menus?" });
-claims.push({ title: "PasMonResto does not offer meat." });
-claims.push({ title: "What are the conditions of validity of an article of the constitution of the Awesome App team?" });
-claims.push({ title: "Thundercats are on the move, Thundercats are loose. Feel the magic, hear the roar, Thundercats are loose. Thunder, thunder, thunder, Thundercats! Thunder, thunder, thunder, Thundercats! Thunder, thunder, thunder, Thundercats! Thunder, thunder, thunder, Thundercats! Thundercats! " });
-claims.push({ title: "Top Cat! The most effectual Top Cat! Who’s intellectual close friends get to call him T.C., providing it’s with dignity. Top Cat! The indisputable leader of the gang. He’s the boss, he’s a pip, he’s the championship. He’s the most tip top, Top Cat. " });
-claims.push({ title: "PasMonResto does not offer meat." });
-claims.push({ title: "PasMonResto does not offer meat." });
-claims.push({ title: "PasMonResto does not offer meat." });
-claims.push({ title: "PasMonResto does not offer meat." });
-claims.push({ title: "PasMonResto does not offer meat." });
-claims.push({ title: "PasMonResto does not offer meat." });
-claims.push({ title: "PasMonResto does not offer meat." });
-claims.push({ title: "PasMonResto does not offer meat." });
-claims.push({ title: "PasMonResto does not offer meat." });
-claims.push({ title: "PasMonResto does not offer meat." });
-claims.push({ title: "PasMonResto does not offer meat." });
 
-/* src\components\unit\Icons\ChevronRight.svelte generated by Svelte v3.31.2 */
-
-const ChevronRight = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<svg class="${"w-1/2 h-1/2 mx-1"}" fill="${"none"}" stroke="${"currentColor"}" viewBox="${"0 0 24 24"}" xmlns="${"http://www.w3.org/2000/svg"}"><path stroke-linecap="${"round"}" stroke-linejoin="${"round"}" stroke-width="${"2"}" d="${"M9 5l7 7-7 7"}"></path></svg>`;
-});
-
-/* src\components\unit\Cards\SearchedClaim.svelte generated by Svelte v3.31.2 */
+/* src\client\components\Cards\SearchedClaim.svelte generated by Svelte v3.31.2 */
 
 const SearchedClaim = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	let { title } = $$props;
+	let { claimLink } = $$props;
 	if ($$props.title === void 0 && $$bindings.title && title !== void 0) $$bindings.title(title);
-	return `<div class="${"border rounded my-1 p-1 border-bangarang-lightEmphasis flex items-center"}"><p class="${" text-bangarang-dark flex-grow"}">${escape(title)}</p>${validate_component(ChevronRight, "ChevronRight").$$render($$result, {}, {}, {})}</div>`;
+	if ($$props.claimLink === void 0 && $$bindings.claimLink && claimLink !== void 0) $$bindings.claimLink(claimLink);
+	return `<div class="${"border rounded my-1 p-1 border-bangarang-lightEmphasis flex items-center"}"><a${add_attribute("href", claimLink, 0)} class="${" text-bangarang-dark flex-grow"}">${escape(title)}</a></div>`;
 });
 
-/* src\components\unit\Lists\SearchedClaims.svelte generated by Svelte v3.31.2 */
+/* src\client\components\Lists\SearchedClaims.svelte generated by Svelte v3.31.2 */
 
 const SearchedClaims = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	
@@ -654,10 +428,18 @@ const SearchedClaims = create_ssr_component(($$result, $$props, $$bindings, slot
 		searchedClaims = retreiveClaimsByClaimSearchValue(claimSearchValue);
 	});
 
-	return `${each(searchedClaims, searchedClaim => `${validate_component(SearchedClaim, "SearchedClaim").$$render($$result, { title: searchedClaim.title }, {}, {})}`)}`;
+	return `${each(searchedClaims, searchedClaim => `${validate_component(SearchedClaim, "SearchedClaim").$$render(
+		$$result,
+		{
+			title: searchedClaim.title,
+			claimLink: "/" + claimLinkPrefix + searchedClaim.id
+		},
+		{},
+		{}
+	)}`)}`;
 });
 
-/* src\components\views\MainMenu\ClaimSearchView.svelte generated by Svelte v3.31.2 */
+/* src\client\views\MainMenu\ClaimSearchView.svelte generated by Svelte v3.31.2 */
 
 const ClaimSearchView = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	return `<main class="${"flex-grow overflow-y-auto"}">${validate_component(SearchedClaims, "SearchedClaims").$$render($$result, {}, {}, {})}</main>
@@ -665,9 +447,9 @@ const ClaimSearchView = create_ssr_component(($$result, $$props, $$bindings, slo
     ${validate_component(BackToMainMenuLink, "BackToMainMenuLink").$$render($$result, {}, {}, {})}</footer>`;
 });
 
-/* src\routes\index.svelte generated by Svelte v3.31.2 */
+/* src\routes\MainMenu.svelte generated by Svelte v3.31.2 */
 
-const Routes = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+const MainMenu = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	let $claimSearchStore, $$unsubscribe_claimSearchStore;
 	$$unsubscribe_claimSearchStore = subscribe(claimSearchStore, value => $claimSearchStore = value);
 	claimSearchStore.subscribe($$value => $claimSearchStore = $$value);
@@ -678,30 +460,224 @@ const Routes = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	: `${validate_component(ClaimSearchView, "ClaimSearchView").$$render($$result, {}, {}, {})}`}`;
 });
 
-var component_0 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	'default': Routes
+var component_6 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    'default': MainMenu
 });
 
-/* src\components\unit\Titles\ViewTitle.svelte generated by Svelte v3.31.2 */
+/* src\routes\index.svelte generated by Svelte v3.31.2 */
 
-const ViewTitle = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+const Routes = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `${validate_component(MainMenu, "MainMenu").$$render($$result, {}, {}, {})}`;
+});
+
+var component_0 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    'default': Routes
+});
+
+/* src\client\components\Titles\HeaderTitle.svelte generated by Svelte v3.31.2 */
+
+const HeaderTitle = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	let { title } = $$props;
 	if ($$props.title === void 0 && $$bindings.title && title !== void 0) $$bindings.title(title);
 	return `<h1 class="${"text-center my-1 text-2xl text-bangarang-darkEmphasis"}">${escape(title)}</h1>`;
 });
 
-/* src\routes\EarlyAdoptersAgileTeamMember.svelte generated by Svelte v3.31.2 */
+/* src\client\components\Lists\ValuePropositionDesignCanvasList.svelte generated by Svelte v3.31.2 */
 
-const EarlyAdoptersAgileTeamMember = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<header class="${"flex flex-col"}">${validate_component(ViewTitle, "ViewTitle").$$render($$result, { title: "AGILE TEAM MEMBER EARLY ADOPTER" }, {}, {})}</header>
-<main class="${"flex-grow overflow-y-auto"}"></main>
+const ValuePropositionDesignCanvasList = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	
+	let { valuePropositionDesignCanvas } = $$props;
+	const sections = Object.entries(valuePropositionDesignCanvas);
+
+	const retrieveSubTitleFromType = type => {
+		if (type === "customerJobs") return `You have activities`;
+		if (type === "pains") return `But you have pains`;
+		if (type === "painRelievers") return `We want to help you`;
+		if (type === "productAndServices") return `We have a solution`;
+		if (type === "gainCreators") return `We provide additionnal capabilities`;
+		if (type === "gains") return `You can acheive more`;
+		return `!!!ERROR UNKNOWN TYPE!!!`;
+	};
+
+	if ($$props.valuePropositionDesignCanvas === void 0 && $$bindings.valuePropositionDesignCanvas && valuePropositionDesignCanvas !== void 0) $$bindings.valuePropositionDesignCanvas(valuePropositionDesignCanvas);
+
+	return `${each(sections, ([type, contents]) => `${type !== "audience" && type !== "pageLink" && Array.isArray(contents) && contents.length > 0
+	? `<section><h1 class="${"text-sm mt-4 mb-1 text-bangarang-darkEmphasis font-semibold text-center"}">${escape(retrieveSubTitleFromType(type).toLocaleUpperCase())}</h1>
+            ${contents.length > 1
+		? `<ul class="${"list-disc list-inside"}">${each(contents, content => `<li class="${"text-bangarang-darkEmphasis text-sm"}">${escape(content)}</li>`)}
+                </ul>`
+		: `<p class="${"text-bangarang-darkEmphasis text-sm text-center"}">${escape(contents[0])}</p>`}
+        </section>`
+	: ``}`)}`;
+});
+
+const valuePropositionsDesignCanvas = [
+    {
+        audience: "Activist",
+        customerJobs: [
+            "You revendicate your ideas.",
+            "You collectively commit to a cause.",
+            "Your are pacifist."
+        ],
+        pains: [
+            "You suffer too much violence during protest.",
+            "You have to be disobedient.",
+            "You die or you are hurt while you protest."
+        ],
+        painRelievers: [
+            "You will claim from anyware.",
+            "Does claiming from home is a disobedience?",
+            "You will not claim by protesting anymore."
+        ],
+        productAndServices: ["Bangarang is an open source and free direct democratic claim system. It allows anybody to declare or search for claim and claiming for them anonymously."],
+        gainCreators: [
+            "You can claim whatever you want.",
+            "You can change your mind.",
+            "You have as much power as the others."
+        ],
+        gains: [
+            "You can claim on what makes sense to you.",
+            "You have the right like everyone else to make mistakes.",
+            "You do direct democracy."
+        ],
+        pageLink: "activist"
+    },
+    {
+        audience: "Syndicalist",
+        customerJobs: [
+            "You defend your interests as a worker.",
+            "You show solidarity with your colleagues.",
+            "You struggle daily for immediate improvements in work but also for the disappearance of salaried workers and employers."
+        ],
+        pains: [
+            "You are often divided.",
+            "You are individualist.",
+            "You die at work."
+        ],
+        painRelievers: [
+            "You will claim on common causes.",
+            "You will be free to claim without being unionized.",
+            "We will make a strong claim on workplace safety."
+        ],
+        productAndServices: ["Bangarang is an open source and free direct democratic claim system. It allows anybody to declare or search for claim and claiming for them anonymously."],
+        gainCreators: [
+            "You are unified by the number but independent by your choices.",
+            "You can change your mind.",
+            "You can claim as much as your employer."
+        ],
+        gains: [
+            "You and your colleagues will be more united.",
+            "You have the right like everyone else to make mistakes.",
+            "You greatly reduce the disparities between employers and employees."
+        ],
+        pageLink: "syndicalist"
+    },
+    {
+        audience: "Agile Team Member",
+        customerJobs: [
+            "We are uncovering better ways of developing software by doing it and helping others do it."
+        ],
+        pains: [
+            "You have more process and tools instead of individuals and interactions.",
+            "You have focus documentation instead of working software.",
+            "You take lot of time on contract negotiation over customer collaboration.",
+            "You have to follow THE PLAN instead of responding to change."
+        ],
+        painRelievers: [
+            "You claim how the software should be.",
+            "You claim the rule that documentation is optionnal but working software is mandatory.",
+            "You claim NO ESTIMATE.",
+            "You claim that customer feedback drive what must be done."
+        ],
+        productAndServices: ["Bangarang is an open source and free direct democratic claim system. It allows anybody to declare or search for claim and claiming for them anonymously."],
+        gainCreators: [
+            "Your software will be more focused on customer needs.",
+            "Your business objectives will be reach with better results.",
+            "You are owners of the product.",
+            "Your customers satisfaction will be enhanced."
+        ],
+        gains: [
+            "You value individuals and interactions over processes and tools",
+            "You value a working software over comprehensive documentation",
+            "You value customer collaboration over contract negotiation",
+            "You value responding to change over following a plan"
+        ],
+        pageLink: "agileTeamMember"
+    }
+];
+
+const retreiveValuePropositionFromValuePropositionPageLink = (valuePropositionPageLink) => {
+    return valuePropositionsDesignCanvas.find(valuePropositionDesignCanvas => valuePropositionPageLink.startsWith(valuePropositionDesignCanvas.pageLink));
+};
+
+/* src\routes\valuePropositions\[valuePropositionPageLink].svelte generated by Svelte v3.31.2 */
+
+var __awaiter = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
+	function adopt(value) {
+		return value instanceof P
+		? value
+		: new P(function (resolve) {
+					resolve(value);
+				});
+	}
+
+	return new (P || (P = Promise))(function (resolve, reject) {
+			function fulfilled(value) {
+				try {
+					step(generator.next(value));
+				} catch(e) {
+					reject(e);
+				}
+			}
+
+			function rejected(value) {
+				try {
+					step(generator["throw"](value));
+				} catch(e) {
+					reject(e);
+				}
+			}
+
+			function step(result) {
+				result.done
+				? resolve(result.value)
+				: adopt(result.value).then(fulfilled, rejected);
+			}
+
+			step((generator = generator.apply(thisArg, _arguments || [])).next());
+		});
+};
+
+function preload(page, session) {
+	return __awaiter(this, void 0, void 0, function* () {
+		const { valuePropositionPageLink } = page.params;
+		const valuePropositionDesignCanvas = retreiveValuePropositionFromValuePropositionPageLink(valuePropositionPageLink);
+		return { valuePropositionDesignCanvas };
+	});
+}
+
+const U5BvaluePropositionPageLinku5D = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	
+	let { valuePropositionDesignCanvas } = $$props;
+	if ($$props.valuePropositionDesignCanvas === void 0 && $$bindings.valuePropositionDesignCanvas && valuePropositionDesignCanvas !== void 0) $$bindings.valuePropositionDesignCanvas(valuePropositionDesignCanvas);
+
+	return `<header class="${"flex flex-col"}">${validate_component(HeaderTitle, "HeaderTitle").$$render(
+		$$result,
+		{
+			title: valuePropositionDesignCanvas.audience + " Value Proposition"
+		},
+		{},
+		{}
+	)}</header>
+<main class="${"flex-grow overflow-y-auto"}">${validate_component(ValuePropositionDesignCanvasList, "ValuePropositionDesignCanvas").$$render($$result, { valuePropositionDesignCanvas }, {}, {})}</main>
 <footer class="${"flex flex-col"}">${validate_component(Link, "Link").$$render(
 		$$result,
 		{
 			size: "small",
 			linkName: "The Lean Canvas",
-			linkHref: links.leanCanvas
+			linkHref: links.LeanCanvas
 		},
 		{},
 		{}
@@ -711,7 +687,7 @@ const EarlyAdoptersAgileTeamMember = create_ssr_component(($$result, $$props, $$
 		{
 			size: "small",
 			linkName: "Use Bangarang!",
-			linkHref: links.mainMenu
+			linkHref: links.MainMenu
 		},
 		{},
 		{}
@@ -719,98 +695,36 @@ const EarlyAdoptersAgileTeamMember = create_ssr_component(($$result, $$props, $$
 });
 
 var component_1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	'default': EarlyAdoptersAgileTeamMember
+    __proto__: null,
+    'default': U5BvaluePropositionPageLinku5D,
+    preload: preload
 });
 
-/* src\routes\EarlyAdoptersSyndicalist.svelte generated by Svelte v3.31.2 */
-
-const EarlyAdoptersSyndicalist = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<header class="${"flex flex-col"}">${validate_component(ViewTitle, "ViewTitle").$$render($$result, { title: "SYNDICALIST EARLY ADOPTER" }, {}, {})}</header>
-<main class="${"flex-grow overflow-y-auto"}"></main>
-<footer class="${"flex flex-col"}">${validate_component(Link, "Link").$$render(
-		$$result,
-		{
-			size: "small",
-			linkName: "The Lean Canvas",
-			linkHref: links.leanCanvas
-		},
-		{},
-		{}
-	)}
-    ${validate_component(Link, "Link").$$render(
-		$$result,
-		{
-			size: "small",
-			linkName: "Use Bangarang!",
-			linkHref: links.mainMenu
-		},
-		{},
-		{}
-	)}</footer>`;
-});
-
-var component_2 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	'default': EarlyAdoptersSyndicalist
-});
-
-/* src\routes\EarlyAdoptersActivist.svelte generated by Svelte v3.31.2 */
-
-const EarlyAdoptersActivist = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<header class="${"flex flex-col"}">${validate_component(ViewTitle, "ViewTitle").$$render($$result, { title: "ACTIVIST EARLY ADOPTER" }, {}, {})}</header>
-<main class="${"flex-grow overflow-y-auto"}"></main>
-<footer class="${"flex flex-col"}">${validate_component(Link, "Link").$$render(
-		$$result,
-		{
-			size: "small",
-			linkName: "The Lean Canvas",
-			linkHref: links.leanCanvas
-		},
-		{},
-		{}
-	)}
-    ${validate_component(Link, "Link").$$render(
-		$$result,
-		{
-			size: "small",
-			linkName: "Use Bangarang!",
-			linkHref: links.mainMenu
-		},
-		{},
-		{}
-	)}</footer>`;
-});
-
-var component_3 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	'default': EarlyAdoptersActivist
-});
-
-/* src\components\unit\Cards\DescriptionCard.svelte generated by Svelte v3.31.2 */
+/* src\client\components\Cards\DescriptionCard.svelte generated by Svelte v3.31.2 */
 
 const DescriptionCard = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	
 	let { descriptionCardContract } = $$props;
 	if ($$props.descriptionCardContract === void 0 && $$bindings.descriptionCardContract && descriptionCardContract !== void 0) $$bindings.descriptionCardContract(descriptionCardContract);
 
-	return `<section class="${"mb-2 p-1"}"><h2 class="${"text-bangarang-dark text-center font-semibold"}">${escape(descriptionCardContract.title)}</h2>
-    <p class="${"text-bangarang-darkEmphasis text-center text-sm"}">${escape(descriptionCardContract.description)}</p>
-    ${descriptionCardContract.bulletPoints?.length > 0
+	return `<section class="${"mb-2 p-1"}"><h2 class="${"text-bangarang-dark text-center"}">${escape(descriptionCardContract.title)}</h2>
+    <p class="${"text-bangarang-darkEmphasis text-center font-light italic text-sm"}">${escape(descriptionCardContract.description)}</p>
+    ${descriptionCardContract.bulletPoints?.length > 1
 	? `<ul class="${"list-disc list-inside"}">${each(descriptionCardContract.bulletPoints, bulletPoint => `<li class="${"text-bangarang-darkEmphasis text-sm"}">${escape(bulletPoint)}</li>`)}</ul>`
-	: ``}
+	: `${descriptionCardContract.bulletPoints?.length === 1
+		? `<p class="${"text-bangarang-darkEmphasis text-sm text-center"}">${escape(descriptionCardContract.bulletPoints[0])}</p>`
+		: ``}`}
     ${descriptionCardContract.links?.length > 0
-	? `${each(descriptionCardContract.links, link => `<span>${validate_component(Link, "Link").$$render(
+	? `${each(descriptionCardContract.links, link => `<p class="${"text-center"}">${validate_component(Link, "Link").$$render(
 			$$result,
 			{
 				linkHref: link.href,
 				linkName: link.name,
-				size: "medium"
+				size: "small"
 			},
 			{},
 			{}
-		)}
-            </span>`)}`
+		)}</p>`)}`
 	: ``}</section>`;
 });
 
@@ -846,7 +760,7 @@ const BusinessModel = create_ssr_component(($$result, $$props, $$bindings, slots
 		}
 	];
 
-	return `<header class="${"flex flex-col"}">${validate_component(ViewTitle, "ViewTitle").$$render($$result, { title: "Bangarang Business Model" }, {}, {})}</header>
+	return `<header class="${"flex flex-col"}">${validate_component(HeaderTitle, "HeaderTitle").$$render($$result, { title: "Bangarang Business Model" }, {}, {})}</header>
 <main class="${"flex-grow overflow-y-auto"}">${each(BusinessModelValues, businessModelValue => `${validate_component(DescriptionCard, "BusinessValueSection").$$render(
 		$$result,
 		{
@@ -860,7 +774,7 @@ const BusinessModel = create_ssr_component(($$result, $$props, $$bindings, slots
 		{
 			size: "small",
 			linkName: "The Lean Canvas",
-			linkHref: links.leanCanvas
+			linkHref: links.LeanCanvas
 		},
 		{},
 		{}
@@ -870,16 +784,255 @@ const BusinessModel = create_ssr_component(($$result, $$props, $$bindings, slots
 		{
 			size: "small",
 			linkName: "Use Bangarang!",
-			linkHref: links.mainMenu
+			linkHref: links.MainMenu
 		},
 		{},
 		{}
 	)}</footer>`;
 });
 
+var component_2 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    'default': BusinessModel
+});
+
+/* src\client\components\Titles\MainTitle.svelte generated by Svelte v3.31.2 */
+
+const MainTitle = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { title } = $$props;
+	let { size = "medium" } = $$props;
+	let { theme = "light" } = $$props;
+
+	const headingTextSizeFromSize = size => {
+		if (size === "large") return "text-3xl";
+		return "text-xl";
+	};
+
+	const colorFromTheme = theme => {
+		if (theme === "dark") return "text-bangarang-light";
+		return "text-bangarang-dark";
+	};
+
+	if ($$props.title === void 0 && $$bindings.title && title !== void 0) $$bindings.title(title);
+	if ($$props.size === void 0 && $$bindings.size && size !== void 0) $$bindings.size(size);
+	if ($$props.theme === void 0 && $$bindings.theme && theme !== void 0) $$bindings.theme(theme);
+	return `<h1 class="${escape(headingTextSizeFromSize(size)) + " m-5 " + escape(colorFromTheme(theme)) + " font-semibold text-left"}">${escape(title)}</h1>`;
+});
+
+/* src\client\components\Titles\MainSubTitle.svelte generated by Svelte v3.31.2 */
+
+const MainSubTitle = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { title } = $$props;
+	let { theme = "light" } = $$props;
+
+	const colorFromTheme = theme => {
+		if (theme === "dark") return "text-bangarang-lightEmphasis";
+		return "text-bangarang-darkEmphasis";
+	};
+
+	if ($$props.title === void 0 && $$bindings.title && title !== void 0) $$bindings.title(title);
+	if ($$props.theme === void 0 && $$bindings.theme && theme !== void 0) $$bindings.theme(theme);
+	return `<h2 class="${"text-xl m-4 " + escape(colorFromTheme(theme)) + " font-medium text-right"}">${escape(title)}</h2>`;
+});
+
+/* src\client\components\Buttons\GenericButton.svelte generated by Svelte v3.31.2 */
+
+const GenericButton = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { textbutton = "CLICK ME!" } = $$props;
+	let { size = "medium" } = $$props;
+	let { onClickAction } = $$props;
+	let { customClasses = "" } = $$props;
+	let { color = "light" } = $$props;
+
+	const textSizeFromSize = size => {
+		if (size === "large") return "text-2xl";
+		return "text-xl";
+	};
+
+	const marginTopFromSize = size => {
+		if (size === "large") return "mt-4";
+		return "";
+	};
+
+	const borderFromSize = size => {
+		if (size === "large") return "border-2";
+		return "border";
+	};
+
+	const buttonThemeFromColor = color => {
+		if (color === "dark") return "text-bangarang-light border-bangarang-light bg-bangarang-dark";
+		return "text-bangarang-dark border-bangarang-dark bg-bangarang-light";
+	};
+
+	if ($$props.textbutton === void 0 && $$bindings.textbutton && textbutton !== void 0) $$bindings.textbutton(textbutton);
+	if ($$props.size === void 0 && $$bindings.size && size !== void 0) $$bindings.size(size);
+	if ($$props.onClickAction === void 0 && $$bindings.onClickAction && onClickAction !== void 0) $$bindings.onClickAction(onClickAction);
+	if ($$props.customClasses === void 0 && $$bindings.customClasses && customClasses !== void 0) $$bindings.customClasses(customClasses);
+	if ($$props.color === void 0 && $$bindings.color && color !== void 0) $$bindings.color(color);
+	return `<button class="${escape(textSizeFromSize(size)) + " " + escape(marginTopFromSize(size)) + " " + escape(customClasses) + " " + escape(buttonThemeFromColor(color)) + " my-1 px-1 pb-1  " + escape(borderFromSize(size)) + " rounded-md"}">${escape(textbutton)}</button>`;
+});
+
+/* src\routes\landingPages\LandingPageModel.svelte generated by Svelte v3.31.2 */
+
+async function preload$1(page, session) {
+	const { slug } = page.params;
+	const res = await this.fetch(`blog/${slug}.json`);
+	const article = await res.json();
+	return { article };
+}
+
+const theme = "dark";
+
+const LandingPageModel = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { mainHeadLine } = $$props;
+	let { supportingHeadline } = $$props;
+	if ($$props.mainHeadLine === void 0 && $$bindings.mainHeadLine && mainHeadLine !== void 0) $$bindings.mainHeadLine(mainHeadLine);
+	if ($$props.supportingHeadline === void 0 && $$bindings.supportingHeadline && supportingHeadline !== void 0) $$bindings.supportingHeadline(supportingHeadline);
+
+	return `<main class="${"flex-grow overflow-y-auto flex flex-col items-center justify-evenly bg-bangarang-dark"}"><section>${mainHeadLine
+	? `${validate_component(MainTitle, "MainTitle").$$render(
+			$$result,
+			{
+				title: mainHeadLine,
+				size: "large",
+				theme
+			},
+			{},
+			{}
+		)}`
+	: ``}
+        ${supportingHeadline
+	? `${validate_component(MainSubTitle, "MainSubTitle").$$render(
+			$$result,
+			{
+				title: `Use Bangarang and ${supportingHeadline.toLocaleLowerCase()}`,
+				theme
+			},
+			{},
+			{}
+		)}`
+	: ``}</section>
+    ${validate_component(GenericButton, "GenericButton").$$render(
+		$$result,
+		{
+			textbutton: "Get started",
+			customClasses: "w-11/12",
+			size: "large",
+			color: "dark"
+		},
+		{},
+		{}
+	)}</main>`;
+});
+
+var component_3 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    'default': LandingPageModel,
+    preload: preload$1
+});
+
+/* src\routes\landingPages\[audience]\[landingPageId].svelte generated by Svelte v3.31.2 */
+
+var __awaiter$1 = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
+	function adopt(value) {
+		return value instanceof P
+		? value
+		: new P(function (resolve) {
+					resolve(value);
+				});
+	}
+
+	return new (P || (P = Promise))(function (resolve, reject) {
+			function fulfilled(value) {
+				try {
+					step(generator.next(value));
+				} catch(e) {
+					reject(e);
+				}
+			}
+
+			function rejected(value) {
+				try {
+					step(generator["throw"](value));
+				} catch(e) {
+					reject(e);
+				}
+			}
+
+			function step(result) {
+				result.done
+				? resolve(result.value)
+				: adopt(result.value).then(fulfilled, rejected);
+			}
+
+			step((generator = generator.apply(thisArg, _arguments || [])).next());
+		});
+};
+
+function preload$2(page, session) {
+	return __awaiter$1(this, void 0, void 0, function* () {
+		const { audience, landingPageId } = page.params;
+		const valueProposition = retreiveValuePropositionFromValuePropositionPageLink(audience);
+		const mainHeadLine = valueProposition.pains[landingPageId - 1];
+		const supportingHeadLine = valueProposition.painRelievers[landingPageId - 1];
+		if (!mainHeadLine || !supportingHeadLine) throw new Error("Value Proposition not found"); else return { mainHeadLine, supportingHeadLine };
+	});
+}
+
+const theme$1 = "dark";
+
+const U5BlandingPageIdu5D = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { mainHeadLine } = $$props;
+	let { supportingHeadLine } = $$props;
+
+	const navigateToBangarang = () => {
+		window.location.href = links.MainMenu;
+	};
+
+	if ($$props.mainHeadLine === void 0 && $$bindings.mainHeadLine && mainHeadLine !== void 0) $$bindings.mainHeadLine(mainHeadLine);
+	if ($$props.supportingHeadLine === void 0 && $$bindings.supportingHeadLine && supportingHeadLine !== void 0) $$bindings.supportingHeadLine(supportingHeadLine);
+
+	return `<main class="${"flex-grow overflow-y-auto flex flex-col items-center justify-evenly bg-bangarang-dark"}"><section>${mainHeadLine
+	? `${validate_component(MainTitle, "MainTitle").$$render(
+			$$result,
+			{
+				title: mainHeadLine,
+				size: "large",
+				theme: theme$1
+			},
+			{},
+			{}
+		)}`
+	: ``}
+        ${supportingHeadLine
+	? `${validate_component(MainSubTitle, "MainSubTitle").$$render(
+			$$result,
+			{
+				title: `Use Bangarang and ${supportingHeadLine.toLocaleLowerCase()}`,
+				theme: theme$1
+			},
+			{},
+			{}
+		)}`
+	: ``}</section>
+    ${validate_component(GenericButton, "GenericButton").$$render(
+		$$result,
+		{
+			textbutton: "Get started",
+			customClasses: "w-11/12",
+			size: "large",
+			color: "dark",
+			onClickAction: navigateToBangarang
+		},
+		{},
+		{}
+	)}</main>`;
+});
+
 var component_4 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	'default': BusinessModel
+    __proto__: null,
+    'default': U5BlandingPageIdu5D,
+    preload: preload$2
 });
 
 /* src\routes\LeanCanvas.svelte generated by Svelte v3.31.2 */
@@ -900,20 +1053,10 @@ const LeanCanvas = create_ssr_component(($$result, $$props, $$bindings, slots) =
 					title: "Early Adopters",
 					description: "Characteristics list of ideal customers.",
 					bulletPoints: ["Syndicates", "Activits", "Team members where there is lot of control"],
-					links: [
-						{
-							name: "Are your a syndicalist?",
-							href: links.syndicalistEarlyAdopters
-						},
-						{
-							name: "Are your an activist?",
-							href: links.activistEarlyAdopters
-						},
-						{
-							name: "Are your an agile team member?",
-							href: links.agileTeamMemberEarlyAdopters
-						}
-					]
+					links: valuePropositionsDesignCanvas.map(valuePropositionDesignCanvas => ({
+						name: `Are you a ${valuePropositionDesignCanvas.audience.toLocaleLowerCase()}?`,
+						href: valuePropositionLinkPrefix + valuePropositionDesignCanvas.pageLink
+					}))
 				}
 			]
 		},
@@ -1038,15 +1181,15 @@ const LeanCanvas = create_ssr_component(($$result, $$props, $$bindings, slots) =
 		}
 	];
 
-	return `<header class="${"flex flex-col"}">${validate_component(ViewTitle, "ViewTitle").$$render($$result, { title: "Bangarang Lean Canvas" }, {}, {})}</header>
-<main class="${"flex-grow overflow-y-auto"}">${each(leanCanvas, leanCanvasPart => `<h1 class="${"text-xl mt-4 text-bangarang-dark font-semibold text-center"}">${escape(leanCanvasPart.partName)}</h1>
+	return `<header class="${"flex flex-col"}">${validate_component(HeaderTitle, "HeaderTitle").$$render($$result, { title: "Bangarang Lean Canvas" }, {}, {})}</header>
+<main class="${"flex-grow overflow-y-auto"}">${each(leanCanvas, leanCanvasPart => `${validate_component(MainTitle, "MainTitle").$$render($$result, { title: leanCanvasPart.partName }, {}, {})}
         ${each(leanCanvasPart.sections, section => `${validate_component(DescriptionCard, "DescriptionCard").$$render($$result, { descriptionCardContract: section }, {}, {})}`)}`)}</main>
 <footer class="${"flex flex-col"}">${validate_component(Link, "Link").$$render(
 		$$result,
 		{
 			size: "small",
 			linkName: "The Business Model",
-			linkHref: links.businessModel
+			linkHref: links.BusinessModel
 		},
 		{},
 		{}
@@ -1056,7 +1199,7 @@ const LeanCanvas = create_ssr_component(($$result, $$props, $$bindings, slots) =
 		{
 			size: "small",
 			linkName: "Use Bangarang!",
-			linkHref: links.mainMenu
+			linkHref: links.MainMenu
 		},
 		{},
 		{}
@@ -1064,49 +1207,199 @@ const LeanCanvas = create_ssr_component(($$result, $$props, $$bindings, slots) =
 });
 
 var component_5 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	'default': LeanCanvas
+    __proto__: null,
+    'default': LeanCanvas
 });
 
-/* src\components\unit\Styles\tailwindcss.svelte generated by Svelte v3.31.2 */
+/* src\client\components\Links\ClaimShare.svelte generated by Svelte v3.31.2 */
 
-const css = {
-	code: "@tailwind base;@tailwind components;@tailwind utilities;",
-	map: "{\"version\":3,\"file\":\"tailwindcss.svelte\",\"sources\":[\"tailwindcss.svelte\"],\"sourcesContent\":[\"<style global>\\n  @tailwind base;\\n  @tailwind components;\\n  @tailwind utilities;\\n</style>\"],\"names\":[],\"mappings\":\"AACE,UAAU,IAAI,CAAC,AACf,UAAU,UAAU,CAAC,AACrB,UAAU,SAAS,CAAC\"}"
+const ClaimShare = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+
+	return `<section class="${"mb-2"}"><p class="${"text-center underline text-sm text-bangarang-darkEmphasis cursor-pointer"}">Would you like to share this claim?</p>
+    ${ `${ ``}`}</section>`;
+});
+
+/* src\client\components\Footers\ClaimFooter.svelte generated by Svelte v3.31.2 */
+
+const ClaimFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `<footer class="${"flex flex-col p-1"}">${validate_component(ClaimShare, "ClaimShare").$$render($$result, {}, {}, {})}
+    ${validate_component(Link, "Link").$$render(
+		$$result,
+		{
+			size: "small",
+			linkHref: links.MainMenu,
+			linkName: "<< Back to main menu.",
+			textAlign: "text-left"
+		},
+		{},
+		{}
+	)}</footer>`;
+});
+
+/* src\client\components\Headers\ClaimHeader.svelte generated by Svelte v3.31.2 */
+
+const ClaimHeader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { title } = $$props;
+	if ($$props.title === void 0 && $$bindings.title && title !== void 0) $$bindings.title(title);
+	return `<header class="${"flex-grow overflow-y-auto flex flex-col place-content-center p-1"}"><p class="${" self-center text-lg text-center text-bangarang-lightEmphasis"}">${escape(title)}</p></header>`;
+});
+
+/* src\client\components\Buttons\ClaimAgainstButton.svelte generated by Svelte v3.31.2 */
+
+const ClaimAgainstButton = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	const againstClaimButtonClicked = () => {
+		console.log("CLAIMED AGAINST!");
+	};
+
+	return `${validate_component(GenericButton, "GenericButton").$$render(
+		$$result,
+		{
+			textbutton: "Against",
+			onClickAction: againstClaimButtonClicked
+		},
+		{},
+		{}
+	)}`;
+});
+
+/* src\client\components\Buttons\ClaimForButton.svelte generated by Svelte v3.31.2 */
+
+const ClaimForButton = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	const forClaimButtonClicked = () => {
+		console.log("CLAIMED FOR!");
+	};
+
+	return `${validate_component(GenericButton, "GenericButton").$$render(
+		$$result,
+		{
+			textbutton: "For",
+			onClickAction: forClaimButtonClicked
+		},
+		{},
+		{}
+	)}`;
+});
+
+/* src\client\components\Mains\ClaimMain.svelte generated by Svelte v3.31.2 */
+
+const ClaimMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { peopleClaimed = 0 } = $$props;
+	let { peopleFor = 0 } = $$props;
+	let { peopleAgainst = 0 } = $$props;
+	const retreivePercentage = (total, part) => total > 0 ? part / total * 100 : 0;
+	if ($$props.peopleClaimed === void 0 && $$bindings.peopleClaimed && peopleClaimed !== void 0) $$bindings.peopleClaimed(peopleClaimed);
+	if ($$props.peopleFor === void 0 && $$bindings.peopleFor && peopleFor !== void 0) $$bindings.peopleFor(peopleFor);
+	if ($$props.peopleAgainst === void 0 && $$bindings.peopleAgainst && peopleAgainst !== void 0) $$bindings.peopleAgainst(peopleAgainst);
+
+	return `<main class="${"flex flex-col my-2"}"><p class="${"text-center text-bangarang-lightEmphasis my-2"}">${escape(peopleClaimed)}<br>people claimed</p>
+    <section class="${"flex justify-between my-1 mx-4"}"><section class="${"flex flex-col w-1/3"}">${validate_component(ClaimAgainstButton, "ClaimAgainstButton").$$render($$result, {}, {}, {})}
+            <p class="${"text-center text-bangarang-lightEmphasis"}">${escape(retreivePercentage(peopleClaimed, peopleAgainst).toFixed(2))}%</p></section>
+        <section class="${"flex flex-col w-1/3"}">${validate_component(ClaimForButton, "ClaimForButton").$$render($$result, {}, {}, {})}
+            <p class="${"text-center text-bangarang-lightEmphasis"}">${escape(retreivePercentage(peopleClaimed, peopleFor).toFixed(2))}%</p></section></section></main>`;
+});
+
+const retreiveClaimById = (id) => claims.find(claim => claim.id === id);
+
+/* src\routes\claims\[claimId].svelte generated by Svelte v3.31.2 */
+
+var __awaiter$2 = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
+	function adopt(value) {
+		return value instanceof P
+		? value
+		: new P(function (resolve) {
+					resolve(value);
+				});
+	}
+
+	return new (P || (P = Promise))(function (resolve, reject) {
+			function fulfilled(value) {
+				try {
+					step(generator.next(value));
+				} catch(e) {
+					reject(e);
+				}
+			}
+
+			function rejected(value) {
+				try {
+					step(generator["throw"](value));
+				} catch(e) {
+					reject(e);
+				}
+			}
+
+			function step(result) {
+				result.done
+				? resolve(result.value)
+				: adopt(result.value).then(fulfilled, rejected);
+			}
+
+			step((generator = generator.apply(thisArg, _arguments || [])).next());
+		});
 };
 
-const Tailwindcss = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	$$result.css.add(css);
-	return ``;
+function preload$3(page, session) {
+	return __awaiter$2(this, void 0, void 0, function* () {
+		const { claimId } = page.params;
+		const claim = retreiveClaimById(claimId);
+		return { claim };
+	});
+}
+
+const U5BclaimIdu5D = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	
+	let { claim } = $$props;
+	if ($$props.claim === void 0 && $$bindings.claim && claim !== void 0) $$bindings.claim(claim);
+
+	return `${validate_component(ClaimHeader, "ClaimHeader").$$render($$result, { title: claim.title }, {}, {})}
+${validate_component(ClaimMain, "ClaimMain").$$render(
+		$$result,
+		{
+			peopleClaimed: claim.peopleClaimed,
+			peopleFor: claim.peopleFor,
+			peopleAgainst: claim.peopleAgainst
+		},
+		{},
+		{}
+	)}
+${validate_component(ClaimFooter, "ClaimFooter").$$render($$result, {}, {}, {})}`;
 });
 
-/* src\routes\_layout.svelte generated by Svelte v3.31.2 */
+var component_7 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    'default': U5BclaimIdu5D,
+    preload: preload$3
+});
+
+/* src\node_modules\@sapper\internal\layout.svelte generated by Svelte v3.31.2 */
 
 const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `${validate_component(Tailwindcss, "Tailwindcss").$$render($$result, {}, {}, {})}`;
+	return `${slots.default ? slots.default({}) : ``}`;
 });
 
 var root_comp = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	'default': Layout
+    __proto__: null,
+    'default': Layout
 });
 
-/* src\routes\_error.svelte generated by Svelte v3.31.2 */
+/* src\node_modules\@sapper\internal\error.svelte generated by Svelte v3.31.2 */
 
 const Error$1 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let { status } = $$props;
 	let { error } = $$props;
-	if ($$props.status === void 0 && $$bindings.status && status !== void 0) $$bindings.status(status);
+	let { status } = $$props;
 	if ($$props.error === void 0 && $$bindings.error && error !== void 0) $$bindings.error(error);
+	if ($$props.status === void 0 && $$bindings.status && status !== void 0) $$bindings.status(status);
 
-	return `${($$result.head += `${($$result.title = `<title>OUPS! ${escape(status)} - ${escape(error.message)}</title>`, "")}`, "")}
-<h1>OUPS!</h1>
-<p>${escape(status)} - ${escape(error.message)}</p>
+	return `<h1>${escape(status)}</h1>
+
+<p>${escape(error.message)}</p>
 
 ${ ``}`;
 });
 
 // This file is generated by Sapper — do not edit it!
+
+const d = decodeURIComponent;
 
 const manifest = {
 	server_routes: [
@@ -1123,26 +1416,11 @@ const manifest = {
 		},
 
 		{
-			// EarlyAdoptersAgileTeamMember.svelte
-			pattern: /^\/EarlyAdoptersAgileTeamMember\/?$/,
+			// valuePropositions/[valuePropositionPageLink].svelte
+			pattern: /^\/valuePropositions\/([^/]+?)\/?$/,
 			parts: [
-				{ name: "EarlyAdoptersAgileTeamMember", file: "EarlyAdoptersAgileTeamMember.svelte", component: component_1 }
-			]
-		},
-
-		{
-			// EarlyAdoptersSyndicalist.svelte
-			pattern: /^\/EarlyAdoptersSyndicalist\/?$/,
-			parts: [
-				{ name: "EarlyAdoptersSyndicalist", file: "EarlyAdoptersSyndicalist.svelte", component: component_2 }
-			]
-		},
-
-		{
-			// EarlyAdoptersActivist.svelte
-			pattern: /^\/EarlyAdoptersActivist\/?$/,
-			parts: [
-				{ name: "EarlyAdoptersActivist", file: "EarlyAdoptersActivist.svelte", component: component_3 }
+				null,
+				{ name: "valuePropositions_$valuePropositionPageLink", file: "valuePropositions/[valuePropositionPageLink].svelte", component: component_1, params: match => ({ valuePropositionPageLink: d(match[1]) }) }
 			]
 		},
 
@@ -1150,7 +1428,26 @@ const manifest = {
 			// BusinessModel.svelte
 			pattern: /^\/BusinessModel\/?$/,
 			parts: [
-				{ name: "BusinessModel", file: "BusinessModel.svelte", component: component_4 }
+				{ name: "BusinessModel", file: "BusinessModel.svelte", component: component_2 }
+			]
+		},
+
+		{
+			// landingPages/LandingPageModel.svelte
+			pattern: /^\/landingPages\/LandingPageModel\/?$/,
+			parts: [
+				null,
+				{ name: "landingPages_LandingPageModel", file: "landingPages/LandingPageModel.svelte", component: component_3 }
+			]
+		},
+
+		{
+			// landingPages/[audience]/[landingPageId].svelte
+			pattern: /^\/landingPages\/([^/]+?)\/([^/]+?)\/?$/,
+			parts: [
+				null,
+				null,
+				{ name: "landingPages_$audience$93_$91landingPageId", file: "landingPages/[audience]/[landingPageId].svelte", component: component_4, params: match => ({ audience: d(match[1]), landingPageId: d(match[2]) }) }
 			]
 		},
 
@@ -1159,6 +1456,23 @@ const manifest = {
 			pattern: /^\/LeanCanvas\/?$/,
 			parts: [
 				{ name: "LeanCanvas", file: "LeanCanvas.svelte", component: component_5 }
+			]
+		},
+
+		{
+			// MainMenu.svelte
+			pattern: /^\/MainMenu\/?$/,
+			parts: [
+				{ name: "MainMenu", file: "MainMenu.svelte", component: component_6 }
+			]
+		},
+
+		{
+			// claims/[claimId].svelte
+			pattern: /^\/claims\/([^/]+?)\/?$/,
+			parts: [
+				null,
+				{ name: "claims_$claimId", file: "claims/[claimId].svelte", component: component_7, params: match => ({ claimId: d(match[1]) }) }
 			]
 		}
 	],
@@ -1205,7 +1519,7 @@ ${validate_component(Layout, "Layout").$$render($$result, Object.assign({ segmen
  * @param typeMap [Object] Map of MIME type -> Array[extensions]
  * @param ...
  */
-function Mime$1() {
+function Mime() {
   this._types = Object.create(null);
   this._extensions = Object.create(null);
 
@@ -1237,7 +1551,7 @@ function Mime$1() {
  * @param map (Object) type definitions
  * @param force (Boolean) if true, force overriding of existing definitions
  */
-Mime$1.prototype.define = function(typeMap, force) {
+Mime.prototype.define = function(typeMap, force) {
   for (var type in typeMap) {
     var extensions = typeMap[type].map(function(t) {return t.toLowerCase()});
     type = type.toLowerCase();
@@ -1274,7 +1588,7 @@ Mime$1.prototype.define = function(typeMap, force) {
 /**
  * Lookup a mime type based on extension
  */
-Mime$1.prototype.getType = function(path) {
+Mime.prototype.getType = function(path) {
   path = String(path);
   var last = path.replace(/^.*[/\\]/, '').toLowerCase();
   var ext = last.replace(/^.*\./, '').toLowerCase();
@@ -1288,16 +1602,16 @@ Mime$1.prototype.getType = function(path) {
 /**
  * Return file extension associated with a mime type
  */
-Mime$1.prototype.getExtension = function(type) {
+Mime.prototype.getExtension = function(type) {
   type = /^\s*([^;\s]*)/.test(type) && RegExp.$1;
   return type && this._extensions[type.toLowerCase()] || null;
 };
 
-var Mime_1$1 = Mime$1;
+var Mime_1 = Mime;
 
-var standard$1 = {"application/andrew-inset":["ez"],"application/applixware":["aw"],"application/atom+xml":["atom"],"application/atomcat+xml":["atomcat"],"application/atomdeleted+xml":["atomdeleted"],"application/atomsvc+xml":["atomsvc"],"application/atsc-dwd+xml":["dwd"],"application/atsc-held+xml":["held"],"application/atsc-rsat+xml":["rsat"],"application/bdoc":["bdoc"],"application/calendar+xml":["xcs"],"application/ccxml+xml":["ccxml"],"application/cdfx+xml":["cdfx"],"application/cdmi-capability":["cdmia"],"application/cdmi-container":["cdmic"],"application/cdmi-domain":["cdmid"],"application/cdmi-object":["cdmio"],"application/cdmi-queue":["cdmiq"],"application/cu-seeme":["cu"],"application/dash+xml":["mpd"],"application/davmount+xml":["davmount"],"application/docbook+xml":["dbk"],"application/dssc+der":["dssc"],"application/dssc+xml":["xdssc"],"application/ecmascript":["ecma","es"],"application/emma+xml":["emma"],"application/emotionml+xml":["emotionml"],"application/epub+zip":["epub"],"application/exi":["exi"],"application/fdt+xml":["fdt"],"application/font-tdpfr":["pfr"],"application/geo+json":["geojson"],"application/gml+xml":["gml"],"application/gpx+xml":["gpx"],"application/gxf":["gxf"],"application/gzip":["gz"],"application/hjson":["hjson"],"application/hyperstudio":["stk"],"application/inkml+xml":["ink","inkml"],"application/ipfix":["ipfix"],"application/its+xml":["its"],"application/java-archive":["jar","war","ear"],"application/java-serialized-object":["ser"],"application/java-vm":["class"],"application/javascript":["js","mjs"],"application/json":["json","map"],"application/json5":["json5"],"application/jsonml+json":["jsonml"],"application/ld+json":["jsonld"],"application/lgr+xml":["lgr"],"application/lost+xml":["lostxml"],"application/mac-binhex40":["hqx"],"application/mac-compactpro":["cpt"],"application/mads+xml":["mads"],"application/manifest+json":["webmanifest"],"application/marc":["mrc"],"application/marcxml+xml":["mrcx"],"application/mathematica":["ma","nb","mb"],"application/mathml+xml":["mathml"],"application/mbox":["mbox"],"application/mediaservercontrol+xml":["mscml"],"application/metalink+xml":["metalink"],"application/metalink4+xml":["meta4"],"application/mets+xml":["mets"],"application/mmt-aei+xml":["maei"],"application/mmt-usd+xml":["musd"],"application/mods+xml":["mods"],"application/mp21":["m21","mp21"],"application/mp4":["mp4s","m4p"],"application/mrb-consumer+xml":["*xdf"],"application/mrb-publish+xml":["*xdf"],"application/msword":["doc","dot"],"application/mxf":["mxf"],"application/n-quads":["nq"],"application/n-triples":["nt"],"application/node":["cjs"],"application/octet-stream":["bin","dms","lrf","mar","so","dist","distz","pkg","bpk","dump","elc","deploy","exe","dll","deb","dmg","iso","img","msi","msp","msm","buffer"],"application/oda":["oda"],"application/oebps-package+xml":["opf"],"application/ogg":["ogx"],"application/omdoc+xml":["omdoc"],"application/onenote":["onetoc","onetoc2","onetmp","onepkg"],"application/oxps":["oxps"],"application/p2p-overlay+xml":["relo"],"application/patch-ops-error+xml":["*xer"],"application/pdf":["pdf"],"application/pgp-encrypted":["pgp"],"application/pgp-signature":["asc","sig"],"application/pics-rules":["prf"],"application/pkcs10":["p10"],"application/pkcs7-mime":["p7m","p7c"],"application/pkcs7-signature":["p7s"],"application/pkcs8":["p8"],"application/pkix-attr-cert":["ac"],"application/pkix-cert":["cer"],"application/pkix-crl":["crl"],"application/pkix-pkipath":["pkipath"],"application/pkixcmp":["pki"],"application/pls+xml":["pls"],"application/postscript":["ai","eps","ps"],"application/provenance+xml":["provx"],"application/pskc+xml":["pskcxml"],"application/raml+yaml":["raml"],"application/rdf+xml":["rdf","owl"],"application/reginfo+xml":["rif"],"application/relax-ng-compact-syntax":["rnc"],"application/resource-lists+xml":["rl"],"application/resource-lists-diff+xml":["rld"],"application/rls-services+xml":["rs"],"application/route-apd+xml":["rapd"],"application/route-s-tsid+xml":["sls"],"application/route-usd+xml":["rusd"],"application/rpki-ghostbusters":["gbr"],"application/rpki-manifest":["mft"],"application/rpki-roa":["roa"],"application/rsd+xml":["rsd"],"application/rss+xml":["rss"],"application/rtf":["rtf"],"application/sbml+xml":["sbml"],"application/scvp-cv-request":["scq"],"application/scvp-cv-response":["scs"],"application/scvp-vp-request":["spq"],"application/scvp-vp-response":["spp"],"application/sdp":["sdp"],"application/senml+xml":["senmlx"],"application/sensml+xml":["sensmlx"],"application/set-payment-initiation":["setpay"],"application/set-registration-initiation":["setreg"],"application/shf+xml":["shf"],"application/sieve":["siv","sieve"],"application/smil+xml":["smi","smil"],"application/sparql-query":["rq"],"application/sparql-results+xml":["srx"],"application/srgs":["gram"],"application/srgs+xml":["grxml"],"application/sru+xml":["sru"],"application/ssdl+xml":["ssdl"],"application/ssml+xml":["ssml"],"application/swid+xml":["swidtag"],"application/tei+xml":["tei","teicorpus"],"application/thraud+xml":["tfi"],"application/timestamped-data":["tsd"],"application/toml":["toml"],"application/ttml+xml":["ttml"],"application/urc-ressheet+xml":["rsheet"],"application/voicexml+xml":["vxml"],"application/wasm":["wasm"],"application/widget":["wgt"],"application/winhlp":["hlp"],"application/wsdl+xml":["wsdl"],"application/wspolicy+xml":["wspolicy"],"application/xaml+xml":["xaml"],"application/xcap-att+xml":["xav"],"application/xcap-caps+xml":["xca"],"application/xcap-diff+xml":["xdf"],"application/xcap-el+xml":["xel"],"application/xcap-error+xml":["xer"],"application/xcap-ns+xml":["xns"],"application/xenc+xml":["xenc"],"application/xhtml+xml":["xhtml","xht"],"application/xliff+xml":["xlf"],"application/xml":["xml","xsl","xsd","rng"],"application/xml-dtd":["dtd"],"application/xop+xml":["xop"],"application/xproc+xml":["xpl"],"application/xslt+xml":["xslt"],"application/xspf+xml":["xspf"],"application/xv+xml":["mxml","xhvml","xvml","xvm"],"application/yang":["yang"],"application/yin+xml":["yin"],"application/zip":["zip"],"audio/3gpp":["*3gpp"],"audio/adpcm":["adp"],"audio/basic":["au","snd"],"audio/midi":["mid","midi","kar","rmi"],"audio/mobile-xmf":["mxmf"],"audio/mp3":["*mp3"],"audio/mp4":["m4a","mp4a"],"audio/mpeg":["mpga","mp2","mp2a","mp3","m2a","m3a"],"audio/ogg":["oga","ogg","spx"],"audio/s3m":["s3m"],"audio/silk":["sil"],"audio/wav":["wav"],"audio/wave":["*wav"],"audio/webm":["weba"],"audio/xm":["xm"],"font/collection":["ttc"],"font/otf":["otf"],"font/ttf":["ttf"],"font/woff":["woff"],"font/woff2":["woff2"],"image/aces":["exr"],"image/apng":["apng"],"image/bmp":["bmp"],"image/cgm":["cgm"],"image/dicom-rle":["drle"],"image/emf":["emf"],"image/fits":["fits"],"image/g3fax":["g3"],"image/gif":["gif"],"image/heic":["heic"],"image/heic-sequence":["heics"],"image/heif":["heif"],"image/heif-sequence":["heifs"],"image/hej2k":["hej2"],"image/hsj2":["hsj2"],"image/ief":["ief"],"image/jls":["jls"],"image/jp2":["jp2","jpg2"],"image/jpeg":["jpeg","jpg","jpe"],"image/jph":["jph"],"image/jphc":["jhc"],"image/jpm":["jpm"],"image/jpx":["jpx","jpf"],"image/jxr":["jxr"],"image/jxra":["jxra"],"image/jxrs":["jxrs"],"image/jxs":["jxs"],"image/jxsc":["jxsc"],"image/jxsi":["jxsi"],"image/jxss":["jxss"],"image/ktx":["ktx"],"image/png":["png"],"image/sgi":["sgi"],"image/svg+xml":["svg","svgz"],"image/t38":["t38"],"image/tiff":["tif","tiff"],"image/tiff-fx":["tfx"],"image/webp":["webp"],"image/wmf":["wmf"],"message/disposition-notification":["disposition-notification"],"message/global":["u8msg"],"message/global-delivery-status":["u8dsn"],"message/global-disposition-notification":["u8mdn"],"message/global-headers":["u8hdr"],"message/rfc822":["eml","mime"],"model/3mf":["3mf"],"model/gltf+json":["gltf"],"model/gltf-binary":["glb"],"model/iges":["igs","iges"],"model/mesh":["msh","mesh","silo"],"model/mtl":["mtl"],"model/obj":["obj"],"model/stl":["stl"],"model/vrml":["wrl","vrml"],"model/x3d+binary":["*x3db","x3dbz"],"model/x3d+fastinfoset":["x3db"],"model/x3d+vrml":["*x3dv","x3dvz"],"model/x3d+xml":["x3d","x3dz"],"model/x3d-vrml":["x3dv"],"text/cache-manifest":["appcache","manifest"],"text/calendar":["ics","ifb"],"text/coffeescript":["coffee","litcoffee"],"text/css":["css"],"text/csv":["csv"],"text/html":["html","htm","shtml"],"text/jade":["jade"],"text/jsx":["jsx"],"text/less":["less"],"text/markdown":["markdown","md"],"text/mathml":["mml"],"text/mdx":["mdx"],"text/n3":["n3"],"text/plain":["txt","text","conf","def","list","log","in","ini"],"text/richtext":["rtx"],"text/rtf":["*rtf"],"text/sgml":["sgml","sgm"],"text/shex":["shex"],"text/slim":["slim","slm"],"text/stylus":["stylus","styl"],"text/tab-separated-values":["tsv"],"text/troff":["t","tr","roff","man","me","ms"],"text/turtle":["ttl"],"text/uri-list":["uri","uris","urls"],"text/vcard":["vcard"],"text/vtt":["vtt"],"text/xml":["*xml"],"text/yaml":["yaml","yml"],"video/3gpp":["3gp","3gpp"],"video/3gpp2":["3g2"],"video/h261":["h261"],"video/h263":["h263"],"video/h264":["h264"],"video/jpeg":["jpgv"],"video/jpm":["*jpm","jpgm"],"video/mj2":["mj2","mjp2"],"video/mp2t":["ts"],"video/mp4":["mp4","mp4v","mpg4"],"video/mpeg":["mpeg","mpg","mpe","m1v","m2v"],"video/ogg":["ogv"],"video/quicktime":["qt","mov"],"video/webm":["webm"]};
+var standard = {"application/andrew-inset":["ez"],"application/applixware":["aw"],"application/atom+xml":["atom"],"application/atomcat+xml":["atomcat"],"application/atomdeleted+xml":["atomdeleted"],"application/atomsvc+xml":["atomsvc"],"application/atsc-dwd+xml":["dwd"],"application/atsc-held+xml":["held"],"application/atsc-rsat+xml":["rsat"],"application/bdoc":["bdoc"],"application/calendar+xml":["xcs"],"application/ccxml+xml":["ccxml"],"application/cdfx+xml":["cdfx"],"application/cdmi-capability":["cdmia"],"application/cdmi-container":["cdmic"],"application/cdmi-domain":["cdmid"],"application/cdmi-object":["cdmio"],"application/cdmi-queue":["cdmiq"],"application/cu-seeme":["cu"],"application/dash+xml":["mpd"],"application/davmount+xml":["davmount"],"application/docbook+xml":["dbk"],"application/dssc+der":["dssc"],"application/dssc+xml":["xdssc"],"application/ecmascript":["ecma","es"],"application/emma+xml":["emma"],"application/emotionml+xml":["emotionml"],"application/epub+zip":["epub"],"application/exi":["exi"],"application/fdt+xml":["fdt"],"application/font-tdpfr":["pfr"],"application/geo+json":["geojson"],"application/gml+xml":["gml"],"application/gpx+xml":["gpx"],"application/gxf":["gxf"],"application/gzip":["gz"],"application/hjson":["hjson"],"application/hyperstudio":["stk"],"application/inkml+xml":["ink","inkml"],"application/ipfix":["ipfix"],"application/its+xml":["its"],"application/java-archive":["jar","war","ear"],"application/java-serialized-object":["ser"],"application/java-vm":["class"],"application/javascript":["js","mjs"],"application/json":["json","map"],"application/json5":["json5"],"application/jsonml+json":["jsonml"],"application/ld+json":["jsonld"],"application/lgr+xml":["lgr"],"application/lost+xml":["lostxml"],"application/mac-binhex40":["hqx"],"application/mac-compactpro":["cpt"],"application/mads+xml":["mads"],"application/manifest+json":["webmanifest"],"application/marc":["mrc"],"application/marcxml+xml":["mrcx"],"application/mathematica":["ma","nb","mb"],"application/mathml+xml":["mathml"],"application/mbox":["mbox"],"application/mediaservercontrol+xml":["mscml"],"application/metalink+xml":["metalink"],"application/metalink4+xml":["meta4"],"application/mets+xml":["mets"],"application/mmt-aei+xml":["maei"],"application/mmt-usd+xml":["musd"],"application/mods+xml":["mods"],"application/mp21":["m21","mp21"],"application/mp4":["mp4s","m4p"],"application/mrb-consumer+xml":["*xdf"],"application/mrb-publish+xml":["*xdf"],"application/msword":["doc","dot"],"application/mxf":["mxf"],"application/n-quads":["nq"],"application/n-triples":["nt"],"application/node":["cjs"],"application/octet-stream":["bin","dms","lrf","mar","so","dist","distz","pkg","bpk","dump","elc","deploy","exe","dll","deb","dmg","iso","img","msi","msp","msm","buffer"],"application/oda":["oda"],"application/oebps-package+xml":["opf"],"application/ogg":["ogx"],"application/omdoc+xml":["omdoc"],"application/onenote":["onetoc","onetoc2","onetmp","onepkg"],"application/oxps":["oxps"],"application/p2p-overlay+xml":["relo"],"application/patch-ops-error+xml":["*xer"],"application/pdf":["pdf"],"application/pgp-encrypted":["pgp"],"application/pgp-signature":["asc","sig"],"application/pics-rules":["prf"],"application/pkcs10":["p10"],"application/pkcs7-mime":["p7m","p7c"],"application/pkcs7-signature":["p7s"],"application/pkcs8":["p8"],"application/pkix-attr-cert":["ac"],"application/pkix-cert":["cer"],"application/pkix-crl":["crl"],"application/pkix-pkipath":["pkipath"],"application/pkixcmp":["pki"],"application/pls+xml":["pls"],"application/postscript":["ai","eps","ps"],"application/provenance+xml":["provx"],"application/pskc+xml":["pskcxml"],"application/raml+yaml":["raml"],"application/rdf+xml":["rdf","owl"],"application/reginfo+xml":["rif"],"application/relax-ng-compact-syntax":["rnc"],"application/resource-lists+xml":["rl"],"application/resource-lists-diff+xml":["rld"],"application/rls-services+xml":["rs"],"application/route-apd+xml":["rapd"],"application/route-s-tsid+xml":["sls"],"application/route-usd+xml":["rusd"],"application/rpki-ghostbusters":["gbr"],"application/rpki-manifest":["mft"],"application/rpki-roa":["roa"],"application/rsd+xml":["rsd"],"application/rss+xml":["rss"],"application/rtf":["rtf"],"application/sbml+xml":["sbml"],"application/scvp-cv-request":["scq"],"application/scvp-cv-response":["scs"],"application/scvp-vp-request":["spq"],"application/scvp-vp-response":["spp"],"application/sdp":["sdp"],"application/senml+xml":["senmlx"],"application/sensml+xml":["sensmlx"],"application/set-payment-initiation":["setpay"],"application/set-registration-initiation":["setreg"],"application/shf+xml":["shf"],"application/sieve":["siv","sieve"],"application/smil+xml":["smi","smil"],"application/sparql-query":["rq"],"application/sparql-results+xml":["srx"],"application/srgs":["gram"],"application/srgs+xml":["grxml"],"application/sru+xml":["sru"],"application/ssdl+xml":["ssdl"],"application/ssml+xml":["ssml"],"application/swid+xml":["swidtag"],"application/tei+xml":["tei","teicorpus"],"application/thraud+xml":["tfi"],"application/timestamped-data":["tsd"],"application/toml":["toml"],"application/ttml+xml":["ttml"],"application/urc-ressheet+xml":["rsheet"],"application/voicexml+xml":["vxml"],"application/wasm":["wasm"],"application/widget":["wgt"],"application/winhlp":["hlp"],"application/wsdl+xml":["wsdl"],"application/wspolicy+xml":["wspolicy"],"application/xaml+xml":["xaml"],"application/xcap-att+xml":["xav"],"application/xcap-caps+xml":["xca"],"application/xcap-diff+xml":["xdf"],"application/xcap-el+xml":["xel"],"application/xcap-error+xml":["xer"],"application/xcap-ns+xml":["xns"],"application/xenc+xml":["xenc"],"application/xhtml+xml":["xhtml","xht"],"application/xliff+xml":["xlf"],"application/xml":["xml","xsl","xsd","rng"],"application/xml-dtd":["dtd"],"application/xop+xml":["xop"],"application/xproc+xml":["xpl"],"application/xslt+xml":["xslt"],"application/xspf+xml":["xspf"],"application/xv+xml":["mxml","xhvml","xvml","xvm"],"application/yang":["yang"],"application/yin+xml":["yin"],"application/zip":["zip"],"audio/3gpp":["*3gpp"],"audio/adpcm":["adp"],"audio/basic":["au","snd"],"audio/midi":["mid","midi","kar","rmi"],"audio/mobile-xmf":["mxmf"],"audio/mp3":["*mp3"],"audio/mp4":["m4a","mp4a"],"audio/mpeg":["mpga","mp2","mp2a","mp3","m2a","m3a"],"audio/ogg":["oga","ogg","spx"],"audio/s3m":["s3m"],"audio/silk":["sil"],"audio/wav":["wav"],"audio/wave":["*wav"],"audio/webm":["weba"],"audio/xm":["xm"],"font/collection":["ttc"],"font/otf":["otf"],"font/ttf":["ttf"],"font/woff":["woff"],"font/woff2":["woff2"],"image/aces":["exr"],"image/apng":["apng"],"image/bmp":["bmp"],"image/cgm":["cgm"],"image/dicom-rle":["drle"],"image/emf":["emf"],"image/fits":["fits"],"image/g3fax":["g3"],"image/gif":["gif"],"image/heic":["heic"],"image/heic-sequence":["heics"],"image/heif":["heif"],"image/heif-sequence":["heifs"],"image/hej2k":["hej2"],"image/hsj2":["hsj2"],"image/ief":["ief"],"image/jls":["jls"],"image/jp2":["jp2","jpg2"],"image/jpeg":["jpeg","jpg","jpe"],"image/jph":["jph"],"image/jphc":["jhc"],"image/jpm":["jpm"],"image/jpx":["jpx","jpf"],"image/jxr":["jxr"],"image/jxra":["jxra"],"image/jxrs":["jxrs"],"image/jxs":["jxs"],"image/jxsc":["jxsc"],"image/jxsi":["jxsi"],"image/jxss":["jxss"],"image/ktx":["ktx"],"image/png":["png"],"image/sgi":["sgi"],"image/svg+xml":["svg","svgz"],"image/t38":["t38"],"image/tiff":["tif","tiff"],"image/tiff-fx":["tfx"],"image/webp":["webp"],"image/wmf":["wmf"],"message/disposition-notification":["disposition-notification"],"message/global":["u8msg"],"message/global-delivery-status":["u8dsn"],"message/global-disposition-notification":["u8mdn"],"message/global-headers":["u8hdr"],"message/rfc822":["eml","mime"],"model/3mf":["3mf"],"model/gltf+json":["gltf"],"model/gltf-binary":["glb"],"model/iges":["igs","iges"],"model/mesh":["msh","mesh","silo"],"model/mtl":["mtl"],"model/obj":["obj"],"model/stl":["stl"],"model/vrml":["wrl","vrml"],"model/x3d+binary":["*x3db","x3dbz"],"model/x3d+fastinfoset":["x3db"],"model/x3d+vrml":["*x3dv","x3dvz"],"model/x3d+xml":["x3d","x3dz"],"model/x3d-vrml":["x3dv"],"text/cache-manifest":["appcache","manifest"],"text/calendar":["ics","ifb"],"text/coffeescript":["coffee","litcoffee"],"text/css":["css"],"text/csv":["csv"],"text/html":["html","htm","shtml"],"text/jade":["jade"],"text/jsx":["jsx"],"text/less":["less"],"text/markdown":["markdown","md"],"text/mathml":["mml"],"text/mdx":["mdx"],"text/n3":["n3"],"text/plain":["txt","text","conf","def","list","log","in","ini"],"text/richtext":["rtx"],"text/rtf":["*rtf"],"text/sgml":["sgml","sgm"],"text/shex":["shex"],"text/slim":["slim","slm"],"text/stylus":["stylus","styl"],"text/tab-separated-values":["tsv"],"text/troff":["t","tr","roff","man","me","ms"],"text/turtle":["ttl"],"text/uri-list":["uri","uris","urls"],"text/vcard":["vcard"],"text/vtt":["vtt"],"text/xml":["*xml"],"text/yaml":["yaml","yml"],"video/3gpp":["3gp","3gpp"],"video/3gpp2":["3g2"],"video/h261":["h261"],"video/h263":["h263"],"video/h264":["h264"],"video/jpeg":["jpgv"],"video/jpm":["*jpm","jpgm"],"video/mj2":["mj2","mjp2"],"video/mp2t":["ts"],"video/mp4":["mp4","mp4v","mpg4"],"video/mpeg":["mpeg","mpg","mpe","m1v","m2v"],"video/ogg":["ogv"],"video/quicktime":["qt","mov"],"video/webm":["webm"]};
 
-var lite$1 = new Mime_1$1(standard$1);
+var lite = new Mime_1(standard);
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -1314,7 +1628,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 
-function __awaiter(thisArg, _arguments, P, generator) {
+function __awaiter$3(thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -1326,7 +1640,7 @@ function __awaiter(thisArg, _arguments, P, generator) {
 
 function get_server_route_handler(routes) {
     function handle_route(route, req, res, next) {
-        return __awaiter(this, void 0, void 0, function* () {
+        return __awaiter$3(this, void 0, void 0, function* () {
             req.params = route.params(route.pattern.exec(req.path));
             const method = req.method.toLowerCase();
             // 'delete' cannot be exported from a module because it is a keyword,
@@ -1408,7 +1722,7 @@ function get_server_route_handler(routes) {
  * @public
  */
 
-var parse_1 = parse$1;
+var parse_1 = parse;
 
 /**
  * Module variables.
@@ -1430,7 +1744,7 @@ var pairSplitRegExp = /; */;
  * @public
  */
 
-function parse$1(str, options) {
+function parse(str, options) {
   if (typeof str !== 'string') {
     throw new TypeError('argument str must be a string');
   }
@@ -5676,7 +5990,7 @@ function get_page_handler(manifest, session_getter) {
     }
     function handle_page(page, req, res, status = 200, error = null) {
         var _a, _b;
-        return __awaiter(this, void 0, void 0, function* () {
+        return __awaiter$3(this, void 0, void 0, function* () {
             const is_service_worker_index = req.path === '/service-worker-index.html';
             const build_info = get_build_info();
             res.setHeader('Content-Type', 'text/html');
@@ -6030,7 +6344,7 @@ function middleware(opts = {}) {
             cache_control:  'max-age=31536000, immutable'
         }),
         get_server_route_handler(manifest.server_routes),
-        get_page_handler(manifest, session || noop$2)
+        get_page_handler(manifest, session || noop$1)
     ].filter(Boolean));
 }
 function compose_handlers(ignore, handlers) {
@@ -6069,7 +6383,7 @@ function serve({ prefix, pathname, cache_control }) {
     const read =  (file) => (cache.has(file) ? cache : cache.set(file, fs__default['default'].readFileSync(path__default['default'].join(build_dir, file)))).get(file);
     return (req, res, next) => {
         if (filter(req)) {
-            const type = lite$1.getType(req.path);
+            const type = lite.getType(req.path);
             try {
                 const file = path__default['default'].posix.normalize(decodeURIComponent(req.path));
                 const data = read(file);
@@ -6093,12 +6407,12 @@ function serve({ prefix, pathname, cache_control }) {
         }
     };
 }
-function noop$2() { }
+function noop$1() { }
 
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
 polka__default['default']() // You can also use Express
-    .use(compression__default['default']({ threshold: 0 }), sirv('static', { dev }), middleware())
+    .use(compression__default['default']({ threshold: 0 }), sirv__default['default']('static', { dev }), middleware())
     .listen(PORT, err => {
     if (err)
         console.log('error', err);
