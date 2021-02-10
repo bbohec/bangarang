@@ -3,7 +3,7 @@
     import {links} from "../../routing/links"
     import ClaimShare from "../Links/ClaimShare.svelte"
 </script>
-<footer class="flex flex-col">
+<footer class="flex flex-col p-1">
     <ClaimShare/>
     <Link size="small" linkHref={links.mainMenu} linkName="<< Back to main menu." textAlign={"text-left"}/>
 </footer>
