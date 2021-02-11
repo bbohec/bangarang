@@ -1,0 +1,1 @@
+export const userDontExist = (individualIdentifier: string): string =>`User identified by identifier ${individualIdentifier} don't exist.`;

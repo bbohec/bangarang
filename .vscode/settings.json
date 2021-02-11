@@ -1,0 +1,7 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "css.customData": [".vscode/css_custom_data.json"],
+    "deno.enable": false
+}

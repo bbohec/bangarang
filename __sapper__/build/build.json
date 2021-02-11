@@ -1,0 +1,69 @@
+{
+  "bundler": "rollup",
+  "shimport": "2.0.4",
+  "assets": {
+    "main": "client.41b5c719.js"
+  },
+  "css": {},
+  "dependencies": {
+    "index.svelte": [
+      "index.4e54cd59.js",
+      "MainMenu.2d2bdcfe.js",
+      "links.e56aeae5.js",
+      "Link.d7969823.js",
+      "claims.b4780f82.js"
+    ],
+    "valuePropositions/[valuePropositionPageLink].svelte": [
+      "[valuePropositionPageLink].11744351.js",
+      "Link.d7969823.js",
+      "links.e56aeae5.js",
+      "HeaderTitle.195bc548.js",
+      "retreiveValuePropositionFromValuePropositionPageLink.64de19e0.js",
+      "valuePropositions.f31230f0.js"
+    ],
+    "businessModel.svelte": [
+      "BusinessModel.3f82a5c7.js",
+      "Link.d7969823.js",
+      "links.e56aeae5.js",
+      "HeaderTitle.195bc548.js",
+      "DescriptionCard.e625904b.js"
+    ],
+    "landingPages/LandingPageModel.svelte": [
+      "LandingPageModel.dbba6e17.js",
+      "MainTitle.49d8846e.js",
+      "MainSubTitle.55b4abd9.js",
+      "GenericButton.eeb38898.js"
+    ],
+    "landingPages/[audience]/[landingPageId].svelte": [
+      "[landingPageId].04a91891.js",
+      "MainTitle.49d8846e.js",
+      "MainSubTitle.55b4abd9.js",
+      "GenericButton.eeb38898.js",
+      "retreiveValuePropositionFromValuePropositionPageLink.64de19e0.js",
+      "valuePropositions.f31230f0.js",
+      "links.e56aeae5.js"
+    ],
+    "leanCanvas.svelte": [
+      "LeanCanvas.25e58c4e.js",
+      "Link.d7969823.js",
+      "links.e56aeae5.js",
+      "HeaderTitle.195bc548.js",
+      "MainTitle.49d8846e.js",
+      "DescriptionCard.e625904b.js",
+      "valuePropositions.f31230f0.js"
+    ],
+    "mainMenu.svelte": [
+      "MainMenu.2d2bdcfe.js",
+      "links.e56aeae5.js",
+      "Link.d7969823.js",
+      "claims.b4780f82.js"
+    ],
+    "claims/[claimId].svelte": [
+      "[claimId].440dd03c.js",
+      "Link.d7969823.js",
+      "links.e56aeae5.js",
+      "GenericButton.eeb38898.js",
+      "claims.b4780f82.js"
+    ]
+  }
+}
