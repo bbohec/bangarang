@@ -706,12 +706,12 @@ const DescriptionCard = create_ssr_component(($$result, $$props, $$bindings, slo
 
 	return `<section class="${"mb-2 p-1"}"><h2 class="${"text-bangarang-dark text-center"}">${escape(descriptionCardContract.title)}</h2>
     <p class="${"text-bangarang-darkEmphasis text-center font-light italic text-sm"}">${escape(descriptionCardContract.description)}</p>
-    ${descriptionCardContract.bulletPoints?.length > 1
+    ${descriptionCardContract.bulletPoints !== undefined && descriptionCardContract.bulletPoints.length > 1
 	? `<ul class="${"list-disc list-inside"}">${each(descriptionCardContract.bulletPoints, bulletPoint => `<li class="${"text-bangarang-darkEmphasis text-sm"}">${escape(bulletPoint)}</li>`)}</ul>`
-	: `${descriptionCardContract.bulletPoints?.length === 1
+	: `${descriptionCardContract.bulletPoints !== undefined && descriptionCardContract.bulletPoints.length === 1
 		? `<p class="${"text-bangarang-darkEmphasis text-sm text-center"}">${escape(descriptionCardContract.bulletPoints[0])}</p>`
 		: ``}`}
-    ${descriptionCardContract.links?.length > 0
+    ${descriptionCardContract.links !== undefined && descriptionCardContract.links.length > 0
 	? `${each(descriptionCardContract.links, link => `<p class="${"text-center"}">${validate_component(Link, "Link").$$render(
 			$$result,
 			{
