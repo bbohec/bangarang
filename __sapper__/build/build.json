@@ -2,8 +2,68 @@
   "bundler": "rollup",
   "shimport": "2.0.4",
   "assets": {
-    "main": "client.842ab86c.js"
+    "main": "client.edbb8359.js"
   },
   "css": {},
-  "dependencies": {}
+  "dependencies": {
+    "index.svelte": [
+      "index.1bb6fa4d.js",
+      "MainMenu.9537eb39.js",
+      "links.e56aeae5.js",
+      "Link.ae05177d.js",
+      "claims.b4780f82.js"
+    ],
+    "valuePropositions/[valuePropositionPageLink].svelte": [
+      "[valuePropositionPageLink].bcd1ec9c.js",
+      "Link.ae05177d.js",
+      "links.e56aeae5.js",
+      "HeaderTitle.9a9da9f6.js",
+      "retreiveValuePropositionFromValuePropositionPageLink.64de19e0.js",
+      "valuePropositions.f31230f0.js"
+    ],
+    "businessModel.svelte": [
+      "BusinessModel.52764be5.js",
+      "Link.ae05177d.js",
+      "links.e56aeae5.js",
+      "HeaderTitle.9a9da9f6.js",
+      "DescriptionCard.25e20c36.js"
+    ],
+    "landingPages/LandingPageModel.svelte": [
+      "LandingPageModel.3424450a.js",
+      "MainTitle.df47b714.js",
+      "MainSubTitle.f648eb05.js",
+      "GenericButton.e0ac349d.js"
+    ],
+    "landingPages/[audience]/[landingPageId].svelte": [
+      "[landingPageId].299e448a.js",
+      "MainTitle.df47b714.js",
+      "MainSubTitle.f648eb05.js",
+      "GenericButton.e0ac349d.js",
+      "retreiveValuePropositionFromValuePropositionPageLink.64de19e0.js",
+      "valuePropositions.f31230f0.js",
+      "links.e56aeae5.js"
+    ],
+    "leanCanvas.svelte": [
+      "LeanCanvas.2b73a8a0.js",
+      "Link.ae05177d.js",
+      "links.e56aeae5.js",
+      "HeaderTitle.9a9da9f6.js",
+      "MainTitle.df47b714.js",
+      "DescriptionCard.25e20c36.js",
+      "valuePropositions.f31230f0.js"
+    ],
+    "mainMenu.svelte": [
+      "MainMenu.9537eb39.js",
+      "links.e56aeae5.js",
+      "Link.ae05177d.js",
+      "claims.b4780f82.js"
+    ],
+    "claims/[claimId].svelte": [
+      "[claimId].32d21b4f.js",
+      "Link.ae05177d.js",
+      "links.e56aeae5.js",
+      "GenericButton.e0ac349d.js",
+      "claims.b4780f82.js"
+    ]
+  }
 }
