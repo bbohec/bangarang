@@ -6,18 +6,23 @@
 	}
 </script>
 <script lang="ts">
+    import type { ClaimContract } from "../../client/interfaces/ClaimContract";
     import ClaimFooter from "../../client/components/Footers/ClaimFooter.svelte"
     import ClaimHeader from "../../client/components/Headers/ClaimHeader.svelte"
     import ClaimMain from "../../client/components/Mains/ClaimMain.svelte"
-    import { retreiveClaimById } from "../../client/logic/retreiveClaimById";
-    import type { ClaimContract } from "../../client/interfaces/ClaimContract";
+    import { retreiveClaimById } from "../../client/logic/claim/retreiveClaimById";
+    import {claimingStore} from "../../client/stores/claimingStore"
     export let claim:ClaimContract
+    claimingStore.subscribe(claiming => {
+        if(claiming.claimingStatus === "claimed") claim=retreiveClaimById(claim.id)
+    })
 </script>
 <ClaimHeader title={claim.title}/>
 <ClaimMain 
     peopleClaimed={claim.peopleClaimed} 
     peopleFor={claim.peopleFor} 
     peopleAgainst={claim.peopleAgainst}
+    claimId = {claim.id}
 />
 <ClaimFooter/>
 

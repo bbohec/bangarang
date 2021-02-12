@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { ClaimContract } from '../../interfaces/ClaimContract';
-    import { retreiveClaimsByClaimSearchValue } from '../../logic/retreiveClaimsByClaimSearchValue';
+    import { retreiveClaimsByClaimSearchValue } from '../../logic/claim/retreiveClaimsByClaimSearchValue';
     import {claimSearchStore} from '../../stores/claimSearchStore'
     import SearchedClaim from '../Cards/SearchedClaim.svelte'
     import {claimLinkPrefix} from "../../routing/links"

@@ -1,4 +1,4 @@
-import type { ValuePropositionDesignCanvasContract } from "../interfaces/ValuePropositionCanvasContract";
+import type { ValuePropositionDesignCanvasContract } from "../../interfaces/ValuePropositionCanvasContract";
 export const valuePropositionsDesignCanvas:ValuePropositionDesignCanvasContract[]= [
     {
         audience:"Activist",
