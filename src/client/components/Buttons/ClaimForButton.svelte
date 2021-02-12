@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { claiming } from "../../logic/claiming/claiming";
+    import { claiming } from "../../logic/claiming";
     import { claimingStore } from "../../stores/claimingStore";
     import GenericButton from "./GenericButton.svelte"
     export let claimId:string;
