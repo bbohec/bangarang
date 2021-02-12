@@ -1,20 +1,27 @@
 # Bangarang — Product Development Log
 - Official video >> subscribe to form in order to be informed about demo & launch
-- Claiming
-- Sign In
 - Register
 - Declare
-
 - ❌ To-do / Not Finished
 - 👉 Doing
 - ✔️ Done
 
+
+## 2021/02/15 — Day 11
+ - Stand Up
+ - Sign In (clean architecture)
+ - Finish Claiming
+ - Sapper config issue
+ - Declare
+ - Day 12 Summary
+
 ## 2021/02/12 — Day 11
  - ✔️ Stand Up + Bonus
- - 👉 Claiming (clean architecture)
- - Sign In (clean architecture)
- - Sapper config issue
- - Day 11 Summary
+ - ✔️ Claiming (clean architecture)
+ - ❌ Sign In (clean architecture)
+ - ❌ Sapper config issue
+ - 👉 Day 11 Summary
+
 
 
 ## 2021/02/08 — Day 10
