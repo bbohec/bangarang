@@ -12,7 +12,7 @@
     import MainTitle from "../../../client/components/Titles/MainTitle.svelte"
     import MainSubTitle from "../../../client/components/Titles/MainSubTitle.svelte"
     import GenericButton from "../../../client/components/Buttons/GenericButton.svelte"
-    import { retreiveValuePropositionFromValuePropositionPageLink } from "../../../client/logic/retreiveValuePropositionFromValuePropositionPageLink";
+    import { retreiveValuePropositionFromValuePropositionPageLink } from "../../../client/logic/valueProposition/retreiveValuePropositionFromValuePropositionPageLink";
     import { links } from "../../../client/routing/links";
     export let mainHeadLine:string
     export let supportingHeadLine:string

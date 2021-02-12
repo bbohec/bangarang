@@ -1,4 +1,4 @@
-import type { ClaimContract } from "../interfaces/ClaimContract";
+import type { ClaimContract } from "../../interfaces/ClaimContract";
 export const claims = new Array<ClaimContract>();
 claims.push({ 
     peopleClaimed:10,

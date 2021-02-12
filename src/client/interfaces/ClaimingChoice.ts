@@ -1,0 +1,1 @@
+export type ClaimingChoice = "For"|"Against"

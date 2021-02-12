@@ -11,7 +11,7 @@
     import HeaderTitle from "../../client/components/Titles/HeaderTitle.svelte"
     import ValuePropositionDesignCanvas from "../../client/components/Lists/ValuePropositionDesignCanvasList.svelte"
     import type { ValuePropositionDesignCanvasContract } from "../../client/interfaces/ValuePropositionCanvasContract";
-    import { retreiveValuePropositionFromValuePropositionPageLink } from "../../client/logic/retreiveValuePropositionFromValuePropositionPageLink";
+    import { retreiveValuePropositionFromValuePropositionPageLink } from "../../client/logic/valueProposition/retreiveValuePropositionFromValuePropositionPageLink";
     export let valuePropositionDesignCanvas:ValuePropositionDesignCanvasContract
 </script>
 <header class="flex flex-col">

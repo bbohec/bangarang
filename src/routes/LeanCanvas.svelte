@@ -5,7 +5,7 @@
     import MainTitle from "../client/components/Titles/MainTitle.svelte"
     import DescriptionCard from "../client/components/Cards/DescriptionCard.svelte"
     import type { DescriptionCardContract } from "../client/interfaces/DescriptionCardContract";
-    import {valuePropositionsDesignCanvas} from "../client/logic/valuePropositions"
+    import {valuePropositionsDesignCanvas} from "../client/logic/valueProposition/valuePropositions"
     const leanCanvas:Array<{partName:string,sections:Array<DescriptionCardContract>}> = [
         {
             partName:"Customers",

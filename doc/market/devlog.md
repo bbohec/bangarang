@@ -10,11 +10,10 @@
 - ✔️ Done
 
 ## 2021/02/12 — Day 11
- - Stand Up + Bonus
- - Claiming (clean architecture)
+ - ✔️ Stand Up + Bonus
+ - 👉 Claiming (clean architecture)
  - Sign In (clean architecture)
- - svelte SSR/Hydrate ← question with svelte community
- - hosting SSR → Vercel
+ - Sapper config issue
  - Day 11 Summary
 
 
