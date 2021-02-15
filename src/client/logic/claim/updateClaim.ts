@@ -1,6 +1,6 @@
 import type { ClaimingChoice } from "../../interfaces/ClaimingChoice";
 import { claims } from "./claims";
-export function updateClaim(claimId:string,claimChoice:ClaimingChoice):void {
+export function userClaimed(claimId:string,claimChoice:ClaimingChoice):void {
     claims.map(claim => {
         if (claim.id === claimId) {
             claim.peopleClaimed++;

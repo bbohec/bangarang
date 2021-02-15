@@ -1,12 +1,15 @@
 <script lang="ts">
-    import { claiming } from "../../logic/claiming";
     import { claimingStore } from "../../stores/claimingStore";
+    import {connectedUserStore} from "../../stores/connectedUserStore"
     import GenericButton from "./GenericButton.svelte"
+    import {claimButtonInteracted} from "../../logic/claim/claimButtonInteracted"
     export let claimId:string;
-    const forClaimButtonClicked = ():void => claiming(claimId,"For")
+    let connectedUserId:string|null = null;
+    connectedUserStore.subscribe(connectedUser => {(connectedUser === null)? connectedUserId = null: connectedUserId=connectedUser.id})
+    const onClickAction=():void=> claimButtonInteracted(claimId,connectedUserId,"For")
 </script>
 {#if $claimingStore.claimingStatus === "nothing"}
-    <GenericButton textbutton="For" onClickAction={forClaimButtonClicked} disabled={false}/>
+    <GenericButton textbutton="For" onClickAction={onClickAction} disabled={false}/>
 {:else}
-    <GenericButton textbutton="For" onClickAction={forClaimButtonClicked} disabled={true}/>
+    <GenericButton textbutton="For" onClickAction={onClickAction} disabled={true}/>
 {/if}

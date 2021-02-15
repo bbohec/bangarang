@@ -1,6 +1,8 @@
 <script lang="ts" context="module">
+    import {currentClaimIdStore} from "../../client/stores/currentClaimIdStore"
 	export async function preload(page, session) {
         const { claimId } = page.params;
+        currentClaimIdStore.set(claimId)
         const claim:ClaimContract=retreiveClaimById(claimId)
 		return { claim };
 	}
@@ -13,6 +15,7 @@
     import { retreiveClaimById } from "../../client/logic/claim/retreiveClaimById";
     import {claimingStore} from "../../client/stores/claimingStore"
     export let claim:ClaimContract
+    currentClaimIdStore.set(claim.id)
     claimingStore.subscribe(claiming => {
         if(claiming.claimingStatus === "claimed") claim=retreiveClaimById(claim.id)
     })
