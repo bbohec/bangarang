@@ -2,4 +2,4 @@ Lien de la playlist Bangarang: https://youtube.com/playlist?list=PL4jAusJfrmMvdq
 
 Lien du repo GitHub de Bangarang: https://github.com/bbohec/bangarang 
 
-Lien vers la démo de Bangarang: https://sometimesuseful.com/bangarang/ 
+Lien vers la démo de Bangarang: https://bangarang.sometimesuseful.com/

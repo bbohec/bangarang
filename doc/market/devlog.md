@@ -7,7 +7,7 @@
 - ✔️ Done
 
 
-## 2021/02/15 — Day 11
+## 2021/02/15 — Day 12
  - Stand Up
  - Sign In (clean architecture)
  - Finish Claiming
@@ -20,9 +20,7 @@
  - ✔️ Claiming (clean architecture)
  - ❌ Sign In (clean architecture)
  - ❌ Sapper config issue
- - 👉 Day 11 Summary
-
-
+ - ✔️ Day 11 Summary
 
 ## 2021/02/08 — Day 10
  - ✔️ Stand Up
@@ -31,9 +29,9 @@
  - ❌ svelte SSR/Hydrate ← question with svelte community
  - ❌ hosting SSR → Vercel
  - ✔️ Day 10 Summary
- - Bonus — Update rendering color palette & landing page
- - Bonus — Migrate from CSR svelte-routing lib to SSR Sapper Framework
- - Bonus — Migrate from static/CSR GitHub Page to SSR/CSR on Vercel
+ - ✔️ Bonus — Update rendering color palette & landing page
+ - ✔️ Bonus — Migrate from CSR svelte-routing lib to SSR Sapper Framework
+ - ✔️ Bonus — Migrate from static/CSR GitHub Page to SSR/CSR on Vercel
 
 ## 2021/02/05 — Day 9
 - ✔️ Stand Up
