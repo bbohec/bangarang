@@ -11,7 +11,7 @@
 ## 2021/02/22 — Day 13
  - Stand Up
  - Declare
- - Clean Archi / Business Logic
+ - Clean architecture / Business Logic
  - Day 12 Summary
 
 ## 2021/02/15 — Day 12
