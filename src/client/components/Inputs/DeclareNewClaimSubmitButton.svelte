@@ -1,0 +1,1 @@
+<input class="m-1 rounded border border-bangarang-lightEmphasis bg-bangarang-light text-bangarang-darkEmphasis" type="submit" value="Declare">

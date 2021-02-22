@@ -1,0 +1,1 @@
+<input type="radio" name="claimType" id="claimType"  checked> <label for="claimType" class="text-bangarang-lightEmphasis" >Claim as a proposal.</label>

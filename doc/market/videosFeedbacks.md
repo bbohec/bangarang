@@ -1,9 +1,26 @@
 # Videos Feedbacks
+## Day 13
+- Video Analytics
+    - Views 1017 (432 unique)
+    - Total hours of play 58h
+    - Average viewing time 3:25 m
+    - 19 > +2 subs > 21 subs
+    - 23 like / 1 dislike
+    - 1+ troll comments
+- Feedback population type
+    - Developer communities (++ -)
+    - IT Professional communities (+)
+    - Friends/Family (+)
+    - RIC > check Bangarang videos (+ -)
+- Google Analytics Bangarang
+- Google Form > +4
+
+
 ## Day 9
 - Video Analytics
     - Views 784 (338 unique)
     - Total hours of play 46.4h
-    - Average viewing time 3:33m
+    - Average viewing time 3:33 m
     - 12 > +7 subs > 19 subs
     - 18 like / 1 dislike
     - 1+ troll comments
@@ -12,10 +29,10 @@
     - IT Professional communities (+)
     - Friends/Family (++)
 - RIC > check Bangarang videos
-- Facebook Pages "Gilets Jaunes" / RIC / Militant
+- Facebook Pages “yellow vest” / RIC / Militant
 - Pros
     - Metric ++ > Share
-    - Comments - (quality)
+    - Comments — (quality)
 - Cons
     - Require video entertainment
     - troll
@@ -24,7 +41,7 @@
 - Video Analytics
     - Views 515 (233 unique)
     - Total hours of play 32.7h
-    - Average viewing time 3:48m
+    - Average viewing time 3:48 m
     - +6 subs > 12 subs
     - 12 like / 1 dislike
     - 2+ comments > UI 
@@ -37,7 +54,7 @@
     - Friends/Family (10)
     - Product > thumbnails ++
 - RIC > check Bangarang videos
-- Facebook Pages "Gilets Jaunes" / RIC / Militant
+- Facebook Pages “yellow vest” / RIC / Militant
 - Pros
     - Good idea / Very interesting
     - Comment++
@@ -49,7 +66,7 @@
 - Video Analytics
     - Views 126 (87 unique)
     - Total hours of play 15.2h
-    - Average viewing time 7.15m
+    - Average viewing time 7.15 m
     - +6 sub
     - 1 like / 1 dislike
     - No comments
@@ -70,4 +87,4 @@
     > - change music
 - Errors
     - Product Market Fit > Bad definition used
-    - Use [Business Model](https://en.wikipedia.org/wiki/Business_model) instead of [Product Market Fit](https://en.wikipedia.org/wiki/Product/market_fit)
+    - Use [Business Model](https://en.wikipedia.org/wiki/Business_model) instead of [Product Market Fit](https://en.wikipedia.org/wiki/Product/market_fit).

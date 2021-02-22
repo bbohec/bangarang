@@ -1,0 +1,1 @@
+export type ClaimType ="Claim as proposal"|"Claim with multiple proposals";

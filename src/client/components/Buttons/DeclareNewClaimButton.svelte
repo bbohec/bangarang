@@ -1,4 +1,8 @@
-<button 
-    class= "text-xl mx-5 my-1 px-1 text-bangarang-dark border border-bangarang-darkEmphasis rounded-md bg-bangarang-lightEmphasis"
-    disabled
->Declare a new claim</button>
+<script lang="ts">
+    import { goto } from '@sapper/app';
+    import GenericButton from './GenericButton.svelte'
+    const textbutton = `Declare new claim`
+    const newClaimUrl ="newClaim"
+    const navigateToUrl = ():void => goto(newClaimUrl)
+</script>
+<GenericButton {textbutton} onClickAction={navigateToUrl}/>
