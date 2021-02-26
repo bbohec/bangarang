@@ -3,17 +3,18 @@
     import DeclareNewClaimSubmitButton from "../Inputs/DeclareNewClaimSubmitButton.svelte"
     import ClaimAsProposalRadioButton from "../Inputs/ClaimAsProposalRadioButton.svelte"
     import type { ClaimType } from "../../interfaces/ClaimType";
-    let value:string
+    import { declaringClaim } from "../../logic/declaringNewClaim";
+    let claimTitle:string
     let claimChoice:ClaimType="Claim as proposal"
-    const declareNewClaim = ():void => {}
+    const declareNewClaim = ():void => {declaringClaim(claimTitle) }
 </script>
 <form class="w-full flex flex-col items-center" on:submit|preventDefault={declareNewClaim}>
-    <NewClaimTitleInput bind:value/>
+    <NewClaimTitleInput bind:value={claimTitle}/>
     <fieldset>
         <legend class="text-bangarang-lightEmphasis">Claim type</legend>
         <ClaimAsProposalRadioButton/>
     </fieldset>
-    {#if value!== ""}
+    {#if claimTitle!== ""}
         <DeclareNewClaimSubmitButton/>
     {/if}
 </form>

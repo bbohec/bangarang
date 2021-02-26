@@ -2,7 +2,6 @@ import type { ClaimingChoice } from "../interfaces/ClaimingChoice"
 import { claimingStore } from "../stores/claimingStore"
 import { userClaimed as addNewClaimingOnClaim } from "./claim/updateClaim"
 import { userSaveClaim } from "./user/userSaveClaim"
-import {users} from "../logic/user/users"
 import { changeClaimingChoiceOnClaim } from "./claim/changeClaimingChoiceOnClaim"
 import { isUserAlreadyClaimed } from "./user/isUserAlreadyClaimed"
 export const claiming = (claimId:string,connectedUserId:string,claimingChoice:ClaimingChoice):void => {

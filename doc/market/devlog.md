@@ -9,19 +9,24 @@
 - 👉 Doing
 - ✔️ Done
 
-## 2021/02/26 — Day 14
+## 2021/03/01
  - Stand Up
- - Declare
  - Clean architecture / Business Logic
  - Summary.
 
+## 2021/02/26 — Day 14
+ - ✔️ Stand Up
+ - ✔️ Declare
+ - ✔️ Cleaning
+ - ❌ Clean architecture / Business Logic
+ - 👉 Summary.
 
 ## 2021/02/22 — Day 13
- - ✔️ Stand Up — Micro!
+ - ✔️ Stand Up
  - ✔️ Feedback
  - ❌ Declare
  - ❌ Clean architecture / Business Logic
- - 👉 Summary.
+ - ✔️ Summary.
 
 ## 2021/02/15 — Day 12
  - ✔️ Stand Up

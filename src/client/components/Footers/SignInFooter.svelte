@@ -1,14 +1,15 @@
 <script lang="ts">
     import Link from "../Links/Link.svelte";
-    import SignInInformation from "../Descriptions/SignInInformation.svelte"
-    import {claimLinkPrefix, links} from "../../routing/links"
+    import SignInInformation from "../Notification/SignInInformation.svelte"
+    import {links} from "../../navigation/links"
     import {currentClaimIdStore} from "../../stores/currentClaimIdStore"
     import {signInStore} from "../../stores/signInStore"
+    import { linkPrefixes } from "../../navigation/linkPrefixes";
     let currentClaimId:string|undefined=undefined;
     currentClaimIdStore.subscribe(currentClaimIdFromStore =>currentClaimId=currentClaimIdFromStore)
     const linkFromCurrentClaimId = (currentClaimId:string):{href:string,name:string} => {
         if(currentClaimId===undefined)return {href:links.MainMenu,name:"<< Back to main menu."}
-        return {href:claimLinkPrefix+currentClaimId,name:"<< Back to the claim."}
+        return {href:linkPrefixes.claimLinkPrefix+currentClaimId,name:"<< Back to the claim."}
     }
 </script>
 <footer class="flex flex-col p-1 min-h-">

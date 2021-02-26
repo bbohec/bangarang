@@ -1,12 +1,10 @@
 <script lang="ts">
-	import WelcomePageView from '../client/views/MainMenu/WelcomePageView.svelte'
-	import ClaimSearchView from '../client/views/MainMenu/ClaimSearchView.svelte'
+	import MainMenuView from "../client/views/MainMenuView.svelte"
+	import SearchClaimsView from '../client/views/SearchClaimsView.svelte'
 	import {claimSearchStore} from '../client/stores/claimSearchStore'
 </script>
-<style>
-</style>
 {#if $claimSearchStore === ''}
-	<WelcomePageView/>
+	<MainMenuView/>
 {:else}
-	<ClaimSearchView/>
+	<SearchClaimsView/>
 {/if} 

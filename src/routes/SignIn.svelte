@@ -1,8 +1,4 @@
 <script lang="ts">
-    import SignInHeader from "../client/components/Headers/SignInHeader.svelte"
-    import SignInMain from "../client/components/Mains/SignInMain.svelte"
-    import SignInFooter from "../client/components/Footers/SignInFooter.svelte"
+    import SignInView from '../client/views/SignInView.svelte'
 </script>
-<SignInHeader/>
-<SignInMain/>
-<SignInFooter/>
+<SignInView/>
