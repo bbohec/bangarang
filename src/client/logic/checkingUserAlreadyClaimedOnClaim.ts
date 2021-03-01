@@ -9,7 +9,7 @@ export const checkingUserAlreadyClaimedOnClaim = (connectedUserId:string,claimId
         setTimeout(() => checked(connectedUserId,claimId,userAlreadyClaimed), claimingFakeWaitingTime);
     }
 }
-const checked = (connectedUserId:string,claimId:string,userAlreadyClaimed:ClaimingChoice):void => {
+const checked = (connectedUserId:string,claimId:string,userAlreadyClaimed:ClaimingChoice|undefined):void => {
     checkingIfUserAlreadyClaimedOnClaimStore.set({checkingStatus:"checked",userId:connectedUserId,claimId:claimId,userClaimed:userAlreadyClaimed})
     setTimeout(()=>checkingIfUserAlreadyClaimedOnClaimStore.set({checkingStatus:"idle",userId:connectedUserId,claimId:claimId,userClaimed:userAlreadyClaimed}),timeOfClaimedNotification)
 }

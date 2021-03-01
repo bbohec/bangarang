@@ -13,8 +13,8 @@ const App = polka() // You can also use Express
 		sirv('static', { dev }),
 		sapper.middleware()
 	)
-	.listen(PORT, err => {
-		if (err) console.log('error', err);
+	.listen(PORT, (error:Error) => {
+		if (error) throw error
 	});
 
 export default App
