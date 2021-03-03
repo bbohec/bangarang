@@ -7,7 +7,7 @@
     import ClaimingInformation from "../Notification/ClaimingInformation.svelte"
     import DeclaringInformation from "../Notification/DeclaringInformation.svelte";
 </script>
-<footer class="flex flex-col p-1 min-h-">
+<footer class="flex flex-col p-1 mx-auto max-w-screen-2xl">
     {#if $claimingStore.claimingStatus === "claiming"}
         <ClaimingInformation/>
     {:else if $declaringClaimStore.declaringClaimStatus === "declaringClaim"}

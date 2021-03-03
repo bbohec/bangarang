@@ -13,7 +13,7 @@
     beforeUpdate(()=> checkingUserAlreadyClaimedOnClaim(connectedUserId,claimId))
     const retreivePercentage = (total:number,part:number):number => (total>0)?part/total*100:0
 </script>
-<main class="flex flex-col my-2">
+<main class="flex flex-col mx-auto max-w-screen-2xl my-2">
     <p class="text-center text-bangarang-lightEmphasis my-2">{peopleClaimed}<br>people claimed</p>
     <section class="flex justify-between my-1 mx-4">
         <section class="flex flex-col w-1/3">

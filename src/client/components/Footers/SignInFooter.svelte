@@ -7,12 +7,12 @@
     import { linkPrefixes } from "../../navigation/linkPrefixes";
     let currentClaimId:string|undefined=undefined;
     currentClaimIdStore.subscribe(currentClaimIdFromStore =>currentClaimId=currentClaimIdFromStore)
-    const linkFromCurrentClaimId = (currentClaimId:string):{href:string,name:string} => {
+    const linkFromCurrentClaimId = (currentClaimId:string|undefined):{href:string,name:string} => {
         if(currentClaimId===undefined)return {href:links.MainMenu,name:"<< Back to main menu."}
         return {href:linkPrefixes.claimLinkPrefix+currentClaimId,name:"<< Back to the claim."}
     }
 </script>
-<footer class="flex flex-col p-1 min-h-">
+<footer class="flex flex-col p-1 mx-auto max-w-screen-2xl">
     {#if $signInStore.signInStatus === "signing in"}
         <SignInInformation/>
     {:else}

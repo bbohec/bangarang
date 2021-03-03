@@ -7,7 +7,7 @@
         <SignInSection/>
     </main>
 {:else}
-    <main class="flex flex-col items-center my-10">
+    <main class="flex flex-col items-center my-10 mx-auto max-w-screen-2xl">
         <p class="invisible">SignOut</p>
     </main>
 {/if}

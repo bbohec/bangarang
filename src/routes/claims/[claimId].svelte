@@ -1,11 +1,11 @@
 <script lang="ts" context="module">
     import {currentClaimIdStore} from "../../client/stores/currentClaimIdStore"
-	export async function preload(page, session) {
+	export async function preload(page:any, session:any) {
         const { claimId } = page.params;
         let claim:ClaimContract;
         currentClaimIdStore.set(claimId)
         declaringClaimStore.subscribe(declaringClaim => {
-            if (declaringClaim.declaringClaimStatus === "declaringClaim") claim = declaringClaim.claimToDeclare
+            if (declaringClaim.declaringClaimStatus === "declaringClaim" && declaringClaim.claimToDeclare) claim = declaringClaim.claimToDeclare
             else claim = retreiveClaimById(claimId)
         })
 		return { claim };

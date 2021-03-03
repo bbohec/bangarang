@@ -1,7 +1,7 @@
 import type { ClaimingChoice } from "../interfaces/ClaimingChoice"
 import { checkingIfUserAlreadyClaimedOnClaimStore } from "../stores/checkingUserAlreadyClaimedOnClaimStore"
 import { isUserAlreadyClaimed } from "./user/isUserAlreadyClaimed"
-export const checkingUserAlreadyClaimedOnClaim = (connectedUserId:string,claimId:string):void => {
+export const checkingUserAlreadyClaimedOnClaim = (connectedUserId:string|null,claimId:string):void => {
     if (connectedUserId === null) idle()
     else {
         checkingIfUserAlreadyClaimedOnClaimStore.set({checkingStatus:"checking..."})

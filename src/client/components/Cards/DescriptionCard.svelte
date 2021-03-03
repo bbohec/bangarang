@@ -3,7 +3,7 @@
     import Link from "../Links/Link.svelte"
     export let descriptionCardContract:DescriptionCardContract
 </script>
-<section class="mb-2 p-1">
+<section class="mb-2 p-1 border-bangarang-lightEmphasis border rounded shadow">
     <h2 class="text-bangarang-dark text-center">{descriptionCardContract.title}</h2>
     <p class="text-bangarang-darkEmphasis text-center font-light italic text-sm">{descriptionCardContract.description}</p>
     {#if descriptionCardContract.bulletPoints !== undefined && descriptionCardContract.bulletPoints.length > 1}

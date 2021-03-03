@@ -16,6 +16,7 @@
     "build:css": "cross-env NODE_ENV=production postcss src/assets/global.pcss -o static/global.css",
     "build:sapper": "sapper build",
     "build:export": "sapper export",
+    "test:acceptance": "mocha src/tests/acceptance/**/*.spec.ts",
     "export": "run-s build:css build:export",
     "start": "node __sapper__/build",
     "serve": "serve ___sapper__/export"
@@ -63,9 +64,18 @@
     "svelte-check": "^1.1.36",
     "svelte-preprocess": "^4.6.9",
     "tailwindcss": "^2.0.3",
+    "ts-node": "^9.1.1",
     "tslib": "^2.0.1",
     "typescript": "^4.2.2",
     "uuid": "^8.3.2",
     "vercel-sapper": "^0.44.0"
+  },
+  "mocha": {
+    "reporter": "spec",
+    "require": [
+      "source-map-support/register",
+      "ts-node/register"
+    ],
+    "full-trace": true
   }
 }

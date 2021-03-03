@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-	export async function preload(page, session) {
+	export async function preload(page:any, session:any) {
 		const { audience,landingPageId } = page.params;
         const valueProposition = retreiveValuePropositionFromValuePropositionPageLink(audience)
         const mainHeadLine:string|undefined = valueProposition.pains[landingPageId-1]
