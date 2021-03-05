@@ -12,10 +12,10 @@
 - 👉 Doing
 - ✔️ Done
 
-## 2021/03/05 — Day 16
-- Stand Up
+## 2021/03/08 — Day 17
+- Twitch Live Stream
+- ✔️ Stand Up
 - ATDD/TDD > Clean architecture / Business Logic
-    - Signing In.
     - Declaring Simple Claim
     - Retrieving Claim.
     - Searching Claims.
@@ -23,6 +23,18 @@
     - Registering.
 - Typing uuid.
 - Summary.
+
+## 2021/03/05 — Day 16
+- ✔️ Stand Up
+- ❌ ATDD/TDD > Clean architecture / Business Logic
+    - ✔️ Signing In.
+    - ❌ Declaring Simple Claim
+    - ❌ Retrieving Claim.
+    - ❌ Searching Claims.
+    - ❌ Claiming.
+    - ❌ Registering.
+- ❌ Typing uuid.
+- ✔️ Summary.
 
 ## 2021/03/01 — Day 15
  - ✔️ Stand Up
@@ -36,14 +48,14 @@
  - ❌ ATDD/TDD > Clean architecture / Business Logic
     - ❌ Signing In.
  - ❌ typing uuid
- - 👉 Summary.
+ - ✔️ Summary.
 
 ## 2021/02/26 — Day 14
  - ✔️ Stand Up
  - ✔️ Declare
  - ✔️ Cleaning
  - ❌ Clean architecture / Business Logic
- - 👉 Summary.
+ - ✔️ Summary.
 
 ## 2021/02/22 — Day 13
  - ✔️ Stand Up

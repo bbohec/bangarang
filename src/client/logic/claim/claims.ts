@@ -1,5 +1,5 @@
-import type { ClaimContract } from "../../interfaces/ClaimContract";
-export const claims = new Array<ClaimContract>();
+import type { UIClaimContract } from "../../interfaces/UIClaimContract";
+export const claims = new Array<UIClaimContract>();
 claims.push({ 
     peopleClaimed:10,
     peopleAgainst:9,

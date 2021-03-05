@@ -1,5 +1,5 @@
-import type { ClaimContract } from "../../interfaces/ClaimContract"
+import type { UIClaimContract } from "../../interfaces/UIClaimContract"
 import { claims } from "./claims"
-export const retreiveClaimsByClaimSearchValue = (claimSearchValue:string):Array<ClaimContract> => {
+export const retreiveClaimsByClaimSearchValue = (claimSearchValue:string):Array<UIClaimContract> => {
     return claims.filter(claim => claim.title.includes(claimSearchValue))
 }

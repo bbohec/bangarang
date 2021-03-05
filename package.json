@@ -17,6 +17,8 @@
     "build:sapper": "sapper build",
     "build:export": "sapper export",
     "test:acceptance": "mocha src/tests/acceptance/**/*.spec.ts",
+    "test:integration": "mocha src/tests/integration/**/*.spec.ts",
+    "test:all": "mocha src/tests/**/*.spec.ts",
     "export": "run-s build:css build:export",
     "start": "node __sapper__/build",
     "serve": "serve ___sapper__/export"

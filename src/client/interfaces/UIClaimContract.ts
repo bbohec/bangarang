@@ -1,4 +1,4 @@
-export interface ClaimContract {
+export interface UIClaimContract {
     peopleAgainst: number;
     peopleFor: number;
     peopleClaimed: number;
