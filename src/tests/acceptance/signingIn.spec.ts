@@ -1,28 +1,34 @@
 import 'mocha';
 import {expect} from "chai";
-import { bangarangMemberNotFoundError, FakeBangarangMembersInteractor } from '../../client/adapters/FakeBangarangMembersInteractor';
+import { FakeBangarangMembersInteractor } from '../../client/adapters/FakeBangarangMembersInteractor';
 import { FakeSigningInUserNotificationInteractor } from '../../client/adapters/FakeSigningInUserNotificationInteractor';
 import { User } from '../../client/businessLogic/User';
-import type { UserContact } from '../../client/port/UserContact';
+import type { UserContract } from '../../client/port/UserContact';
 import { SigningInNotificationType, successSigningInNotification, alreadySignedInSigningInNotification, badCredentialsSigningInNotification } from '../../client/port/interactors/SigningInUserNotificationInteractorContract';
 import { FakeBangarangClaimInteractor } from "../../client/adapters/FakeBangarangClaimInteractor";
 import { FakeDeclaringClaimUserNotificationInteractor } from "../../client/adapters/FakeDeclaringClaimUserNotificationInteractor";
+import { FakeRetrievingClaimUserNotificationInteractor } from "../../client/adapters/FakeRetrievingClaimUserNotificationInteractor";
+import { FakeBangarangUserInterfaceInteractor } from '../../client/adapters/FakeBangarangUserInterfaceInteractor';
+import { bangarangMemberNotFoundError } from '../../client/port/interactors/BangarangMembersInteractorContract';
 describe(`Feature: User Sign In
     As a guest
     In order to claim
     I want to sign in Bangarang
     `,()=> {
-        const fakeBangarangClaimInteractor = new FakeBangarangClaimInteractor()
+    const fakeBangarangClaimInteractor = new FakeBangarangClaimInteractor()
     const fakeSigningInUserNotificationInteractor = new FakeSigningInUserNotificationInteractor()
-    const expectedUser:UserContact= {username:"johndoe",fullname:"",password:"Password"}
+    const expectedUser:UserContract= {username:"johndoe",fullname:"",password:"Password"}
     const signingInNotificationType:SigningInNotificationType = "Signing In"
     describe(`Scenario: User Signing In`,()=> {
-        const fakeBangarangMembersInteractor = new FakeBangarangMembersInteractor([expectedUser]);
+        const fakeBangarangMembersInteractor = new FakeBangarangMembersInteractor();
+        fakeBangarangMembersInteractor.withBangarangMembersDatabase([expectedUser])
         const user:User = new User(expectedUser,{
             bangarangMembersInteractor:fakeBangarangMembersInteractor,
             signingInUserNotificationInteractor:fakeSigningInUserNotificationInteractor,
             declaringClaimUserNotificationInteractor:new FakeDeclaringClaimUserNotificationInteractor(),
-            bangarangClaimInteractor:fakeBangarangClaimInteractor
+            bangarangClaimInteractor:fakeBangarangClaimInteractor,
+            bangarangUserInterfaceInteractor: new FakeBangarangUserInterfaceInteractor(),
+            retrievingClaimUserNotificationInteractor:new FakeRetrievingClaimUserNotificationInteractor()
         })
         it(`Given the user is not signed in`,()=> {
             expect(user.isSignedIn()).to.be.false
@@ -49,12 +55,15 @@ describe(`Feature: User Sign In
         })
     })
     describe(`Scenario: User already signed in`,()=>{
-        const fakeBangarangMembersInteractor = new FakeBangarangMembersInteractor([expectedUser])
+        const fakeBangarangMembersInteractor = new FakeBangarangMembersInteractor()
+        fakeBangarangMembersInteractor.withBangarangMembersDatabase([expectedUser])
         const user:User = new User(expectedUser,{
             bangarangMembersInteractor:fakeBangarangMembersInteractor,
             declaringClaimUserNotificationInteractor:new FakeDeclaringClaimUserNotificationInteractor(),
             signingInUserNotificationInteractor:fakeSigningInUserNotificationInteractor,
-            bangarangClaimInteractor:fakeBangarangClaimInteractor
+            bangarangClaimInteractor:fakeBangarangClaimInteractor,
+            bangarangUserInterfaceInteractor: new FakeBangarangUserInterfaceInteractor(),
+            retrievingClaimUserNotificationInteractor:new FakeRetrievingClaimUserNotificationInteractor()
         })
         before(()=>user.signingIn())
         it(`Given the user is already SignedIn`,()=>{
@@ -70,12 +79,14 @@ describe(`Feature: User Sign In
         })
     })
     describe(`Scenario: User is not a Bangarang member`,()=>{
-        const fakeBangarangMembersInteractor = new FakeBangarangMembersInteractor([])
+        const fakeBangarangMembersInteractor = new FakeBangarangMembersInteractor()
         const user:User = new User(expectedUser,{
             bangarangMembersInteractor:fakeBangarangMembersInteractor,
             declaringClaimUserNotificationInteractor:new FakeDeclaringClaimUserNotificationInteractor(),
             signingInUserNotificationInteractor:fakeSigningInUserNotificationInteractor,
-            bangarangClaimInteractor:fakeBangarangClaimInteractor
+            bangarangClaimInteractor:fakeBangarangClaimInteractor,
+            bangarangUserInterfaceInteractor: new FakeBangarangUserInterfaceInteractor(),
+            retrievingClaimUserNotificationInteractor:new FakeRetrievingClaimUserNotificationInteractor()
         })
         it(`Given the user is not signed in`,()=>{
             expect(user.isSignedIn()).is.false
@@ -94,13 +105,16 @@ describe(`Feature: User Sign In
         })
     })
     describe(`Scenario: Bad credentials`,()=>{
-        const fakeBangarangMembersInteractor = new FakeBangarangMembersInteractor([expectedUser])
-        const badPasswordUser:UserContact = {username:"johndoe",fullname:"",password:"badpassword"}
+        const fakeBangarangMembersInteractor = new FakeBangarangMembersInteractor()
+        fakeBangarangMembersInteractor.withBangarangMembersDatabase([expectedUser])
+        const badPasswordUser:UserContract = {username:"johndoe",fullname:"",password:"badpassword"}
         const user:User = new User(badPasswordUser,{
             bangarangMembersInteractor:fakeBangarangMembersInteractor,
             declaringClaimUserNotificationInteractor:new FakeDeclaringClaimUserNotificationInteractor(),
             signingInUserNotificationInteractor:fakeSigningInUserNotificationInteractor,
-            bangarangClaimInteractor:fakeBangarangClaimInteractor
+            bangarangClaimInteractor:fakeBangarangClaimInteractor,
+            bangarangUserInterfaceInteractor: new FakeBangarangUserInterfaceInteractor(),
+            retrievingClaimUserNotificationInteractor:new FakeRetrievingClaimUserNotificationInteractor()
         })
         it(`Given the user is not signed in`,()=>{
             expect(user.isSignedIn()).is.false
@@ -118,13 +132,3 @@ describe(`Feature: User Sign In
         })
     })
 })
-
-
-
-/*
-    Scenario: Bad credentials
-        Given the user is a guest
-        And there is "johndoe" Bangarang member with password 'Password'
-        When the user signin as "johndoe" with password "badpassword"
-        Then there is an error notification with message "Bad credentials. Please verify your credentials or register to Bangarang."
-*/

@@ -1,8 +1,8 @@
 # Bangarang — Product Development Log
 - Register
+- Backend
 - Multi-language — /!\ FR /!\
 - Error management
-- Backend
 - Official video >> subscribe to form in order to be informed about demo & launch
 - BDD > Feature scenarios:
     - Signing Out.
@@ -12,17 +12,29 @@
 - 👉 Doing
 - ✔️ Done
 
-## 2021/03/08 — Day 17
-- ❌ Twitch Live Stream
-- ✔️ Stand Up + new Mic
-- 👉 ATDD/TDD > Clean architecture / Business Logic
-    - 👉 Declaring Simple Claim.
-    - Retrieving Claim.
+## 2021/03/12 — Day 18
+- Twitch Live Stream
+- Stand Up
+- ATDD/TDD > Clean architecture / Business Logic
     - Searching Claims.
     - Claiming.
     - Registering.
+- Remove password on User Contract
 - Typing uuid.
 - Summary.
+
+## 2021/03/08 — Day 17
+- ❌ Twitch Live Stream
+- ✔️ Stand Up + new Mic
+- ❌ ATDD/TDD > Clean architecture / Business Logic
+    - ✔️ Declaring Simple Claim.
+    - ✔️ Retrieving Claim.
+    - ❌ Searching Claims.
+    - ❌ Claiming.
+    - ❌ Registering.
+- ❌ Remove password on User Contract
+- ❌ Typing uuid.
+- ✔️ Summary.
 
 ## 2021/03/05 — Day 16
 - ✔️ Stand Up

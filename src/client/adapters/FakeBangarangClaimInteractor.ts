@@ -1,21 +1,22 @@
 import type { ClaimContract } from '../port/ClaimContract';
-import { BangarangClaimInteractor, claimNotFound } from '../port/interactors/BangarangClaimInteractor';
+import { BangarangClaimInteractor, bangarangClaimNotFound } from '../port/interactors/BangarangClaimInteractor';
 export class FakeBangarangClaimInteractor implements BangarangClaimInteractor {
-    constructor(
-        public declaredClaims: ClaimContract[] = []
-    ){}
-    isClaimExist(claim: ClaimContract): Boolean {
-        return (this.findClaimByTitle(claim.title))?true:false
+    public withClaims(claims:ClaimContract[]) {
+        this.declaredClaims = claims
     }
-    declareClaim(claim: ClaimContract): void {
+    public claimByTitle(title: string): ClaimContract|Error {
+        const claimFound = this.findClaimByTitleUpperCase(title)
+        if (claimFound) return claimFound;
+        return new Error(bangarangClaimNotFound(title));
+    }
+    public isClaimExistByTitleUpperCase(claim: ClaimContract): Boolean {
+        return (this.findClaimByTitleUpperCase(claim.title))?true:false
+    }
+    public declareClaim(claim: ClaimContract): void {
         this.declaredClaims.push(claim);
     }
-    claimWithTitle(title: string): ClaimContract {
-        const claimFound = this.findClaimByTitle(title)
-        if (claimFound) return claimFound;
-        throw new Error(claimNotFound(title));
+    private findClaimByTitleUpperCase(claimTitle: string):ClaimContract|undefined {
+        return this.declaredClaims.find(declaredClaim => declaredClaim.title.toUpperCase() === claimTitle.toUpperCase());
     }
-    private findClaimByTitle(claimTitle: string):ClaimContract|undefined {
-        return this.declaredClaims.find(declaredClaim => declaredClaim.title === claimTitle);
-    }
+    public declaredClaims: ClaimContract[] = []
 }
