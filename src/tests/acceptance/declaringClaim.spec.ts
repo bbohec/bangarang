@@ -6,18 +6,22 @@ import { FakeSigningInUserNotificationInteractor } from '../../client/adapters/F
 import { FakeDeclaringClaimUserNotificationInteractor } from '../../client/adapters/FakeDeclaringClaimUserNotificationInteractor';
 import { FakeBangarangClaimInteractor } from '../../client/adapters/FakeBangarangClaimInteractor';
 import type { ClaimContract } from '../../client/port/ClaimContract';
-import { DeclaringClaimNotificationType, successDeclaringUserNotification } from '../../client/port/interactors/DeclaringClaimUserNotificationInteractorContract';
+import { claimAlreadyExistDeclaringClaimUserNotification, DeclaringClaimNotificationType, DeclaringClaimUserNotificationInteractorContract, successDeclaringClaimUserNotification,} from '../../client/port/interactors/DeclaringClaimUserNotificationInteractorContract';
+import { FakeUserInterfaceInteractor } from '../../client/adapters/FakeUserInterfaceInteractor';
+import { claimNotFound } from '../../client/port/interactors/BangarangClaimInteractor';
+
 
 describe(`Feature: Declaring Claim
     As a guest or a Bangarang Member
     In order to claim or share a claim
     I want to declare a claim
     `,()=> {
+    const declaringClaimNotificationType:DeclaringClaimNotificationType="Declaring claim."
     describe(`Scenario: Declaring Simple Claim`,()=>{
+        const fakeDeclaringClaimUserNotificationInteractor = new FakeDeclaringClaimUserNotificationInteractor()
         const fakeBangarangClaimInteractor = new FakeBangarangClaimInteractor()
         const expectedClaim:ClaimContract={title:'claim',type:"simple"}
-        const declaringClaimNotificationType:DeclaringClaimNotificationType="Declaring claim."
-        const fakeDeclaringClaimUserNotificationInteractor = new FakeDeclaringClaimUserNotificationInteractor()
+        const fakeUserInterfaceInteractor = new FakeUserInterfaceInteractor()
         it(`Given the claim with title '${expectedClaim.title}' is not declared on Bangarang.`,()=>{
             expect(()=>fakeBangarangClaimInteractor.claimWithTitle(expectedClaim.title).title)
                 .to.throw(claimNotFound(expectedClaim.title))
@@ -35,52 +39,67 @@ describe(`Feature: Declaring Claim
         it(`Then the claim with title '${expectedClaim.title}' is declared on Bangarang.`,()=>{
             expect(fakeBangarangClaimInteractor.claimWithTitle(expectedClaim.title).title).equal(expectedClaim.title)
         })
-        it(`And the user has a '${declaringClaimNotificationType}' notification with '${successDeclaringUserNotification.status}' status and '${successDeclaringUserNotification.message}' message.`,()=> {
-            expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.status).equal(successDeclaringUserNotification.status)
-            expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.message).equal(successDeclaringUserNotification.message)
+        it(`And the user has a '${declaringClaimNotificationType}' notification with '${successDeclaringClaimUserNotification.status}' status and '${successDeclaringClaimUserNotification.message}' message.`,()=> {
+            expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.status).equal(successDeclaringClaimUserNotification.status)
+            expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.message).equal(successDeclaringClaimUserNotification.message)
         })
         it(`The user go to the 'claim'.`,()=> {
-            expect(fakeUserInterfaceInteractor.view).equal('claim')
+            expect(fakeUserInterfaceInteractor.currentView).equal('claim')
+        })
+    })
+    describe(`Scenario: Claim with same title already exist`,()=>{
+        const fakeDeclaringClaimUserNotificationInteractor = new FakeDeclaringClaimUserNotificationInteractor()
+        const expectedClaim:ClaimContract={title:'claim',type:"simple"}
+        const fakeBangarangClaimInteractor = new FakeBangarangClaimInteractor([expectedClaim])
+        const fakeUserInterfaceInteractor = new FakeUserInterfaceInteractor()
+        it(`Given the claim with title '${expectedClaim.title}' is declared on Bangarang.`,()=>{
+            expect(fakeBangarangClaimInteractor.claimWithTitle(expectedClaim.title).title).equal(expectedClaim.title)
+        })
+        it(`When the user declare a new '${expectedClaim.type}' claim with title '${expectedClaim.title}'.`,(done)=>{
+            const user = new User({username:"",password:"",fullname:""},{
+                bangarangClaimInteractor:fakeBangarangClaimInteractor,
+                bangarangMembersInteractor: new FakeBangarangMembersInteractor([]),
+                declaringClaimUserNotificationInteractor:fakeDeclaringClaimUserNotificationInteractor,
+                signingInUserNotificationInteractor: new FakeSigningInUserNotificationInteractor(),
+            })
+            user.declareClaim(expectedClaim)
+            done()
+        })
+        it(`Then the new claim is not declared on Bangarang.`,()=>{
+            expect(fakeBangarangClaimInteractor.declaredClaims.length).equal(1)
+        })
+        it(`And the user has a '${declaringClaimNotificationType}' notification with '${claimAlreadyExistDeclaringClaimUserNotification(expectedClaim.title).status}' status and '${claimAlreadyExistDeclaringClaimUserNotification(expectedClaim.title).message}' message.`,()=> {
+            expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.message).equal(claimAlreadyExistDeclaringClaimUserNotification(expectedClaim.title).message)
+            expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.status).equal(claimAlreadyExistDeclaringClaimUserNotification(expectedClaim.title).status)
+        })
+        it(`The user go to the 'claim'.`,()=> {
+            expect(fakeUserInterfaceInteractor.currentView).equal('claim')
         })
     })
 })
-export function claimNotFound(title: string): string | undefined {
-    return `Claim with title ${title} not found.`;
-}
+
 /*
 Feature: Declaring Claim
     As a guest or a Bangarang Member
     In order to claim or share a claim
     I want to declare a claim
 
-    Scenario: Declaring Simple Claim
-        Given the claim with title 'claim' is not declared on Bangarang.
-        When the user declare a new 'simple' claim with title 'claim'.
-        Then the claim with title 'claim' is declared on Bangarang.
-        And the user has a 'Declaring claim' notification with 'Success' status and 'Declared.' message.
-        The user go to the 'claim'.
-
-    Scenario: Claim with same title already exist
-        Given the claim with title 'claim' is declared on Bangarang.
-        When the user declare a new 'simple' claim with title 'claim'.
-        Then the new claim is not declared on Bangarang.
-        And the user has a 'The claim 'claim' already exist' error notification.
-        The user go to the 'claim'.
-
     Scenario: Claim with same title already exist
         Given the claim with title 'claim' is declared on Bangarang.
         When the user declare a new 'simple' claim with title 'CLAIM'.
         Then the new claim is not declared on Bangarang.
-        And the user has a 'The claim 'claim' already exist' error notification.
-        The user go to the 'claim'.
+        And the user has a 'Declaring claim.' notification with 'Failed' status and 'The claim "claim" already exist' message.
+        And the user go to the 'claim'.
 
     Scenario: Claim with empty title
         When the user declare a new 'simple' claim with title ''.
         Then the new claim is not declared on Bangarang.
-        And the user has a 'A claim must have a title.' error notification.
+        And the user has a 'Declaring claim.' notification with 'Failed' status and 'A claim must have a title.' message.
+        And the user stay on to the 'declaring claim' menu.
 
     Scenario: Claim with no type
         When the user declare a new '' claim with title 'claim'.
         Then the new claim is not declared on Bangarang.
-        And the user has a 'A claim must have a type.' error notification.
+        And the user has a 'Declaring claim.' notification with 'Failed' status and 'A claim must have a type.' message.
+        And the user stay on to the 'declaring claim' menu.
 */

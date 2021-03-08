@@ -2,7 +2,7 @@ import type { ClaimContract } from "../port/ClaimContract";
 import type { BangarangAdaptersContract } from "../port/BangarangAdaptersContract";
 import type { UserContact } from "../port/UserContact";
 import { alreadySignedInSigningInNotification, badCredentialsSigningInNotification, successSigningInNotification } from "../port/interactors/SigningInUserNotificationInteractorContract";
-import { successDeclaringUserNotification } from "../port/interactors/DeclaringClaimUserNotificationInteractorContract";
+import { claimAlreadyExistDeclaringClaimUserNotification, successDeclaringClaimUserNotification } from "../port/interactors/DeclaringClaimUserNotificationInteractorContract";
 export class User implements UserContact  {
     constructor(userContract: UserContact, bangarangAdapters: BangarangAdaptersContract) {
         this.username = userContract.username;
@@ -11,8 +11,10 @@ export class User implements UserContact  {
         this.bangarangAdapters = bangarangAdapters;
     }
     public declareClaim(claim:ClaimContract):void {
-        this.bangarangAdapters.bangarangClaimInteractor.declareClaim(claim)
-        this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(successDeclaringUserNotification)
+        if (!this.bangarangAdapters.bangarangClaimInteractor.isClaimExist(claim)) {
+            this.bangarangAdapters.bangarangClaimInteractor.declareClaim(claim)
+            this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(successDeclaringClaimUserNotification)
+        } else this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(claimAlreadyExistDeclaringClaimUserNotification(claim.title))
     }
     public signingIn():void {
         if(this.bangarangAdapters.bangarangMembersInteractor.isSignedIn(this.username))

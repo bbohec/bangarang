@@ -1,16 +1,21 @@
 import type { ClaimContract } from '../port/ClaimContract';
-import type { BangarangClaimInteractor } from '../port/interactors/BangarangClaimInteractor';
-import { claimNotFound } from '../../tests/acceptance/declaringClaim.spec';
-
+import { BangarangClaimInteractor, claimNotFound } from '../port/interactors/BangarangClaimInteractor';
 export class FakeBangarangClaimInteractor implements BangarangClaimInteractor {
+    constructor(
+        public declaredClaims: ClaimContract[] = []
+    ){}
+    isClaimExist(claim: ClaimContract): Boolean {
+        return (this.findClaimByTitle(claim.title))?true:false
+    }
     declareClaim(claim: ClaimContract): void {
         this.declaredClaims.push(claim);
     }
     claimWithTitle(title: string): ClaimContract {
-        const claimFound = this.declaredClaims.find(claim => claim.title === title);
-        if (claimFound)
-            return claimFound;
+        const claimFound = this.findClaimByTitle(title)
+        if (claimFound) return claimFound;
         throw new Error(claimNotFound(title));
     }
-    private declaredClaims: ClaimContract[] = [];
+    private findClaimByTitle(claimTitle: string):ClaimContract|undefined {
+        return this.declaredClaims.find(declaredClaim => declaredClaim.title === claimTitle);
+    }
 }

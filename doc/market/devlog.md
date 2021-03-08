@@ -13,10 +13,10 @@
 - ✔️ Done
 
 ## 2021/03/08 — Day 17
-- Twitch Live Stream
-- ✔️ Stand Up
-- ATDD/TDD > Clean architecture / Business Logic
-    - Declaring Simple Claim
+- ❌ Twitch Live Stream
+- ✔️ Stand Up + new Mic
+- 👉 ATDD/TDD > Clean architecture / Business Logic
+    - 👉 Declaring Simple Claim.
     - Retrieving Claim.
     - Searching Claims.
     - Claiming.

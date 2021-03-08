@@ -7,4 +7,5 @@ export interface DeclaringClaimUserNotificationInteractorContract extends UserNo
 export interface DeclaringClaimUserNotificationContract extends UserNotificationContract {
     type:DeclaringClaimNotificationType
 }
-export const successDeclaringUserNotification:DeclaringClaimUserNotificationContract = {status:"Success", message:"Declared.",type:"Declaring claim."}
+export const successDeclaringClaimUserNotification:DeclaringClaimUserNotificationContract = {status:"Success", message:"Declared.",type:"Declaring claim."}
+export const claimAlreadyExistDeclaringClaimUserNotification = (claimTitle:string):DeclaringClaimUserNotificationContract => ({status:"Failed", message:`The claim "${claimTitle}" already exist`,type:"Declaring claim."})
