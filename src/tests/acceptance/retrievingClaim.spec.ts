@@ -14,6 +14,7 @@ import type { ClaimChoice } from '../../client/port/ClaimChoice';
 import { claimNotDeclaredRetrievingClaimUserNotification, RetrievingClaimNotificationType, successRetrievingClaimUserNotification } from '../../client/port/interactors/RetrievingClaimUserNotificationInteractorContract';
 import { bangarangClaimNotFound } from '../../client/port/interactors/BangarangClaimInteractor';
 import { bangarangMemberNotFoundError } from '../../client/port/interactors/BangarangMembersInteractorContract';
+import { FakeSearchingClaimsUserNotificationInteractor } from '../../client/adapters/FakeSearchingClaimsUserNotificationInteractorContract';
 describe(`Feature : Retrieving Claim
     As a guest or a Bangarang Member
     In order to share a claim or to claim
@@ -46,7 +47,8 @@ describe(`Feature : Retrieving Claim
         declaringClaimUserNotificationInteractor: new FakeDeclaringClaimUserNotificationInteractor(),
         signingInUserNotificationInteractor: new FakeSigningInUserNotificationInteractor(),
         bangarangUserInterfaceInteractor: new FakeBangarangUserInterfaceInteractor(),
-        retrievingClaimUserNotificationInteractor
+        retrievingClaimUserNotificationInteractor,
+        searchingClaimsUserNotificationInteractor:new FakeSearchingClaimsUserNotificationInteractor()
     })
     function initScenario(claims:ClaimContract[],previousUserClaimChoice:ClaimChoice,expectedUsers:UserContract[],membersClaims: MemberClaim[]) {
         bangarangClaimInteractor.withClaims(claims)

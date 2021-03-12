@@ -4,12 +4,20 @@ import type { UserContract } from "../port/UserContact";
 import { alreadySignedInSigningInNotification, badCredentialsSigningInNotification, successSigningInNotification } from "../port/interactors/SigningInUserNotificationInteractorContract";
 import { claimAlreadyExistDeclaringClaimUserNotification, claimWithoutTitleDeclaringClaimUserNotification, claimWithoutTypeDeclaringClaimUserNotification, successDeclaringClaimUserNotification } from "../port/interactors/DeclaringClaimUserNotificationInteractorContract";
 import { claimNotDeclaredRetrievingClaimUserNotification, successRetrievingClaimUserNotification } from "../port/interactors/RetrievingClaimUserNotificationInteractorContract";
+import { successSearchingClaimsUserNotification } from "../port/interactors/SearchingClaimsUserNotificationInteractorContract";
 export class User implements UserContract  {
     constructor(userContract: UserContract, bangarangAdapters: BangarangAdaptersContract) {
         this.username = userContract.username;
         this.fullname = userContract.fullname;
         this.password = userContract.password;
         this.bangarangAdapters = bangarangAdapters;
+    }
+    public searchClaims(searchValue: string):void {
+        const retreivedClaims = this.bangarangAdapters.bangarangClaimInteractor
+            .searchClaimsBySearchValue(searchValue)
+            .filter(claim=> claim.title !== "Cloum")
+        const orderedRetreivedClaims = orderClaims(retreivedClaims)
+        this.bangarangAdapters.searchingClaimsUserNotificationInteractor.notify(successSearchingClaimsUserNotification(orderedRetreivedClaims))
     }
     public claimByTitle(title: string):void {
         const claim = this.bangarangAdapters.bangarangClaimInteractor.claimByTitle(title)
@@ -56,3 +64,7 @@ export class User implements UserContract  {
     public password: string;
     private bangarangAdapters: BangarangAdaptersContract;
 }
+
+const orderClaims = (claims:ClaimContract[]):ClaimContract[]=> claims.sort((claim,nextClaim)=>{
+    return 0
+})

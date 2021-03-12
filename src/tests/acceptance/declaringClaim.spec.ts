@@ -10,6 +10,7 @@ import type { ClaimContract } from '../../client/port/ClaimContract';
 import { claimAlreadyExistDeclaringClaimUserNotification, claimWithoutTitleDeclaringClaimUserNotification, claimWithoutTypeDeclaringClaimUserNotification, DeclaringClaimNotificationType, DeclaringClaimUserNotificationInteractorContract, successDeclaringClaimUserNotification,} from '../../client/port/interactors/DeclaringClaimUserNotificationInteractorContract';
 import { FakeBangarangUserInterfaceInteractor } from '../../client/adapters/FakeBangarangUserInterfaceInteractor';
 import { bangarangClaimNotFound } from '../../client/port/interactors/BangarangClaimInteractor';
+import { FakeSearchingClaimsUserNotificationInteractor } from '../../client/adapters/FakeSearchingClaimsUserNotificationInteractorContract';
 
 
 
@@ -151,7 +152,8 @@ describe(`Feature: Declaring Claim
             declaringClaimUserNotificationInteractor: fakeDeclaringClaimUserNotificationInteractor,
             signingInUserNotificationInteractor: new FakeSigningInUserNotificationInteractor(),
             bangarangUserInterfaceInteractor: fakeBangarangUserInterfaceInteractor,
-            retrievingClaimUserNotificationInteractor:new FakeRetrievingClaimUserNotificationInteractor()
+            retrievingClaimUserNotificationInteractor:new FakeRetrievingClaimUserNotificationInteractor(),
+            searchingClaimsUserNotificationInteractor:new FakeSearchingClaimsUserNotificationInteractor()
         });
         user.declareClaim(claimToDeclare);
     }

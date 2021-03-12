@@ -1,4 +1,23 @@
 # Videos Feedbacks
+
+## Day 17
+- Video Analytics
+    - Views 1.2k (511 unique)
+    - Total hours of play 65h
+    - Average viewing time 3:15 m
+    - 21 > +8 subs > 29 subs
+    - Video Ending
+- Feedback population type
+    - Short Video Demo
+    - Style Theme
+    - Share Claim
+- Google Analytics Bangarang
+    - FR
+    - 110 Users
+    - 1m51s
+    - https://bangarang.sometimesuseful.com/
+- Google Form > +0
+
 ## Day 13
 - Video Analytics
     - Views 1017 (432 unique)

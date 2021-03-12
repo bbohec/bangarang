@@ -1,6 +1,9 @@
 import type { ClaimContract } from '../port/ClaimContract';
 import { BangarangClaimInteractor, bangarangClaimNotFound } from '../port/interactors/BangarangClaimInteractor';
 export class FakeBangarangClaimInteractor implements BangarangClaimInteractor {
+    public searchClaimsBySearchValue(searchValue: string): ClaimContract[] {
+        return this.declaredClaims
+    }
     public withClaims(claims:ClaimContract[]) {
         this.declaredClaims = claims
     }
