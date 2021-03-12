@@ -16,8 +16,25 @@ export class User implements UserContract  {
         const retreivedClaims = this.bangarangAdapters.bangarangClaimInteractor
             .searchClaimsBySearchValue(searchValue)
             .filter(claim=> claim.title !== "Cloum")
-        const orderedRetreivedClaims = orderClaims(retreivedClaims)
-        this.bangarangAdapters.searchingClaimsUserNotificationInteractor.notify(successSearchingClaimsUserNotification(orderedRetreivedClaims))
+        //const orderedRetreivedClaims = orderClaims(retreivedClaims,searchValue)
+        this.bangarangAdapters.searchingClaimsUserNotificationInteractor.notify(successSearchingClaimsUserNotification(retreivedClaims))
+        function orderClaims(claims:ClaimContract[],searchCriteria:string):ClaimContract[] {
+            return claims.sort((nextClaim,currentClaim)=>{
+                const unexpectedWords = wordsThatAreOnCurrentClaimTitleButNotOnSearchCriteria(currentClaim.title,searchCriteria);
+                if (currentClaim.title.includes(searchCriteria)) return 0
+                return (shouldReorder(unexpectedWords,currentClaim))?-1:0
+                function wordsThatAreOnCurrentClaimTitleButNotOnSearchCriteria(currentTitle:string,searchCriteria:string):string[] {
+                    return separateSentenceIntoWords(currentTitle).filter(currentTitleWord=> separateSentenceIntoWords(searchCriteria).some(searchCriteriaWord => currentTitleWord !== searchCriteriaWord))
+                }
+                function shouldReorder(unexpectedValues: string[],currentClaim:ClaimContract):boolean {
+                    return unexpectedValues.map(unexpectedValue => currentClaim.title.includes(unexpectedValue)).some(value => value)
+                }
+                function separateSentenceIntoWords(sentence:string) {
+                    const wordSeparator = " ";
+                    return sentence.split(wordSeparator);
+                }
+            })
+        }
     }
     public claimByTitle(title: string):void {
         const claim = this.bangarangAdapters.bangarangClaimInteractor.claimByTitle(title)

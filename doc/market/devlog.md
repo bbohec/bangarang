@@ -10,20 +10,27 @@
     - Signing Out.
     - Declaring Multiple Proposal Claim.
     - Unregistering. (remove claims)
-
 - ❌ To-do / Not Finished
 - 👉 Doing
 - ✔️ Done
+
+## 2021/03/15 — Day 19
+- Twitch Live Stream
+- Stand Up
+- Feedback
+- ATDD/TDD > Clean architecture / Business Logic
+    - Searching Claims.
+        - TDD Claim Sort Engine
+- Summary.
 
 ## 2021/03/12 — Day 18
 - ❌ Twitch Live Stream
 - ✔️ Stand Up
 - ✔️ Feedback
-- 👉 ATDD/TDD > Clean architecture / Business Logic
-    - 👉 Searching Claims.
-    - Claiming.
-    - Registering.
-- Summary.
+- ❌ ATDD/TDD > Clean architecture / Business Logic
+    - ❌ Searching Claims.
+        - ❌ TDD Claim Sort Engine
+- ✔️ Summary.
 
 ## 2021/03/08 — Day 17
 - ❌ Twitch Live Stream
