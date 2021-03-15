@@ -12,29 +12,35 @@ export class User implements UserContract  {
         this.password = userContract.password;
         this.bangarangAdapters = bangarangAdapters;
     }
-    public searchClaims(searchValue: string):void {
-        const retreivedClaims = this.bangarangAdapters.bangarangClaimInteractor
-            .searchClaimsBySearchValue(searchValue)
-            .filter(claim=> claim.title !== "Cloum")
-        //const orderedRetreivedClaims = orderClaims(retreivedClaims,searchValue)
-        this.bangarangAdapters.searchingClaimsUserNotificationInteractor.notify(successSearchingClaimsUserNotification(retreivedClaims))
-        function orderClaims(claims:ClaimContract[],searchCriteria:string):ClaimContract[] {
-            return claims.sort((nextClaim,currentClaim)=>{
-                const unexpectedWords = wordsThatAreOnCurrentClaimTitleButNotOnSearchCriteria(currentClaim.title,searchCriteria);
-                if (currentClaim.title.includes(searchCriteria)) return 0
-                return (shouldReorder(unexpectedWords,currentClaim))?-1:0
-                function wordsThatAreOnCurrentClaimTitleButNotOnSearchCriteria(currentTitle:string,searchCriteria:string):string[] {
-                    return separateSentenceIntoWords(currentTitle).filter(currentTitleWord=> separateSentenceIntoWords(searchCriteria).some(searchCriteriaWord => currentTitleWord !== searchCriteriaWord))
-                }
-                function shouldReorder(unexpectedValues: string[],currentClaim:ClaimContract):boolean {
-                    return unexpectedValues.map(unexpectedValue => currentClaim.title.includes(unexpectedValue)).some(value => value)
-                }
-                function separateSentenceIntoWords(sentence:string) {
-                    const wordSeparator = " ";
-                    return sentence.split(wordSeparator);
-                }
-            })
+    public searchClaims(searchCriteria: string):void {
+        enum Order {
+            keep=0,
+            change=-1
         }
+        const wordSeparator = " ";
+        const sentenceIntoWords = (sentence: string, wordSeparator: string): string[] => sentence.split(wordSeparator);
+        function claimSortEngine(nextClaim:ClaimContract, currentClaim:ClaimContract,searchCriteria:string):Order {
+            const sentenceWordsNotInOtherSentence = (sentence: string, otherSentence: string): string[] => sentenceIntoWords(sentence, wordSeparator)
+                .filter(titleWord => !sentenceIntoWords(otherSentence, wordSeparator).includes(titleWord));
+            const sentenceWordsInOtherSentence = (sentence: string, otherSentence: string): string[] => sentenceIntoWords(sentence, wordSeparator)
+                .filter(titleWord => sentenceIntoWords(otherSentence, wordSeparator).includes(titleWord));
+            const titlesMatchSearchCriteria = (currentClaimTitle: string, nextClaimTitle: string, searchCriteria: string): boolean => {
+                const claimTitleWithoutWordsThatAreNotInSearchCriteria = (claimTitle: string, searchCriteria: string): string => sentenceWordsNotInOtherSentence(claimTitle, sentenceWordsNotInOtherSentence(claimTitle, searchCriteria).join(wordSeparator)).join(wordSeparator);
+                return claimTitleWithoutWordsThatAreNotInSearchCriteria(currentClaimTitle, searchCriteria) === claimTitleWithoutWordsThatAreNotInSearchCriteria(nextClaimTitle, searchCriteria);
+            };
+            const isNextClaimHaveMoreSearchCriteriaWordsThanCurrentClaim=()=> sentenceWordsInOtherSentence(searchCriteria.toLowerCase(), currentClaim.title.toLowerCase()).length < sentenceWordsInOtherSentence(searchCriteria.toLowerCase(), nextClaim.title.toLowerCase()).length;
+            if (isNextClaimHaveMoreSearchCriteriaWordsThanCurrentClaim()) return Order.change
+            if (currentClaim.title.includes(searchCriteria)) return Order.keep;
+            if (titlesMatchSearchCriteria(currentClaim.title.toLowerCase(), nextClaim.title.toLowerCase(), searchCriteria.toLowerCase()))return Order.keep;
+            if (sentenceWordsNotInOtherSentence(currentClaim.title, searchCriteria).length > 0)return Order.change;
+            return Order.keep;
+        }
+        const retreivedClaims = this.bangarangAdapters.bangarangClaimInteractor
+            .findClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(sentenceIntoWords(searchCriteria.toLowerCase(),wordSeparator))
+            .sort((nextClaim,previousClaim)=>claimSortEngine(nextClaim,previousClaim,searchCriteria))
+        this.bangarangAdapters
+            .searchingClaimsUserNotificationInteractor
+            .notify(successSearchingClaimsUserNotification(retreivedClaims))
     }
     public claimByTitle(title: string):void {
         const claim = this.bangarangAdapters.bangarangClaimInteractor.claimByTitle(title)

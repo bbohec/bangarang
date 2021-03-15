@@ -18,6 +18,219 @@ describe(`Feature: Searching Claims
     In order to claim or share a claim,
     I want to find claims
     `,()=> {
+    interface SearchingClaimsScenarioInterface {
+        scenarioTitle:string,
+        expectedDeclaredClaims:ClaimContract[],
+        retreivedClaims:ClaimContract[],
+        searchCriteria:string
+    }
+    const scenarios:SearchingClaimsScenarioInterface[] = [
+        {
+            scenarioTitle:"order engine unit 1",
+            expectedDeclaredClaims:[
+                {type:"", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"good people1", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"good people 2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            retreivedClaims:[
+                {type:"", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"good people 2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"good people1", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            searchCriteria:"good people"
+        },
+        {
+            scenarioTitle:"order engine unit 2",
+            expectedDeclaredClaims:[
+                {type:"", title:"good 4 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            retreivedClaims:[
+                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"good 4 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            searchCriteria:"good people"
+        },
+        {
+            scenarioTitle:"order engine unit 3",
+            expectedDeclaredClaims:[
+                {type:"", title:"good NOPE people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            retreivedClaims:[
+                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"good NOPE people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            searchCriteria:"good people"
+        },
+        {
+            scenarioTitle:"order engine unit 4",
+            expectedDeclaredClaims:[
+                {type:"", title:"Bad NOPE Cookie", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"COOKIE BAD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            retreivedClaims:[
+                {type:"", title:"COOKIE BAD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"Bad NOPE Cookie", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            searchCriteria:"Bad Cookie"
+        },
+        {
+            scenarioTitle:"order engine unit 5",
+            expectedDeclaredClaims:[
+                {type:"", title:"Third NOPE Thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"THING THIRD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            retreivedClaims:[
+                {type:"", title:"THING THIRD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"Third NOPE Thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            searchCriteria:"Thing Third"
+        },
+        {
+            scenarioTitle:"order engine unit 6",
+            expectedDeclaredClaims:[
+                {type:"", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            retreivedClaims:[
+                {type:"", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            searchCriteria:"good people"
+        },
+        {
+            scenarioTitle:"order engine unit 7",
+            expectedDeclaredClaims:[
+                {type:"", title:"third NOPE thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"THIRD LOREM THING", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            retreivedClaims:[
+                {type:"", title:"third NOPE thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"THIRD LOREM THING", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            searchCriteria:"third thing"
+        },
+        {
+            scenarioTitle:"order engine unit 8",
+            expectedDeclaredClaims:[
+                {type:"", title:"third 3 thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"THIRD 4 THING", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            retreivedClaims:[
+                {type:"", title:"third 3 thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"THIRD 4 THING", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            searchCriteria:"third thing"
+        },
+        {
+            scenarioTitle:"order engine unit 9",
+            expectedDeclaredClaims:[
+                {type:"", title:"third thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"THIRD THING", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            retreivedClaims:[
+                {type:"", title:"third thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"THIRD THING", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            searchCriteria:"THIRD THING"
+        },
+        {
+            scenarioTitle:"Searching Claims with one word",
+            expectedDeclaredClaims:[
+                {type:"", title:"claim", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"claim2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"claim3", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"Claim4", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"CLAIME5", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"Cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            retreivedClaims:[
+                {type:"", title:"claim", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"claim2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"claim3", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"Claim4", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"CLAIME5", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0}
+            ],
+            searchCriteria:"claim"
+        },
+        {
+            scenarioTitle:"Searching Claims with multiple words",
+            expectedDeclaredClaims:[
+                {type:"", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"good people1", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"good people 2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"Cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            retreivedClaims:[
+                {type:"", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"good people 2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"good people1", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            searchCriteria:"good people"
+        },
+        {
+            scenarioTitle:"Searching Claims with one or multiple words",
+            expectedDeclaredClaims:[
+                {type:"", title:"good", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"good 2 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"Cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            retreivedClaims:[
+                {type:"", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"good 2 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"good", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            searchCriteria:"good people"
+        },
+        {
+            scenarioTitle:"No claims match search criteria",
+            expectedDeclaredClaims:[
+                {type:"", title:"cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"cloum2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"cloum3", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"Cloum4", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"CLOUME5", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+            ],
+            retreivedClaims:[],
+            searchCriteria:"claim"
+        },
+        {
+            scenarioTitle:"Claims found with bad lower/upper case search criteria",
+            expectedDeclaredClaims:[
+                {type:"", title:"cloum2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"cloum3", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"Cloum4", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"CLOUME5", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0}
+            ],
+            retreivedClaims:[
+                {type:"", title:"cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"cloum2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"cloum3", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"Cloum4", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
+                {type:"", title:"CLOUME5", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0}
+            ],
+            searchCriteria:"clOUm"
+        }
+    ]
     const bangarangClaimInteractor = new FakeBangarangClaimInteractor()
     const searchingClaimsUserNotificationInteractor = new FakeSearchingClaimsUserNotificationInteractor()
     const user = new User({username:"",fullname:"",password:""},{
@@ -35,226 +248,29 @@ describe(`Feature: Searching Claims
         searchingClaimsUserNotificationInteractor.currentNotification=undefined
         expectedNotification=scenarioExpectedNotification
     }
-    describe(`Scenario: Searching Claims with one word`,()=>{
-        const searchCriteria = "claim";
-        const expectedDeclaredClaims:ClaimContract[]=[
-            {type:"", title:"claim", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-            {type:"", title:"claim2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-            {type:"", title:"claim3", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-            {type:"", title:"Claim4", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-            {type:"", title:"CLAIME5", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-            {type:"", title:"Cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-        ]
-        const retreivedClaims:ClaimContract[]=expectedDeclaredClaims.filter(claim=> claim.title !== "Cloum")
-        const scenarioExpectedNotification = successSearchingClaimsUserNotification(retreivedClaims)
-        before(()=>initScenario(expectedDeclaredClaims,scenarioExpectedNotification))
-        const expectedDeclaredClaimsTitles = expectedDeclaredClaims.map(claim => claim.title);
-        it(`Given there is the following declared claims:
-            [${expectedDeclaredClaimsTitles}]`,()=>{
-            bangarangClaimInteractor.withClaims(expectedDeclaredClaims)
-            expect(bangarangClaimInteractor.declaredClaims.map(claim => claim.title)).to.deep.equal(expectedDeclaredClaimsTitles)
-        })
-        it(`When the user search claims with search criteria '${searchCriteria}'`,(done)=>{
-            user.searchClaims(searchCriteria)
-            done()
-        })
-        it(`Then the retreived claims is the following:
-            [${scenarioExpectedNotification.retreivedClaims?.map(claim=>claim.title)}]`,()=>{
-            expect(searchingClaimsUserNotificationInteractor.currentNotification?.retreivedClaims).to.deep.equal(scenarioExpectedNotification.retreivedClaims)
-        })
-        it(`And the user has a '${scenarioExpectedNotification.type}' notification with '${scenarioExpectedNotification.status}' status and '${scenarioExpectedNotification.message}' message.`,()=>{
-            expect(searchingClaimsUserNotificationInteractor.currentNotification?.status).equal(scenarioExpectedNotification.status)
-            expect(searchingClaimsUserNotificationInteractor.currentNotification?.message).equal(scenarioExpectedNotification.message)
-            expect(searchingClaimsUserNotificationInteractor.currentNotification?.type).equal(scenarioExpectedNotification.type)
-        })
-    })
-    describe(`Scenario: Searching Claims with multiple words`,()=>{
-        const searchCriteria = "good people";
-        const expectedDeclaredClaims:ClaimContract[]=[
-            {type:"", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-            {type:"", title:"good people1", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-            {type:"", title:"good people 2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-            {type:"", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-            {type:"", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-            {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-            {type:"", title:"Cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-        ]
-        const retreivedClaims:ClaimContract[]=[
-            {type:"", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-            {type:"", title:"good people1", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-            {type:"", title:"good people 2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-            {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-            {type:"", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-            {type:"", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-        ]
-        const scenarioExpectedNotification = successSearchingClaimsUserNotification(retreivedClaims)
-        const expectedDeclaredClaimsTitles = expectedDeclaredClaims.map(claim => claim.title);
-        before(()=>initScenario(expectedDeclaredClaims,scenarioExpectedNotification))
-        it(`Given there is the following declared claims:
-            [${expectedDeclaredClaimsTitles}]`,()=>{
-            bangarangClaimInteractor.withClaims(expectedDeclaredClaims)
-            expect(bangarangClaimInteractor.declaredClaims.map(claim => claim.title)).to.deep.equal(expectedDeclaredClaimsTitles)
-        })
-        it(`When the user search claims with search criteria '${searchCriteria}'`,(done)=>{
-            user.searchClaims(searchCriteria)
-            done()
-        })
-        /*
-        it(`Then the retreived claims is the following:
-            [${scenarioExpectedNotification.retreivedClaims?.map(claim=>claim.title)}]`,()=>{
-            expect(searchingClaimsUserNotificationInteractor.currentNotification?.retreivedClaims).to.deep.equal(scenarioExpectedNotification.retreivedClaims)
-        })
-        
-        it(`And the user has a '${scenarioExpectedNotification.type}' notification with '${scenarioExpectedNotification.status}' status and '${scenarioExpectedNotification.message}' message.`,()=>{
-            expect(searchingClaimsUserNotificationInteractor.currentNotification?.status).equal(scenarioExpectedNotification.status)
-            expect(searchingClaimsUserNotificationInteractor.currentNotification?.message).equal(scenarioExpectedNotification.message)
-            expect(searchingClaimsUserNotificationInteractor.currentNotification?.type).equal(scenarioExpectedNotification.type)
-        })
-        */
-    })
-    describe(`Unit Test`,()=>{
-        const orderClaims=(claims:ClaimContract[],searchCriteria:string):ClaimContract[]=> {
-            return claims.sort((nextClaim,currentClaim)=>{
-                const unexpectedWords = wordsThatAreOnCurrentClaimTitleButNotOnSearchCriteria(currentClaim.title,searchCriteria);
-                if (currentClaim.title.includes(searchCriteria)) return 0
-                return (shouldReorder(unexpectedWords,currentClaim))?-1:0
-                function wordsThatAreOnCurrentClaimTitleButNotOnSearchCriteria(currentTitle:string,searchCriteria:string):string[] {
-                    return separateSentenceIntoWords(currentTitle).filter(currentTitleWord=> separateSentenceIntoWords(searchCriteria).some(searchCriteriaWord => currentTitleWord !== searchCriteriaWord))
-                }
-                function shouldReorder(unexpectedValues: string[],currentClaim:ClaimContract):boolean {
-                    return unexpectedValues.map(unexpectedValue => currentClaim.title.includes(unexpectedValue)).some(value => value)
-                }
-                function separateSentenceIntoWords(sentence:string) {
-                    const wordSeparator = " ";
-                    return sentence.split(wordSeparator);
-                }
+    scenarios.forEach((scenario,index)=> {
+        describe(`Scenario ${index+1}: ${scenario.scenarioTitle}`,()=>{
+            const scenarioExpectedNotification = successSearchingClaimsUserNotification(scenario.retreivedClaims)
+            const expectedDeclaredClaimsTitles = scenario.expectedDeclaredClaims.map(claim => claim.title);
+            before(()=>initScenario(scenario.expectedDeclaredClaims,scenarioExpectedNotification))
+            it(`Given there is the following declared claims:
+                [${expectedDeclaredClaimsTitles}]`,()=>{
+                bangarangClaimInteractor.withClaims(scenario.expectedDeclaredClaims)
+                expect(bangarangClaimInteractor.declaredClaims.map(claim => claim.title)).to.deep.equal(expectedDeclaredClaimsTitles)
             })
-        }
-        const scenarios:{expectedDeclaredClaims:ClaimContract[],retreivedClaims:ClaimContract[],searchCriteria:string}[] = [
-            {
-                expectedDeclaredClaims:[
-                    {type:"", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                    {type:"", title:"good people1", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                    {type:"", title:"good people 2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                    {type:"", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                    {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                ],
-                retreivedClaims:[
-                    {type:"", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                    {type:"", title:"good people1", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                    {type:"", title:"good people 2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                    {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                    {type:"", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                ],
-                searchCriteria:"good people"
-            },
-            {
-                expectedDeclaredClaims:[
-                    {type:"", title:"good 4 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                    {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                ],
-                retreivedClaims:[
-                    {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                    {type:"", title:"good 4 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                ],
-                searchCriteria:"good people"
-            },
-            {
-                expectedDeclaredClaims:[
-                    {type:"", title:"good NOPE people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                    {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                ],
-                retreivedClaims:[
-                    {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                    {type:"", title:"good NOPE people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                ],
-                searchCriteria:"good people"
-            },
-            {
-                expectedDeclaredClaims:[
-                    {type:"", title:"Bad NOPE Cookie", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                    {type:"", title:"COOKIE BAD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                ],
-                retreivedClaims:[
-                    {type:"", title:"COOKIE BAD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                    {type:"", title:"Bad NOPE Cookie", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                ],
-                searchCriteria:"Bad Cookie"
-            },
-            {
-                expectedDeclaredClaims:[
-                    {type:"", title:"Third NOPE Thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                    {type:"", title:"THING THIRD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                ],
-                retreivedClaims:[
-                    {type:"", title:"THING THIRD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                    {type:"", title:"Third NOPE Thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                ],
-                searchCriteria:"Thing Third"
-            },
-            {
-                expectedDeclaredClaims:[
-                    {type:"", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                    {type:"", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                ],
-                retreivedClaims:[
-                    {type:"", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                    {type:"", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0},
-                ],
-                searchCriteria:"good people"
-            }
-        ]
-        scenarios.forEach((scenario,index)=> {
-            it(` Scenario ${index}:
-            The claim title order of 
-            [${scenario.expectedDeclaredClaims.map(claim => claim.title)}]
-        must be:
-            [${scenario.retreivedClaims.map(claim => claim.title)}]
-        with '${scenario.searchCriteria}' as search criteria.`,()=>{
-            expect(orderClaims(scenario.expectedDeclaredClaims,scenario.searchCriteria)).to.deep.equal(scenario.retreivedClaims)
-        })
+            it(`When the user search claims with search criteria '${scenario.searchCriteria}'`,(done)=>{
+                user.searchClaims(scenario.searchCriteria)
+                done()
+            })
+            it(`Then the retreived claims is the following:
+                [${scenarioExpectedNotification.retreivedClaims?.map(claim=>claim.title)}]`,()=>{
+                expect(searchingClaimsUserNotificationInteractor.currentNotification?.retreivedClaims).to.deep.equal(scenarioExpectedNotification.retreivedClaims)
+            })
+            it(`And the user has a '${scenarioExpectedNotification.type}' notification with '${scenarioExpectedNotification.status}' status and '${scenarioExpectedNotification.message}' message.`,()=>{
+                expect(searchingClaimsUserNotificationInteractor.currentNotification?.status).equal(scenarioExpectedNotification.status)
+                expect(searchingClaimsUserNotificationInteractor.currentNotification?.message).equal(scenarioExpectedNotification.message)
+                expect(searchingClaimsUserNotificationInteractor.currentNotification?.type).equal(scenarioExpectedNotification.type)
+            })
         })
     })
 })
-
-
-
-
-
-
-
-
-
-/*
-
-Feature: Searching Claims
-    As a guest or a Bangarang Member,
-    In order to claim or share a claim,
-    I want to find a claim
-   
-
-    Scenario: Searching Claims with multiple words
-        Given there is the following declared claims:
-            [good people,good people1,good people 2,good 3 people,GOOD 4 PEOPLE,PEOPLE GOOD,Cloum]
-        When the user search claims with search criteria 'good people'
-        Then the searched claims is the following:
-            [good people,good people1,good people 2,PEOPLE GOOD,good 3 people,GOOD 4 PEOPLE]
-        And the user has a "6 claims found." success notification.
-
-    Scenario: Searching Claims with one or multiple words
-        Given there is the following declared claims:
-            [good ,people,good people,good 2 people,GOOD 4 PEOPLE,PEOPLE GOOD,Cloum]
-        When the user search claims with search criteria 'good people'
-        Then the searched claims is the following:
-            [good people,PEOPLE GOOD,good 2 people,GOOD 4 PEOPLE,good ,people]
-        And the user has a "6 claims found." success notification.
-
-    Scenario: No claims
-        Given there is the following declared claims:
-            [cloum,cloum2,cloum3,Cloum4,CLOUME5]
-        When the user search claims with search criteria 'claim'
-        Then the searched claims is the following:
-            []
-        And the user has a "0 claims found." success notification.
-
-*/

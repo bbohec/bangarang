@@ -14,14 +14,23 @@
 - 👉 Doing
 - ✔️ Done
 
-## 2021/03/15 — Day 19
+## 2021/03/19 — Day 20
 - Twitch Live Stream
 - Stand Up
-- Feedback
 - ATDD/TDD > Clean architecture / Business Logic
-    - Searching Claims.
-        - TDD Claim Sort Engine
+    - Claiming.
+    - Registering.
 - Summary.
+
+## 2021/03/15 — Day 19
+- ❌ Twitch Live Stream
+- ✔️ Stand Up
+- ✔️ ATDD/TDD > Clean architecture / Business Logic
+    - ✔️ Searching Claims.
+        - ✔️ TDD Claim Sort Engine
+    - ❌ Claiming.
+- ✔️ Twitch Live Stream Announce : https://www.twitch.tv/benjaminbohec — Monday 9:00am/6:00pm & Friday 9:00am/6:00pm
+- 👉 Summary.
 
 ## 2021/03/12 — Day 18
 - ❌ Twitch Live Stream

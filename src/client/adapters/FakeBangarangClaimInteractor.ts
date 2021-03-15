@@ -1,8 +1,8 @@
 import type { ClaimContract } from '../port/ClaimContract';
 import { BangarangClaimInteractor, bangarangClaimNotFound } from '../port/interactors/BangarangClaimInteractor';
 export class FakeBangarangClaimInteractor implements BangarangClaimInteractor {
-    public searchClaimsBySearchValue(searchValue: string): ClaimContract[] {
-        return this.declaredClaims
+    public findClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(searchCriteriaWords: string[]): ClaimContract[] {
+        return this.declaredClaims.filter(claim => searchCriteriaWords.some(searchCriteriaWord => claim.title.toLowerCase().includes(searchCriteriaWord)))
     }
     public withClaims(claims:ClaimContract[]) {
         this.declaredClaims = claims

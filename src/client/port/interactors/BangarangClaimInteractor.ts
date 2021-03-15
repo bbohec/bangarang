@@ -1,6 +1,6 @@
 import type { ClaimContract } from '../ClaimContract';
 export interface BangarangClaimInteractor {
-    searchClaimsBySearchValue(searchValue: string):ClaimContract[];
+    findClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(searchCriteriaWords: string[]):ClaimContract[];
     claimByTitle(title: string): ClaimContract|Error;
     isClaimExistByTitleUpperCase(claim: ClaimContract):Boolean;
     declareClaim(claim: ClaimContract): void;
