@@ -2,8 +2,13 @@ import { bangarangMemberNotFoundError, BangarangMembersInteractorContract } from
 import type { MemberClaim } from "../port/MemberClaim";
 import type { UserContract } from "../port/UserContact";
 export class FakeBangarangMembersInteractor implements BangarangMembersInteractorContract {
+    public saveMemberClaim(memberClaim: MemberClaim): void {
+        const memberClaimIndex = this.bangarangMembersClaims.findIndex(bangarangMemberClaim => bangarangMemberClaim.claimTitle === memberClaim.claimTitle)
+        if (memberClaimIndex > -1) this.bangarangMembersClaims[memberClaimIndex] = memberClaim
+        else this.bangarangMembersClaims.push(memberClaim)
+    }
     public memberHasClaimedOnClaim(username:string,claimTitle:string): "For"|"Against"|undefined {
-        return this.membersClaims
+        return this.bangarangMembersClaims
             .find(memberClaim => memberClaim.memberUsername === username && memberClaim.claimTitle === claimTitle)?.claimChoice
     }
     public signingIn(username: string, password: string):void|Error {
@@ -27,13 +32,13 @@ export class FakeBangarangMembersInteractor implements BangarangMembersInteracto
         this.bangarangMembersDatabase=bangarangMembersDatabase
     }
     withMembersClaims(membersClaims:MemberClaim[]):void{
-        this.membersClaims=membersClaims
+        this.bangarangMembersClaims=membersClaims
     }
     withBangarangSignedInMemberDatabase(bangarangSignedInMemberDatabase:UserContract[]):void{
         this.bangarangSignedInMemberDatabase=bangarangSignedInMemberDatabase
     }
     private bangarangMembersDatabase: UserContract[]= []
-    private membersClaims:MemberClaim[]=[]
+    private bangarangMembersClaims:MemberClaim[]=[]
     private bangarangSignedInMemberDatabase:UserContract[] = []
 }
 

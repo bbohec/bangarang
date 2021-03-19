@@ -1,11 +1,13 @@
 import type { ClaimContract } from '../port/ClaimContract';
 import { BangarangClaimInteractor, bangarangClaimNotFound } from '../port/interactors/BangarangClaimInteractor';
 export class FakeBangarangClaimInteractor implements BangarangClaimInteractor {
+    public saveClaim(claimToSave: ClaimContract): void {
+        const existingClaimIndex = this.declaredClaims.findIndex(claim=> claim.title === claimToSave.title)
+        if (existingClaimIndex > -1) this.declaredClaims[existingClaimIndex] = claimToSave
+        else this.declaredClaims.push(claimToSave)
+    }
     public findClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(searchCriteriaWords: string[]): ClaimContract[] {
         return this.declaredClaims.filter(claim => searchCriteriaWords.some(searchCriteriaWord => claim.title.toLowerCase().includes(searchCriteriaWord)))
-    }
-    public withClaims(claims:ClaimContract[]) {
-        this.declaredClaims = claims
     }
     public claimByTitle(title: string): ClaimContract|Error {
         const claimFound = this.findClaimByTitleUpperCase(title)
@@ -20,6 +22,9 @@ export class FakeBangarangClaimInteractor implements BangarangClaimInteractor {
     }
     private findClaimByTitleUpperCase(claimTitle: string):ClaimContract|undefined {
         return this.declaredClaims.find(declaredClaim => declaredClaim.title.toUpperCase() === claimTitle.toUpperCase());
+    }
+    public removeAllClaims():void {
+        this.declaredClaims=[]
     }
     public declaredClaims: ClaimContract[] = []
 }

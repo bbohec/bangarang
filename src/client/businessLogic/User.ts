@@ -5,12 +5,40 @@ import { alreadySignedInSigningInNotification, badCredentialsSigningInNotificati
 import { claimAlreadyExistDeclaringClaimUserNotification, claimWithoutTitleDeclaringClaimUserNotification, claimWithoutTypeDeclaringClaimUserNotification, successDeclaringClaimUserNotification } from "../port/interactors/DeclaringClaimUserNotificationInteractorContract";
 import { claimNotDeclaredRetrievingClaimUserNotification, successRetrievingClaimUserNotification } from "../port/interactors/RetrievingClaimUserNotificationInteractorContract";
 import { successSearchingClaimsUserNotification } from "../port/interactors/SearchingClaimsUserNotificationInteractorContract";
+import { claimNotDeclaredClaimingUserNotification, multipleTimesClaimingUserNotification, mustBeSignedInClaimingUserNotification, successClaimingUserNotification } from "../port/interactors/ClaimingUserNotificationInteractorContract";
+import type { ClaimChoice } from "../port/ClaimChoice";
+import { StaticView } from "../port/interactors/BangarangUserInterfaceInteractor";
+import { Claim } from "./Claim";
 export class User implements UserContract  {
     constructor(userContract: UserContract, bangarangAdapters: BangarangAdaptersContract) {
         this.username = userContract.username;
         this.fullname = userContract.fullname;
         this.password = userContract.password;
         this.bangarangAdapters = bangarangAdapters;
+    }
+    public claiming(claimTitle: string, claimChoice: ClaimChoice):void {
+        const retreivedClaim = this.bangarangAdapters.bangarangClaimInteractor.claimByTitle(claimTitle)
+        const isUserHasPreviouslyMadeTheSameClaimChoice=(previousClaimChoice:ClaimChoice,claimChoice:ClaimChoice):boolean => previousClaimChoice !==undefined && previousClaimChoice === claimChoice
+        if (retreivedClaim instanceof Error) 
+            this.bangarangAdapters.claimingUserNotificationInteractor.notify(claimNotDeclaredClaimingUserNotification(claimTitle))
+        else if (!this.isSignedIn()){
+            this.bangarangAdapters.claimingUserNotificationInteractor.notify(mustBeSignedInClaimingUserNotification)
+            this.bangarangAdapters.bangarangUserInterfaceInteractor.goToView(StaticView.SigningInMenu)
+        }
+        else{
+            const previousClaimChoice = this.bangarangAdapters.bangarangMembersInteractor.memberHasClaimedOnClaim(this.username, claimTitle)
+            if (isUserHasPreviouslyMadeTheSameClaimChoice(previousClaimChoice,claimChoice))
+                this.bangarangAdapters.claimingUserNotificationInteractor.notify(multipleTimesClaimingUserNotification(claimChoice))
+            else {
+                const updatedClaim = new Claim(retreivedClaim)
+                updatedClaim
+                    .increasePeopleClaimedWhenNoPreviousClaimChoice(previousClaimChoice)
+                    .removePreviousClaimOnClaim(previousClaimChoice)
+                    .increaseClaimChoiseFromClaimChoice(claimChoice)
+                    .save(this.bangarangAdapters.bangarangClaimInteractor,this.bangarangAdapters.bangarangMembersInteractor,this.username,claimChoice)
+                this.bangarangAdapters.claimingUserNotificationInteractor.notify(successClaimingUserNotification)
+            }
+        }
     }
     public searchClaims(searchCriteria: string):void {
         enum Order {
@@ -62,7 +90,7 @@ export class User implements UserContract  {
         else if (claim.type === "")this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(claimWithoutTypeDeclaringClaimUserNotification)
         else {
             if (!this.bangarangAdapters.bangarangClaimInteractor.isClaimExistByTitleUpperCase(claim)) {
-                this.bangarangAdapters.bangarangClaimInteractor.declareClaim(claim)
+                this.bangarangAdapters.bangarangClaimInteractor.saveClaim(claim)
                 this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(successDeclaringClaimUserNotification)
             } else this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(claimAlreadyExistDeclaringClaimUserNotification(claim.title))
             const retrievedClaim = this.bangarangAdapters.bangarangClaimInteractor.claimByTitle(claim.title)

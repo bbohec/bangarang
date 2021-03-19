@@ -11,6 +11,7 @@ import { claimAlreadyExistDeclaringClaimUserNotification, claimWithoutTitleDecla
 import { FakeBangarangUserInterfaceInteractor } from '../../client/adapters/FakeBangarangUserInterfaceInteractor';
 import { bangarangClaimNotFound } from '../../client/port/interactors/BangarangClaimInteractor';
 import { FakeSearchingClaimsUserNotificationInteractor } from '../../client/adapters/FakeSearchingClaimsUserNotificationInteractorContract';
+import { FakeClaimingUserNotificationInteractor } from '../../client/adapters/FakeClaimingUserNotificationInteractorContract';
 
 
 
@@ -19,7 +20,7 @@ describe(`Feature: Declaring Claim
     In order to claim or share a claim
     I want to declare a claim
     `,()=> {
-    const fakeBangarangClaimInteractor = new FakeBangarangClaimInteractor()
+    const bangarangClaimInteractor = new FakeBangarangClaimInteractor()
     const declaringClaimNotificationType:DeclaringClaimNotificationType="Declaring claim."
     const fakeDeclaringClaimUserNotificationInteractor = new FakeDeclaringClaimUserNotificationInteractor()
     const expectedClaim:ClaimContract={title:'expectedClaim',type:"simple",peopleClaimed:0,peopleClaimedFor:0,peopleClaimedAgainst:0}
@@ -32,7 +33,7 @@ describe(`Feature: Declaring Claim
             expect(fakeBangarangUserInterfaceInteractor.currentView).equal(declaringClaimMenuView)
         })
         it(`And the claim with title '${expectedClaim.title}' is not declared on Bangarang.`,()=>{
-            expect(()=> {throw fakeBangarangClaimInteractor.claimByTitle(expectedClaim.title)})
+            expect(()=> {throw bangarangClaimInteractor.claimByTitle(expectedClaim.title)})
                 .to.throw(bangarangClaimNotFound(expectedClaim.title))
         })
         it(`When the user declare a new '${expectedClaim.type}' claim with title '${expectedClaim.title}'.`,(done)=>{
@@ -40,7 +41,7 @@ describe(`Feature: Declaring Claim
             done()
         })
         it(`Then the claim with title '${expectedClaim.title}' is declared on Bangarang.`,()=>{
-            expect(fakeBangarangClaimInteractor.claimByTitle(expectedClaim.title)).deep.equal(expectedClaim)
+            expect(bangarangClaimInteractor.claimByTitle(expectedClaim.title)).deep.equal(expectedClaim)
         })
         it(`And the user has a '${declaringClaimNotificationType}' notification with '${successDeclaringClaimUserNotification.status}' status and '${successDeclaringClaimUserNotification.message}' message.`,()=> {
             expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.status).equal(successDeclaringClaimUserNotification.status)
@@ -57,14 +58,14 @@ describe(`Feature: Declaring Claim
             expect(fakeBangarangUserInterfaceInteractor.currentView).equal(declaringClaimMenuView)
         })
         it(`And the claim with title '${expectedClaim.title}' is declared on Bangarang.`,()=>{
-            expect(fakeBangarangClaimInteractor.claimByTitle(expectedClaim.title)).deep.equal(expectedClaim)
+            expect(bangarangClaimInteractor.claimByTitle(expectedClaim.title)).deep.equal(expectedClaim)
         })
         it(`When the user declare a new '${expectedClaim.type}' claim with title '${expectedClaim.title}'.`,(done)=>{
             declareClaim(expectedClaim)
             done()
         })
         it(`Then the new claim is not declared on Bangarang.`,()=>{
-            expect(fakeBangarangClaimInteractor.declaredClaims.length).equal(1)
+            expect(bangarangClaimInteractor.declaredClaims.length).equal(1)
         })
         it(`And the user has a '${declaringClaimNotificationType}' notification with '${claimAlreadyExistDeclaringClaimUserNotification(expectedClaim.title).status}' status and '${claimAlreadyExistDeclaringClaimUserNotification(expectedClaim.title).message}' message.`,()=> {
             expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.message).equal(claimAlreadyExistDeclaringClaimUserNotification(expectedClaim.title).message)
@@ -81,14 +82,14 @@ describe(`Feature: Declaring Claim
             expect(fakeBangarangUserInterfaceInteractor.currentView).equal(declaringClaimMenuView)
         })
         it(`And the claim with title '${expectedClaim.title}' is declared on Bangarang.`,()=>{
-            expect(fakeBangarangClaimInteractor.claimByTitle(expectedClaim.title)).deep.equal(expectedClaim)
+            expect(bangarangClaimInteractor.claimByTitle(expectedClaim.title)).deep.equal(expectedClaim)
         })
         it(`When the user declare a new '${upperCaseClaim.type}' claim with title '${upperCaseClaim.title}'.`,(done)=>{
             declareClaim(upperCaseClaim);
             done()
         })
         it(`Then the new claim is not declared on Bangarang.`,()=>{
-            expect(fakeBangarangClaimInteractor.declaredClaims.length).equal(1)
+            expect(bangarangClaimInteractor.declaredClaims.length).equal(1)
         })
         it(`And the user has a '${declaringClaimNotificationType}' notification with '${claimAlreadyExistDeclaringClaimUserNotification(upperCaseClaim.title).status}' status and '${claimAlreadyExistDeclaringClaimUserNotification(upperCaseClaim.title).message}' message.`,()=> {
             expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.message).equal(claimAlreadyExistDeclaringClaimUserNotification(upperCaseClaim.title).message)
@@ -109,7 +110,7 @@ describe(`Feature: Declaring Claim
             done()
         })
         it(`Then the new claim is not declared on Bangarang.`,()=>{
-            expect(fakeBangarangClaimInteractor.declaredClaims.length).equal(0)
+            expect(bangarangClaimInteractor.declaredClaims.length).equal(0)
         })
         it(`And the user has a '${declaringClaimNotificationType}' notification with '${claimWithoutTitleDeclaringClaimUserNotification.status}' status and '${claimWithoutTitleDeclaringClaimUserNotification.message}' message.`,()=> {
             expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.message).equal(claimWithoutTitleDeclaringClaimUserNotification.message)
@@ -130,7 +131,7 @@ describe(`Feature: Declaring Claim
             done()
         })
         it(`Then the new claim is not declared on Bangarang.`,()=>{
-            expect(fakeBangarangClaimInteractor.declaredClaims.length).equal(0)
+            expect(bangarangClaimInteractor.declaredClaims.length).equal(0)
         })
         it(`And the user has a '${declaringClaimNotificationType}' notification with '${claimWithoutTypeDeclaringClaimUserNotification.status}' status and '${claimWithoutTypeDeclaringClaimUserNotification.message}' message.`,()=> {
             expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.message).equal(claimWithoutTypeDeclaringClaimUserNotification.message)
@@ -141,19 +142,21 @@ describe(`Feature: Declaring Claim
         })
     })
     function initScenario(expectedClaims:ClaimContract[]) {
-        fakeBangarangClaimInteractor.withClaims(expectedClaims);
+        bangarangClaimInteractor.removeAllClaims()
+        expectedClaims.forEach(claim => bangarangClaimInteractor.saveClaim(claim))
         fakeDeclaringClaimUserNotificationInteractor.resetNotification();
         fakeBangarangUserInterfaceInteractor.goToView(declaringClaimMenuView);
     }
     function declareClaim( claimToDeclare: ClaimContract) {
         const user = new User({ username: "", password: "", fullname: "" }, {
-            bangarangClaimInteractor: fakeBangarangClaimInteractor,
+            bangarangClaimInteractor: bangarangClaimInteractor,
             bangarangMembersInteractor: new FakeBangarangMembersInteractor(),
             declaringClaimUserNotificationInteractor: fakeDeclaringClaimUserNotificationInteractor,
             signingInUserNotificationInteractor: new FakeSigningInUserNotificationInteractor(),
             bangarangUserInterfaceInteractor: fakeBangarangUserInterfaceInteractor,
             retrievingClaimUserNotificationInteractor:new FakeRetrievingClaimUserNotificationInteractor(),
-            searchingClaimsUserNotificationInteractor:new FakeSearchingClaimsUserNotificationInteractor()
+            searchingClaimsUserNotificationInteractor:new FakeSearchingClaimsUserNotificationInteractor(),
+            claimingUserNotificationInteractor:new FakeClaimingUserNotificationInteractor()
         });
         user.declareClaim(claimToDeclare);
     }

@@ -11,6 +11,7 @@ import { FakeRetrievingClaimUserNotificationInteractor } from "../../client/adap
 import { FakeBangarangUserInterfaceInteractor } from '../../client/adapters/FakeBangarangUserInterfaceInteractor';
 import { bangarangMemberNotFoundError } from '../../client/port/interactors/BangarangMembersInteractorContract';
 import { FakeSearchingClaimsUserNotificationInteractor } from '../../client/adapters/FakeSearchingClaimsUserNotificationInteractorContract';
+import { FakeClaimingUserNotificationInteractor } from '../../client/adapters/FakeClaimingUserNotificationInteractorContract';
 describe(`Feature: User Sign In
     As a guest
     In order to claim
@@ -30,7 +31,8 @@ describe(`Feature: User Sign In
             bangarangClaimInteractor:fakeBangarangClaimInteractor,
             bangarangUserInterfaceInteractor: new FakeBangarangUserInterfaceInteractor(),
             retrievingClaimUserNotificationInteractor:new FakeRetrievingClaimUserNotificationInteractor(),
-            searchingClaimsUserNotificationInteractor:new FakeSearchingClaimsUserNotificationInteractor()
+            searchingClaimsUserNotificationInteractor:new FakeSearchingClaimsUserNotificationInteractor(),
+            claimingUserNotificationInteractor:new FakeClaimingUserNotificationInteractor()
         })
         it(`Given the user is not signed in`,()=> {
             expect(user.isSignedIn()).to.be.false
@@ -66,7 +68,8 @@ describe(`Feature: User Sign In
             bangarangClaimInteractor:fakeBangarangClaimInteractor,
             bangarangUserInterfaceInteractor: new FakeBangarangUserInterfaceInteractor(),
             retrievingClaimUserNotificationInteractor:new FakeRetrievingClaimUserNotificationInteractor(),
-            searchingClaimsUserNotificationInteractor:new FakeSearchingClaimsUserNotificationInteractor()
+            searchingClaimsUserNotificationInteractor:new FakeSearchingClaimsUserNotificationInteractor(),
+            claimingUserNotificationInteractor:new FakeClaimingUserNotificationInteractor()
         })
         before(()=>user.signingIn())
         it(`Given the user is already SignedIn`,()=>{
@@ -90,7 +93,8 @@ describe(`Feature: User Sign In
             bangarangClaimInteractor:fakeBangarangClaimInteractor,
             bangarangUserInterfaceInteractor: new FakeBangarangUserInterfaceInteractor(),
             retrievingClaimUserNotificationInteractor:new FakeRetrievingClaimUserNotificationInteractor(),
-            searchingClaimsUserNotificationInteractor:new FakeSearchingClaimsUserNotificationInteractor()
+            searchingClaimsUserNotificationInteractor:new FakeSearchingClaimsUserNotificationInteractor(),
+            claimingUserNotificationInteractor:new FakeClaimingUserNotificationInteractor()
         })
         it(`Given the user is not signed in`,()=>{
             expect(user.isSignedIn()).is.false
@@ -119,7 +123,8 @@ describe(`Feature: User Sign In
             bangarangClaimInteractor:fakeBangarangClaimInteractor,
             bangarangUserInterfaceInteractor: new FakeBangarangUserInterfaceInteractor(),
             retrievingClaimUserNotificationInteractor:new FakeRetrievingClaimUserNotificationInteractor(),
-            searchingClaimsUserNotificationInteractor:new FakeSearchingClaimsUserNotificationInteractor()
+            searchingClaimsUserNotificationInteractor:new FakeSearchingClaimsUserNotificationInteractor(),
+            claimingUserNotificationInteractor:new FakeClaimingUserNotificationInteractor()
         })
         it(`Given the user is not signed in`,()=>{
             expect(user.isSignedIn()).is.false

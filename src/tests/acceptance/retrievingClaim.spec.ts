@@ -15,6 +15,8 @@ import { claimNotDeclaredRetrievingClaimUserNotification, RetrievingClaimNotific
 import { bangarangClaimNotFound } from '../../client/port/interactors/BangarangClaimInteractor';
 import { bangarangMemberNotFoundError } from '../../client/port/interactors/BangarangMembersInteractorContract';
 import { FakeSearchingClaimsUserNotificationInteractor } from '../../client/adapters/FakeSearchingClaimsUserNotificationInteractorContract';
+import { each } from 'svelte/internal';
+import { FakeClaimingUserNotificationInteractor } from '../../client/adapters/FakeClaimingUserNotificationInteractorContract';
 describe(`Feature : Retrieving Claim
     As a guest or a Bangarang Member
     In order to share a claim or to claim
@@ -48,10 +50,12 @@ describe(`Feature : Retrieving Claim
         signingInUserNotificationInteractor: new FakeSigningInUserNotificationInteractor(),
         bangarangUserInterfaceInteractor: new FakeBangarangUserInterfaceInteractor(),
         retrievingClaimUserNotificationInteractor,
-        searchingClaimsUserNotificationInteractor:new FakeSearchingClaimsUserNotificationInteractor()
+        searchingClaimsUserNotificationInteractor:new FakeSearchingClaimsUserNotificationInteractor(),
+        claimingUserNotificationInteractor:new FakeClaimingUserNotificationInteractor()
     })
     function initScenario(claims:ClaimContract[],previousUserClaimChoice:ClaimChoice,expectedUsers:UserContract[],membersClaims: MemberClaim[]) {
-        bangarangClaimInteractor.withClaims(claims)
+        bangarangClaimInteractor.removeAllClaims()
+        claims.forEach(claim=> bangarangClaimInteractor.saveClaim(claim)) 
         retrievingClaimUserNotificationInteractor.resetNotification()
         expectedClaimWithMemberPreviousClaimChoice.previousUserClaimChoice=previousUserClaimChoice
         bangarangMembersInteractor.withBangarangMembersDatabase(expectedUsers)

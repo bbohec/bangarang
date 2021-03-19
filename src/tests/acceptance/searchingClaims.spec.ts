@@ -10,6 +10,7 @@ import { FakeRetrievingClaimUserNotificationInteractor } from '../../client/adap
 import { FakeSearchingClaimsUserNotificationInteractor } from '../../client/adapters/FakeSearchingClaimsUserNotificationInteractorContract';
 import { SearchingClaimsUserNotificationContract, successSearchingClaimsUserNotification } from '../../client/port/interactors/SearchingClaimsUserNotificationInteractorContract';
 import { User } from '../../client/businessLogic/User';
+import { FakeClaimingUserNotificationInteractor } from '../../client/adapters/FakeClaimingUserNotificationInteractorContract';
 
 
 
@@ -240,11 +241,13 @@ describe(`Feature: Searching Claims
         declaringClaimUserNotificationInteractor:new FakeDeclaringClaimUserNotificationInteractor(),
         signingInUserNotificationInteractor:new FakeSigningInUserNotificationInteractor(), 
         retrievingClaimUserNotificationInteractor:new FakeRetrievingClaimUserNotificationInteractor(),
-        searchingClaimsUserNotificationInteractor:searchingClaimsUserNotificationInteractor
+        searchingClaimsUserNotificationInteractor:searchingClaimsUserNotificationInteractor,
+        claimingUserNotificationInteractor:new FakeClaimingUserNotificationInteractor()
     })
     let expectedNotification:SearchingClaimsUserNotificationContract;
     function initScenario(claims:ClaimContract[],scenarioExpectedNotification:SearchingClaimsUserNotificationContract) {
-        bangarangClaimInteractor.withClaims(claims)
+        bangarangClaimInteractor.removeAllClaims()
+        claims.forEach(claim =>bangarangClaimInteractor.saveClaim(claim) ) 
         searchingClaimsUserNotificationInteractor.currentNotification=undefined
         expectedNotification=scenarioExpectedNotification
     }
@@ -255,7 +258,7 @@ describe(`Feature: Searching Claims
             before(()=>initScenario(scenario.expectedDeclaredClaims,scenarioExpectedNotification))
             it(`Given there is the following declared claims:
                 [${expectedDeclaredClaimsTitles}]`,()=>{
-                bangarangClaimInteractor.withClaims(scenario.expectedDeclaredClaims)
+                scenario.expectedDeclaredClaims.forEach(claim => bangarangClaimInteractor.saveClaim(claim)) 
                 expect(bangarangClaimInteractor.declaredClaims.map(claim => claim.title)).to.deep.equal(expectedDeclaredClaimsTitles)
             })
             it(`When the user search claims with search criteria '${scenario.searchCriteria}'`,(done)=>{

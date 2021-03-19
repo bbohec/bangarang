@@ -5,6 +5,7 @@ import type { DeclaringClaimUserNotificationInteractorContract } from "./interac
 import type { RetrievingClaimUserNotificationInteractorContract } from "./interactors/RetrievingClaimUserNotificationInteractorContract";
 import type { SigningInUserNotificationInteractorContract } from "./interactors/SigningInUserNotificationInteractorContract";
 import type { SearchingClaimsUserNotificationInteractorContract } from "./interactors/SearchingClaimsUserNotificationInteractorContract";
+import type { ClaimingUserNotificationInteractorContract } from "./interactors/ClaimingUserNotificationInteractorContract";
 export interface BangarangAdaptersContract {
     bangarangClaimInteractor:BangarangClaimInteractor
     bangarangMembersInteractor: BangarangMembersInteractorContract;
@@ -13,4 +14,5 @@ export interface BangarangAdaptersContract {
     signingInUserNotificationInteractor: SigningInUserNotificationInteractorContract;
     retrievingClaimUserNotificationInteractor:RetrievingClaimUserNotificationInteractorContract;
     searchingClaimsUserNotificationInteractor:SearchingClaimsUserNotificationInteractorContract;
+    claimingUserNotificationInteractor:ClaimingUserNotificationInteractorContract;
 }
