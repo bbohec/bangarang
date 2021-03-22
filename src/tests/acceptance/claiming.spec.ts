@@ -6,7 +6,7 @@ import { UserBuilder } from '../../client/businessLogic/UserBuilder';
 import { FakeBangarangMembersInteractor } from '../../client/adapters/FakeBangarangMembersInteractor';
 import { FakeBangarangClaimInteractor } from '../../client/adapters/FakeBangarangClaimInteractor';
 import { FakeBangarangUserInterfaceInteractor } from '../../client/adapters/FakeBangarangUserInterfaceInteractor';
-import { FakeClaimingUserNotificationInteractor } from '../../client/adapters/FakeClaimingUserNotificationInteractorContract';
+import { FakeClaimingUserNotificationInteractor } from '../../client/adapters/FakeClaimingUserNotificationInteractor';
 import { ClaimingNotificationType, ClaimingUserNotificationContract, claimNotDeclaredClaimingUserNotification, multipleTimesClaimingUserNotification, mustBeSignedInClaimingUserNotification, successClaimingUserNotification } from '../../client/port/interactors/ClaimingUserNotificationInteractorContract';
 import { StaticView } from '../../client/port/interactors/BangarangUserInterfaceInteractor';
 import type { UserContract } from '../../client/port/UserContact';
@@ -24,7 +24,7 @@ describe(`Feature: Claiming
     const user = new UserBuilder()
         .withUserContract(userContract)
         .withBangarangClaimInteractor(bangarangClaimInteractor)
-        .withBangarangMemberInteractor(bangarangMembersInteractor)
+        .withBangarangMembersInteractor(bangarangMembersInteractor)
         .withBangarangUserInterfaceInteractor(bangarangUserInterfaceInteractor)
         .withClaimingUserNotificationInteractor(claimingUserNotificationInteractor)
         .getUser()
@@ -44,7 +44,7 @@ describe(`Feature: Claiming
         {
             description:"Scenario: Claiming For",
             userSignedIn:true,
-            expectedClaim: {type:"", title:"claim", peopleClaimed:10, peopleClaimedFor:10, peopleClaimedAgainst:0},
+            expectedClaim: {type:"", title:"claim", peopleClaimed:10, peopleClaimedFor:10, peopleClaimedAgainst:0,id:""},
             claimDeclared:true,
             userChoice: 'For',
             previousClaimChoice:undefined,
@@ -60,7 +60,7 @@ describe(`Feature: Claiming
         {
             description:"Scenario: Claiming Against",
             userSignedIn:true,
-            expectedClaim:{type:"", title:"claim", peopleClaimed:20, peopleClaimedFor:0, peopleClaimedAgainst:20},
+            expectedClaim:{type:"", title:"claim", peopleClaimed:20, peopleClaimedFor:0, peopleClaimedAgainst:20,id:""},
             claimDeclared:true,
             userChoice:'Against',
             previousClaimChoice:undefined,
@@ -76,7 +76,7 @@ describe(`Feature: Claiming
         {
             description:"Scenario: Claim not declared on Bangarang",
             userSignedIn:true,
-            expectedClaim:{type:"", title:"claim", peopleClaimed:20, peopleClaimedFor:0, peopleClaimedAgainst:20},
+            expectedClaim:{type:"", title:"claim", peopleClaimed:20, peopleClaimedFor:0, peopleClaimedAgainst:20,id:""},
             claimDeclared:false,
             userChoice:'Against',
             previousClaimChoice:undefined,
@@ -88,7 +88,7 @@ describe(`Feature: Claiming
         {
             description:"Scenario: User not Signed In",
             userSignedIn:false,
-            expectedClaim:{type:"", title:"claim", peopleClaimed:20, peopleClaimedFor:0, peopleClaimedAgainst:20},
+            expectedClaim:{type:"", title:"claim", peopleClaimed:20, peopleClaimedFor:0, peopleClaimedAgainst:20,id:""},
             claimDeclared:true,
             userChoice:'Against',
             previousClaimChoice:undefined,
@@ -104,7 +104,7 @@ describe(`Feature: Claiming
         {
             description:"Scenario: Can't claim For multiple times",
             userSignedIn:true,
-            expectedClaim:{type:"", title:"claim", peopleClaimed:9, peopleClaimedFor:9, peopleClaimedAgainst:0},
+            expectedClaim:{type:"", title:"claim", peopleClaimed:9, peopleClaimedFor:9, peopleClaimedAgainst:0,id:""},
             claimDeclared:true,
             userChoice:'For',
             previousClaimChoice:"For",
@@ -120,7 +120,7 @@ describe(`Feature: Claiming
         {
             description:"Scenario: Can't claim Against multiple times",
             userSignedIn:true,
-            expectedClaim:{type:"", title:"claim", peopleClaimed:9, peopleClaimedFor:9, peopleClaimedAgainst:0},
+            expectedClaim:{type:"", title:"claim", peopleClaimed:9, peopleClaimedFor:9, peopleClaimedAgainst:0,id:""},
             claimDeclared:true,
             userChoice:"Against",
             previousClaimChoice:"Against",
@@ -136,7 +136,7 @@ describe(`Feature: Claiming
         {
             description:"Scenario: user change claim choice For > Against",
             userSignedIn:true,
-            expectedClaim:{type:"", title:"claim", peopleClaimed:9, peopleClaimedFor:9, peopleClaimedAgainst:0},
+            expectedClaim:{type:"", title:"claim", peopleClaimed:9, peopleClaimedFor:9, peopleClaimedAgainst:0,id:""},
             claimDeclared:true,
             userChoice:"Against",
             previousClaimChoice:"For",
@@ -152,7 +152,7 @@ describe(`Feature: Claiming
         {
             description:"Scenario: user change claim choice Against > For",
             userSignedIn:true,
-            expectedClaim:{type:"", title:"claim", peopleClaimed:9, peopleClaimedFor:0, peopleClaimedAgainst:9},
+            expectedClaim:{type:"", title:"claim", peopleClaimed:9, peopleClaimedFor:0, peopleClaimedAgainst:9,id:""},
             claimDeclared:true,
             userChoice:"For",
             previousClaimChoice:"Against",
@@ -194,14 +194,15 @@ describe(`Feature: Claiming
                         type:scenario.expectedClaim.type,
                         peopleClaimed:scenario.expectedClaim.peopleClaimed+1,
                         peopleClaimedFor:scenario.expectedClaim.peopleClaimedFor+((scenario.previousClaimChoice=== "For")?1:0),
-                        peopleClaimedAgainst:scenario.expectedClaim.peopleClaimedAgainst+((scenario.previousClaimChoice=== "Against")?1:0)
+                        peopleClaimedAgainst:scenario.expectedClaim.peopleClaimedAgainst+((scenario.previousClaimChoice=== "Against")?1:0),
+                        id:scenario.expectedClaim.id
                     }
-                    expect(bangarangClaimInteractor.claimByTitle(scenario.expectedClaim.title)).deep.equal(previouslyClaimedClaim)
+                    expect(bangarangClaimInteractor.claimById(scenario.expectedClaim.title)).deep.equal(previouslyClaimedClaim)
                 })
                 else it(`And the claim with title '${scenario.expectedClaim.title}' is declared on Bangarang with the following values:
                 |claimed people| claimed For people | claimed Against people|
                 | ${scenario.expectedClaim.peopleClaimed}           | ${scenario.expectedClaim.peopleClaimedFor}                 | ${scenario.expectedClaim.peopleClaimedAgainst}                     |`,()=>{
-                    expect(bangarangClaimInteractor.claimByTitle(scenario.expectedClaim.title)).deep.equal(scenario.expectedClaim)
+                    expect(bangarangClaimInteractor.claimById(scenario.expectedClaim.title)).deep.equal(scenario.expectedClaim)
                 })
             } else it(`And there is no declared claims on Bangarang`,()=>{
                 expect(bangarangClaimInteractor.declaredClaims.length).equal(0)
@@ -220,7 +221,7 @@ describe(`Feature: Claiming
             scenario.claimChecks.forEach(claimCheck => checkClaimValue(bangarangClaimInteractor, scenario.expectedClaim,claimCheck.propertyName,claimCheck.increased))
             function checkClaimValue(bangarangClaimInteractor: FakeBangarangClaimInteractor, expectedClaim: ClaimContract,claimPropertyToCheck:"peopleClaimedAgainst"|"peopleClaimedFor"|"peopleClaimed",isIncreased:boolean) {
                 it(`And the '${claimPropertyToCheck}' quantity on claim '${expectedClaim.title}' is ${expectedClaim[claimPropertyToCheck]+((isIncreased)?1:0)}`,()=>{
-                    const claim = bangarangClaimInteractor.claimByTitle(expectedClaim.title);
+                    const claim = bangarangClaimInteractor.claimById(expectedClaim.title);
                     if (claim instanceof Error)throw claim;
                     expect(claim[claimPropertyToCheck]).equal(expectedClaim[claimPropertyToCheck]+((isIncreased)?1:0));
                 })  

@@ -79,7 +79,7 @@ describe(`Feature: Registering
             
             const user =new UserBuilder()
                 .withUserContract(scenario.userContract)
-                .withBangarangMemberInteractor(scenario.bangarangMemberInteractor)
+                .withBangarangMembersInteractor(scenario.bangarangMemberInteractor)
                 .withRegisteringUserNotificationInteractor(scenario.registeringUserNotificationInteractor)
                 .getUser()
             before(()=>{
@@ -110,7 +110,7 @@ describe(`Feature: Registering
             it(`When the user register on Bangarang with the following parameters:
             | username | password           | email         | fullname  |
             | ${scenario.userContract.username}  | ${scenario.userPassword}   |  ${scenario.userContract.email} | ${scenario.userContract.fullname}  |`,(done)=> {
-                user.register(scenario.userPassword)
+                user.registering(scenario.userPassword)
                 done()
             })
             if (scenario.alreadyHaveBangarangMember) {

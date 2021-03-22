@@ -1,8 +1,10 @@
 <script lang="ts">
+    import { uiBangarangUserBuilder } from "../../adapters/uiPrimaryAdapter";
     import SignInSection from "../Sections/SignInSection.svelte"
-    import {connectedUserStore} from "../../stores/connectedUserStore"
+    //import {connectedUserStore} from "../../stores/connectedUserStore"
+    const user = uiBangarangUserBuilder.getUser()
 </script>
-{#if $connectedUserStore === null}
+{#if user.username === ""}
     <main class="flex flex-col flex-grow items-center">
         <SignInSection/>
     </main>

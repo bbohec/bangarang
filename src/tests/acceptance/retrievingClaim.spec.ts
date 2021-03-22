@@ -23,7 +23,8 @@ describe(`Feature : Retrieving Claim
         type:"simple",
         peopleClaimed:10,
         peopleClaimedFor:9,
-        peopleClaimedAgainst:1
+        peopleClaimedAgainst:1,
+        id:"claimId"
     }
     const expectedClaimWithMemberPreviousClaimChoice:ClaimContractWithMemberPreviousClaimChoice={
         title:expectedClaim.title,
@@ -31,7 +32,8 @@ describe(`Feature : Retrieving Claim
         peopleClaimed:expectedClaim.peopleClaimed,
         peopleClaimedFor:expectedClaim.peopleClaimedFor,
         peopleClaimedAgainst:expectedClaim.peopleClaimedAgainst,
-        previousUserClaimChoice:undefined
+        previousUserClaimChoice:undefined,
+        id:expectedClaim.id
     }
     const expectedUser:UserContract={fullname:"",username:"user",email:""}
     const bangarangClaimInteractor=new FakeBangarangClaimInteractor()
@@ -40,7 +42,7 @@ describe(`Feature : Retrieving Claim
     const user= new UserBuilder()
         .withUserContract(expectedUser)
         .withBangarangClaimInteractor(bangarangClaimInteractor)
-        .withBangarangMemberInteractor(bangarangMembersInteractor)
+        .withBangarangMembersInteractor(bangarangMembersInteractor)
         .withRetrievingClaimUserNotificationInteractor(retrievingClaimUserNotificationInteractor)
         .getUser()
     function initScenario(claims:ClaimContract[],previousUserClaimChoice:ClaimChoice,expectedUsers:UserContract[],membersClaims: MemberClaim[]) {
@@ -59,10 +61,10 @@ describe(`Feature : Retrieving Claim
                 .to.throw(bangarangMemberNotFoundError(expectedUser.username))
         })
         it(`And the claim '${expectedClaim.title}' is declared on Bangarang`,()=>{
-            expect(bangarangClaimInteractor.claimByTitle(expectedClaim.title)).deep.equal(expectedClaim)
+            expect(bangarangClaimInteractor.claimById(expectedClaim.title)).deep.equal(expectedClaim)
         })
         it(`When the user retrieve the claim with title '${expectedClaim.title}'`,()=>{
-            user.claimByTitle(expectedClaim.title)
+            user.retrievingClaimById(expectedClaim.title)
         })
         it(`Then the retrieved claim in the claim user notification has the following information: 
         | title | people claimed    | people claimed for    | people claimed against    | previous user claim choice    |
@@ -85,10 +87,10 @@ describe(`Feature : Retrieving Claim
             expect(bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(expectedUser.username,expectedClaim.title)).is.undefined
         })
         it(`And the claim '${expectedClaim.title}' is declared on Bangarang`,()=>{
-            expect(bangarangClaimInteractor.claimByTitle(expectedClaim.title)).deep.equal(expectedClaim)
+            expect(bangarangClaimInteractor.claimById(expectedClaim.title)).deep.equal(expectedClaim)
         })
         it(`When the user retrieve the claim with title '${expectedClaim.title}'`,()=>{
-            user.claimByTitle(expectedClaim.title)
+            user.retrievingClaimById(expectedClaim.title)
         })
         it(`Then the retrieved claim in the claim user notification has the following information: 
         | title | people claimed    | people claimed for    | people claimed against    | previous user claim choice    |
@@ -111,10 +113,10 @@ describe(`Feature : Retrieving Claim
             expect(bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(expectedUser.username,expectedClaim.title)).equal(expectedClaimChoice)
         })
         it(`And the claim '${expectedClaim.title}' is declared on Bangarang`,()=>{
-            expect(bangarangClaimInteractor.claimByTitle(expectedClaim.title)).deep.equal(expectedClaim)
+            expect(bangarangClaimInteractor.claimById(expectedClaim.title)).deep.equal(expectedClaim)
         })
         it(`When the user retrieve the claim with title '${expectedClaim.title}'`,()=>{
-            user.claimByTitle(expectedClaim.title)
+            user.retrievingClaimById(expectedClaim.title)
         })
         it(`Then the retrieved claim in the claim user notification has the following information: 
         | title | people claimed    | people claimed for    | people claimed against    | previous user claim choice    |
@@ -137,10 +139,10 @@ describe(`Feature : Retrieving Claim
             expect(bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(expectedUser.username,expectedClaim.title)).equal(expectedClaimChoice)
         })
         it(`And the claim '${expectedClaim.title}' is declared on Bangarang`,()=>{
-            expect(bangarangClaimInteractor.claimByTitle(expectedClaim.title)).deep.equal(expectedClaim)
+            expect(bangarangClaimInteractor.claimById(expectedClaim.title)).deep.equal(expectedClaim)
         })
         it(`When the user retrieve the claim with title '${expectedClaim.title}'`,()=>{
-            user.claimByTitle(expectedClaim.title)
+            user.retrievingClaimById(expectedClaim.title)
         })
         it(`Then the retrieved claim in the claim user notification has the following information: 
         | title | people claimed    | people claimed for    | people claimed against    | previous user claim choice    |
@@ -160,11 +162,11 @@ describe(`Feature : Retrieving Claim
                 .to.throw(bangarangMemberNotFoundError(expectedUser.username))
         })
         it(`And the claim '${expectedClaim.title}' is not declared on Bangarang`,()=>{
-            expect(()=>{throw bangarangClaimInteractor.claimByTitle(expectedClaim.title)})
+            expect(()=>{throw bangarangClaimInteractor.claimById(expectedClaim.title)})
                 .to.throw(bangarangClaimNotFound(expectedClaim.title))
         })
         it(`When the user retrieve the claim with title '${expectedClaim.title}'`,()=>{
-            user.claimByTitle(expectedClaim.title)
+            user.retrievingClaimById(expectedClaim.title)
         })
         it(`Then the retrieved claim is undefined`,()=>{
             expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.claimWithMemberPreviousClaimChoice).is.undefined

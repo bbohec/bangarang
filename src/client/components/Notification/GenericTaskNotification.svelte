@@ -1,13 +1,14 @@
 <script lang="ts">
+    import type { UserNotificationContract } from "../../port/UserNotification";
     import Spinner from "../Icons/Spinner.svelte"
     import Success from "../Icons/Success.svelte"
-    export let runningTaskText:string;
-    export let successTaskText:string;
-    export let runningCondition:boolean
-    export let successCondition:boolean
+    import Failed from "../Icons/Failed.svelte"
+    export let taskNotification:UserNotificationContract;
 </script>
-{#if runningCondition}
-    <p class="text-right text-bangarang-lightEmphasis flex items-center justify-end">{runningTaskText}<Spinner/></p>
-{:else if successCondition}
-    <p class="text-right text-bangarang-lightEmphasis flex items-center justify-end">{successTaskText}<Success/></p>
+{#if taskNotification.status === "Executing"}
+    <p class="text-right text-bangarang-lightEmphasis flex items-center justify-end">{taskNotification.message}<Spinner/></p>
+{:else if taskNotification.status === "Success"}
+    <p class="text-right text-bangarang-lightEmphasis flex items-center justify-end">{taskNotification.message}<Success/></p>
+{:else if taskNotification.status === "Failed"}
+    <p class="text-right text-bangarang-lightEmphasis flex items-center justify-end">{taskNotification.message}<Failed/></p>
 {/if}

@@ -8,6 +8,8 @@ export interface ClaimingUserNotificationInteractorContract extends UserNotifica
 export interface ClaimingUserNotificationContract extends UserNotificationContract {
     type:ClaimingNotificationType
 }
+export const idleClaimingUserNotification:ClaimingUserNotificationContract= {status:"Idle", message:`Wainting for claiming event.`, type:"Claiming."}
+export const executingClaimingUserNotification:ClaimingUserNotificationContract= {status:"Executing", message:`Executing claiming event.`, type:"Claiming."}
 export const successClaimingUserNotification:ClaimingUserNotificationContract= {status:"Success", message:`Claimed.`, type:"Claiming."}
 export const claimNotDeclaredClaimingUserNotification=(claimTitle:string):ClaimingUserNotificationContract => ({status:"Failed", message:`The claim '${claimTitle}' is not declared on Bangarang.`, type:"Claiming."})
 export const mustBeSignedInClaimingUserNotification:ClaimingUserNotificationContract= {status:"Failed", message:`You must be signed in in order to claim.`, type:"Claiming."}

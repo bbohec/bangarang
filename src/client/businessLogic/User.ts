@@ -17,7 +17,7 @@ export class User implements UserContract  {
         this.email = userContract.email;
         this.bangarangAdapters = bangarangAdapters;
     }
-    public register(password:string):void {
+    public registering(password:string):void {
         if(this.bangarangAdapters.bangarangMembersInteractor.isMemberExistWithUsername(this.username))
             this.bangarangAdapters.registeringUserNotificationInteractor.notify(alreadyMemberRegisteringUserNotification)
         else if(!this.bangarangAdapters.passwordInteractor.isPasswordSecure(password))
@@ -29,7 +29,7 @@ export class User implements UserContract  {
         } else this.bangarangAdapters.registeringUserNotificationInteractor.notify(badEmailRegisteringUserNotification)
     }
     public claiming(claimTitle: string, claimChoice: ClaimChoice):void {
-        const retreivedClaim = this.bangarangAdapters.bangarangClaimInteractor.claimByTitle(claimTitle)
+        const retreivedClaim = this.bangarangAdapters.bangarangClaimInteractor.claimById(claimTitle)
         const isUserHasPreviouslyMadeTheSameClaimChoice=(previousClaimChoice:ClaimChoice,claimChoice:ClaimChoice):boolean => previousClaimChoice !==undefined && previousClaimChoice === claimChoice
         if (retreivedClaim instanceof Error) 
             this.bangarangAdapters.claimingUserNotificationInteractor.notify(claimNotDeclaredClaimingUserNotification(claimTitle))
@@ -52,7 +52,7 @@ export class User implements UserContract  {
             }
         }
     }
-    public searchClaims(searchCriteria: string):void {
+    public searchingClaims(searchCriteria: string):void {
         enum Order {
             keep=0,
             change=-1
@@ -85,11 +85,11 @@ export class User implements UserContract  {
             
         
     }
-    public claimByTitle(title: string):void {
-        const claim = this.bangarangAdapters.bangarangClaimInteractor.claimByTitle(title)
+    public retrievingClaimById(id: string):void {
+        const claim = this.bangarangAdapters.bangarangClaimInteractor.claimById(id)
         if (claim instanceof Error)  this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(claimNotDeclaredRetrievingClaimUserNotification)
         else {
-            const previousMemberClaimChoiceOnClaim = this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, title);
+            const previousMemberClaimChoiceOnClaim = this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, id);
             if(previousMemberClaimChoiceOnClaim instanceof Error)this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(unexpectedErrorRetrievingClaimUserNotification(previousMemberClaimChoiceOnClaim))
             else {
                     const claimWithMemberPreviousClaimChoice:ClaimContractWithMemberPreviousClaimChoice = {
@@ -98,21 +98,22 @@ export class User implements UserContract  {
                     peopleClaimed:claim.peopleClaimed,
                     peopleClaimedAgainst:claim.peopleClaimedAgainst,
                     peopleClaimedFor:claim.peopleClaimedFor,
-                    previousUserClaimChoice:previousMemberClaimChoiceOnClaim
+                    previousUserClaimChoice:previousMemberClaimChoiceOnClaim,
+                    id:claim.id
                 }
                 this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(successRetrievingClaimUserNotification(claimWithMemberPreviousClaimChoice))
             }
         }
     }
-    public declareClaim(claim:ClaimContract):void {
-        if (claim.title === "") this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(claimWithoutTitleDeclaringClaimUserNotification)
-        else if (claim.type === "")this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(claimWithoutTypeDeclaringClaimUserNotification)
+    public declaringClaim(claimTitle:string,claimType:string,claimId:string):void {
+        if (claimTitle === "") this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(claimWithoutTitleDeclaringClaimUserNotification)
+        else if (claimType === "")this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(claimWithoutTypeDeclaringClaimUserNotification)
         else {
-            if (!this.bangarangAdapters.bangarangClaimInteractor.isClaimExistByTitleUpperCase(claim)) {
-                this.bangarangAdapters.bangarangClaimInteractor.saveClaim(claim)
+            if (!this.bangarangAdapters.bangarangClaimInteractor.isClaimExistByTitleUpperCase(claimTitle)) {
+                this.bangarangAdapters.bangarangClaimInteractor.saveClaim({title:claimTitle,type:claimType,peopleClaimed:0,peopleClaimedFor:0,peopleClaimedAgainst:0,id:claimId})
                 this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(successDeclaringClaimUserNotification)
-            } else this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(claimAlreadyExistDeclaringClaimUserNotification(claim.title))
-            const retrievedClaim = this.bangarangAdapters.bangarangClaimInteractor.claimByTitle(claim.title)
+            } else this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(claimAlreadyExistDeclaringClaimUserNotification(claimTitle))
+            const retrievedClaim = this.bangarangAdapters.bangarangClaimInteractor.claimById(claimTitle)
             if (retrievedClaim instanceof Error) this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(claimNotDeclaredRetrievingClaimUserNotification)
             else this.bangarangAdapters.bangarangUserInterfaceInteractor.goToView(retrievedClaim.title)
         } 

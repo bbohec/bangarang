@@ -1,5 +1,3 @@
 import {Writable, writable} from 'svelte/store'
-import type { DeclaringClaimConstract } from '../interfaces/DeclaringClaimConstract'
-export const declaringClaimStore:Writable<DeclaringClaimConstract> = writable({declaringClaimStatus:"nothing"})
-
-
+import { DeclaringClaimUserNotificationContract, idleDeclaringClaimUserNotification } from '../port/interactors/DeclaringClaimUserNotificationInteractorContract'
+export const declaringClaimUserNotificationStore:Writable<DeclaringClaimUserNotificationContract> = writable(idleDeclaringClaimUserNotification)

@@ -3,7 +3,7 @@
     import SignInInformation from "../Notification/SignInInformation.svelte"
     import {links} from "../../navigation/links"
     import {currentClaimIdStore} from "../../stores/currentClaimIdStore"
-    import {signInStore} from "../../stores/signInStore"
+    import {signingInNotificationStore} from "../../stores/signInStore"
     import { linkPrefixes } from "../../navigation/linkPrefixes";
     let currentClaimId:string|undefined=undefined;
     currentClaimIdStore.subscribe(currentClaimIdFromStore =>currentClaimId=currentClaimIdFromStore)
@@ -13,7 +13,7 @@
     }
 </script>
 <footer class="flex flex-col p-1 mx-auto max-w-screen-2xl">
-    {#if $signInStore.signInStatus === "signing in"}
+    {#if $signingInNotificationStore.status === "Executing"}
         <SignInInformation/>
     {:else}
         <section class="flex justify-center items-center">

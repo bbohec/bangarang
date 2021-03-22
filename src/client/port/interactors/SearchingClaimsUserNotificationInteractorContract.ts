@@ -10,6 +10,8 @@ export interface SearchingClaimsUserNotificationContract extends UserNotificatio
     retreivedClaims?:ClaimContract[]
 }
 export type SearchingClaimsNotificationType="Searching Claims"
+export const executingSearchingClaimsUserNotification:SearchingClaimsUserNotificationContract ={status:"Executing", message:`Searching claims...`, type:"Searching Claims"}
+export const idleSearchingClaimsUserNotification:SearchingClaimsUserNotificationContract ={status:"Idle", message:`Waiting for searching claims event.`, type:"Searching Claims"}
 export const successSearchingClaimsUserNotification=(retreivedClaims:ClaimContract[]):SearchingClaimsUserNotificationContract => ({status:"Success", message:`${retreivedClaims.length} claims found.`, type:"Searching Claims",retreivedClaims})
 export const unexpectedErrorSearchingClaimsUserNotification=(error:Error):SearchingClaimsUserNotificationContract => ({status:"Failed", message:`Unexpected error '${error.message}'.`, type:"Searching Claims"})
 /*

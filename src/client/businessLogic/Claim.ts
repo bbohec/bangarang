@@ -10,6 +10,7 @@ export class Claim {
         this.peopleClaimed=claimContract.peopleClaimed
         this.peopleClaimedFor=claimContract.peopleClaimedFor
         this.peopleClaimedAgainst=claimContract.peopleClaimedAgainst
+        this.id=claimContract.id
     }
     public increasePeopleClaimedWhenNoPreviousClaimChoice(previousClaimChoice: string | undefined):Claim {
         if (!previousClaimChoice)this.peopleClaimed++;
@@ -36,4 +37,5 @@ export class Claim {
     public peopleClaimed: number;
     public peopleClaimedFor: number;
     public peopleClaimedAgainst: number;
+    public id:string
 }

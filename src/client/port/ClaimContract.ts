@@ -5,6 +5,7 @@ export interface ClaimContract {
     peopleClaimed:number;
     peopleClaimedFor:number;
     peopleClaimedAgainst:number;
+    id:string
 }
 
 export interface ClaimContractWithMemberPreviousClaimChoice extends ClaimContract {

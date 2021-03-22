@@ -1,5 +1,6 @@
 export interface UserNotificationContract {
-    status: "Success"|"Failed";
+    status: UserNotificationStatus;
     message: string;
     type:string;
 }
+export type UserNotificationStatus = "Success"|"Failed"|"Idle"|"Executing"

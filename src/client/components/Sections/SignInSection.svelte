@@ -1,13 +1,13 @@
 <script lang="ts">
-    import { signIn } from "../../logic/singIn";
+    import { signingIn } from "../../logic/singIn";
     import GenericButton from "../Buttons/GenericButton.svelte"
-    import {signInStore} from "../../stores/signInStore"
+    import {signingInNotificationStore} from "../../stores/signInStore"
     let userInputUsername="";
     let userInputPassword="";
-    const onClickSignInButton = ():void => signIn(userInputUsername,userInputPassword)
+    const onClickSignInButton = ():void => signingIn(userInputUsername,userInputPassword)
 </script>
 <p class="text-bangarang-lightEmphasis">Sign into your account</p>
-{#if $signInStore.signInStatus === "signing in"}
+{#if $signingInNotificationStore.status === "Executing"}
     <input 
         class="text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md" 
         type="text" 

@@ -1,24 +1,20 @@
-import type { UIClaimContract } from "../interfaces/UIClaimContract"
-import { declaringClaimStore } from "../stores/declaringClaimStore"
-import { newClaim } from "./claim/newClaim"
 import {v1 as uuid} from "uuid"
+import { declaringClaimUserNotificationStore } from "../stores/declaringClaimStore"
+import { executingDeclaringClaimUserNotification } from "../port/interactors/DeclaringClaimUserNotificationInteractorContract"
+import { uiBangarangUserBuilder } from "../adapters/uiPrimaryAdapter"
+import type { ClaimContract } from "../port/ClaimContract"
 export const declaringClaim = (claimTitle:string):void => {
-    const claim:UIClaimContract = {
+    const claimToDeclare:ClaimContract={
         title:claimTitle,
+        type:"Simple",
         peopleClaimed:0,
-        peopleAgainst:0,
-        peopleFor:0,
+        peopleClaimedAgainst:0,
+        peopleClaimedFor:0,
         id:uuid()
     }
-    declaringClaimStore.set({declaringClaimStatus:"declaringClaim",claimToDeclare:claim})
-    setTimeout(() => claimDeclared(claim), declaringClaimFakeWaitingTime);
+    declaringClaimUserNotificationStore.set(executingDeclaringClaimUserNotification(claimToDeclare))
+    setTimeout(() => uiBangarangUserBuilder.getUser().declaringClaim(claimToDeclare.title,claimToDeclare.type,claimToDeclare.id), declaringClaimFakeWaitingTime);
 }
-const claimDeclared = (claim:UIClaimContract):void => {
-    newClaim(claim)
-    declaringClaimStore.set({declaringClaimStatus:"claimDeclared",claimToDeclare:claim})
-    setTimeout(()=>declaringClaimStore.set({declaringClaimStatus:"nothing"}),timeOfClaimDeclaredNotification)
-}
-const timeOfClaimDeclaredNotification = 1500
 const declaringClaimFakeWaitingTime = 500;
 
 

@@ -8,9 +8,9 @@ import { FakeBangarangMembersInteractor } from '../adapters/FakeBangarangMembers
 import { FakeBangarangUserInterfaceInteractor } from '../adapters/FakeBangarangUserInterfaceInteractor';
 import { FakeDeclaringClaimUserNotificationInteractor } from '../adapters/FakeDeclaringClaimUserNotificationInteractor';
 import { FakeSigningInUserNotificationInteractor } from '../adapters/FakeSigningInUserNotificationInteractor';
-import { FakeSearchingClaimsUserNotificationInteractor } from '../adapters/FakeSearchingClaimsUserNotificationInteractorContract';
+import { FakeSearchingClaimsUserNotificationInteractor } from '../adapters/FakeSearchingClaimsUserNotificationInteractor';
 import { FakeRetrievingClaimUserNotificationInteractor } from '../adapters/FakeRetrievingClaimUserNotificationInteractor';
-import { FakeClaimingUserNotificationInteractor } from '../adapters/FakeClaimingUserNotificationInteractorContract';
+import { FakeClaimingUserNotificationInteractor } from '../adapters/FakeClaimingUserNotificationInteractor';
 import { FakeRegisteringUserNotificationInteractor } from '../adapters/FakeRegisteringUserNotificationInteractor';
 import type { BangarangClaimInteractorContract } from '../port/interactors/BangarangClaimInteractorContract';
 import type { SearchingClaimsUserNotificationInteractorContract } from '../port/interactors/SearchingClaimsUserNotificationInteractorContract';
@@ -51,13 +51,18 @@ export class UserBuilder {
         return this
     }
     getUser(): User {
-        return new User(this.userContract, this.bangarangAdapters);
+        if (!this.user) this.user =  new User(this.userContract, this.bangarangAdapters);
+        return this.user
+    }
+    resetUser(): User {
+        this.user =  new User(this.userContract, this.bangarangAdapters);
+        return this.user
     }
     withUserContract(userContract: UserContract): UserBuilder {
         this.userContract = userContract;
         return this;
     }
-    withBangarangMemberInteractor(bangarangMembersInteractor: BangarangMembersInteractorContract): UserBuilder {
+    withBangarangMembersInteractor(bangarangMembersInteractor: BangarangMembersInteractorContract): UserBuilder {
         this.bangarangAdapters.bangarangMembersInteractor = bangarangMembersInteractor;
         return this;
     }
@@ -79,4 +84,5 @@ export class UserBuilder {
         emailInteractor:new InternalEmailInteractor(),
         passwordInteractor:new FakePasswordInteractor()
     };
+    private user:User|undefined;
 }

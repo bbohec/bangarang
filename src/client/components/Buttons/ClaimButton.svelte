@@ -1,19 +1,16 @@
 <script lang="ts">
-    import type { ClaimingChoice } from "../../interfaces/ClaimingChoice";
-    import { claimingStore } from "../../stores/claimingStore";
-    import {declaringClaimStore} from "../../stores/declaringClaimStore"
-    import {checkingIfUserAlreadyClaimedOnClaimStore} from "../../stores/checkingUserAlreadyClaimedOnClaimStore"
+    import { claimingUserNotificationStore } from "../../stores/claimingStore";
+    import {declaringClaimUserNotificationStore} from "../../stores/declaringClaimStore"
     import GenericButton from "./GenericButton.svelte"
-    import {claimButtonInteracted} from "../../logic/claim/claimButtonInteracted"
+    import type { ClaimChoice } from "../../port/ClaimChoice";
+    import { claiming } from "../../logic/claiming";
     export let claimId:string;
-    export let claimingChoice:ClaimingChoice|undefined;
-    export let connectedUserId:string|null = null;
-    const onClickAction=():void=> claimButtonInteracted(claimId,connectedUserId,claimingChoice)
+    export let claimingChoice:ClaimChoice;
+    export let userClaimingChoice:ClaimChoice
+    const onClickAction=():void=> claiming(claimId,claimingChoice)
 </script>
-{#if $claimingStore.claimingStatus === "nothing" && $declaringClaimStore.declaringClaimStatus === "nothing"}
-    {#if $checkingIfUserAlreadyClaimedOnClaimStore.userClaimed === claimingChoice}
-        <GenericButton textbutton={claimingChoice} onClickAction={onClickAction} disabled={true}/>
-    {:else if $checkingIfUserAlreadyClaimedOnClaimStore.checkingStatus !== "idle"}
+{#if $claimingUserNotificationStore.status === "Idle" && $declaringClaimUserNotificationStore.status === "Idle"}
+    {#if userClaimingChoice === claimingChoice}
         <GenericButton textbutton={claimingChoice} onClickAction={onClickAction} disabled={true}/>
     {:else}
         <GenericButton textbutton={claimingChoice} onClickAction={onClickAction} disabled={false}/> 
