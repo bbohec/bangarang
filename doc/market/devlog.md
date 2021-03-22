@@ -1,5 +1,4 @@
 # Bangarang — Product Development Log
-
 - ? Builder placement on clean architecture
 - Typing uuid.
 - Backend
