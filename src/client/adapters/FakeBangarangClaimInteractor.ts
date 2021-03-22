@@ -6,7 +6,7 @@ export class FakeBangarangClaimInteractor implements BangarangClaimInteractorCon
         if (existingClaimIndex > -1) this.declaredClaims[existingClaimIndex] = claimToSave
         else this.declaredClaims.push(claimToSave)
     }
-    public findClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(searchCriteriaWords: string[]): ClaimContract[] {
+    public retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(searchCriteriaWords: string[]): ClaimContract[] {
         return this.declaredClaims.filter(claim => searchCriteriaWords.some(searchCriteriaWord => claim.title.toLowerCase().includes(searchCriteriaWord)))
     }
     public claimByTitle(title: string): ClaimContract|Error {
@@ -14,7 +14,7 @@ export class FakeBangarangClaimInteractor implements BangarangClaimInteractorCon
         if (claimFound) return claimFound;
         return new Error(bangarangClaimNotFound(title));
     }
-    public isClaimExistByTitleUpperCase(claim: ClaimContract): Boolean {
+    public isClaimExistByTitleUpperCase(claim: ClaimContract): boolean {
         return (this.findClaimByTitleUpperCase(claim.title))?true:false
     }
     public declareClaim(claim: ClaimContract): void {

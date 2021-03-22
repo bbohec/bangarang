@@ -12,3 +12,4 @@ export const successClaimingUserNotification:ClaimingUserNotificationContract= {
 export const claimNotDeclaredClaimingUserNotification=(claimTitle:string):ClaimingUserNotificationContract => ({status:"Failed", message:`The claim '${claimTitle}' is not declared on Bangarang.`, type:"Claiming."})
 export const mustBeSignedInClaimingUserNotification:ClaimingUserNotificationContract= {status:"Failed", message:`You must be signed in in order to claim.`, type:"Claiming."}
 export const multipleTimesClaimingUserNotification=(claimChoice:ClaimChoice):ClaimingUserNotificationContract=>({status:"Failed", message:`Claiming '${claimChoice}' multiple times on a claim is forbidden.`, type:"Claiming."})
+export const unexpectedErrorClaimingUserNotification=(error:Error):ClaimingUserNotificationContract=>({status:"Failed", message:`Unexpected Error: '${error.message}'.`, type:"Claiming."})

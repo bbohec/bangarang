@@ -65,7 +65,7 @@ export class UserBuilder {
         this.bangarangAdapters.registeringUserNotificationInteractor = registeringUserNotificationInteractor;
         return this;
     }
-    private userContract: UserContract = { username: "", fullname: "", password: "", email: "" };
+    private userContract: UserContract = { username: "", fullname: "", email: "" };
     private bangarangAdapters: BangarangAdaptersContract = {
         bangarangClaimInteractor: new FakeBangarangClaimInteractor(),
         bangarangMembersInteractor: new FakeBangarangMembersInteractor(),

@@ -27,9 +27,9 @@ export class Claim {
         bangarangClaimInteractor: BangarangClaimInteractorContract, 
         bangarangMembersInteractor: BangarangMembersInteractorContract, 
         username: string, 
-        claimChoice: ClaimChoice):void {
-        bangarangClaimInteractor.saveClaim(this)
-        bangarangMembersInteractor.saveMemberClaim({claimTitle:this.title, memberUsername:username, claimChoice})
+        claimChoice: ClaimChoice):void|Error|Error[] {
+        const saveClaim = bangarangClaimInteractor.saveClaim(this)
+        const saveMemberClaim = bangarangMembersInteractor.saveMemberClaim({claimTitle:this.title, memberUsername:username, claimChoice})
     }
     public type: string;
     public title: string;

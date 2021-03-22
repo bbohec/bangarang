@@ -11,6 +11,7 @@ export interface SearchingClaimsUserNotificationContract extends UserNotificatio
 }
 export type SearchingClaimsNotificationType="Searching Claims"
 export const successSearchingClaimsUserNotification=(retreivedClaims:ClaimContract[]):SearchingClaimsUserNotificationContract => ({status:"Success", message:`${retreivedClaims.length} claims found.`, type:"Searching Claims",retreivedClaims})
+export const unexpectedErrorSearchingClaimsUserNotification=(error:Error):SearchingClaimsUserNotificationContract => ({status:"Failed", message:`Unexpected error '${error.message}'.`, type:"Searching Claims"})
 /*
 export const claimNotDeclaredRetrievingClaimUserNotification:RetrievingClaimUserNotificationContract = ({status:"Failed", message:"The claim is not declared on Bangarang.",type:"Retrieving claim."})
 */

@@ -9,12 +9,14 @@ import { FakeBangarangUserInterfaceInteractor } from '../../client/adapters/Fake
 import { FakeClaimingUserNotificationInteractor } from '../../client/adapters/FakeClaimingUserNotificationInteractorContract';
 import { ClaimingNotificationType, ClaimingUserNotificationContract, claimNotDeclaredClaimingUserNotification, multipleTimesClaimingUserNotification, mustBeSignedInClaimingUserNotification, successClaimingUserNotification } from '../../client/port/interactors/ClaimingUserNotificationInteractorContract';
 import { StaticView } from '../../client/port/interactors/BangarangUserInterfaceInteractor';
+import type { UserContract } from '../../client/port/UserContact';
 describe(`Feature: Claiming
     As a Bangarang Member
     In order to claim
     I want to claim on claim`,()=> {
     const notificationType:ClaimingNotificationType = "Claiming."
-    const userContract = { username: "", password: "", fullname: "",email:"" }
+    const userContract:UserContract = { username: "", fullname: "",email:"" }
+    const userPassword = ""
     const bangarangClaimInteractor = new FakeBangarangClaimInteractor();
     const bangarangMembersInteractor = new FakeBangarangMembersInteractor();
     const bangarangUserInterfaceInteractor = new FakeBangarangUserInterfaceInteractor();
@@ -165,10 +167,11 @@ describe(`Feature: Claiming
         }
     ]
     function initScenario (scenario:Scenario){
-        bangarangMembersInteractor.withBangarangMembersDatabase([userContract]);
-        bangarangMembersInteractor.withBangarangSignedInMemberDatabase([]);
-        bangarangMembersInteractor.withMembersClaims([]);
-        if(scenario.userSignedIn)user.signingIn()
+        bangarangMembersInteractor.specificWithMembers([userContract]);
+        bangarangMembersInteractor.specificWithSignedInMembers([]);
+        bangarangMembersInteractor.specificWithMembersClaims([]);
+        bangarangMembersInteractor.specificWithCredentials([{username:userContract.username,password:userPassword}])
+        if(scenario.userSignedIn)user.signingIn("")
         bangarangClaimInteractor.removeAllClaims();
         if(scenario.claimDeclared)bangarangClaimInteractor.saveClaim(scenario.expectedClaim)
         claimingUserNotificationInteractor.currentUserNotification = undefined
@@ -180,7 +183,7 @@ describe(`Feature: Claiming
         ${scenario.description}`,()=> {
             before(()=>initScenario(scenario))
             it(`Given the user is ${(!scenario.userSignedIn)?"not ":""}signed in`,()=>{
-                expect(user.isSignedIn()).equal(scenario.userSignedIn)
+                expect(bangarangMembersInteractor.isSignedIn(userContract.username)).equal(scenario.userSignedIn)
             })
             if (scenario.claimDeclared){ 
                 if(scenario.previousClaimChoice)it(`And the claim with title '${scenario.expectedClaim.title}' is declared on Bangarang with the following values:
@@ -204,7 +207,7 @@ describe(`Feature: Claiming
                 expect(bangarangClaimInteractor.declaredClaims.length).equal(0)
             })
             if (scenario.previousClaimChoice) it(`And the user has previously claimed '${scenario.previousClaimChoice}' on claim '${scenario.expectedClaim.title}'`,()=>{
-                expect(bangarangMembersInteractor.memberHasClaimedOnClaim(userContract.username,scenario.expectedClaim.title)).equal(scenario.previousClaimChoice)
+                expect(bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(userContract.username,scenario.expectedClaim.title)).equal(scenario.previousClaimChoice)
             })
             it(`When the user claim '${scenario.userChoice}' on the claim with title '${scenario.expectedClaim.title}'`,(done)=>{
                 user.claiming(scenario.expectedClaim.title,scenario.userChoice)

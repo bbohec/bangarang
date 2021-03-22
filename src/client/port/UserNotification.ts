@@ -1,5 +1,5 @@
 export interface UserNotificationContract {
-    status: string;
+    status: "Success"|"Failed";
     message: string;
     type:string;
 }

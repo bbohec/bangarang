@@ -6,113 +6,137 @@ import { FakeBangarangMembersInteractor } from '../../client/adapters/FakeBangar
 import { bangarangMemberNotFoundError } from '../../client/port/interactors/BangarangMembersInteractorContract';
 import { FakeRegisteringUserNotificationInteractor } from '../../client/adapters/FakeRegisteringUserNotificationInteractor';
 import { alreadyMemberRegisteringUserNotification, badEmailRegisteringUserNotification, RegisteringNotificationType, RegisteringUserNotificationContract, RegisteringUserNotificationInteractorContract, successRegisteringUserNotification, unsecurePasswordRegisteringUserNotification } from '../../client/port/interactors/RegisteringUserNotificationInteractorContract';
+import { credentialsMissing } from '../../client/port/bangarangMemberCredential';
 describe(`Feature: Registering
     As a guest,
     In order to claim,
     I want to register on Bangarang.`,()=> {
     interface scenario {
         title:string
-        withUserContract:UserContract
-        withBangarangMemberInteractor:FakeBangarangMembersInteractor
-        withRegisteringUserNotificationInteractor:FakeRegisteringUserNotificationInteractor
+        userContract:UserContract
+        userPassword:string
+        bangarangMemberInteractor:FakeBangarangMembersInteractor
+        registeringUserNotificationInteractor:FakeRegisteringUserNotificationInteractor
         expectedNotification:RegisteringUserNotificationContract
         thenUserShouldBeRegistered:boolean
-        alreadyHaveBangarangMember?:UserContract
+        alreadyHaveBangarangMember?:{user:UserContract,password:string}
     }
     const registeringNotificationType:RegisteringNotificationType = "Registering."
     const scenarios:scenario[] = [
         {
             title:"Register on Bangarang.",
-            withUserContract:{username:"johndoe",password:"\"(VRVdFrr4jF'Rx7",fullname:"John Doe",email:"john@doe.com"} ,
-            withBangarangMemberInteractor:new FakeBangarangMembersInteractor(),
-            withRegisteringUserNotificationInteractor:new FakeRegisteringUserNotificationInteractor(),
+            userContract:{username:"johndoe",fullname:"John Doe",email:"john@doe.com"} ,
+            userPassword:"\"(VRVdFrr4jF'Rx7",
+            bangarangMemberInteractor:new FakeBangarangMembersInteractor(),
+            registeringUserNotificationInteractor:new FakeRegisteringUserNotificationInteractor(),
             thenUserShouldBeRegistered:true,
             expectedNotification:successRegisteringUserNotification
         },
         {
             title:"Invalid email.",
-            withUserContract:{username:"johndoe",password:"\"(VRVdFrr4jF'Rx7",fullname:"John Doe",email:"johndoe.com"} ,
-            withBangarangMemberInteractor:new FakeBangarangMembersInteractor(),
-            withRegisteringUserNotificationInteractor:new FakeRegisteringUserNotificationInteractor(),
+            userContract:{username:"johndoe",fullname:"John Doe",email:"johndoe.com"} ,
+            userPassword:"\"(VRVdFrr4jF'Rx7",
+            bangarangMemberInteractor:new FakeBangarangMembersInteractor(),
+            registeringUserNotificationInteractor:new FakeRegisteringUserNotificationInteractor(),
             thenUserShouldBeRegistered:false,
             expectedNotification:badEmailRegisteringUserNotification
         },
         {
             title:"Invalid email 2.",
-            withUserContract:{username:"johndoe",password:"\"(VRVdFrr4jF'Rx7",fullname:"John Doe",email:"john@doe."} ,
-            withBangarangMemberInteractor:new FakeBangarangMembersInteractor(),
-            withRegisteringUserNotificationInteractor:new FakeRegisteringUserNotificationInteractor(),
+            userContract:{username:"johndoe",fullname:"John Doe",email:"john@doe."} ,
+            userPassword:"\"(VRVdFrr4jF'Rx7",
+            bangarangMemberInteractor:new FakeBangarangMembersInteractor(),
+            registeringUserNotificationInteractor:new FakeRegisteringUserNotificationInteractor(),
             thenUserShouldBeRegistered:false,
             expectedNotification:badEmailRegisteringUserNotification
         },
         {
             title:"Unsecure Password.",
-            withUserContract:{username:"johndoe",password:"password",fullname:"John Doe",email:"john@doe.com"} ,
-            withBangarangMemberInteractor:new FakeBangarangMembersInteractor(),
-            withRegisteringUserNotificationInteractor:new FakeRegisteringUserNotificationInteractor(),
+            userContract:{username:"johndoe",fullname:"John Doe",email:"john@doe.com"} ,
+            userPassword:"password",
+            bangarangMemberInteractor:new FakeBangarangMembersInteractor(),
+            registeringUserNotificationInteractor:new FakeRegisteringUserNotificationInteractor(),
             thenUserShouldBeRegistered:false,
             expectedNotification:unsecurePasswordRegisteringUserNotification
         },
         {
             title:"Already member of Bangarang.",
-            withUserContract:{username:"johndoe",password:"\"(VRVsdfsdfdFrr4jF'Rx7",fullname:"Johnny Doe",email:"johnny@doe.com"} ,
-            withBangarangMemberInteractor:new FakeBangarangMembersInteractor(),
-            withRegisteringUserNotificationInteractor:new FakeRegisteringUserNotificationInteractor(),
+            userContract:{username:"johndoe",fullname:"Johnny Doe",email:"johnny@doe.com"} ,
+            userPassword:"\"(VRVsdfsdfdFrr4jF'Rx7",
+            bangarangMemberInteractor:new FakeBangarangMembersInteractor(),
+            registeringUserNotificationInteractor:new FakeRegisteringUserNotificationInteractor(),
             thenUserShouldBeRegistered:false,
             expectedNotification:alreadyMemberRegisteringUserNotification,
-            alreadyHaveBangarangMember:{username:"johndoe",password:"\"(VRVdFrr4jF'Rx7",fullname:"John Doe",email:"john@doe.com"}
+            alreadyHaveBangarangMember:{
+                user:{username:"johndoe",fullname:"John Doe",email:"john@doe.com"},
+                password:"\"(VRVdFrr4jF'Rx7"
+            }
         }
     ]
     scenarios.forEach(scenario => {
         describe(`
     Scenario: ${scenario.title}`,()=>{
-            if (scenario.alreadyHaveBangarangMember) scenario.withBangarangMemberInteractor.withBangarangMembersDatabase([scenario.alreadyHaveBangarangMember])
+            
             const user =new UserBuilder()
-                .withUserContract(scenario.withUserContract)
-                .withBangarangMemberInteractor(scenario.withBangarangMemberInteractor)
-                .withRegisteringUserNotificationInteractor(scenario.withRegisteringUserNotificationInteractor)
+                .withUserContract(scenario.userContract)
+                .withBangarangMemberInteractor(scenario.bangarangMemberInteractor)
+                .withRegisteringUserNotificationInteractor(scenario.registeringUserNotificationInteractor)
                 .getUser()
-            it(`Given the user is not signed in as '${user.username}'.`,()=>{
-                expect(user.isSignedIn()).to.be.false
+            before(()=>{
+                if (scenario.alreadyHaveBangarangMember) {
+                    scenario.bangarangMemberInteractor.specificWithMembers([scenario.alreadyHaveBangarangMember.user])
+                    scenario.bangarangMemberInteractor.specificWithCredentials([{username:scenario.alreadyHaveBangarangMember.user.username,password:scenario.alreadyHaveBangarangMember.password}])
+                }
             })
-            if (!scenario.alreadyHaveBangarangMember)it(`And there is no '${scenario.withUserContract.username}' Bangarang member'`,()=> {
-                    expect(()=>{scenario.withBangarangMemberInteractor.findBangarangMemberFromUsername(scenario.withUserContract.username)})
-                        .to.throw(bangarangMemberNotFoundError(scenario.withUserContract.username))
+            
+            it(`Given the user is not signed in as '${user.username}'.`,()=>{
+                expect(scenario.bangarangMemberInteractor.isSignedIn(scenario.userContract.username)).to.be.false
+            })
+            if (!scenario.alreadyHaveBangarangMember)it(`And there is no '${scenario.userContract.username}' Bangarang member'`,()=> {
+                    expect(()=>{scenario.bangarangMemberInteractor.specificFindMemberFromUsername(scenario.userContract.username)})
+                        .to.throw(bangarangMemberNotFoundError(scenario.userContract.username))
+                    expect(()=>{scenario.bangarangMemberInteractor.specificFindMemberPasswordFromUsername(scenario.userContract.username)})
+                        .to.throw(credentialsMissing(scenario.userContract.username))
                 }) 
             else {
                 const bangarangMember = scenario.alreadyHaveBangarangMember
-                it(`And '${bangarangMember.username}' is a Bangarang member with the following parameters:
+                it(`And '${bangarangMember.user.username}' is a Bangarang member with the following parameters:
             | username | password           | email         | fullname  |
-            | ${bangarangMember.username}  | ${bangarangMember.password}   |  ${bangarangMember.email} | ${bangarangMember.fullname}  |`,()=> {
-                    expect(scenario.withBangarangMemberInteractor.findBangarangMemberFromUsername(bangarangMember.username)).deep.equal(bangarangMember)
+            | ${bangarangMember.user.username}  | ${bangarangMember.password}   |  ${bangarangMember.user.email} | ${bangarangMember.user.fullname}  |`,()=> {
+                    expect(scenario.bangarangMemberInteractor.specificFindMemberFromUsername(bangarangMember.user.username)).deep.equal(bangarangMember.user)
+                    expect(scenario.bangarangMemberInteractor.specificFindMemberPasswordFromUsername(bangarangMember.user.username)).equal(bangarangMember.password)
                 })
             }
             it(`When the user register on Bangarang with the following parameters:
             | username | password           | email         | fullname  |
-            | ${scenario.withUserContract.username}  | ${scenario.withUserContract.password}   |  ${scenario.withUserContract.email} | ${scenario.withUserContract.fullname}  |`,(done)=> {
-                user.register()
+            | ${scenario.userContract.username}  | ${scenario.userPassword}   |  ${scenario.userContract.email} | ${scenario.userContract.fullname}  |`,(done)=> {
+                user.register(scenario.userPassword)
                 done()
             })
             if (scenario.alreadyHaveBangarangMember) {
                 const bangarangMember = scenario.alreadyHaveBangarangMember
-                it(`Then '${bangarangMember.username}' is a Bangarang member with the following parameters:
+                it(`Then '${bangarangMember.user.username}' is a Bangarang member with the following parameters:
             | username | password           | email         | fullname  |
-            | ${bangarangMember.username}  | ${bangarangMember.password}   |  ${bangarangMember.email} | ${bangarangMember.fullname}  |`,()=> {
-                    expect(scenario.withBangarangMemberInteractor.findBangarangMemberFromUsername(bangarangMember.username)).deep.equal(bangarangMember)
+            | ${bangarangMember.user.username}  | ${bangarangMember.password}   |  ${bangarangMember.user.email} | ${bangarangMember.user.fullname}  |`,()=> {
+                    expect(scenario.bangarangMemberInteractor.specificFindMemberFromUsername(bangarangMember.user.username)).deep.equal(bangarangMember.user)
+                    expect(scenario.bangarangMemberInteractor.specificFindMemberPasswordFromUsername(bangarangMember.user.username)).equal(bangarangMember.password)
                 })
             }
-            else if (scenario.thenUserShouldBeRegistered) it(`Then '${scenario.withUserContract.username}' is a Bangarang member with the following parameters:
+            else if (scenario.thenUserShouldBeRegistered) it(`Then '${scenario.userContract.username}' is a Bangarang member with the following parameters:
             | username | password           | email         | fullname  |
-            | ${scenario.withUserContract.username}  | ${scenario.withUserContract.password}   |  ${scenario.withUserContract.email} | ${scenario.withUserContract.fullname}  |`,()=> {
-                    expect(scenario.withBangarangMemberInteractor.findBangarangMemberFromUsername(scenario.withUserContract.username)).deep.equal(scenario.withUserContract)
+            | ${scenario.userContract.username}  | ${scenario.userPassword}   |  ${scenario.userContract.email} | ${scenario.userContract.fullname}  |`,()=> {
+                    expect(scenario.bangarangMemberInteractor.specificFindMemberFromUsername(scenario.userContract.username)).deep.equal(scenario.userContract)
+                    expect(scenario.bangarangMemberInteractor.specificFindMemberPasswordFromUsername(scenario.userContract.username)).equal(scenario.userPassword)
                 })
-            else it(`And there is no '${scenario.withUserContract.username}' Bangarang member'`,()=> {
-                    expect(()=>{scenario.withBangarangMemberInteractor.findBangarangMemberFromUsername(scenario.withUserContract.username)})
-                        .to.throw(bangarangMemberNotFoundError(scenario.withUserContract.username))
+            else it(`And there is no '${scenario.userContract.username}' Bangarang member'`,()=> {
+                    expect(()=>{scenario.bangarangMemberInteractor.specificFindMemberFromUsername(scenario.userContract.username)})
+                        .to.throw(bangarangMemberNotFoundError(scenario.userContract.username))
+                    expect(()=>{scenario.bangarangMemberInteractor.specificFindMemberPasswordFromUsername(scenario.userContract.username)})
+                        .to.throw(credentialsMissing(scenario.userContract.username))
                 })
             it(`And the user has a '${registeringNotificationType}' notification with '${scenario.expectedNotification.status}' status and '${scenario.expectedNotification.message}' message.`,()=> {
-                expect(scenario.withRegisteringUserNotificationInteractor.currentUserNotification?.message).equal(scenario.expectedNotification.message)
-                expect(scenario.withRegisteringUserNotificationInteractor.currentUserNotification?.status).equal(scenario.expectedNotification.status)
+                expect(scenario.registeringUserNotificationInteractor.currentUserNotification?.message).equal(scenario.expectedNotification.message)
+                expect(scenario.registeringUserNotificationInteractor.currentUserNotification?.status).equal(scenario.expectedNotification.status)
             })
         })
     })

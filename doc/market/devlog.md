@@ -17,10 +17,10 @@
 ## 2021/03/22 — Day 21
 - ✔️ Twitch Live Stream https://www.twitch.tv/benjaminbohec
 - ✔️ Stand Up 
-- 👉 ATDD/TDD > Clean architecture / Business Logic
+- ✔️ ATDD/TDD > Clean architecture / Business Logic
     - ✔️ Registering.
-    - 👉 Remove password on User Contract
-- Link Business Logic <> UI : UI Adapter
+    - ✔️ Remove password on User Contract
+- 👉 Link Business Logic <> UI : UI Adapter
 - Summary.
 
 ## 2021/03/19 — Day 20

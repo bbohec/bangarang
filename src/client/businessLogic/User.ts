@@ -3,9 +3,9 @@ import type { BangarangAdaptersContract } from "../port/BangarangAdaptersContrac
 import type { UserContract } from "../port/UserContact";
 import { alreadySignedInSigningInNotification, badCredentialsSigningInNotification, successSigningInNotification } from "../port/interactors/SigningInUserNotificationInteractorContract";
 import { claimAlreadyExistDeclaringClaimUserNotification, claimWithoutTitleDeclaringClaimUserNotification, claimWithoutTypeDeclaringClaimUserNotification, successDeclaringClaimUserNotification } from "../port/interactors/DeclaringClaimUserNotificationInteractorContract";
-import { claimNotDeclaredRetrievingClaimUserNotification, successRetrievingClaimUserNotification } from "../port/interactors/RetrievingClaimUserNotificationInteractorContract";
-import { successSearchingClaimsUserNotification } from "../port/interactors/SearchingClaimsUserNotificationInteractorContract";
-import { claimNotDeclaredClaimingUserNotification, multipleTimesClaimingUserNotification, mustBeSignedInClaimingUserNotification, successClaimingUserNotification } from "../port/interactors/ClaimingUserNotificationInteractorContract";
+import { claimNotDeclaredRetrievingClaimUserNotification, successRetrievingClaimUserNotification, unexpectedErrorRetrievingClaimUserNotification } from "../port/interactors/RetrievingClaimUserNotificationInteractorContract";
+import { successSearchingClaimsUserNotification, unexpectedErrorSearchingClaimsUserNotification } from "../port/interactors/SearchingClaimsUserNotificationInteractorContract";
+import { claimNotDeclaredClaimingUserNotification, multipleTimesClaimingUserNotification, mustBeSignedInClaimingUserNotification, successClaimingUserNotification, unexpectedErrorClaimingUserNotification } from "../port/interactors/ClaimingUserNotificationInteractorContract";
 import type { ClaimChoice } from "../port/ClaimChoice";
 import { StaticView } from "../port/interactors/BangarangUserInterfaceInteractor";
 import { Claim } from "./Claim";
@@ -14,17 +14,17 @@ export class User implements UserContract  {
     constructor(userContract: UserContract, bangarangAdapters: BangarangAdaptersContract) {
         this.username = userContract.username;
         this.fullname = userContract.fullname;
-        this.password = userContract.password;
         this.email = userContract.email;
         this.bangarangAdapters = bangarangAdapters;
     }
-    public register():void {
+    public register(password:string):void {
         if(this.bangarangAdapters.bangarangMembersInteractor.isMemberExistWithUsername(this.username))
             this.bangarangAdapters.registeringUserNotificationInteractor.notify(alreadyMemberRegisteringUserNotification)
-        else if(!this.bangarangAdapters.passwordInteractor.isPasswordSecure(this.password))
+        else if(!this.bangarangAdapters.passwordInteractor.isPasswordSecure(password))
             this.bangarangAdapters.registeringUserNotificationInteractor.notify(unsecurePasswordRegisteringUserNotification)
         else if(this.bangarangAdapters.emailInteractor.isEmailValid(this.email)){
-            this.bangarangAdapters.bangarangMembersInteractor.save({username:this.username,password:this.password,fullname:this.fullname,email:this.email})
+            this.bangarangAdapters.bangarangMembersInteractor.saveMember({username:this.username,fullname:this.fullname,email:this.email})
+            this.bangarangAdapters.bangarangMembersInteractor.saveCredentials({username:this.username,password})
             this.bangarangAdapters.registeringUserNotificationInteractor.notify(successRegisteringUserNotification)
         } else this.bangarangAdapters.registeringUserNotificationInteractor.notify(badEmailRegisteringUserNotification)
     }
@@ -33,17 +33,17 @@ export class User implements UserContract  {
         const isUserHasPreviouslyMadeTheSameClaimChoice=(previousClaimChoice:ClaimChoice,claimChoice:ClaimChoice):boolean => previousClaimChoice !==undefined && previousClaimChoice === claimChoice
         if (retreivedClaim instanceof Error) 
             this.bangarangAdapters.claimingUserNotificationInteractor.notify(claimNotDeclaredClaimingUserNotification(claimTitle))
-        else if (!this.isSignedIn()){
+        else if (!this.bangarangAdapters.bangarangMembersInteractor.isSignedIn(this.username)){
             this.bangarangAdapters.claimingUserNotificationInteractor.notify(mustBeSignedInClaimingUserNotification)
             this.bangarangAdapters.bangarangUserInterfaceInteractor.goToView(StaticView.SigningInMenu)
         }
         else{
-            const previousClaimChoice = this.bangarangAdapters.bangarangMembersInteractor.memberHasClaimedOnClaim(this.username, claimTitle)
-            if (isUserHasPreviouslyMadeTheSameClaimChoice(previousClaimChoice,claimChoice))
+            const previousClaimChoice = this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, claimTitle)
+            if(previousClaimChoice instanceof Error) this.bangarangAdapters.claimingUserNotificationInteractor.notify(unexpectedErrorClaimingUserNotification(previousClaimChoice))
+            else if (isUserHasPreviouslyMadeTheSameClaimChoice(previousClaimChoice,claimChoice))
                 this.bangarangAdapters.claimingUserNotificationInteractor.notify(multipleTimesClaimingUserNotification(claimChoice))
             else {
-                const updatedClaim = new Claim(retreivedClaim)
-                updatedClaim
+                new Claim(retreivedClaim)
                     .increasePeopleClaimedWhenNoPreviousClaimChoice(previousClaimChoice)
                     .removePreviousClaimOnClaim(previousClaimChoice)
                     .increaseClaimChoiseFromClaimChoice(claimChoice)
@@ -76,25 +76,32 @@ export class User implements UserContract  {
             return Order.keep;
         }
         const retreivedClaims = this.bangarangAdapters.bangarangClaimInteractor
-            .findClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(sentenceIntoWords(searchCriteria.toLowerCase(),wordSeparator))
-            .sort((nextClaim,previousClaim)=>claimSortEngine(nextClaim,previousClaim,searchCriteria))
-        this.bangarangAdapters
-            .searchingClaimsUserNotificationInteractor
-            .notify(successSearchingClaimsUserNotification(retreivedClaims))
+            .retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(sentenceIntoWords(searchCriteria.toLowerCase(),wordSeparator))
+        if (retreivedClaims instanceof Error) {this.bangarangAdapters.searchingClaimsUserNotificationInteractor.notify(unexpectedErrorSearchingClaimsUserNotification(retreivedClaims))}
+        else {
+            retreivedClaims.sort((nextClaim,previousClaim)=>claimSortEngine(nextClaim,previousClaim,searchCriteria))
+            this.bangarangAdapters.searchingClaimsUserNotificationInteractor.notify(successSearchingClaimsUserNotification(retreivedClaims))
+        }
+            
+        
     }
     public claimByTitle(title: string):void {
         const claim = this.bangarangAdapters.bangarangClaimInteractor.claimByTitle(title)
         if (claim instanceof Error)  this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(claimNotDeclaredRetrievingClaimUserNotification)
         else {
-            const claimWithMemberPreviousClaimChoice:ClaimContractWithMemberPreviousClaimChoice = {
-                title:claim.title,
-                type:claim.type,
-                peopleClaimed:claim.peopleClaimed,
-                peopleClaimedAgainst:claim.peopleClaimedAgainst,
-                peopleClaimedFor:claim.peopleClaimedFor,
-                previousUserClaimChoice:this.bangarangAdapters.bangarangMembersInteractor.memberHasClaimedOnClaim(this.username,title)
+            const previousMemberClaimChoiceOnClaim = this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, title);
+            if(previousMemberClaimChoiceOnClaim instanceof Error)this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(unexpectedErrorRetrievingClaimUserNotification(previousMemberClaimChoiceOnClaim))
+            else {
+                    const claimWithMemberPreviousClaimChoice:ClaimContractWithMemberPreviousClaimChoice = {
+                    title:claim.title,
+                    type:claim.type,
+                    peopleClaimed:claim.peopleClaimed,
+                    peopleClaimedAgainst:claim.peopleClaimedAgainst,
+                    peopleClaimedFor:claim.peopleClaimedFor,
+                    previousUserClaimChoice:previousMemberClaimChoiceOnClaim
+                }
+                this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(successRetrievingClaimUserNotification(claimWithMemberPreviousClaimChoice))
             }
-            this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(successRetrievingClaimUserNotification(claimWithMemberPreviousClaimChoice))
         }
     }
     public declareClaim(claim:ClaimContract):void {
@@ -110,21 +117,24 @@ export class User implements UserContract  {
             else this.bangarangAdapters.bangarangUserInterfaceInteractor.goToView(retrievedClaim.title)
         } 
     }
-    public signingIn():void {
+    public signingIn(password:string):void {
         if(this.bangarangAdapters.bangarangMembersInteractor.isSignedIn(this.username))
             this.bangarangAdapters.signingInUserNotificationInteractor.notify(alreadySignedInSigningInNotification)
         else {
-            const error = this.bangarangAdapters.bangarangMembersInteractor.signingIn(this.username,this.password)
+            const error = this.bangarangAdapters.bangarangMembersInteractor.signingIn({username:this.username,password})
             if (error) this.bangarangAdapters.signingInUserNotificationInteractor.notify(badCredentialsSigningInNotification)
             else this.bangarangAdapters.signingInUserNotificationInteractor.notify(successSigningInNotification)
         }
     }
-    public isSignedIn():Boolean{
-        return this.bangarangAdapters.bangarangMembersInteractor.isSignedIn(this.username)
+    /*
+    public isSignedIn():boolean{
+        const isSignedIn = this.bangarangAdapters.bangarangMembersInteractor.isSignedIn(this.username);
+        if (isSignedIn instanceof Error)
+        return isSignedIn
     };
+    */
     public username: string;
     public fullname: string;
-    public password: string;
     public email:string;
     private bangarangAdapters: BangarangAdaptersContract;
 }
