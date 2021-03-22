@@ -9,12 +9,24 @@ import { claimNotDeclaredClaimingUserNotification, multipleTimesClaimingUserNoti
 import type { ClaimChoice } from "../port/ClaimChoice";
 import { StaticView } from "../port/interactors/BangarangUserInterfaceInteractor";
 import { Claim } from "./Claim";
+import { alreadyMemberRegisteringUserNotification, badEmailRegisteringUserNotification, successRegisteringUserNotification, unsecurePasswordRegisteringUserNotification } from "../port/interactors/RegisteringUserNotificationInteractorContract";
 export class User implements UserContract  {
     constructor(userContract: UserContract, bangarangAdapters: BangarangAdaptersContract) {
         this.username = userContract.username;
         this.fullname = userContract.fullname;
         this.password = userContract.password;
+        this.email = userContract.email;
         this.bangarangAdapters = bangarangAdapters;
+    }
+    public register():void {
+        if(this.bangarangAdapters.bangarangMembersInteractor.isMemberExistWithUsername(this.username))
+            this.bangarangAdapters.registeringUserNotificationInteractor.notify(alreadyMemberRegisteringUserNotification)
+        else if(!this.bangarangAdapters.passwordInteractor.isPasswordSecure(this.password))
+            this.bangarangAdapters.registeringUserNotificationInteractor.notify(unsecurePasswordRegisteringUserNotification)
+        else if(this.bangarangAdapters.emailInteractor.isEmailValid(this.email)){
+            this.bangarangAdapters.bangarangMembersInteractor.save({username:this.username,password:this.password,fullname:this.fullname,email:this.email})
+            this.bangarangAdapters.registeringUserNotificationInteractor.notify(successRegisteringUserNotification)
+        } else this.bangarangAdapters.registeringUserNotificationInteractor.notify(badEmailRegisteringUserNotification)
     }
     public claiming(claimTitle: string, claimChoice: ClaimChoice):void {
         const retreivedClaim = this.bangarangAdapters.bangarangClaimInteractor.claimByTitle(claimTitle)
@@ -113,6 +125,7 @@ export class User implements UserContract  {
     public username: string;
     public fullname: string;
     public password: string;
+    public email:string;
     private bangarangAdapters: BangarangAdaptersContract;
 }
 

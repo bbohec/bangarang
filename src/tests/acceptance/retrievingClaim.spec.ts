@@ -1,22 +1,16 @@
 import 'mocha';
 import {expect} from "chai";
-import { User } from '../../client/businessLogic/User';
-import { FakeBangarangClaimInteractor } from '../../client/adapters/FakeBangarangClaimInteractor';
-import { FakeBangarangMembersInteractor } from '../../client/adapters/FakeBangarangMembersInteractor';
-import { FakeDeclaringClaimUserNotificationInteractor } from '../../client/adapters/FakeDeclaringClaimUserNotificationInteractor';
-import { FakeRetrievingClaimUserNotificationInteractor } from "../../client/adapters/FakeRetrievingClaimUserNotificationInteractor";
-import { FakeSigningInUserNotificationInteractor } from '../../client/adapters/FakeSigningInUserNotificationInteractor';
-import { FakeBangarangUserInterfaceInteractor } from '../../client/adapters/FakeBangarangUserInterfaceInteractor';
 import type { ClaimContract, ClaimContractWithMemberPreviousClaimChoice } from '../../client/port/ClaimContract';
 import type { UserContract } from '../../client/port/UserContact';
 import type { MemberClaim } from '../../client/port/MemberClaim';
 import type { ClaimChoice } from '../../client/port/ClaimChoice';
+import { UserBuilder } from '../../client/businessLogic/UserBuilder';
+import { FakeBangarangClaimInteractor } from '../../client/adapters/FakeBangarangClaimInteractor';
+import { FakeBangarangMembersInteractor } from '../../client/adapters/FakeBangarangMembersInteractor';
+import { FakeRetrievingClaimUserNotificationInteractor } from "../../client/adapters/FakeRetrievingClaimUserNotificationInteractor";
 import { claimNotDeclaredRetrievingClaimUserNotification, RetrievingClaimNotificationType, successRetrievingClaimUserNotification } from '../../client/port/interactors/RetrievingClaimUserNotificationInteractorContract';
-import { bangarangClaimNotFound } from '../../client/port/interactors/BangarangClaimInteractor';
+import { bangarangClaimNotFound } from '../../client/port/interactors/BangarangClaimInteractorContract';
 import { bangarangMemberNotFoundError } from '../../client/port/interactors/BangarangMembersInteractorContract';
-import { FakeSearchingClaimsUserNotificationInteractor } from '../../client/adapters/FakeSearchingClaimsUserNotificationInteractorContract';
-import { each } from 'svelte/internal';
-import { FakeClaimingUserNotificationInteractor } from '../../client/adapters/FakeClaimingUserNotificationInteractorContract';
 describe(`Feature : Retrieving Claim
     As a guest or a Bangarang Member
     In order to share a claim or to claim
@@ -39,20 +33,16 @@ describe(`Feature : Retrieving Claim
         peopleClaimedAgainst:expectedClaim.peopleClaimedAgainst,
         previousUserClaimChoice:undefined
     }
-    const expectedUser:UserContract={fullname:"",username:"user",password:""}
+    const expectedUser:UserContract={fullname:"",username:"user",password:"",email:""}
     const bangarangClaimInteractor=new FakeBangarangClaimInteractor()
     const retrievingClaimUserNotificationInteractor = new FakeRetrievingClaimUserNotificationInteractor()
     const bangarangMembersInteractor= new FakeBangarangMembersInteractor()
-    const user:User = new User(expectedUser,{
-        bangarangClaimInteractor,
-        bangarangMembersInteractor,
-        declaringClaimUserNotificationInteractor: new FakeDeclaringClaimUserNotificationInteractor(),
-        signingInUserNotificationInteractor: new FakeSigningInUserNotificationInteractor(),
-        bangarangUserInterfaceInteractor: new FakeBangarangUserInterfaceInteractor(),
-        retrievingClaimUserNotificationInteractor,
-        searchingClaimsUserNotificationInteractor:new FakeSearchingClaimsUserNotificationInteractor(),
-        claimingUserNotificationInteractor:new FakeClaimingUserNotificationInteractor()
-    })
+    const user= new UserBuilder()
+        .withUserContract(expectedUser)
+        .withBangarangClaimInteractor(bangarangClaimInteractor)
+        .withBangarangMemberInteractor(bangarangMembersInteractor)
+        .withRetrievingClaimUserNotificationInteractor(retrievingClaimUserNotificationInteractor)
+        .getUser()
     function initScenario(claims:ClaimContract[],previousUserClaimChoice:ClaimChoice,expectedUsers:UserContract[],membersClaims: MemberClaim[]) {
         bangarangClaimInteractor.removeAllClaims()
         claims.forEach(claim=> bangarangClaimInteractor.saveClaim(claim)) 

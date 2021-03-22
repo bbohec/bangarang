@@ -1,6 +1,6 @@
 import type { ClaimChoice } from "../port/ClaimChoice";
 import type { ClaimContract } from "../port/ClaimContract";
-import type { BangarangClaimInteractor } from "../port/interactors/BangarangClaimInteractor";
+import type { BangarangClaimInteractorContract } from "../port/interactors/BangarangClaimInteractorContract";
 import type { BangarangMembersInteractorContract } from "../port/interactors/BangarangMembersInteractorContract";
 
 export class Claim {
@@ -24,7 +24,7 @@ export class Claim {
         return this
     }
     public save(
-        bangarangClaimInteractor: BangarangClaimInteractor, 
+        bangarangClaimInteractor: BangarangClaimInteractorContract, 
         bangarangMembersInteractor: BangarangMembersInteractorContract, 
         username: string, 
         claimChoice: ClaimChoice):void {

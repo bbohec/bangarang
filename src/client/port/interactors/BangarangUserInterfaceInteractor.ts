@@ -1,4 +1,4 @@
-export interface BangarangUserInterfaceInteractor {
+export interface BangarangUserInterfaceInteractorContract {
     goToView(viewName: string):void;
 }
 

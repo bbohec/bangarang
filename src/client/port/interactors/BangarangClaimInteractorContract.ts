@@ -1,5 +1,5 @@
 import type { ClaimContract } from '../ClaimContract';
-export interface BangarangClaimInteractor {
+export interface BangarangClaimInteractorContract {
     saveClaim(claimToSave: ClaimContract):void;
     findClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(searchCriteriaWords: string[]):ClaimContract[];
     claimByTitle(title: string): ClaimContract|Error;

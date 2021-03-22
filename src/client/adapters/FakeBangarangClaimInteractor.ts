@@ -1,6 +1,6 @@
 import type { ClaimContract } from '../port/ClaimContract';
-import { BangarangClaimInteractor, bangarangClaimNotFound } from '../port/interactors/BangarangClaimInteractor';
-export class FakeBangarangClaimInteractor implements BangarangClaimInteractor {
+import { BangarangClaimInteractorContract, bangarangClaimNotFound } from '../port/interactors/BangarangClaimInteractorContract';
+export class FakeBangarangClaimInteractor implements BangarangClaimInteractorContract {
     public saveClaim(claimToSave: ClaimContract): void {
         const existingClaimIndex = this.declaredClaims.findIndex(claim=> claim.title === claimToSave.title)
         if (existingClaimIndex > -1) this.declaredClaims[existingClaimIndex] = claimToSave

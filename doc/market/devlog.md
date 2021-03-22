@@ -1,7 +1,7 @@
 # Bangarang — Product Development Log
-- Remove password on User Contract
+
+- ? Builder placement on clean architecture
 - Typing uuid.
-- Register
 - Backend
 - Multi-language — /!\ FR /!\
 - Error management
@@ -14,13 +14,22 @@
 - 👉 Doing
 - ✔️ Done
 
-## 2021/03/19 — Day 20
+## 2021/03/22 — Day 21
 - ✔️ Twitch Live Stream https://www.twitch.tv/benjaminbohec
 - ✔️ Stand Up 
 - 👉 ATDD/TDD > Clean architecture / Business Logic
-    - 👉 Claiming.
-    - Registering.
+    - ✔️ Registering.
+    - 👉 Remove password on User Contract
+- Link Business Logic <> UI : UI Adapter
 - Summary.
+
+## 2021/03/19 — Day 20
+- ✔️ Twitch Live Stream https://www.twitch.tv/benjaminbohec
+- ✔️ Stand Up 
+- ❌ ATDD/TDD > Clean architecture / Business Logic
+    - ✔️ Claiming.
+    - ❌ Registering. >>> ? Builder placement on clean architecture
+- ✔️ Summary.
 
 ## 2021/03/15 — Day 19
 - ❌ Twitch Live Stream

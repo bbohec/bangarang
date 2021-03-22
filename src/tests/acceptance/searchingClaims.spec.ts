@@ -2,18 +2,10 @@ import 'mocha';
 import {expect} from "chai";
 import type { ClaimContract } from '../../client/port/ClaimContract';
 import { FakeBangarangClaimInteractor } from '../../client/adapters/FakeBangarangClaimInteractor';
-import { FakeBangarangMembersInteractor } from '../../client/adapters/FakeBangarangMembersInteractor';
-import { FakeBangarangUserInterfaceInteractor } from '../../client/adapters/FakeBangarangUserInterfaceInteractor';
-import { FakeDeclaringClaimUserNotificationInteractor } from '../../client/adapters/FakeDeclaringClaimUserNotificationInteractor';
-import { FakeSigningInUserNotificationInteractor } from '../../client/adapters/FakeSigningInUserNotificationInteractor';
-import { FakeRetrievingClaimUserNotificationInteractor } from '../../client/adapters/FakeRetrievingClaimUserNotificationInteractor';
 import { FakeSearchingClaimsUserNotificationInteractor } from '../../client/adapters/FakeSearchingClaimsUserNotificationInteractorContract';
 import { SearchingClaimsUserNotificationContract, successSearchingClaimsUserNotification } from '../../client/port/interactors/SearchingClaimsUserNotificationInteractorContract';
-import { User } from '../../client/businessLogic/User';
-import { FakeClaimingUserNotificationInteractor } from '../../client/adapters/FakeClaimingUserNotificationInteractorContract';
-
-
-
+import { UserBuilder } from '../../client/businessLogic/UserBuilder';
+import type { User } from '../../client/businessLogic/User';
 describe(`Feature: Searching Claims
     As a guest or a Bangarang Member,
     In order to claim or share a claim,
@@ -234,28 +226,20 @@ describe(`Feature: Searching Claims
     ]
     const bangarangClaimInteractor = new FakeBangarangClaimInteractor()
     const searchingClaimsUserNotificationInteractor = new FakeSearchingClaimsUserNotificationInteractor()
-    const user = new User({username:"",fullname:"",password:""},{
-        bangarangClaimInteractor:bangarangClaimInteractor,
-        bangarangMembersInteractor:new FakeBangarangMembersInteractor(),
-        bangarangUserInterfaceInteractor:new FakeBangarangUserInterfaceInteractor(),
-        declaringClaimUserNotificationInteractor:new FakeDeclaringClaimUserNotificationInteractor(),
-        signingInUserNotificationInteractor:new FakeSigningInUserNotificationInteractor(), 
-        retrievingClaimUserNotificationInteractor:new FakeRetrievingClaimUserNotificationInteractor(),
-        searchingClaimsUserNotificationInteractor:searchingClaimsUserNotificationInteractor,
-        claimingUserNotificationInteractor:new FakeClaimingUserNotificationInteractor()
-    })
-    let expectedNotification:SearchingClaimsUserNotificationContract;
-    function initScenario(claims:ClaimContract[],scenarioExpectedNotification:SearchingClaimsUserNotificationContract) {
+    const user:User = new UserBuilder()
+        .withBangarangClaimInteractor(bangarangClaimInteractor)
+        .withSearchingClaimsUserNotificationInteractor(searchingClaimsUserNotificationInteractor)
+        .getUser()
+    function initScenario(claims:ClaimContract[]) {
         bangarangClaimInteractor.removeAllClaims()
         claims.forEach(claim =>bangarangClaimInteractor.saveClaim(claim) ) 
         searchingClaimsUserNotificationInteractor.currentNotification=undefined
-        expectedNotification=scenarioExpectedNotification
     }
     scenarios.forEach((scenario,index)=> {
         describe(`Scenario ${index+1}: ${scenario.scenarioTitle}`,()=>{
             const scenarioExpectedNotification = successSearchingClaimsUserNotification(scenario.retreivedClaims)
             const expectedDeclaredClaimsTitles = scenario.expectedDeclaredClaims.map(claim => claim.title);
-            before(()=>initScenario(scenario.expectedDeclaredClaims,scenarioExpectedNotification))
+            before(()=>initScenario(scenario.expectedDeclaredClaims))
             it(`Given there is the following declared claims:
                 [${expectedDeclaredClaimsTitles}]`,()=>{
                 scenario.expectedDeclaredClaims.forEach(claim => bangarangClaimInteractor.saveClaim(claim)) 

@@ -1,20 +1,12 @@
 import 'mocha';
 import {expect} from "chai";
-import { User } from '../../client/businessLogic/User';
-import { FakeBangarangMembersInteractor } from '../../client/adapters/FakeBangarangMembersInteractor';
-import { FakeSigningInUserNotificationInteractor } from '../../client/adapters/FakeSigningInUserNotificationInteractor';
-import { FakeDeclaringClaimUserNotificationInteractor } from '../../client/adapters/FakeDeclaringClaimUserNotificationInteractor';
-import { FakeRetrievingClaimUserNotificationInteractor } from "../../client/adapters/FakeRetrievingClaimUserNotificationInteractor";
-import { FakeBangarangClaimInteractor } from '../../client/adapters/FakeBangarangClaimInteractor';
 import type { ClaimContract } from '../../client/port/ClaimContract';
-import { claimAlreadyExistDeclaringClaimUserNotification, claimWithoutTitleDeclaringClaimUserNotification, claimWithoutTypeDeclaringClaimUserNotification, DeclaringClaimNotificationType, DeclaringClaimUserNotificationInteractorContract, successDeclaringClaimUserNotification,} from '../../client/port/interactors/DeclaringClaimUserNotificationInteractorContract';
+import { UserBuilder } from '../../client/businessLogic/UserBuilder';
+import { FakeDeclaringClaimUserNotificationInteractor } from '../../client/adapters/FakeDeclaringClaimUserNotificationInteractor';
+import { FakeBangarangClaimInteractor } from '../../client/adapters/FakeBangarangClaimInteractor';
 import { FakeBangarangUserInterfaceInteractor } from '../../client/adapters/FakeBangarangUserInterfaceInteractor';
-import { bangarangClaimNotFound } from '../../client/port/interactors/BangarangClaimInteractor';
-import { FakeSearchingClaimsUserNotificationInteractor } from '../../client/adapters/FakeSearchingClaimsUserNotificationInteractorContract';
-import { FakeClaimingUserNotificationInteractor } from '../../client/adapters/FakeClaimingUserNotificationInteractorContract';
-
-
-
+import { claimAlreadyExistDeclaringClaimUserNotification, claimWithoutTitleDeclaringClaimUserNotification, claimWithoutTypeDeclaringClaimUserNotification, DeclaringClaimNotificationType, DeclaringClaimUserNotificationInteractorContract, successDeclaringClaimUserNotification,} from '../../client/port/interactors/DeclaringClaimUserNotificationInteractorContract';
+import { bangarangClaimNotFound } from '../../client/port/interactors/BangarangClaimInteractorContract';
 describe(`Feature: Declaring Claim
     As a guest or a Bangarang Member
     In order to claim or share a claim
@@ -148,17 +140,12 @@ describe(`Feature: Declaring Claim
         fakeBangarangUserInterfaceInteractor.goToView(declaringClaimMenuView);
     }
     function declareClaim( claimToDeclare: ClaimContract) {
-        const user = new User({ username: "", password: "", fullname: "" }, {
-            bangarangClaimInteractor: bangarangClaimInteractor,
-            bangarangMembersInteractor: new FakeBangarangMembersInteractor(),
-            declaringClaimUserNotificationInteractor: fakeDeclaringClaimUserNotificationInteractor,
-            signingInUserNotificationInteractor: new FakeSigningInUserNotificationInteractor(),
-            bangarangUserInterfaceInteractor: fakeBangarangUserInterfaceInteractor,
-            retrievingClaimUserNotificationInteractor:new FakeRetrievingClaimUserNotificationInteractor(),
-            searchingClaimsUserNotificationInteractor:new FakeSearchingClaimsUserNotificationInteractor(),
-            claimingUserNotificationInteractor:new FakeClaimingUserNotificationInteractor()
-        });
-        user.declareClaim(claimToDeclare);
+        new UserBuilder()
+            .withBangarangClaimInteractor(bangarangClaimInteractor)
+            .withBangarangUserInterfaceInteractor(fakeBangarangUserInterfaceInteractor)
+            .withDeclaringClaimUserNotificationInteractor(fakeDeclaringClaimUserNotificationInteractor)
+            .getUser()
+            .declareClaim(claimToDeclare);
     }
 })
 

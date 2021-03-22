@@ -1,39 +1,31 @@
 import 'mocha';
 import {expect} from "chai";
-import { User } from '../../client/businessLogic/User';
+import type { ClaimChoice } from '../../client/port/ClaimChoice';
+import type { ClaimContract } from '../../client/port/ClaimContract';
+import { UserBuilder } from '../../client/businessLogic/UserBuilder';
 import { FakeBangarangMembersInteractor } from '../../client/adapters/FakeBangarangMembersInteractor';
-import { FakeRetrievingClaimUserNotificationInteractor } from '../../client/adapters/FakeRetrievingClaimUserNotificationInteractor';
-import { FakeSearchingClaimsUserNotificationInteractor } from '../../client/adapters/FakeSearchingClaimsUserNotificationInteractorContract';
-import { FakeSigningInUserNotificationInteractor } from '../../client/adapters/FakeSigningInUserNotificationInteractor';
 import { FakeBangarangClaimInteractor } from '../../client/adapters/FakeBangarangClaimInteractor';
 import { FakeBangarangUserInterfaceInteractor } from '../../client/adapters/FakeBangarangUserInterfaceInteractor';
-import { FakeDeclaringClaimUserNotificationInteractor } from '../../client/adapters/FakeDeclaringClaimUserNotificationInteractor';
-import type { ClaimContract } from '../../client/port/ClaimContract';
-import { ClaimingNotificationType, ClaimingUserNotificationContract, claimNotDeclaredClaimingUserNotification, multipleTimesClaimingUserNotification, mustBeSignedInClaimingUserNotification, successClaimingUserNotification } from '../../client/port/interactors/ClaimingUserNotificationInteractorContract';
 import { FakeClaimingUserNotificationInteractor } from '../../client/adapters/FakeClaimingUserNotificationInteractorContract';
-import type { ClaimChoice } from '../../client/port/ClaimChoice';
+import { ClaimingNotificationType, ClaimingUserNotificationContract, claimNotDeclaredClaimingUserNotification, multipleTimesClaimingUserNotification, mustBeSignedInClaimingUserNotification, successClaimingUserNotification } from '../../client/port/interactors/ClaimingUserNotificationInteractorContract';
 import { StaticView } from '../../client/port/interactors/BangarangUserInterfaceInteractor';
-
 describe(`Feature: Claiming
     As a Bangarang Member
     In order to claim
     I want to claim on claim`,()=> {
     const notificationType:ClaimingNotificationType = "Claiming."
-    const userContract = { username: "", password: "", fullname: "" }
+    const userContract = { username: "", password: "", fullname: "",email:"" }
     const bangarangClaimInteractor = new FakeBangarangClaimInteractor();
-    const claimingUserNotificationInteractor = new FakeClaimingUserNotificationInteractor()
     const bangarangMembersInteractor = new FakeBangarangMembersInteractor();
     const bangarangUserInterfaceInteractor = new FakeBangarangUserInterfaceInteractor();
-    const user = new User(userContract, {
-        bangarangClaimInteractor,
-        bangarangMembersInteractor,
-        declaringClaimUserNotificationInteractor: new FakeDeclaringClaimUserNotificationInteractor(),
-        signingInUserNotificationInteractor: new FakeSigningInUserNotificationInteractor(),
-        bangarangUserInterfaceInteractor,
-        retrievingClaimUserNotificationInteractor:new FakeRetrievingClaimUserNotificationInteractor(),
-        searchingClaimsUserNotificationInteractor:new FakeSearchingClaimsUserNotificationInteractor(),
-        claimingUserNotificationInteractor:claimingUserNotificationInteractor
-    });
+    const claimingUserNotificationInteractor = new FakeClaimingUserNotificationInteractor()
+    const user = new UserBuilder()
+        .withUserContract(userContract)
+        .withBangarangClaimInteractor(bangarangClaimInteractor)
+        .withBangarangMemberInteractor(bangarangMembersInteractor)
+        .withBangarangUserInterfaceInteractor(bangarangUserInterfaceInteractor)
+        .withClaimingUserNotificationInteractor(claimingUserNotificationInteractor)
+        .getUser()
     interface Scenario {
         userSignedIn: boolean;
         description:string
