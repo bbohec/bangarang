@@ -44,7 +44,7 @@ describe(`Feature: Claiming
         {
             description:"Scenario: Claiming For",
             userSignedIn:true,
-            expectedClaim: {type:"", title:"claim", peopleClaimed:10, peopleClaimedFor:10, peopleClaimedAgainst:0,id:""},
+            expectedClaim: {type:"Simple", title:"claim", peopleClaimed:10, peopleClaimedFor:10, peopleClaimedAgainst:0,id:""},
             claimDeclared:true,
             userChoice: 'For',
             previousClaimChoice:undefined,
@@ -60,7 +60,7 @@ describe(`Feature: Claiming
         {
             description:"Scenario: Claiming Against",
             userSignedIn:true,
-            expectedClaim:{type:"", title:"claim", peopleClaimed:20, peopleClaimedFor:0, peopleClaimedAgainst:20,id:""},
+            expectedClaim:{type:"Simple", title:"claim", peopleClaimed:20, peopleClaimedFor:0, peopleClaimedAgainst:20,id:""},
             claimDeclared:true,
             userChoice:'Against',
             previousClaimChoice:undefined,
@@ -76,7 +76,7 @@ describe(`Feature: Claiming
         {
             description:"Scenario: Claim not declared on Bangarang",
             userSignedIn:true,
-            expectedClaim:{type:"", title:"claim", peopleClaimed:20, peopleClaimedFor:0, peopleClaimedAgainst:20,id:""},
+            expectedClaim:{type:"Simple", title:"claim", peopleClaimed:20, peopleClaimedFor:0, peopleClaimedAgainst:20,id:""},
             claimDeclared:false,
             userChoice:'Against',
             previousClaimChoice:undefined,
@@ -88,7 +88,7 @@ describe(`Feature: Claiming
         {
             description:"Scenario: User not Signed In",
             userSignedIn:false,
-            expectedClaim:{type:"", title:"claim", peopleClaimed:20, peopleClaimedFor:0, peopleClaimedAgainst:20,id:""},
+            expectedClaim:{type:"Simple", title:"claim", peopleClaimed:20, peopleClaimedFor:0, peopleClaimedAgainst:20,id:""},
             claimDeclared:true,
             userChoice:'Against',
             previousClaimChoice:undefined,
@@ -104,7 +104,7 @@ describe(`Feature: Claiming
         {
             description:"Scenario: Can't claim For multiple times",
             userSignedIn:true,
-            expectedClaim:{type:"", title:"claim", peopleClaimed:9, peopleClaimedFor:9, peopleClaimedAgainst:0,id:""},
+            expectedClaim:{type:"Simple", title:"claim", peopleClaimed:9, peopleClaimedFor:9, peopleClaimedAgainst:0,id:""},
             claimDeclared:true,
             userChoice:'For',
             previousClaimChoice:"For",
@@ -120,7 +120,7 @@ describe(`Feature: Claiming
         {
             description:"Scenario: Can't claim Against multiple times",
             userSignedIn:true,
-            expectedClaim:{type:"", title:"claim", peopleClaimed:9, peopleClaimedFor:9, peopleClaimedAgainst:0,id:""},
+            expectedClaim:{type:"Simple", title:"claim", peopleClaimed:9, peopleClaimedFor:9, peopleClaimedAgainst:0,id:""},
             claimDeclared:true,
             userChoice:"Against",
             previousClaimChoice:"Against",
@@ -136,7 +136,7 @@ describe(`Feature: Claiming
         {
             description:"Scenario: user change claim choice For > Against",
             userSignedIn:true,
-            expectedClaim:{type:"", title:"claim", peopleClaimed:9, peopleClaimedFor:9, peopleClaimedAgainst:0,id:""},
+            expectedClaim:{type:"Simple", title:"claim", peopleClaimed:9, peopleClaimedFor:9, peopleClaimedAgainst:0,id:""},
             claimDeclared:true,
             userChoice:"Against",
             previousClaimChoice:"For",
@@ -152,7 +152,7 @@ describe(`Feature: Claiming
         {
             description:"Scenario: user change claim choice Against > For",
             userSignedIn:true,
-            expectedClaim:{type:"", title:"claim", peopleClaimed:9, peopleClaimedFor:0, peopleClaimedAgainst:9,id:""},
+            expectedClaim:{type:"Simple", title:"claim", peopleClaimed:9, peopleClaimedFor:0, peopleClaimedAgainst:9,id:""},
             claimDeclared:true,
             userChoice:"For",
             previousClaimChoice:"Against",

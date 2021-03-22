@@ -2,7 +2,6 @@ import { RetrievingClaimUserNotificationInteractorContract, RetrievingClaimUserN
 import { retrievingClaimUserNotificationStore } from "../stores/retrievingClaimStore";
 export class SvelteRetrievingClaimUserNotificationInteractor implements RetrievingClaimUserNotificationInteractorContract {
     notify(userNotification: RetrievingClaimUserNotificationContract): void {
-        console.log(userNotification)
         const timeOfClaimRetrievingNotification = 1500
         retrievingClaimUserNotificationStore.set(userNotification)
         setTimeout(()=>retrievingClaimUserNotificationStore.set(idleRetrievingClaimUserNotification),timeOfClaimRetrievingNotification)

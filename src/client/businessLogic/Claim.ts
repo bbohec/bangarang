@@ -1,5 +1,5 @@
 import type { ClaimChoice } from "../port/ClaimChoice";
-import type { ClaimContract } from "../port/ClaimContract";
+import type { ClaimContract, ClaimType } from "../port/ClaimContract";
 import type { BangarangClaimInteractorContract } from "../port/interactors/BangarangClaimInteractorContract";
 import type { BangarangMembersInteractorContract } from "../port/interactors/BangarangMembersInteractorContract";
 
@@ -32,7 +32,7 @@ export class Claim {
         const saveClaim = bangarangClaimInteractor.saveClaim(this)
         const saveMemberClaim = bangarangMembersInteractor.saveMemberClaim({claimTitle:this.title, memberUsername:username, claimChoice})
     }
-    public type: string;
+    public type: ClaimType;
     public title: string;
     public peopleClaimed: number;
     public peopleClaimedFor: number;

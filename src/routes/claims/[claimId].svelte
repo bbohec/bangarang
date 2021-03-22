@@ -2,7 +2,7 @@
     import {currentClaimIdStore} from "../../client/stores/currentClaimIdStore"
 	export async function preload(page:any, session:any) {
         const { claimId } = page.params;
-        let claim:ClaimContractWithMemberPreviousClaimChoice;
+        let claim:ClaimContractWithMemberPreviousClaimChoice|undefined;
         currentClaimIdStore.set(claimId)
         /*currentClaimIdStore.subscribe(claimId => {
             console.log(`retrievingClaimById(${claimId})`)
@@ -21,15 +21,23 @@
                 }
             }
             else {
-                console.log(`retrievingClaimById(${claimId})`)
+                //console.log(`retrievingClaimById(${claimId})`)
                 retrievingClaimById(claimId)
             }
+        })
+        retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => {
+            console.log(retrievingClaimUserNotification)
+            if(retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) {
+                console.log("APPLY CLAIM")
+                claim =retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice
+                console.log(claim)
+            }   
         })
 		return { claim };
 	}
 </script>
 <script lang="ts">
-    export let claim:ClaimContractWithMemberPreviousClaimChoice
+    export let claim:ClaimContractWithMemberPreviousClaimChoice|undefined
     import {claimingUserNotificationStore} from "../../client/stores/claimingStore"
     import {declaringClaimUserNotificationStore} from "../../client/stores/declaringClaimStore"
     import ClaimView from "../../client/views/ClaimView.svelte"
@@ -38,11 +46,17 @@
     import { retrievingClaimById } from "../../client/logic/retrievingClaimById";
     //currentClaimIdStore.set(claim.id)
     claimingUserNotificationStore.subscribe(claimingUserNotification => {
-        if(claimingUserNotification.status === "Success") retrievingClaimById(claim.id)
+        if(claimingUserNotification.status === "Success" && claim) retrievingClaimById(claim.id)
     })
     retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => {
-        if(retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice)
+        console.log(retrievingClaimUserNotification)
+        if(retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) {
+            console.log("APPLY CLAIM")
             claim =retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice
+            console.log(claim)
+        }   
     })
 </script>
-<ClaimView {claim}/>
+{#if claim}
+    <ClaimView {claim}/>
+{/if}

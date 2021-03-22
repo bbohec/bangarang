@@ -34,6 +34,7 @@ uiBangarangUserBuilder
     .registering(demoUserPassword)
 uiBangarangUserBuilder
     .withUserContract(guest)
+    .resetUser()
 
 
 function demoClaims(): Array<ClaimContract> {

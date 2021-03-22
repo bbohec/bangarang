@@ -1,6 +1,5 @@
 # Bangarang — Product Development Log
 - ? Builder placement on clean architecture
-- Typing uuid.
 - Backend
 - Multi-language — /!\ FR /!\
 - Error management
@@ -13,14 +12,22 @@
 - 👉 Doing
 - ✔️ Done
 
+## 2021/03/26 — Day 22
+- Twitch Live Stream https://www.twitch.tv/benjaminbohec
+- Stand Up 
+- ATDD/TDD > Logic Repair
+- Link Business Logic <> UI : UI Adapter
+- Backend
+- Summary.
+
 ## 2021/03/22 — Day 21
 - ✔️ Twitch Live Stream https://www.twitch.tv/benjaminbohec
 - ✔️ Stand Up 
 - ✔️ ATDD/TDD > Clean architecture / Business Logic
     - ✔️ Registering.
     - ✔️ Remove password on User Contract
-- 👉 Link Business Logic <> UI : UI Adapter
-- Summary.
+- ❌ Link Business Logic <> UI : UI Adapter
+- 👉 Summary.
 
 ## 2021/03/19 — Day 20
 - ✔️ Twitch Live Stream https://www.twitch.tv/benjaminbohec

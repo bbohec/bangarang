@@ -304,10 +304,18 @@ const routes = (d => [
 	},
 
 	{
+		// SigningInMenu.svelte
+		pattern: /^\/SigningInMenu\/?$/,
+		parts: [
+			{ i: 3 }
+		]
+	},
+
+	{
 		// DeclareClaim.svelte
 		pattern: /^\/DeclareClaim\/?$/,
 		parts: [
-			{ i: 3 }
+			{ i: 4 }
 		]
 	},
 
@@ -317,7 +325,7 @@ const routes = (d => [
 		parts: [
 			null,
 			null,
-			{ i: 4, params: match => ({ audience: d(match[1]), landingPageId: d(match[2]) }) }
+			{ i: 5, params: match => ({ audience: d(match[1]), landingPageId: d(match[2]) }) }
 		]
 	},
 
@@ -325,21 +333,13 @@ const routes = (d => [
 		// LeanCanvas.svelte
 		pattern: /^\/LeanCanvas\/?$/,
 		parts: [
-			{ i: 5 }
+			{ i: 6 }
 		]
 	},
 
 	{
 		// MainMenu.svelte
 		pattern: /^\/MainMenu\/?$/,
-		parts: [
-			{ i: 6 }
-		]
-	},
-
-	{
-		// SignIn.svelte
-		pattern: /^\/SignIn\/?$/,
 		parts: [
 			{ i: 7 }
 		]
@@ -537,7 +537,6 @@ const badCredentialsSigningInNotification = { status: "Failed", message: "Bad cr
 const idleDeclaringClaimUserNotification = { status: "Idle", message: "Waiting for claim declaration event.", type: "Declaring claim." };
 const successDeclaringClaimUserNotification = { status: "Success", message: "Declared.", type: "Declaring claim." };
 const claimWithoutTitleDeclaringClaimUserNotification = { status: "Failed", message: "A claim must have a title.", type: "Declaring claim." };
-const claimWithoutTypeDeclaringClaimUserNotification = { status: "Failed", message: "A claim must have a type.", type: "Declaring claim." };
 const claimAlreadyExistDeclaringClaimUserNotification = (claimTitle) => ({ status: "Failed", message: `The claim "${claimTitle}" already exist`, type: "Declaring claim." });
 
 const idleRetrievingClaimUserNotification = { status: "Idle", message: "Waiting for retrieving claim event.", type: "Retrieving claim." };
@@ -709,8 +708,7 @@ class User {
     declaringClaim(claimTitle, claimType, claimId) {
         if (claimTitle === "")
             this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(claimWithoutTitleDeclaringClaimUserNotification);
-        else if (claimType === "")
-            this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(claimWithoutTypeDeclaringClaimUserNotification);
+        //else if (claimType === "")this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(claimWithoutTypeDeclaringClaimUserNotification)
         else {
             if (!this.bangarangAdapters.bangarangClaimInteractor.isClaimExistByTitleUpperCase(claimTitle)) {
                 this.bangarangAdapters.bangarangClaimInteractor.saveClaim({ title: claimTitle, type: claimType, peopleClaimed: 0, peopleClaimedFor: 0, peopleClaimedAgainst: 0, id: claimId });
@@ -738,8 +736,8 @@ class User {
     }
 }
 
-function bangarangClaimNotFound(title) {
-    return `Claim with title ${title} not found.`;
+function bangarangClaimNotFound(id) {
+    return `Claim with id ${id} not found.`;
 }
 
 class FakeBangarangClaimInteractor {
@@ -759,11 +757,11 @@ class FakeBangarangClaimInteractor {
     retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(searchCriteriaWords) {
         return this.declaredClaims.filter(claim => searchCriteriaWords.some(searchCriteriaWord => claim.title.toLowerCase().includes(searchCriteriaWord)));
     }
-    claimById(title) {
-        const claimFound = this.findClaimByTitleUpperCase(title);
+    claimById(id) {
+        const claimFound = this.declaredClaims.find(declaredClaim => declaredClaim.id === id);
         if (claimFound)
             return claimFound;
-        return new Error(bangarangClaimNotFound(title));
+        return new Error(bangarangClaimNotFound(id));
     }
     declareClaim(claim) {
         this.declaredClaims.push(claim);
@@ -1039,8 +1037,7 @@ class SvelteSigningInUserNotificationInteractor {
 
 const bangarangMembersInteractor = new FakeBangarangMembersInteractor();
 const bangarangClaimInteractor = new FakeBangarangClaimInteractor();
-const claims = new Array();
-bangarangClaimInteractor.declaredClaims = claims;
+demoClaims().forEach(claim => bangarangClaimInteractor.saveClaim(claim));
 const uiBangarangUserBuilder = new UserBuilder()
     .withBangarangClaimInteractor(bangarangClaimInteractor)
     .withBangarangMembersInteractor(bangarangMembersInteractor)
@@ -1058,138 +1055,145 @@ uiBangarangUserBuilder
     .getUser()
     .registering(demoUserPassword);
 uiBangarangUserBuilder
-    .withUserContract(guest);
-claims.push({
-    peopleClaimed: 10,
-    peopleClaimedAgainst: 9,
-    peopleClaimedFor: 1,
-    title: "MonResto only offers meat in its menus, he needs at least one menu with only Vegan ingredients.",
-    id: "claim1",
-    type: "Simple"
-});
-claims.push({
-    peopleClaimed: 3215575,
-    peopleClaimedAgainst: 1227755,
-    peopleClaimedFor: 1987820,
-    title: "Does MonResto offer too much meat in its menus?",
-    id: "claim2",
-    type: "Simple"
-});
-claims.push({
-    peopleClaimed: 10,
-    peopleClaimedAgainst: 9,
-    peopleClaimedFor: 1,
-    title: "PasMonResto does not offer meat.",
-    id: "claim3",
-    type: "Simple"
-});
-claims.push({
-    peopleClaimed: 10,
-    peopleClaimedAgainst: 9,
-    peopleClaimedFor: 1,
-    title: "What are the conditions of validity of an article of the constitution of the Awesome App team?",
-    id: "claim4",
-    type: "Simple"
-});
-claims.push({
-    peopleClaimed: 10,
-    peopleClaimedAgainst: 9,
-    peopleClaimedFor: 1,
-    title: "Thundercats are on the move, Thundercats are loose. Feel the magic, hear the roar, Thundercats are loose. Thunder, thunder, thunder, Thundercats! Thunder, thunder, thunder, Thundercats! Thunder, thunder, thunder, Thundercats! Thunder, thunder, thunder, Thundercats! Thundercats! ",
-    id: "claim5",
-    type: "Simple"
-});
-claims.push({
-    peopleClaimed: 10,
-    peopleClaimedAgainst: 9,
-    peopleClaimedFor: 1,
-    title: "Top Cat! The most effectual Top Cat! Who’s intellectual close friends get to call him T.C., providing it’s with dignity. Top Cat! The indisputable leader of the gang. He’s the boss, he’s a pip, he’s the championship. He’s the most tip top, Top Cat. ",
-    id: "claim6",
-    type: "Simple"
-});
-claims.push({
-    peopleClaimed: 10,
-    peopleClaimedAgainst: 9,
-    peopleClaimedFor: 1,
-    title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a lorem vitae sem viverra consequat. Nam a nisl volutpat, suscipit ipsum vitae, feugiat tellus. Vivamus in facilisis dolor. Proin id euismod nisl. Vestibulum a ligula arcu. Ut nec urna convallis, facilisis sem vel, viverra magna. Curabitur vitae augue non urna cursus iaculis.",
-    id: "claim7",
-    type: "Simple"
-});
-claims.push({
-    peopleClaimed: 10,
-    peopleClaimedAgainst: 9,
-    peopleClaimedFor: 1,
-    title: "In eu nulla quam. Vestibulum vulputate vestibulum dolor, nec bibendum urna interdum nec. Nulla dapibus auctor odio eu finibus. Cras finibus ante ac leo suscipit, eget pulvinar libero dignissim. Cras pulvinar aliquet est. Etiam a facilisis augue. Donec sit amet nisl diam. Phasellus sed vehicula metus. Suspendisse magna purus, finibus et aliquet eget, mattis id velit. Aenean tincidunt nec neque nec semper. Integer rutrum ac sem vitae lobortis. Etiam vitae iaculis dui. Phasellus fringilla elit quis metus fringilla, vitae mollis neque finibus.",
-    id: "claim8",
-    type: "Simple"
-});
-claims.push({
-    peopleClaimed: 10,
-    peopleClaimedAgainst: 9,
-    type: "Simple",
-    peopleClaimedFor: 1,
-    title: "Curabitur pulvinar pretium ex et accumsan. Nam fringilla ultrices sagittis. Suspendisse elementum nisi sed eros aliquet, ut congue nibh ornare. Nullam tincidunt eleifend libero, et iaculis libero pellentesque id. Integer sit amet urna vel leo malesuada ultrices. Aliquam vulputate, eros vel vestibulum mollis, tortor nulla laoreet purus, nec aliquam velit nunc vel quam. Cras vel ex dui. Duis ut nulla gravida, sodales lorem vitae, ornare enim. Cras sodales ligula sed eleifend ullamcorper. Aliquam tempus, libero eget consectetur laoreet, est purus facilisis sem, sit amet venenatis lorem massa vitae lorem. Etiam sit amet aliquet odio. Nulla et eros id nibh eleifend vestibulum nec vel dolor. Nulla commodo nulla vitae sem interdum, sit amet blandit velit elementum.", id: "claim9"
-});
-claims.push({
-    peopleClaimed: 10,
-    peopleClaimedAgainst: 9,
-    type: "Simple",
-    peopleClaimedFor: 1,
-    id: "claim11", title: "Etiam enim ligula, blandit in congue at, vulputate quis metus. Donec eu ullamcorper quam. Donec vitae lectus ac dolor finibus aliquet vel ac est. Quisque orci nibh, dictum in interdum ut, faucibus eu justo. Donec lobortis mauris id tellus ullamcorper, et porta mi varius. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer sodales felis a neque rutrum, sit amet pharetra nisl luctus. In vehicula iaculis risus nec tempus. Nunc interdum congue condimentum. Nulla sodales porta lectus nec pretium."
-});
-claims.push({
-    peopleClaimed: 10,
-    peopleClaimedAgainst: 9,
-    type: "Simple",
-    peopleClaimedFor: 1,
-    id: "claim12", title: "Sed lacinia nulla sed sapien mollis consequat. Nulla finibus eleifend metus, in dictum justo iaculis semper. Praesent sed est pellentesque, vulputate mi ut, vehicula leo. Aenean tempus egestas laoreet. Aenean rutrum placerat urna, non luctus est commodo sed. Mauris nec tristique ipsum. Nulla facilisi. Etiam a tristique quam, eu sagittis elit."
-});
-claims.push({
-    peopleClaimed: 10,
-    peopleClaimedAgainst: 9,
-    type: "Simple",
-    peopleClaimedFor: 1,
-    id: "claim13", title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vel leo quam. Integer sit amet tempor turpis. Aenean quis ex mollis, vulputate nunc quis, pulvinar ligula. Morbi luctus sem ac tortor mattis, sed semper magna rhoncus. Proin aliquam nisi eu mi feugiat blandit. Maecenas interdum eros tortor, sit amet posuere turpis dictum a. In ac arcu tincidunt, bibendum odio rutrum, mattis libero. Curabitur euismod, ipsum id tincidunt vehicula, justo metus lacinia dui, vel sodales tellus mi a leo."
-});
-claims.push({
-    peopleClaimed: 10,
-    peopleClaimedAgainst: 9,
-    type: "Simple",
-    peopleClaimedFor: 1,
-    id: "claim14", title: "Quisque porttitor, metus quis tincidunt convallis, mi dui tristique urna, eu ornare neque lorem nec libero. Nullam ut pharetra dui, eget sollicitudin arcu. Donec sollicitudin arcu eu faucibus fringilla. Integer vitae pellentesque nulla, eget feugiat turpis. Aliquam id porttitor ex, ut vulputate nibh. Morbi quam ante, aliquet a tellus in, molestie tempus massa. Integer mollis turpis quis felis fringilla, ut dapibus orci aliquam. Nullam faucibus, erat eu vehicula bibendum, est ipsum scelerisque magna, posuere tempor libero mauris ac purus. Vestibulum pulvinar ante lectus, sollicitudin congue mauris sodales id. Duis porttitor ultricies lorem at tincidunt. Sed iaculis aliquet consectetur."
-});
-claims.push({
-    peopleClaimed: 10,
-    peopleClaimedAgainst: 9,
-    type: "Simple",
-    peopleClaimedFor: 1,
-    id: "claim15", title: "Nulla eu magna augue. In mattis diam non felis efficitur, id semper libero aliquet. Nunc at ex nec orci pretium fringilla sed sit amet nibh. Duis id lobortis nulla. Aenean vitae purus tempus, tristique justo et, semper felis. Vestibulum in pretium dolor. Curabitur accumsan, nisi nec pretium dignissim, tellus augue luctus arcu, nec ultricies ligula lorem bibendum mauris. Phasellus at massa ante. Phasellus tincidunt placerat nisi, et accumsan dui consectetur aliquam. Etiam ultrices, velit ac euismod consectetur, ligula nunc imperdiet leo, ut laoreet erat velit ultrices ipsum. Proin non augue sapien. Phasellus sagittis ut elit at dictum. Nam malesuada eleifend cursus. Curabitur iaculis dolor vitae massa molestie, sed convallis velit dictum."
-});
-claims.push({
-    peopleClaimed: 10,
-    peopleClaimedAgainst: 9,
-    type: "Simple",
-    peopleClaimedFor: 1,
-    id: "claim16", title: "Donec ullamcorper ut arcu eget rutrum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Phasellus nec ipsum pretium, sagittis nisi ut, volutpat sem. Integer rhoncus, leo eu feugiat hendrerit, massa purus varius lectus, id pharetra augue purus id justo. Suspendisse est diam, scelerisque ut commodo et, sollicitudin quis elit. Donec vestibulum tristique consectetur. Suspendisse eleifend pellentesque ipsum, vel mollis lacus luctus in."
-});
-claims.push({
-    peopleClaimed: 10,
-    peopleClaimedAgainst: 9,
-    type: "Simple",
-    peopleClaimedFor: 1,
-    id: "claim17", title: "Donec ac euismod justo. Cras consequat, orci non pellentesque gravida, dolor urna porta nisi, ut luctus odio enim nec nibh. Phasellus vestibulum sapien non arcu porta suscipit. Duis consequat est dui, in rutrum diam varius vel. Cras iaculis, augue vel feugiat mollis, elit nulla imperdiet arcu, quis sagittis diam metus et lorem. Aenean sit amet finibus quam, ut sagittis dolor. Nulla ac hendrerit turpis, at lobortis risus. Phasellus nec magna ut sapien faucibus consequat. Interdum et malesuada fames ac ante ipsum primis in faucibus."
-});
-claims.push({
-    peopleClaimed: 10,
-    peopleClaimedAgainst: 9,
-    type: "Simple",
-    peopleClaimedFor: 1,
-    id: "claim18", title: "Sed ultrices, lorem eleifend sagittis ultrices, purus lorem fringilla neque, at vulputate magna augue id erat. Ut pulvinar lacus vel dui mattis eleifend. Donec sit amet arcu mattis, sagittis purus quis, consequat augue. Curabitur risus orci, malesuada id gravida et, maximus id arcu. Nullam tristique euismod diam non imperdiet. Donec congue auctor erat, sit amet blandit tortor condimentum at. Curabitur lacinia purus a libero laoreet tristique. Donec aliquam, augue sed efficitur porttitor, mauris massa blandit quam, id venenatis tortor massa ac lectus. Ut tempus rhoncus urna vitae pharetra. Sed ullamcorper pretium nibh, eget pharetra neque cursus nec. Aliquam quis nibh id orci euismod accumsan. Maecenas dictum neque odio. Morbi eget ante feugiat, rutrum metus nec, lacinia metus. Suspendisse mollis, libero quis placerat luctus, erat libero dapibus ante, sed fringilla nulla felis eu purus. Vivamus non consectetur ipsum, in ullamcorper est. Nunc odio arcu, auctor ut elit sed, suscipit vehicula nulla."
-});
+    .withUserContract(guest)
+    .resetUser();
+function demoClaims() {
+    const claims = new Array();
+    claims.push({
+        peopleClaimed: 10,
+        peopleClaimedAgainst: 9,
+        peopleClaimedFor: 1,
+        title: "MonResto only offers meat in its menus, he needs at least one menu with only Vegan ingredients.",
+        id: "claim1",
+        type: "Simple"
+    });
+    claims.push({
+        peopleClaimed: 3215575,
+        peopleClaimedAgainst: 1227755,
+        peopleClaimedFor: 1987820,
+        title: "Does MonResto offer too much meat in its menus?",
+        id: "claim2",
+        type: "Simple"
+    });
+    claims.push({
+        peopleClaimed: 10,
+        peopleClaimedAgainst: 9,
+        peopleClaimedFor: 1,
+        title: "PasMonResto does not offer meat.",
+        id: "claim3",
+        type: "Simple"
+    });
+    claims.push({
+        peopleClaimed: 10,
+        peopleClaimedAgainst: 9,
+        peopleClaimedFor: 1,
+        title: "What are the conditions of validity of an article of the constitution of the Awesome App team?",
+        id: "claim4",
+        type: "Simple"
+    });
+    claims.push({
+        peopleClaimed: 10,
+        peopleClaimedAgainst: 9,
+        peopleClaimedFor: 1,
+        title: "Thundercats are on the move, Thundercats are loose. Feel the magic, hear the roar, Thundercats are loose. Thunder, thunder, thunder, Thundercats! Thunder, thunder, thunder, Thundercats! Thunder, thunder, thunder, Thundercats! Thunder, thunder, thunder, Thundercats! Thundercats! ",
+        id: "claim5",
+        type: "Simple"
+    });
+    claims.push({
+        peopleClaimed: 10,
+        peopleClaimedAgainst: 9,
+        peopleClaimedFor: 1,
+        title: "Top Cat! The most effectual Top Cat! Who’s intellectual close friends get to call him T.C., providing it’s with dignity. Top Cat! The indisputable leader of the gang. He’s the boss, he’s a pip, he’s the championship. He’s the most tip top, Top Cat. ",
+        id: "claim6",
+        type: "Simple"
+    });
+    claims.push({
+        peopleClaimed: 10,
+        peopleClaimedAgainst: 9,
+        peopleClaimedFor: 1,
+        title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a lorem vitae sem viverra consequat. Nam a nisl volutpat, suscipit ipsum vitae, feugiat tellus. Vivamus in facilisis dolor. Proin id euismod nisl. Vestibulum a ligula arcu. Ut nec urna convallis, facilisis sem vel, viverra magna. Curabitur vitae augue non urna cursus iaculis.",
+        id: "claim7",
+        type: "Simple"
+    });
+    claims.push({
+        peopleClaimed: 10,
+        peopleClaimedAgainst: 9,
+        peopleClaimedFor: 1,
+        title: "In eu nulla quam. Vestibulum vulputate vestibulum dolor, nec bibendum urna interdum nec. Nulla dapibus auctor odio eu finibus. Cras finibus ante ac leo suscipit, eget pulvinar libero dignissim. Cras pulvinar aliquet est. Etiam a facilisis augue. Donec sit amet nisl diam. Phasellus sed vehicula metus. Suspendisse magna purus, finibus et aliquet eget, mattis id velit. Aenean tincidunt nec neque nec semper. Integer rutrum ac sem vitae lobortis. Etiam vitae iaculis dui. Phasellus fringilla elit quis metus fringilla, vitae mollis neque finibus.",
+        id: "claim8",
+        type: "Simple"
+    });
+    claims.push({
+        peopleClaimed: 10,
+        peopleClaimedAgainst: 9,
+        type: "Simple",
+        peopleClaimedFor: 1,
+        title: "Curabitur pulvinar pretium ex et accumsan. Nam fringilla ultrices sagittis. Suspendisse elementum nisi sed eros aliquet, ut congue nibh ornare. Nullam tincidunt eleifend libero, et iaculis libero pellentesque id. Integer sit amet urna vel leo malesuada ultrices. Aliquam vulputate, eros vel vestibulum mollis, tortor nulla laoreet purus, nec aliquam velit nunc vel quam. Cras vel ex dui. Duis ut nulla gravida, sodales lorem vitae, ornare enim. Cras sodales ligula sed eleifend ullamcorper. Aliquam tempus, libero eget consectetur laoreet, est purus facilisis sem, sit amet venenatis lorem massa vitae lorem. Etiam sit amet aliquet odio. Nulla et eros id nibh eleifend vestibulum nec vel dolor. Nulla commodo nulla vitae sem interdum, sit amet blandit velit elementum.", id: "claim9"
+    });
+    claims.push({
+        peopleClaimed: 10,
+        peopleClaimedAgainst: 9,
+        type: "Simple",
+        peopleClaimedFor: 1,
+        id: "claim11", title: "Etiam enim ligula, blandit in congue at, vulputate quis metus. Donec eu ullamcorper quam. Donec vitae lectus ac dolor finibus aliquet vel ac est. Quisque orci nibh, dictum in interdum ut, faucibus eu justo. Donec lobortis mauris id tellus ullamcorper, et porta mi varius. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer sodales felis a neque rutrum, sit amet pharetra nisl luctus. In vehicula iaculis risus nec tempus. Nunc interdum congue condimentum. Nulla sodales porta lectus nec pretium."
+    });
+    claims.push({
+        peopleClaimed: 10,
+        peopleClaimedAgainst: 9,
+        type: "Simple",
+        peopleClaimedFor: 1,
+        id: "claim12", title: "Sed lacinia nulla sed sapien mollis consequat. Nulla finibus eleifend metus, in dictum justo iaculis semper. Praesent sed est pellentesque, vulputate mi ut, vehicula leo. Aenean tempus egestas laoreet. Aenean rutrum placerat urna, non luctus est commodo sed. Mauris nec tristique ipsum. Nulla facilisi. Etiam a tristique quam, eu sagittis elit."
+    });
+    claims.push({
+        peopleClaimed: 10,
+        peopleClaimedAgainst: 9,
+        type: "Simple",
+        peopleClaimedFor: 1,
+        id: "claim13", title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vel leo quam. Integer sit amet tempor turpis. Aenean quis ex mollis, vulputate nunc quis, pulvinar ligula. Morbi luctus sem ac tortor mattis, sed semper magna rhoncus. Proin aliquam nisi eu mi feugiat blandit. Maecenas interdum eros tortor, sit amet posuere turpis dictum a. In ac arcu tincidunt, bibendum odio rutrum, mattis libero. Curabitur euismod, ipsum id tincidunt vehicula, justo metus lacinia dui, vel sodales tellus mi a leo."
+    });
+    claims.push({
+        peopleClaimed: 10,
+        peopleClaimedAgainst: 9,
+        type: "Simple",
+        peopleClaimedFor: 1,
+        id: "claim14", title: "Quisque porttitor, metus quis tincidunt convallis, mi dui tristique urna, eu ornare neque lorem nec libero. Nullam ut pharetra dui, eget sollicitudin arcu. Donec sollicitudin arcu eu faucibus fringilla. Integer vitae pellentesque nulla, eget feugiat turpis. Aliquam id porttitor ex, ut vulputate nibh. Morbi quam ante, aliquet a tellus in, molestie tempus massa. Integer mollis turpis quis felis fringilla, ut dapibus orci aliquam. Nullam faucibus, erat eu vehicula bibendum, est ipsum scelerisque magna, posuere tempor libero mauris ac purus. Vestibulum pulvinar ante lectus, sollicitudin congue mauris sodales id. Duis porttitor ultricies lorem at tincidunt. Sed iaculis aliquet consectetur."
+    });
+    claims.push({
+        peopleClaimed: 10,
+        peopleClaimedAgainst: 9,
+        type: "Simple",
+        peopleClaimedFor: 1,
+        id: "claim15", title: "Nulla eu magna augue. In mattis diam non felis efficitur, id semper libero aliquet. Nunc at ex nec orci pretium fringilla sed sit amet nibh. Duis id lobortis nulla. Aenean vitae purus tempus, tristique justo et, semper felis. Vestibulum in pretium dolor. Curabitur accumsan, nisi nec pretium dignissim, tellus augue luctus arcu, nec ultricies ligula lorem bibendum mauris. Phasellus at massa ante. Phasellus tincidunt placerat nisi, et accumsan dui consectetur aliquam. Etiam ultrices, velit ac euismod consectetur, ligula nunc imperdiet leo, ut laoreet erat velit ultrices ipsum. Proin non augue sapien. Phasellus sagittis ut elit at dictum. Nam malesuada eleifend cursus. Curabitur iaculis dolor vitae massa molestie, sed convallis velit dictum."
+    });
+    claims.push({
+        peopleClaimed: 10,
+        peopleClaimedAgainst: 9,
+        type: "Simple",
+        peopleClaimedFor: 1,
+        id: "claim16", title: "Donec ullamcorper ut arcu eget rutrum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Phasellus nec ipsum pretium, sagittis nisi ut, volutpat sem. Integer rhoncus, leo eu feugiat hendrerit, massa purus varius lectus, id pharetra augue purus id justo. Suspendisse est diam, scelerisque ut commodo et, sollicitudin quis elit. Donec vestibulum tristique consectetur. Suspendisse eleifend pellentesque ipsum, vel mollis lacus luctus in."
+    });
+    claims.push({
+        peopleClaimed: 10,
+        peopleClaimedAgainst: 9,
+        type: "Simple",
+        peopleClaimedFor: 1,
+        id: "claim17", title: "Donec ac euismod justo. Cras consequat, orci non pellentesque gravida, dolor urna porta nisi, ut luctus odio enim nec nibh. Phasellus vestibulum sapien non arcu porta suscipit. Duis consequat est dui, in rutrum diam varius vel. Cras iaculis, augue vel feugiat mollis, elit nulla imperdiet arcu, quis sagittis diam metus et lorem. Aenean sit amet finibus quam, ut sagittis dolor. Nulla ac hendrerit turpis, at lobortis risus. Phasellus nec magna ut sapien faucibus consequat. Interdum et malesuada fames ac ante ipsum primis in faucibus."
+    });
+    claims.push({
+        peopleClaimed: 10,
+        peopleClaimedAgainst: 9,
+        type: "Simple",
+        peopleClaimedFor: 1,
+        id: "claim18", title: "Sed ultrices, lorem eleifend sagittis ultrices, purus lorem fringilla neque, at vulputate magna augue id erat. Ut pulvinar lacus vel dui mattis eleifend. Donec sit amet arcu mattis, sagittis purus quis, consequat augue. Curabitur risus orci, malesuada id gravida et, maximus id arcu. Nullam tristique euismod diam non imperdiet. Donec congue auctor erat, sit amet blandit tortor condimentum at. Curabitur lacinia purus a libero laoreet tristique. Donec aliquam, augue sed efficitur porttitor, mauris massa blandit quam, id venenatis tortor massa ac lectus. Ut tempus rhoncus urna vitae pharetra. Sed ullamcorper pretium nibh, eget pharetra neque cursus nec. Aliquam quis nibh id orci euismod accumsan. Maecenas dictum neque odio. Morbi eget ante feugiat, rutrum metus nec, lacinia metus. Suspendisse mollis, libero quis placerat luctus, erat libero dapibus ante, sed fringilla nulla felis eu purus. Vivamus non consectetur ipsum, in ullamcorper est. Nunc odio arcu, auctor ut elit sed, suscipit vehicula nulla."
+    });
+    return claims;
+}
 
 const searchingClaims = (searchCriteria) => {
     searchingClaimsUserNotificationStore.set(executingSearchingClaimsUserNotification);
-    setTimeout(() => uiBangarangUserBuilder.getUser().searchingClaims(searchCriteria), searchingClaimsFakeWaitingTime);
+    setTimeout(() => {
+        uiBangarangUserBuilder.getUser().searchingClaims(searchCriteria);
+    }, searchingClaimsFakeWaitingTime);
 };
 const searchingClaimsFakeWaitingTime = 500;
 
@@ -1404,7 +1408,7 @@ const MainMenu = create_ssr_component(($$result, $$props, $$bindings, slots) => 
 	: `${validate_component(SearchClaimsView, "SearchClaimsView").$$render($$result, {}, {}, {})}`}`;
 });
 
-var component_6 = /*#__PURE__*/Object.freeze({
+var component_7 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     'default': MainMenu
 });
@@ -1801,6 +1805,180 @@ var component_2 = /*#__PURE__*/Object.freeze({
     'default': BusinessModel
 });
 
+/* src\client\components\Headers\SignInHeader.svelte generated by Svelte v3.34.0 */
+
+const SignInHeader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	const user = uiBangarangUserBuilder.getUser();
+
+	return `<header class="${"flex flex-col flex-grow justify-center items-center content-center mx-auto max-w-screen-2xl"}">${validate_component(WelcomeTitle, "WelcomeTitle").$$render($$result, {}, {}, {})}
+    ${user.username !== ""
+	? `<h2 class="${"text-2xl text-bangarang-darkEmphasis my-1"}">${escape(user.username)}</h2>`
+	: ``}</header>`;
+});
+
+const signingIn = (userInputUsername, userInputPassword) => {
+    signingInNotificationStore.set(executingSigningInNotification);
+    setTimeout(() => {
+        //connectedUserStore.set({id:"0",username:"johnDoe"})
+        uiBangarangUserBuilder
+            .withUserContract({ username: userInputUsername, fullname: "", email: "" })
+            .resetUser()
+            .signingIn(userInputPassword);
+    }, signInFakeWaitingTime);
+};
+const signInFakeWaitingTime = 500;
+
+/* src\client\components\Sections\SignInSection.svelte generated by Svelte v3.34.0 */
+
+const SignInSection = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $signingInNotificationStore, $$unsubscribe_signingInNotificationStore;
+	$$unsubscribe_signingInNotificationStore = subscribe(signingInNotificationStore, value => $signingInNotificationStore = value);
+	let userInputUsername = "";
+	let userInputPassword = "";
+	const onClickSignInButton = () => signingIn(userInputUsername, userInputPassword);
+	$$unsubscribe_signingInNotificationStore();
+
+	return `<p class="${"text-bangarang-lightEmphasis"}">Sign into your account</p>
+${$signingInNotificationStore.status === "Executing"
+	? `<input class="${"text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}" type="${"text"}" placeholder="${"Username ..."}" readonly${add_attribute("value", userInputUsername, 1)}>
+    <input class="${"text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}" type="${"password"}" placeholder="${"Password ..."}" readonly${add_attribute("value", userInputPassword, 1)}>
+    ${validate_component(GenericButton, "GenericButton").$$render(
+			$$result,
+			{
+				textbutton: "Sign in",
+				onClickAction: onClickSignInButton,
+				disabled: true
+			},
+			{},
+			{}
+		)}`
+	: `<input class="${"text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}" type="${"text"}" placeholder="${"Username ..."}"${add_attribute("value", userInputUsername, 1)}>
+    <input class="${"text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}" type="${"password"}" placeholder="${"Password ..."}"${add_attribute("value", userInputPassword, 1)}>
+    ${``}`}`;
+});
+
+/* src\client\components\Mains\SignInMain.svelte generated by Svelte v3.34.0 */
+
+const SignInMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	const user = uiBangarangUserBuilder.getUser();
+
+	return `${user.username === ""
+	? `<main class="${"flex flex-col flex-grow items-center"}">${validate_component(SignInSection, "SignInSection").$$render($$result, {}, {}, {})}</main>`
+	: `<main class="${"flex flex-col items-center my-10 mx-auto max-w-screen-2xl"}"><p class="${"invisible"}">SignOut</p></main>`}`;
+});
+
+/* src\client\components\Icons\Spinner.svelte generated by Svelte v3.34.0 */
+
+const Spinner = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `
+<svg class="${"stroke-current text-bangarang-lightEmphasis w-10 h-10"}" width="${"45"}" height="${"45"}" viewBox="${"0 0 45 45"}" xmlns="${"http://www.w3.org/2000/svg"}"><g fill="${"none"}" fill-rule="${"evenodd"}" transform="${"translate(1 1)"}" stroke-width="${"2"}"><circle cx="${"22"}" cy="${"22"}" r="${"6"}" stroke-opacity="${"0"}"><animate attributeName="${"r"}" begin="${"1.5s"}" dur="${"3s"}" values="${"6;22"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate><animate attributeName="${"stroke-opacity"}" begin="${"1.5s"}" dur="${"3s"}" values="${"1;0"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate><animate attributeName="${"stroke-width"}" begin="${"1.5s"}" dur="${"3s"}" values="${"2;0"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate></circle><circle cx="${"22"}" cy="${"22"}" r="${"6"}" stroke-opacity="${"0"}"><animate attributeName="${"r"}" begin="${"3s"}" dur="${"3s"}" values="${"6;22"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate><animate attributeName="${"stroke-opacity"}" begin="${"3s"}" dur="${"3s"}" values="${"1;0"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate><animate attributeName="${"stroke-width"}" begin="${"3s"}" dur="${"3s"}" values="${"2;0"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate></circle><circle cx="${"22"}" cy="${"22"}" r="${"8"}"><animate attributeName="${"r"}" begin="${"0s"}" dur="${"1.5s"}" values="${"6;1;2;3;4;5;6"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate></circle></g></svg>`;
+});
+
+/* src\client\components\Icons\Success.svelte generated by Svelte v3.34.0 */
+
+const Success = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `<svg class="${"w-6 h-6 stroke-current text-bangarang-success"}" fill="${"currentColor"}" viewBox="${"0 0 20 20"}" xmlns="${"http://www.w3.org/2000/svg"}"><path fill-rule="${"evenodd"}" d="${"M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"}" clip-rule="${"evenodd"}"></path></svg>`;
+});
+
+/* src\client\components\Icons\Failed.svelte generated by Svelte v3.34.0 */
+
+const Failed = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `<svg class="${"w-6 h-6 stroke-current text-bangarang-failed"}" xmlns="${"http://www.w3.org/2000/svg"}" viewBox="${"0 0 20 20"}" fill="${"currentColor"}"><path fill-rule="${"evenodd"}" d="${"M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"}" clip-rule="${"evenodd"}"></path></svg>`;
+});
+
+/* src\client\components\Notification\GenericTaskNotification.svelte generated by Svelte v3.34.0 */
+
+const GenericTaskNotification = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	
+	let { taskNotification } = $$props;
+	if ($$props.taskNotification === void 0 && $$bindings.taskNotification && taskNotification !== void 0) $$bindings.taskNotification(taskNotification);
+
+	return `${taskNotification.status === "Executing"
+	? `<p class="${"text-right text-bangarang-lightEmphasis flex items-center justify-end"}">${escape(taskNotification.message)}${validate_component(Spinner, "Spinner").$$render($$result, {}, {}, {})}</p>`
+	: `${taskNotification.status === "Success"
+		? `<p class="${"text-right text-bangarang-lightEmphasis flex items-center justify-end"}">${escape(taskNotification.message)}${validate_component(Success, "Success").$$render($$result, {}, {}, {})}</p>`
+		: `${taskNotification.status === "Failed"
+			? `<p class="${"text-right text-bangarang-lightEmphasis flex items-center justify-end"}">${escape(taskNotification.message)}${validate_component(Failed, "Failed").$$render($$result, {}, {}, {})}</p>`
+			: ``}`}`}`;
+});
+
+/* src\client\components\Notification\SignInInformation.svelte generated by Svelte v3.34.0 */
+
+const SignInInformation = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $signingInNotificationStore, $$unsubscribe_signingInNotificationStore;
+	$$unsubscribe_signingInNotificationStore = subscribe(signingInNotificationStore, value => $signingInNotificationStore = value);
+	$$unsubscribe_signingInNotificationStore();
+
+	return `${validate_component(GenericTaskNotification, "GenericTaskNotification").$$render(
+		$$result,
+		{
+			taskNotification: $signingInNotificationStore
+		},
+		{},
+		{}
+	)}`;
+});
+
+const currentClaimIdStore = writable(undefined);
+
+/* src\client\components\Footers\SignInFooter.svelte generated by Svelte v3.34.0 */
+
+const SignInFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $signingInNotificationStore, $$unsubscribe_signingInNotificationStore;
+	$$unsubscribe_signingInNotificationStore = subscribe(signingInNotificationStore, value => $signingInNotificationStore = value);
+	let currentClaimId = undefined;
+	currentClaimIdStore.subscribe(currentClaimIdFromStore => currentClaimId = currentClaimIdFromStore);
+
+	const linkFromCurrentClaimId = currentClaimId => {
+		if (currentClaimId === undefined) return {
+			href: links.MainMenu,
+			name: "<< Back to main menu."
+		};
+
+		return {
+			href: linkPrefixes.claimLinkPrefix + currentClaimId,
+			name: "<< Back to the claim."
+		};
+	};
+
+	$$unsubscribe_signingInNotificationStore();
+
+	return `<footer class="${"flex flex-col p-1 mx-auto max-w-screen-2xl"}">${$signingInNotificationStore.status === "Executing"
+	? `${validate_component(SignInInformation, "SignInInformation").$$render($$result, {}, {}, {})}`
+	: `<section class="${"flex justify-center items-center"}"></section>
+        <section class="${"flex justify-between items-center"}">${validate_component(Link, "Link").$$render(
+			$$result,
+			{
+				size: "small",
+				linkHref: linkFromCurrentClaimId(currentClaimId).href,
+				linkName: linkFromCurrentClaimId(currentClaimId).name,
+				textAlign: "text-left"
+			},
+			{},
+			{}
+		)}
+            ${validate_component(SignInInformation, "SignInInformation").$$render($$result, {}, {}, {})}</section>`}</footer>`;
+});
+
+/* src\client\views\SignInView.svelte generated by Svelte v3.34.0 */
+
+const SignInView = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `${validate_component(SignInHeader, "SignInHeader").$$render($$result, {}, {}, {})}
+${validate_component(SignInMain, "SignInMain").$$render($$result, {}, {}, {})}
+${validate_component(SignInFooter, "SignInFooter").$$render($$result, {}, {}, {})}`;
+});
+
+/* src\routes\SigningInMenu.svelte generated by Svelte v3.34.0 */
+
+const SigningInMenu = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `${validate_component(SignInView, "SignInView").$$render($$result, {}, {}, {})}`;
+});
+
+var component_3 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    'default': SigningInMenu
+});
+
 /* src\client\components\Inputs\NewClaimTitleInput.svelte generated by Svelte v3.34.0 */
 
 const rows = 10;
@@ -1857,8 +2035,6 @@ const NewClaimForm = create_ssr_component(($$result, $$props, $$bindings, slots)
 	return $$rendered;
 });
 
-const currentClaimIdStore = writable(undefined);
-
 /* src\client\components\Mains\DeclareClaimMain.svelte generated by Svelte v3.34.0 */
 
 const DeclareClaimMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -1904,7 +2080,7 @@ const DeclareClaim = create_ssr_component(($$result, $$props, $$bindings, slots)
 	return `${validate_component(DeclareClaimView, "DeclareClaimView").$$render($$result, {}, {}, {})}`;
 });
 
-var component_3 = /*#__PURE__*/Object.freeze({
+var component_4 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     'default': DeclareClaim
 });
@@ -2067,7 +2243,7 @@ const U5BlandingPageIdu5D = create_ssr_component(($$result, $$props, $$bindings,
 	return `${validate_component(LandingPageView, "LandingPageView").$$render($$result, { mainHeadLine, supportingHeadLine }, {}, {})}`;
 });
 
-var component_4 = /*#__PURE__*/Object.freeze({
+var component_5 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     'default': U5BlandingPageIdu5D,
     preload: preload$1
@@ -2274,181 +2450,9 @@ const LeanCanvas = create_ssr_component(($$result, $$props, $$bindings, slots) =
 	return `${validate_component(LeanCanvasView, "LeanCanvasView").$$render($$result, {}, {}, {})}`;
 });
 
-var component_5 = /*#__PURE__*/Object.freeze({
+var component_6 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     'default': LeanCanvas
-});
-
-/* src\client\components\Headers\SignInHeader.svelte generated by Svelte v3.34.0 */
-
-const SignInHeader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	const user = uiBangarangUserBuilder.getUser();
-
-	return `<header class="${"flex flex-col flex-grow justify-center items-center content-center mx-auto max-w-screen-2xl"}">${validate_component(WelcomeTitle, "WelcomeTitle").$$render($$result, {}, {}, {})}
-    ${user.username !== ""
-	? `<h2 class="${"text-2xl text-bangarang-darkEmphasis my-1"}">${escape(user.username)}</h2>`
-	: ``}</header>`;
-});
-
-const signingIn = (userInputUsername, userInputPassword) => {
-    signingInNotificationStore.set(executingSigningInNotification);
-    setTimeout(() => {
-        //connectedUserStore.set({id:"0",username:"johnDoe"})
-        uiBangarangUserBuilder
-            .withUserContract({ username: userInputUsername, fullname: "", email: "" })
-            .resetUser()
-            .signingIn(userInputPassword);
-    }, signInFakeWaitingTime);
-};
-const signInFakeWaitingTime = 500;
-
-/* src\client\components\Sections\SignInSection.svelte generated by Svelte v3.34.0 */
-
-const SignInSection = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $signingInNotificationStore, $$unsubscribe_signingInNotificationStore;
-	$$unsubscribe_signingInNotificationStore = subscribe(signingInNotificationStore, value => $signingInNotificationStore = value);
-	let userInputUsername = "";
-	let userInputPassword = "";
-	const onClickSignInButton = () => signingIn(userInputUsername, userInputPassword);
-	$$unsubscribe_signingInNotificationStore();
-
-	return `<p class="${"text-bangarang-lightEmphasis"}">Sign into your account</p>
-${$signingInNotificationStore.status === "Executing"
-	? `<input class="${"text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}" type="${"text"}" placeholder="${"Username ..."}" readonly${add_attribute("value", userInputUsername, 1)}>
-    <input class="${"text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}" type="${"password"}" placeholder="${"Password ..."}" readonly${add_attribute("value", userInputPassword, 1)}>
-    ${validate_component(GenericButton, "GenericButton").$$render(
-			$$result,
-			{
-				textbutton: "Sign in",
-				onClickAction: onClickSignInButton,
-				disabled: true
-			},
-			{},
-			{}
-		)}`
-	: `<input class="${"text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}" type="${"text"}" placeholder="${"Username ..."}"${add_attribute("value", userInputUsername, 1)}>
-    <input class="${"text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}" type="${"password"}" placeholder="${"Password ..."}"${add_attribute("value", userInputPassword, 1)}>
-    ${``}`}`;
-});
-
-/* src\client\components\Mains\SignInMain.svelte generated by Svelte v3.34.0 */
-
-const SignInMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	const user = uiBangarangUserBuilder.getUser();
-
-	return `${user.username === ""
-	? `<main class="${"flex flex-col flex-grow items-center"}">${validate_component(SignInSection, "SignInSection").$$render($$result, {}, {}, {})}</main>`
-	: `<main class="${"flex flex-col items-center my-10 mx-auto max-w-screen-2xl"}"><p class="${"invisible"}">SignOut</p></main>`}`;
-});
-
-/* src\client\components\Icons\Spinner.svelte generated by Svelte v3.34.0 */
-
-const Spinner = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `
-<svg class="${"stroke-current text-bangarang-lightEmphasis w-10 h-10"}" width="${"45"}" height="${"45"}" viewBox="${"0 0 45 45"}" xmlns="${"http://www.w3.org/2000/svg"}"><g fill="${"none"}" fill-rule="${"evenodd"}" transform="${"translate(1 1)"}" stroke-width="${"2"}"><circle cx="${"22"}" cy="${"22"}" r="${"6"}" stroke-opacity="${"0"}"><animate attributeName="${"r"}" begin="${"1.5s"}" dur="${"3s"}" values="${"6;22"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate><animate attributeName="${"stroke-opacity"}" begin="${"1.5s"}" dur="${"3s"}" values="${"1;0"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate><animate attributeName="${"stroke-width"}" begin="${"1.5s"}" dur="${"3s"}" values="${"2;0"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate></circle><circle cx="${"22"}" cy="${"22"}" r="${"6"}" stroke-opacity="${"0"}"><animate attributeName="${"r"}" begin="${"3s"}" dur="${"3s"}" values="${"6;22"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate><animate attributeName="${"stroke-opacity"}" begin="${"3s"}" dur="${"3s"}" values="${"1;0"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate><animate attributeName="${"stroke-width"}" begin="${"3s"}" dur="${"3s"}" values="${"2;0"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate></circle><circle cx="${"22"}" cy="${"22"}" r="${"8"}"><animate attributeName="${"r"}" begin="${"0s"}" dur="${"1.5s"}" values="${"6;1;2;3;4;5;6"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate></circle></g></svg>`;
-});
-
-/* src\client\components\Icons\Success.svelte generated by Svelte v3.34.0 */
-
-const Success = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<svg class="${"w-6 h-6 stroke-current text-bangarang-success"}" fill="${"currentColor"}" viewBox="${"0 0 20 20"}" xmlns="${"http://www.w3.org/2000/svg"}"><path fill-rule="${"evenodd"}" d="${"M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"}" clip-rule="${"evenodd"}"></path></svg>`;
-});
-
-/* src\client\components\Icons\Failed.svelte generated by Svelte v3.34.0 */
-
-const Failed = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<svg class="${"w-6 h-6 stroke-current text-bangarang-failed"}" xmlns="${"http://www.w3.org/2000/svg"}" viewBox="${"0 0 20 20"}" fill="${"currentColor"}"><path fill-rule="${"evenodd"}" d="${"M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"}" clip-rule="${"evenodd"}"></path></svg>`;
-});
-
-/* src\client\components\Notification\GenericTaskNotification.svelte generated by Svelte v3.34.0 */
-
-const GenericTaskNotification = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	
-	let { taskNotification } = $$props;
-	if ($$props.taskNotification === void 0 && $$bindings.taskNotification && taskNotification !== void 0) $$bindings.taskNotification(taskNotification);
-
-	return `${taskNotification.status === "Executing"
-	? `<p class="${"text-right text-bangarang-lightEmphasis flex items-center justify-end"}">${escape(taskNotification.message)}${validate_component(Spinner, "Spinner").$$render($$result, {}, {}, {})}</p>`
-	: `${taskNotification.status === "Success"
-		? `<p class="${"text-right text-bangarang-lightEmphasis flex items-center justify-end"}">${escape(taskNotification.message)}${validate_component(Success, "Success").$$render($$result, {}, {}, {})}</p>`
-		: `${taskNotification.status === "Failed"
-			? `<p class="${"text-right text-bangarang-lightEmphasis flex items-center justify-end"}">${escape(taskNotification.message)}${validate_component(Failed, "Failed").$$render($$result, {}, {}, {})}</p>`
-			: ``}`}`}`;
-});
-
-/* src\client\components\Notification\SignInInformation.svelte generated by Svelte v3.34.0 */
-
-const SignInInformation = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $signingInNotificationStore, $$unsubscribe_signingInNotificationStore;
-	$$unsubscribe_signingInNotificationStore = subscribe(signingInNotificationStore, value => $signingInNotificationStore = value);
-	$$unsubscribe_signingInNotificationStore();
-
-	return `${validate_component(GenericTaskNotification, "GenericTaskNotification").$$render(
-		$$result,
-		{
-			taskNotification: $signingInNotificationStore
-		},
-		{},
-		{}
-	)}`;
-});
-
-/* src\client\components\Footers\SignInFooter.svelte generated by Svelte v3.34.0 */
-
-const SignInFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $signingInNotificationStore, $$unsubscribe_signingInNotificationStore;
-	$$unsubscribe_signingInNotificationStore = subscribe(signingInNotificationStore, value => $signingInNotificationStore = value);
-	let currentClaimId = undefined;
-	currentClaimIdStore.subscribe(currentClaimIdFromStore => currentClaimId = currentClaimIdFromStore);
-
-	const linkFromCurrentClaimId = currentClaimId => {
-		if (currentClaimId === undefined) return {
-			href: links.MainMenu,
-			name: "<< Back to main menu."
-		};
-
-		return {
-			href: linkPrefixes.claimLinkPrefix + currentClaimId,
-			name: "<< Back to the claim."
-		};
-	};
-
-	$$unsubscribe_signingInNotificationStore();
-
-	return `<footer class="${"flex flex-col p-1 mx-auto max-w-screen-2xl"}">${$signingInNotificationStore.status === "Executing"
-	? `${validate_component(SignInInformation, "SignInInformation").$$render($$result, {}, {}, {})}`
-	: `<section class="${"flex justify-center items-center"}"></section>
-        <section class="${"flex justify-between items-center"}">${validate_component(Link, "Link").$$render(
-			$$result,
-			{
-				size: "small",
-				linkHref: linkFromCurrentClaimId(currentClaimId).href,
-				linkName: linkFromCurrentClaimId(currentClaimId).name,
-				textAlign: "text-left"
-			},
-			{},
-			{}
-		)}
-            ${validate_component(SignInInformation, "SignInInformation").$$render($$result, {}, {}, {})}</section>`}</footer>`;
-});
-
-/* src\client\views\SignInView.svelte generated by Svelte v3.34.0 */
-
-const SignInView = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `${validate_component(SignInHeader, "SignInHeader").$$render($$result, {}, {}, {})}
-${validate_component(SignInMain, "SignInMain").$$render($$result, {}, {}, {})}
-${validate_component(SignInFooter, "SignInFooter").$$render($$result, {}, {}, {})}`;
-});
-
-/* src\routes\SignIn.svelte generated by Svelte v3.34.0 */
-
-const SignIn = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `${validate_component(SignInView, "SignInView").$$render($$result, {}, {}, {})}`;
-});
-
-var component_7 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    'default': SignIn
 });
 
 /* src\client\components\Links\ClaimShare.svelte generated by Svelte v3.34.0 */
@@ -2671,7 +2675,9 @@ ${validate_component(ClaimFooter, "ClaimFooter").$$render($$result, {}, {}, {})}
 
 const retrievingClaimById = (claimId) => {
     retrievingClaimUserNotificationStore.set(executingRetrievingClaimUserNotification);
-    setTimeout(() => uiBangarangUserBuilder.getUser().retrievingClaimById(claimId), declaringClaimFakeWaitingTime);
+    setTimeout(() => {
+        uiBangarangUserBuilder.getUser().retrievingClaimById(claimId);
+    }, declaringClaimFakeWaitingTime);
 };
 const declaringClaimFakeWaitingTime = 500;
 
@@ -2719,6 +2725,10 @@ function preload$2(page, session) {
 		let claim;
 		currentClaimIdStore.set(claimId);
 
+		/*currentClaimIdStore.subscribe(claimId => {
+    console.log(`retrievingClaimById(${claimId})`)
+    retrievingClaimById(claimId)
+})*/
 		declaringClaimUserNotificationStore.subscribe(declaringClaimUserNotification => {
 			if (declaringClaimUserNotification.status === "Executing" && declaringClaimUserNotification.claimToDeclare) {
 				claim = {
@@ -2730,7 +2740,20 @@ function preload$2(page, session) {
 					peopleClaimedFor: declaringClaimUserNotification.claimToDeclare.peopleClaimedFor,
 					previousUserClaimChoice: undefined
 				};
-			} else retrievingClaimById(claimId);
+			} else {
+				//console.log(`retrievingClaimById(${claimId})`)
+				retrievingClaimById(claimId);
+			}
+		});
+
+		retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => {
+			console.log(retrievingClaimUserNotification);
+
+			if (retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) {
+				console.log("APPLY CLAIM");
+				claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice;
+				console.log(claim);
+			}
 		});
 
 		return { claim };
@@ -2743,15 +2766,24 @@ const U5BclaimIdu5D = create_ssr_component(($$result, $$props, $$bindings, slots
 
 	//currentClaimIdStore.set(claim.id)
 	claimingUserNotificationStore.subscribe(claimingUserNotification => {
-		if (claimingUserNotification.status === "Success") retrievingClaimById(claim.id);
+		if (claimingUserNotification.status === "Success" && claim) retrievingClaimById(claim.id);
 	});
 
 	retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => {
-		if (retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice;
+		console.log(retrievingClaimUserNotification);
+
+		if (retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) {
+			console.log("APPLY CLAIM");
+			claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice;
+			console.log(claim);
+		}
 	});
 
 	if ($$props.claim === void 0 && $$bindings.claim && claim !== void 0) $$bindings.claim(claim);
-	return `${validate_component(ClaimView, "ClaimView").$$render($$result, { claim }, {}, {})}`;
+
+	return `${claim
+	? `${validate_component(ClaimView, "ClaimView").$$render($$result, { claim }, {}, {})}`
+	: ``}`;
 });
 
 var component_8 = /*#__PURE__*/Object.freeze({
@@ -2796,10 +2828,18 @@ const manifest = {
 		},
 
 		{
+			// SigningInMenu.svelte
+			pattern: /^\/SigningInMenu\/?$/,
+			parts: [
+				{ name: "SigningInMenu", file: "SigningInMenu.svelte", component: component_3 }
+			]
+		},
+
+		{
 			// DeclareClaim.svelte
 			pattern: /^\/DeclareClaim\/?$/,
 			parts: [
-				{ name: "DeclareClaim", file: "DeclareClaim.svelte", component: component_3 }
+				{ name: "DeclareClaim", file: "DeclareClaim.svelte", component: component_4 }
 			]
 		},
 
@@ -2809,7 +2849,7 @@ const manifest = {
 			parts: [
 				null,
 				null,
-				{ name: "landingPages_$audience$93_$91landingPageId", file: "landingPages/[audience]/[landingPageId].svelte", component: component_4, params: match => ({ audience: d(match[1]), landingPageId: d(match[2]) }) }
+				{ name: "landingPages_$audience$93_$91landingPageId", file: "landingPages/[audience]/[landingPageId].svelte", component: component_5, params: match => ({ audience: d(match[1]), landingPageId: d(match[2]) }) }
 			]
 		},
 
@@ -2817,7 +2857,7 @@ const manifest = {
 			// LeanCanvas.svelte
 			pattern: /^\/LeanCanvas\/?$/,
 			parts: [
-				{ name: "LeanCanvas", file: "LeanCanvas.svelte", component: component_5 }
+				{ name: "LeanCanvas", file: "LeanCanvas.svelte", component: component_6 }
 			]
 		},
 
@@ -2825,15 +2865,7 @@ const manifest = {
 			// MainMenu.svelte
 			pattern: /^\/MainMenu\/?$/,
 			parts: [
-				{ name: "MainMenu", file: "MainMenu.svelte", component: component_6 }
-			]
-		},
-
-		{
-			// SignIn.svelte
-			pattern: /^\/SignIn\/?$/,
-			parts: [
-				{ name: "SignIn", file: "SignIn.svelte", component: component_7 }
+				{ name: "MainMenu", file: "MainMenu.svelte", component: component_7 }
 			]
 		},
 

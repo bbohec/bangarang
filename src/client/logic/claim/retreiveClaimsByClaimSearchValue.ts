@@ -4,7 +4,6 @@ import { searchingClaimsUserNotificationStore } from "../../stores/searchingClai
 export const searchingClaims = (searchCriteria:string):void => {
     searchingClaimsUserNotificationStore.set(executingSearchingClaimsUserNotification)
     setTimeout(() => {
-        console.log(`uiBangarangUserBuilder.getUser().searchingClaims(${searchCriteria})`)
         uiBangarangUserBuilder.getUser().searchingClaims(searchCriteria)
     }, searchingClaimsFakeWaitingTime);
 }

@@ -21,186 +21,186 @@ describe(`Feature: Searching Claims
         {
             scenarioTitle:"order engine unit 1",
             expectedDeclaredClaims:[
-                {type:"", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"good people1", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"good people 2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good people1", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good people 2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             retreivedClaims:[
-                {type:"", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"good people 2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"good people1", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good people 2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good people1", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             searchCriteria:"good people"
         },
         {
             scenarioTitle:"order engine unit 2",
             expectedDeclaredClaims:[
-                {type:"", title:"good 4 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good 4 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             retreivedClaims:[
-                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"good 4 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good 4 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             searchCriteria:"good people"
         },
         {
             scenarioTitle:"order engine unit 3",
             expectedDeclaredClaims:[
-                {type:"", title:"good NOPE people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good NOPE people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             retreivedClaims:[
-                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"good NOPE people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good NOPE people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             searchCriteria:"good people"
         },
         {
             scenarioTitle:"order engine unit 4",
             expectedDeclaredClaims:[
-                {type:"", title:"Bad NOPE Cookie", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"COOKIE BAD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"Bad NOPE Cookie", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"COOKIE BAD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             retreivedClaims:[
-                {type:"", title:"COOKIE BAD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"Bad NOPE Cookie", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"COOKIE BAD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"Bad NOPE Cookie", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             searchCriteria:"Bad Cookie"
         },
         {
             scenarioTitle:"order engine unit 5",
             expectedDeclaredClaims:[
-                {type:"", title:"Third NOPE Thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"THING THIRD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"Third NOPE Thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"THING THIRD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             retreivedClaims:[
-                {type:"", title:"THING THIRD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"Third NOPE Thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"THING THIRD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"Third NOPE Thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             searchCriteria:"Thing Third"
         },
         {
             scenarioTitle:"order engine unit 6",
             expectedDeclaredClaims:[
-                {type:"", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             retreivedClaims:[
-                {type:"", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             searchCriteria:"good people"
         },
         {
             scenarioTitle:"order engine unit 7",
             expectedDeclaredClaims:[
-                {type:"", title:"third NOPE thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"THIRD LOREM THING", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"third NOPE thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"THIRD LOREM THING", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             retreivedClaims:[
-                {type:"", title:"third NOPE thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"THIRD LOREM THING", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"third NOPE thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"THIRD LOREM THING", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             searchCriteria:"third thing"
         },
         {
             scenarioTitle:"order engine unit 8",
             expectedDeclaredClaims:[
-                {type:"", title:"third 3 thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"THIRD 4 THING", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"third 3 thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"THIRD 4 THING", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             retreivedClaims:[
-                {type:"", title:"third 3 thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"THIRD 4 THING", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"third 3 thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"THIRD 4 THING", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             searchCriteria:"third thing"
         },
         {
             scenarioTitle:"order engine unit 9",
             expectedDeclaredClaims:[
-                {type:"", title:"third thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"THIRD THING", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"third thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"THIRD THING", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             retreivedClaims:[
-                {type:"", title:"third thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"THIRD THING", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"third thing", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"THIRD THING", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             searchCriteria:"THIRD THING"
         },
         {
             scenarioTitle:"Searching Claims with one word",
             expectedDeclaredClaims:[
-                {type:"", title:"claim", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"claim2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"claim3", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"Claim4", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"CLAIME5", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"Cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"claim", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"claim2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"claim3", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"Claim4", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"CLAIME5", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"Cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             retreivedClaims:[
-                {type:"", title:"claim", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"claim2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"claim3", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"Claim4", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"CLAIME5", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""}
+                {type:"Simple", title:"claim", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"claim2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"claim3", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"Claim4", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"CLAIME5", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""}
             ],
             searchCriteria:"claim"
         },
         {
             scenarioTitle:"Searching Claims with multiple words",
             expectedDeclaredClaims:[
-                {type:"", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"good people1", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"good people 2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"Cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good people1", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good people 2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"Cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             retreivedClaims:[
-                {type:"", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"good people 2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"good people1", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good people 2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good 3 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good people1", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             searchCriteria:"good people"
         },
         {
             scenarioTitle:"Searching Claims with one or multiple words",
             expectedDeclaredClaims:[
-                {type:"", title:"good", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"good 2 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"Cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good 2 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"Cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             retreivedClaims:[
-                {type:"", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"good 2 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"good", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"PEOPLE GOOD", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good 2 people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"GOOD 4 PEOPLE", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"good", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"people", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             searchCriteria:"good people"
         },
         {
             scenarioTitle:"No claims match search criteria",
             expectedDeclaredClaims:[
-                {type:"", title:"cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"cloum2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"cloum3", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"Cloum4", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"CLOUME5", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"cloum2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"cloum3", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"Cloum4", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"CLOUME5", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
             ],
             retreivedClaims:[],
             searchCriteria:"claim"
@@ -208,18 +208,18 @@ describe(`Feature: Searching Claims
         {
             scenarioTitle:"Claims found with bad lower/upper case search criteria",
             expectedDeclaredClaims:[
-                {type:"", title:"cloum2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"cloum3", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"Cloum4", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"CLOUME5", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""}
+                {type:"Simple", title:"cloum2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"cloum3", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"Cloum4", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"CLOUME5", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""}
             ],
             retreivedClaims:[
-                {type:"", title:"cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"cloum2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"cloum3", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"Cloum4", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
-                {type:"", title:"CLOUME5", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""}
+                {type:"Simple", title:"cloum", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"cloum2", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"cloum3", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"Cloum4", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""},
+                {type:"Simple", title:"CLOUME5", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""}
             ],
             searchCriteria:"clOUm"
         }

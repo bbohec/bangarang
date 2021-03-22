@@ -4,7 +4,6 @@ import { executingRetrievingClaimUserNotification } from "../port/interactors/Re
 export const retrievingClaimById = (claimId:string):void => {
     retrievingClaimUserNotificationStore.set(executingRetrievingClaimUserNotification)
     setTimeout(() => {
-        console.log(`uiBangarangUserBuilder.getUser().retrievingClaimById(${claimId})`)
         uiBangarangUserBuilder.getUser().retrievingClaimById(claimId)}, declaringClaimFakeWaitingTime);
 }
 const declaringClaimFakeWaitingTime = 500;

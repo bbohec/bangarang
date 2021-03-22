@@ -1,4 +1,4 @@
-import type { ClaimContract, ClaimContractWithMemberPreviousClaimChoice } from "../port/ClaimContract";
+import type { ClaimContract, ClaimContractWithMemberPreviousClaimChoice, ClaimTitle, ClaimType, Identifier } from "../port/ClaimContract";
 import type { BangarangAdaptersContract } from "../port/BangarangAdaptersContract";
 import type { UserContract } from "../port/UserContact";
 import { alreadySignedInSigningInNotification, badCredentialsSigningInNotification, successSigningInNotification } from "../port/interactors/SigningInUserNotificationInteractorContract";
@@ -89,7 +89,7 @@ export class User implements UserContract  {
         const claim = this.bangarangAdapters.bangarangClaimInteractor.claimById(id)
         if (claim instanceof Error)  this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(claimNotDeclaredRetrievingClaimUserNotification)
         else {
-            const previousMemberClaimChoiceOnClaim = this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, id);
+            const previousMemberClaimChoiceOnClaim = this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, claim.title);
             if(previousMemberClaimChoiceOnClaim instanceof Error)this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(unexpectedErrorRetrievingClaimUserNotification(previousMemberClaimChoiceOnClaim))
             else {
                     const claimWithMemberPreviousClaimChoice:ClaimContractWithMemberPreviousClaimChoice = {
@@ -105,9 +105,9 @@ export class User implements UserContract  {
             }
         }
     }
-    public declaringClaim(claimTitle:string,claimType:string,claimId:string):void {
+    public declaringClaim(claimTitle:ClaimTitle,claimType:ClaimType,claimId:Identifier):void {
         if (claimTitle === "") this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(claimWithoutTitleDeclaringClaimUserNotification)
-        else if (claimType === "")this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(claimWithoutTypeDeclaringClaimUserNotification)
+        //else if (claimType === "")this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(claimWithoutTypeDeclaringClaimUserNotification)
         else {
             if (!this.bangarangAdapters.bangarangClaimInteractor.isClaimExistByTitleUpperCase(claimTitle)) {
                 this.bangarangAdapters.bangarangClaimInteractor.saveClaim({title:claimTitle,type:claimType,peopleClaimed:0,peopleClaimedFor:0,peopleClaimedAgainst:0,id:claimId})
