@@ -1,7 +1,7 @@
 export interface BangarangUserInterfaceInteractorContract {
-    goToView(viewName: string):void;
+    goToSigningInMenu():void;
+    goToClaim(claimId: string):void;
 }
-
 export enum StaticView {
     SigningInMenu = "SigningInMenu"
 }

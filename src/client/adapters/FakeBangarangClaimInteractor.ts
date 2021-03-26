@@ -1,6 +1,11 @@
 import type { ClaimContract } from '../port/ClaimContract';
-import { BangarangClaimInteractorContract, bangarangClaimNotFound } from '../port/interactors/BangarangClaimInteractorContract';
+import { BangarangClaimInteractorContract, bangarangClaimNotFoundById, bangarangClaimNotFoundByTittleUpperCase } from '../port/interactors/BangarangClaimInteractorContract';
 export class FakeBangarangClaimInteractor implements BangarangClaimInteractorContract {
+    public claimByTitleUpperCase(claimTitle: string): ClaimContract | Error {
+        const claimFound = this.declaredClaims.find(declaredClaim => declaredClaim.title.toUpperCase() === claimTitle.toUpperCase())
+        if (claimFound) return claimFound;
+        return new Error(bangarangClaimNotFoundByTittleUpperCase(claimTitle.toUpperCase()));
+    }
     public isClaimExistByTitleUpperCase(claimTitle: string): boolean | Error {
         return (this.findClaimByTitleUpperCase(claimTitle))?true:false
     }
@@ -15,7 +20,7 @@ export class FakeBangarangClaimInteractor implements BangarangClaimInteractorCon
     public claimById(id: string): ClaimContract|Error {
         const claimFound = this.declaredClaims.find(declaredClaim => declaredClaim.id === id)
         if (claimFound) return claimFound;
-        return new Error(bangarangClaimNotFound(id));
+        return new Error(bangarangClaimNotFoundById(id));
     }
     public declareClaim(claim: ClaimContract): void {
         this.declaredClaims.push(claim);

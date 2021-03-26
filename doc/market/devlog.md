@@ -13,10 +13,16 @@
 - ✔️ Done
 
 ## 2021/03/26 — Day 22
-- Twitch Live Stream https://www.twitch.tv/benjaminbohec
-- Stand Up 
-- ATDD/TDD > Logic Repair
+- ✔️ Twitch Live Stream https://www.twitch.tv/benjaminbohec
+- ✔️ Stand Up 
+- ✔️ ATDD/TDD > Logic Repair
 - Link Business Logic <> UI : UI Adapter
+    - ✔️ Claiming
+    - ✔️ searching claim
+    - ✔️ Declare claim
+    - ✔️ SSR claim link
+    - ✔️ registering 
+    - ✔️ signing in
 - Backend
 - Summary.
 
@@ -27,7 +33,7 @@
     - ✔️ Registering.
     - ✔️ Remove password on User Contract
 - ❌ Link Business Logic <> UI : UI Adapter
-- 👉 Summary.
+- ✔️ Summary.
 
 ## 2021/03/19 — Day 20
 - ✔️ Twitch Live Stream https://www.twitch.tv/benjaminbohec

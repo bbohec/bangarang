@@ -11,7 +11,7 @@ export interface ClaimingUserNotificationContract extends UserNotificationContra
 export const idleClaimingUserNotification:ClaimingUserNotificationContract= {status:"Idle", message:`Wainting for claiming event.`, type:"Claiming."}
 export const executingClaimingUserNotification:ClaimingUserNotificationContract= {status:"Executing", message:`Executing claiming event.`, type:"Claiming."}
 export const successClaimingUserNotification:ClaimingUserNotificationContract= {status:"Success", message:`Claimed.`, type:"Claiming."}
-export const claimNotDeclaredClaimingUserNotification=(claimTitle:string):ClaimingUserNotificationContract => ({status:"Failed", message:`The claim '${claimTitle}' is not declared on Bangarang.`, type:"Claiming."})
+export const claimNotDeclaredClaimingUserNotification=(claimId:string):ClaimingUserNotificationContract => ({status:"Failed", message:`The claim '${claimId}' is not declared on Bangarang.`, type:"Claiming."})
 export const mustBeSignedInClaimingUserNotification:ClaimingUserNotificationContract= {status:"Failed", message:`You must be signed in in order to claim.`, type:"Claiming."}
 export const multipleTimesClaimingUserNotification=(claimChoice:ClaimChoice):ClaimingUserNotificationContract=>({status:"Failed", message:`Claiming '${claimChoice}' multiple times on a claim is forbidden.`, type:"Claiming."})
 export const unexpectedErrorClaimingUserNotification=(error:Error):ClaimingUserNotificationContract=>({status:"Failed", message:`Unexpected Error: '${error.message}'.`, type:"Claiming."})

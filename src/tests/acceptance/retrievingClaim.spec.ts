@@ -9,7 +9,7 @@ import { FakeBangarangClaimInteractor } from '../../client/adapters/FakeBangaran
 import { FakeBangarangMembersInteractor } from '../../client/adapters/FakeBangarangMembersInteractor';
 import { FakeRetrievingClaimUserNotificationInteractor } from "../../client/adapters/FakeRetrievingClaimUserNotificationInteractor";
 import { claimNotDeclaredRetrievingClaimUserNotification, RetrievingClaimNotificationType, successRetrievingClaimUserNotification } from '../../client/port/interactors/RetrievingClaimUserNotificationInteractorContract';
-import { bangarangClaimNotFound } from '../../client/port/interactors/BangarangClaimInteractorContract';
+import { bangarangClaimNotFoundById } from '../../client/port/interactors/BangarangClaimInteractorContract';
 import { bangarangMemberNotFoundError } from '../../client/port/interactors/BangarangMembersInteractorContract';
 describe(`Feature : Retrieving Claim
     As a guest or a Bangarang Member
@@ -163,7 +163,7 @@ describe(`Feature : Retrieving Claim
         })
         it(`And the claim '${expectedClaim.title}' is not declared on Bangarang`,()=>{
             expect(()=>{throw bangarangClaimInteractor.claimById(expectedClaim.id)})
-                .to.throw(bangarangClaimNotFound(expectedClaim.id))
+                .to.throw(bangarangClaimNotFoundById(expectedClaim.id))
         })
         it(`When the user retrieve the claim with title '${expectedClaim.id}'`,()=>{
             user.retrievingClaimById(expectedClaim.id)

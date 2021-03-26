@@ -16,9 +16,9 @@
         <ClaimShare/>
         <section class="flex justify-between items-center">
             <Link size="small" linkHref={links.MainMenu} linkName="<< Back to main menu." textAlign={"text-left"}/>
-            {#if $claimingUserNotificationStore.status === "Success"}
+            {#if $claimingUserNotificationStore.status === "Success" || $claimingUserNotificationStore.status === "Failed"}
                 <ClaimingInformation/>
-            {:else if $declaringClaimUserNotificationStore.status === "Success"}
+            {:else if $declaringClaimUserNotificationStore.status === "Success" || $declaringClaimUserNotificationStore.status === "Failed"}
                 <DeclaringInformation/>
             {/if}
         </section>

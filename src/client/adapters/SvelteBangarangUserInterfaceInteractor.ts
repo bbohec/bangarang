@@ -1,8 +1,12 @@
-import type { BangarangUserInterfaceInteractorContract } from "../port/interactors/BangarangUserInterfaceInteractor";
+import { BangarangUserInterfaceInteractorContract, StaticView } from "../port/interactors/BangarangUserInterfaceInteractor";
 import { goto } from '@sapper/app';
+import { linkPrefixes } from "../navigation/linkPrefixes";
 export class SvelteBangarangUserInterfaceInteractor implements BangarangUserInterfaceInteractorContract {
-    goToView(viewName: string): void {
-        goto(viewName)
+    goToSigningInMenu() {
+        goto(StaticView.SigningInMenu)
+    }
+    goToClaim(claimId: string): void {
+        goto(linkPrefixes.claimLinkPrefix+claimId)
     }
 
 }

@@ -1,10 +1,10 @@
 import type { ClaimContract } from '../ClaimContract';
 export interface BangarangClaimInteractorContract {
-    saveClaim(claimToSave: ClaimContract):void|Error;
-    retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(searchCriteriaWords: string[]):ClaimContract[]|Error;
     claimById(id: string): ClaimContract|Error;
+    claimByTitleUpperCase(claimTitle: string):ClaimContract|Error;
     isClaimExistByTitleUpperCase(claimTitle: string):boolean|Error;
+    retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(searchCriteriaWords: string[]):ClaimContract[]|Error;
+    saveClaim(claimToSave: ClaimContract):void|Error;
 }
-export function bangarangClaimNotFound(id: string): string | undefined {
-    return `Claim with id ${id} not found.`;
-}
+export const bangarangClaimNotFoundById=(id: string): string | undefined => `Claim with id ${id} not found.`;
+export const bangarangClaimNotFoundByTittleUpperCase=(claimTitle: string): string | undefined => `Claim with title like '${claimTitle}' not found.`;
