@@ -556,7 +556,7 @@ export const claimNotDeclaredRetrievingClaimUserNotification:RetrievingClaimUser
 const idleClaimingUserNotification = { status: "Idle", message: `Wainting for claiming event.`, type: "Claiming." };
 const executingClaimingUserNotification = { status: "Executing", message: `Executing claiming event.`, type: "Claiming." };
 const successClaimingUserNotification = { status: "Success", message: `Claimed.`, type: "Claiming." };
-const claimNotDeclaredClaimingUserNotification = (claimTitle) => ({ status: "Failed", message: `The claim '${claimTitle}' is not declared on Bangarang.`, type: "Claiming." });
+const claimNotDeclaredClaimingUserNotification = (claimId) => ({ status: "Failed", message: `The claim '${claimId}' is not declared on Bangarang.`, type: "Claiming." });
 const mustBeSignedInClaimingUserNotification = { status: "Failed", message: `You must be signed in in order to claim.`, type: "Claiming." };
 const multipleTimesClaimingUserNotification = (claimChoice) => ({ status: "Failed", message: `Claiming '${claimChoice}' multiple times on a claim is forbidden.`, type: "Claiming." });
 const unexpectedErrorClaimingUserNotification = (error) => ({ status: "Failed", message: `Unexpected Error: '${error.message}'.`, type: "Claiming." });
@@ -620,17 +620,17 @@ class User {
         else
             this.bangarangAdapters.registeringUserNotificationInteractor.notify(badEmailRegisteringUserNotification);
     }
-    claiming(claimTitle, claimChoice) {
-        const retreivedClaim = this.bangarangAdapters.bangarangClaimInteractor.claimById(claimTitle);
+    claiming(claimId, claimChoice) {
+        const retreivedClaim = this.bangarangAdapters.bangarangClaimInteractor.claimById(claimId);
         const isUserHasPreviouslyMadeTheSameClaimChoice = (previousClaimChoice, claimChoice) => previousClaimChoice !== undefined && previousClaimChoice === claimChoice;
         if (retreivedClaim instanceof Error)
-            this.bangarangAdapters.claimingUserNotificationInteractor.notify(claimNotDeclaredClaimingUserNotification(claimTitle));
+            this.bangarangAdapters.claimingUserNotificationInteractor.notify(claimNotDeclaredClaimingUserNotification(claimId));
         else if (!this.bangarangAdapters.bangarangMembersInteractor.isSignedIn(this.username)) {
             this.bangarangAdapters.claimingUserNotificationInteractor.notify(mustBeSignedInClaimingUserNotification);
-            this.bangarangAdapters.bangarangUserInterfaceInteractor.goToView(StaticView.SigningInMenu);
+            this.bangarangAdapters.bangarangUserInterfaceInteractor.goToSigningInMenu();
         }
         else {
-            const previousClaimChoice = this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, claimTitle);
+            const previousClaimChoice = this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, retreivedClaim.title);
             if (previousClaimChoice instanceof Error)
                 this.bangarangAdapters.claimingUserNotificationInteractor.notify(unexpectedErrorClaimingUserNotification(previousClaimChoice));
             else if (isUserHasPreviouslyMadeTheSameClaimChoice(previousClaimChoice, claimChoice))
@@ -688,7 +688,7 @@ class User {
         if (claim instanceof Error)
             this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(claimNotDeclaredRetrievingClaimUserNotification);
         else {
-            const previousMemberClaimChoiceOnClaim = this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, id);
+            const previousMemberClaimChoiceOnClaim = this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, claim.title);
             if (previousMemberClaimChoiceOnClaim instanceof Error)
                 this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(unexpectedErrorRetrievingClaimUserNotification(previousMemberClaimChoiceOnClaim));
             else {
@@ -710,17 +710,18 @@ class User {
             this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(claimWithoutTitleDeclaringClaimUserNotification);
         //else if (claimType === "")this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(claimWithoutTypeDeclaringClaimUserNotification)
         else {
-            if (!this.bangarangAdapters.bangarangClaimInteractor.isClaimExistByTitleUpperCase(claimTitle)) {
+            const isClaimExistByTitleUpperCase = this.bangarangAdapters.bangarangClaimInteractor.isClaimExistByTitleUpperCase(claimTitle);
+            if (!isClaimExistByTitleUpperCase) {
                 this.bangarangAdapters.bangarangClaimInteractor.saveClaim({ title: claimTitle, type: claimType, peopleClaimed: 0, peopleClaimedFor: 0, peopleClaimedAgainst: 0, id: claimId });
                 this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(successDeclaringClaimUserNotification);
             }
             else
                 this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(claimAlreadyExistDeclaringClaimUserNotification(claimTitle));
-            const retrievedClaim = this.bangarangAdapters.bangarangClaimInteractor.claimById(claimTitle);
+            const retrievedClaim = (isClaimExistByTitleUpperCase) ? this.bangarangAdapters.bangarangClaimInteractor.claimByTitleUpperCase(claimTitle) : this.bangarangAdapters.bangarangClaimInteractor.claimById(claimId);
             if (retrievedClaim instanceof Error)
                 this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(claimNotDeclaredRetrievingClaimUserNotification);
             else
-                this.bangarangAdapters.bangarangUserInterfaceInteractor.goToView(retrievedClaim.title);
+                this.bangarangAdapters.bangarangUserInterfaceInteractor.goToClaim(retrievedClaim.id);
         }
     }
     signingIn(password) {
@@ -736,13 +737,18 @@ class User {
     }
 }
 
-function bangarangClaimNotFound(id) {
-    return `Claim with id ${id} not found.`;
-}
+const bangarangClaimNotFoundById = (id) => `Claim with id ${id} not found.`;
+const bangarangClaimNotFoundByTittleUpperCase = (claimTitle) => `Claim with title like '${claimTitle}' not found.`;
 
 class FakeBangarangClaimInteractor {
     constructor() {
         this.declaredClaims = [];
+    }
+    claimByTitleUpperCase(claimTitle) {
+        const claimFound = this.declaredClaims.find(declaredClaim => declaredClaim.title.toUpperCase() === claimTitle.toUpperCase());
+        if (claimFound)
+            return claimFound;
+        return new Error(bangarangClaimNotFoundByTittleUpperCase(claimTitle.toUpperCase()));
     }
     isClaimExistByTitleUpperCase(claimTitle) {
         return (this.findClaimByTitleUpperCase(claimTitle)) ? true : false;
@@ -761,7 +767,7 @@ class FakeBangarangClaimInteractor {
         const claimFound = this.declaredClaims.find(declaredClaim => declaredClaim.id === id);
         if (claimFound)
             return claimFound;
-        return new Error(bangarangClaimNotFound(id));
+        return new Error(bangarangClaimNotFoundById(id));
     }
     declareClaim(claim) {
         this.declaredClaims.push(claim);
@@ -850,8 +856,11 @@ class FakeBangarangUserInterfaceInteractor {
     constructor() {
         this.currentView = "";
     }
-    goToView(viewName) {
-        this.currentView = viewName;
+    goToSigningInMenu() {
+        this.currentView = StaticView.SigningInMenu;
+    }
+    goToClaim(claimId) {
+        this.currentView = claimId;
     }
 }
 
@@ -979,9 +988,17 @@ class UserBuilder {
     }
 }
 
+const linkPrefixes = {
+    claimLinkPrefix: "claims/",
+    valuePropositionLinkPrefix: "valuePropositions/"
+};
+
 class SvelteBangarangUserInterfaceInteractor {
-    goToView(viewName) {
-        goto(viewName);
+    goToSigningInMenu() {
+        goto(StaticView.SigningInMenu);
+    }
+    goToClaim(claimId) {
+        goto(linkPrefixes.claimLinkPrefix + claimId);
     }
 }
 
@@ -1191,9 +1208,7 @@ function demoClaims() {
 
 const searchingClaims = (searchCriteria) => {
     searchingClaimsUserNotificationStore.set(executingSearchingClaimsUserNotification);
-    setTimeout(() => {
-        uiBangarangUserBuilder.getUser().searchingClaims(searchCriteria);
-    }, searchingClaimsFakeWaitingTime);
+    setTimeout(() => uiBangarangUserBuilder.getUser().searchingClaims(searchCriteria), searchingClaimsFakeWaitingTime);
 };
 const searchingClaimsFakeWaitingTime = 500;
 
@@ -1201,18 +1216,33 @@ const initialClaimSearchValue = '';
 const claimSearchCriteriaStore = writable(initialClaimSearchValue);
 
 /* src\client\components\SearchBars\ClaimSearchBar.svelte generated by Svelte v3.34.0 */
+const waitBeforeSearchingClaims = 1000;
 
 const ClaimSearchBar = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	let $claimSearchCriteriaStore, $$unsubscribe_claimSearchCriteriaStore;
 	$$unsubscribe_claimSearchCriteriaStore = subscribe(claimSearchCriteriaStore, value => $claimSearchCriteriaStore = value);
 	let searchBar;
+	let previousSearchCriteria = "";
 
 	afterUpdate(() => {
-		if ($claimSearchCriteriaStore.length === 1) {
-			searchBar.focus();
-			searchingClaims($claimSearchCriteriaStore);
-		}
+		if ($claimSearchCriteriaStore.length === 1) searchBar.focus();
 	});
+
+	let timer;
+
+	const debounce = currentSearchCriteria => {
+		clearTimeout(timer);
+		timer = setTimeout(() => shouldExecuteSearchingClaims(currentSearchCriteria), waitBeforeSearchingClaims);
+	};
+
+	claimSearchCriteriaStore.subscribe(searchCriteria => debounce(searchCriteria));
+
+	function shouldExecuteSearchingClaims(currentSearchCriteria) {
+		if (currentSearchCriteria !== previousSearchCriteria) {
+			previousSearchCriteria = currentSearchCriteria;
+			searchingClaims(previousSearchCriteria);
+		}
+	}
 
 	$$unsubscribe_claimSearchCriteriaStore();
 	return `<input class="${"text-xl text-center my-1 px-1 pb-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}" type="${"text"}" placeholder="${"Find a claim..."}"${add_attribute("value", $claimSearchCriteriaStore, 1)}${add_attribute("this", searchBar, 1)}>`;
@@ -1335,11 +1365,6 @@ const SearchedClaim = create_ssr_component(($$result, $$props, $$bindings, slots
 	return `<div class="${"border rounded shadow my-2 p-2 border-bangarang-lightEmphasis flex items-center"}"><a${add_attribute("href", claimLink, 0)} class="${" text-bangarang-dark flex-grow text-justify"}">${escape(title)}</a></div>`;
 });
 
-const linkPrefixes = {
-    claimLinkPrefix: "claims/",
-    valuePropositionLinkPrefix: "valuePropositions/"
-};
-
 /* src\client\components\Lists\SearchedClaims.svelte generated by Svelte v3.34.0 */
 
 const SearchedClaims = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -1382,11 +1407,66 @@ const BackToMainMenuLink = create_ssr_component(($$result, $$props, $$bindings, 
 	return `<span class="${"flex items-center px-2"}">${validate_component(BackIcon, "BackIcon").$$render($$result, {}, {}, {})}<p class="${"text-xs text-bangarang-darkEmphasis underline"}">Back to main menu.</p></span>`;
 });
 
+/* src\client\components\Icons\Spinner.svelte generated by Svelte v3.34.0 */
+
+const Spinner = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `
+<svg class="${"stroke-current text-bangarang-lightEmphasis w-10 h-10"}" width="${"45"}" height="${"45"}" viewBox="${"0 0 45 45"}" xmlns="${"http://www.w3.org/2000/svg"}"><g fill="${"none"}" fill-rule="${"evenodd"}" transform="${"translate(1 1)"}" stroke-width="${"2"}"><circle cx="${"22"}" cy="${"22"}" r="${"6"}" stroke-opacity="${"0"}"><animate attributeName="${"r"}" begin="${"1.5s"}" dur="${"3s"}" values="${"6;22"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate><animate attributeName="${"stroke-opacity"}" begin="${"1.5s"}" dur="${"3s"}" values="${"1;0"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate><animate attributeName="${"stroke-width"}" begin="${"1.5s"}" dur="${"3s"}" values="${"2;0"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate></circle><circle cx="${"22"}" cy="${"22"}" r="${"6"}" stroke-opacity="${"0"}"><animate attributeName="${"r"}" begin="${"3s"}" dur="${"3s"}" values="${"6;22"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate><animate attributeName="${"stroke-opacity"}" begin="${"3s"}" dur="${"3s"}" values="${"1;0"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate><animate attributeName="${"stroke-width"}" begin="${"3s"}" dur="${"3s"}" values="${"2;0"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate></circle><circle cx="${"22"}" cy="${"22"}" r="${"8"}"><animate attributeName="${"r"}" begin="${"0s"}" dur="${"1.5s"}" values="${"6;1;2;3;4;5;6"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate></circle></g></svg>`;
+});
+
+/* src\client\components\Icons\Success.svelte generated by Svelte v3.34.0 */
+
+const Success = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `<svg class="${"w-6 h-6 stroke-current text-bangarang-success"}" fill="${"currentColor"}" viewBox="${"0 0 20 20"}" xmlns="${"http://www.w3.org/2000/svg"}"><path fill-rule="${"evenodd"}" d="${"M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"}" clip-rule="${"evenodd"}"></path></svg>`;
+});
+
+/* src\client\components\Icons\Failed.svelte generated by Svelte v3.34.0 */
+
+const Failed = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `<svg class="${"w-6 h-6 stroke-current text-bangarang-failed"}" xmlns="${"http://www.w3.org/2000/svg"}" viewBox="${"0 0 20 20"}" fill="${"currentColor"}"><path fill-rule="${"evenodd"}" d="${"M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"}" clip-rule="${"evenodd"}"></path></svg>`;
+});
+
+/* src\client\components\Notification\GenericTaskNotification.svelte generated by Svelte v3.34.0 */
+
+const GenericTaskNotification = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	
+	let { taskNotification } = $$props;
+	if ($$props.taskNotification === void 0 && $$bindings.taskNotification && taskNotification !== void 0) $$bindings.taskNotification(taskNotification);
+
+	return `${taskNotification.status === "Executing"
+	? `<p class="${"text-right text-bangarang-lightEmphasis flex items-center justify-end"}">${escape(taskNotification.message)}${validate_component(Spinner, "Spinner").$$render($$result, {}, {}, {})}</p>`
+	: `${taskNotification.status === "Success"
+		? `<p class="${"text-right text-bangarang-lightEmphasis flex items-center justify-end"}">${escape(taskNotification.message)}${validate_component(Success, "Success").$$render($$result, {}, {}, {})}</p>`
+		: `${taskNotification.status === "Failed"
+			? `<p class="${"text-right text-bangarang-lightEmphasis flex items-center justify-end"}">${escape(taskNotification.message)}${validate_component(Failed, "Failed").$$render($$result, {}, {}, {})}</p>`
+			: ``}`}`}`;
+});
+
+/* src\client\components\Notification\SearchingClaimsInformation.svelte generated by Svelte v3.34.0 */
+
+const SearchingClaimsInformation = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $searchingClaimsUserNotificationStore,
+		$$unsubscribe_searchingClaimsUserNotificationStore;
+
+	$$unsubscribe_searchingClaimsUserNotificationStore = subscribe(searchingClaimsUserNotificationStore, value => $searchingClaimsUserNotificationStore = value);
+	$$unsubscribe_searchingClaimsUserNotificationStore();
+
+	return `${validate_component(GenericTaskNotification, "GenericTaskNotification").$$render(
+		$$result,
+		{
+			taskNotification: $searchingClaimsUserNotificationStore
+		},
+		{},
+		{}
+	)}`;
+});
+
 /* src\client\components\Footers\SearchedClaimsFooter.svelte generated by Svelte v3.34.0 */
 
 const SearchedClaimsFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	return `<footer class="${"flex flex-col mb-1 mx-auto max-w-screen-2xl"}">${validate_component(ClaimSearchBar, "ClaimSearchBar").$$render($$result, {}, {}, {})}
-    ${validate_component(BackToMainMenuLink, "BackToMainMenuLink").$$render($$result, {}, {}, {})}</footer>`;
+    ${validate_component(BackToMainMenuLink, "BackToMainMenuLink").$$render($$result, {}, {}, {})}
+    ${validate_component(SearchingClaimsInformation, "SearchingClaimsInformation").$$render($$result, {}, {}, {})}</footer>`;
 });
 
 /* src\client\views\SearchClaimsView.svelte generated by Svelte v3.34.0 */
@@ -1865,41 +1945,6 @@ const SignInMain = create_ssr_component(($$result, $$props, $$bindings, slots) =
 	return `${user.username === ""
 	? `<main class="${"flex flex-col flex-grow items-center"}">${validate_component(SignInSection, "SignInSection").$$render($$result, {}, {}, {})}</main>`
 	: `<main class="${"flex flex-col items-center my-10 mx-auto max-w-screen-2xl"}"><p class="${"invisible"}">SignOut</p></main>`}`;
-});
-
-/* src\client\components\Icons\Spinner.svelte generated by Svelte v3.34.0 */
-
-const Spinner = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `
-<svg class="${"stroke-current text-bangarang-lightEmphasis w-10 h-10"}" width="${"45"}" height="${"45"}" viewBox="${"0 0 45 45"}" xmlns="${"http://www.w3.org/2000/svg"}"><g fill="${"none"}" fill-rule="${"evenodd"}" transform="${"translate(1 1)"}" stroke-width="${"2"}"><circle cx="${"22"}" cy="${"22"}" r="${"6"}" stroke-opacity="${"0"}"><animate attributeName="${"r"}" begin="${"1.5s"}" dur="${"3s"}" values="${"6;22"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate><animate attributeName="${"stroke-opacity"}" begin="${"1.5s"}" dur="${"3s"}" values="${"1;0"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate><animate attributeName="${"stroke-width"}" begin="${"1.5s"}" dur="${"3s"}" values="${"2;0"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate></circle><circle cx="${"22"}" cy="${"22"}" r="${"6"}" stroke-opacity="${"0"}"><animate attributeName="${"r"}" begin="${"3s"}" dur="${"3s"}" values="${"6;22"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate><animate attributeName="${"stroke-opacity"}" begin="${"3s"}" dur="${"3s"}" values="${"1;0"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate><animate attributeName="${"stroke-width"}" begin="${"3s"}" dur="${"3s"}" values="${"2;0"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate></circle><circle cx="${"22"}" cy="${"22"}" r="${"8"}"><animate attributeName="${"r"}" begin="${"0s"}" dur="${"1.5s"}" values="${"6;1;2;3;4;5;6"}" calcMode="${"linear"}" repeatCount="${"indefinite"}"></animate></circle></g></svg>`;
-});
-
-/* src\client\components\Icons\Success.svelte generated by Svelte v3.34.0 */
-
-const Success = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<svg class="${"w-6 h-6 stroke-current text-bangarang-success"}" fill="${"currentColor"}" viewBox="${"0 0 20 20"}" xmlns="${"http://www.w3.org/2000/svg"}"><path fill-rule="${"evenodd"}" d="${"M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"}" clip-rule="${"evenodd"}"></path></svg>`;
-});
-
-/* src\client\components\Icons\Failed.svelte generated by Svelte v3.34.0 */
-
-const Failed = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<svg class="${"w-6 h-6 stroke-current text-bangarang-failed"}" xmlns="${"http://www.w3.org/2000/svg"}" viewBox="${"0 0 20 20"}" fill="${"currentColor"}"><path fill-rule="${"evenodd"}" d="${"M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"}" clip-rule="${"evenodd"}"></path></svg>`;
-});
-
-/* src\client\components\Notification\GenericTaskNotification.svelte generated by Svelte v3.34.0 */
-
-const GenericTaskNotification = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	
-	let { taskNotification } = $$props;
-	if ($$props.taskNotification === void 0 && $$bindings.taskNotification && taskNotification !== void 0) $$bindings.taskNotification(taskNotification);
-
-	return `${taskNotification.status === "Executing"
-	? `<p class="${"text-right text-bangarang-lightEmphasis flex items-center justify-end"}">${escape(taskNotification.message)}${validate_component(Spinner, "Spinner").$$render($$result, {}, {}, {})}</p>`
-	: `${taskNotification.status === "Success"
-		? `<p class="${"text-right text-bangarang-lightEmphasis flex items-center justify-end"}">${escape(taskNotification.message)}${validate_component(Success, "Success").$$render($$result, {}, {}, {})}</p>`
-		: `${taskNotification.status === "Failed"
-			? `<p class="${"text-right text-bangarang-lightEmphasis flex items-center justify-end"}">${escape(taskNotification.message)}${validate_component(Failed, "Failed").$$render($$result, {}, {}, {})}</p>`
-			: ``}`}`}`;
 });
 
 /* src\client\components\Notification\SignInInformation.svelte generated by Svelte v3.34.0 */
@@ -2528,9 +2573,9 @@ const ClaimFooter = create_ssr_component(($$result, $$props, $$bindings, slots) 
 				{},
 				{}
 			)}
-            ${$claimingUserNotificationStore.status === "Success"
+            ${$claimingUserNotificationStore.status === "Success" || $claimingUserNotificationStore.status === "Failed"
 			? `${validate_component(ClaimingInformation, "ClaimingInformation").$$render($$result, {}, {}, {})}`
-			: `${$declaringClaimUserNotificationStore.status === "Success"
+			: `${$declaringClaimUserNotificationStore.status === "Success" || $declaringClaimUserNotificationStore.status === "Failed"
 				? `${validate_component(DeclaringInformation, "DeclaringInformation").$$render($$result, {}, {}, {})}`
 				: ``}`}</section>`}`}</footer>`;
 });
@@ -2677,9 +2722,9 @@ const retrievingClaimById = (claimId) => {
     retrievingClaimUserNotificationStore.set(executingRetrievingClaimUserNotification);
     setTimeout(() => {
         uiBangarangUserBuilder.getUser().retrievingClaimById(claimId);
-    }, declaringClaimFakeWaitingTime);
+    }, retrievingClaimFakeWaitingTime);
 };
-const declaringClaimFakeWaitingTime = 500;
+const retrievingClaimFakeWaitingTime = 500;
 
 /* src\routes\claims\[claimId].svelte generated by Svelte v3.34.0 */
 
@@ -2723,62 +2768,37 @@ function preload$2(page, session) {
 	return __awaiter$3(this, void 0, void 0, function* () {
 		const { claimId } = page.params;
 		let claim;
-		currentClaimIdStore.set(claimId);
-
-		/*currentClaimIdStore.subscribe(claimId => {
-    console.log(`retrievingClaimById(${claimId})`)
-    retrievingClaimById(claimId)
-})*/
-		declaringClaimUserNotificationStore.subscribe(declaringClaimUserNotification => {
-			if (declaringClaimUserNotification.status === "Executing" && declaringClaimUserNotification.claimToDeclare) {
-				claim = {
-					title: declaringClaimUserNotification.claimToDeclare.title,
-					type: declaringClaimUserNotification.claimToDeclare.type,
-					id: declaringClaimUserNotification.claimToDeclare.id,
-					peopleClaimed: declaringClaimUserNotification.claimToDeclare.peopleClaimed,
-					peopleClaimedAgainst: declaringClaimUserNotification.claimToDeclare.peopleClaimedAgainst,
-					peopleClaimedFor: declaringClaimUserNotification.claimToDeclare.peopleClaimedFor,
-					previousUserClaimChoice: undefined
-				};
-			} else {
-				//console.log(`retrievingClaimById(${claimId})`)
-				retrievingClaimById(claimId);
-			}
-		});
+		retrievingClaimById(claimId);
 
 		retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => {
 			console.log(retrievingClaimUserNotification);
 
 			if (retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) {
-				console.log("APPLY CLAIM");
 				claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice;
-				console.log(claim);
+				currentClaimIdStore.set(claim.id);
 			}
 		});
 
-		return { claim };
+		if (claim) return { claim };
 	});
 }
 
 const U5BclaimIdu5D = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	let { claim } = $$props;
 	
+	
+	
 
-	//currentClaimIdStore.set(claim.id)
-	claimingUserNotificationStore.subscribe(claimingUserNotification => {
-		if (claimingUserNotification.status === "Success" && claim) retrievingClaimById(claim.id);
-	});
+	const shouldRetrieveClaimOnSuccessClaimingNotification = claimingUserNotification => {
+		if (claimingUserNotification.status === "Success") retrievingClaimById(claim.id);
+	};
 
-	retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => {
-		console.log(retrievingClaimUserNotification);
+	const shouldAffectClaim = retrievingClaimUserNotification => {
+		if (retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice;
+	};
 
-		if (retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) {
-			console.log("APPLY CLAIM");
-			claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice;
-			console.log(claim);
-		}
-	});
-
+	claimingUserNotificationStore.subscribe(claimingUserNotification => shouldRetrieveClaimOnSuccessClaimingNotification(claimingUserNotification));
+	retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => shouldAffectClaim(retrievingClaimUserNotification));
 	if ($$props.claim === void 0 && $$bindings.claim && claim !== void 0) $$bindings.claim(claim);
 
 	return `${claim
