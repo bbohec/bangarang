@@ -21,7 +21,9 @@
     "test:all": "mocha src/tests/**/*.spec.ts",
     "export": "run-s build:css build:export",
     "start": "node __sapper__/build",
-    "serve": "serve ___sapper__/export"
+    "serve": "serve ___sapper__/exporet",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "compression": "^1.7.1",
@@ -47,10 +49,14 @@
     "@types/node": "^14.14.31",
     "@types/polka": "^0.5.2",
     "@types/uuid": "^8.3.0",
+    "@typescript-eslint/eslint-plugin": "^4.20.0",
+    "@typescript-eslint/parser": "^4.20.0",
     "autoprefixer": "^10.0.2",
     "chai": "^4.3.0",
     "cross-env": "^7.0.3",
     "cssnano": "^4.1.10",
+    "eslint": "^7.23.0",
+    "eslint-plugin-svelte3": "^3.1.2",
     "mocha": "^8.3.0",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.2.6",

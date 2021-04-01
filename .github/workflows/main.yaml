@@ -1,0 +1,36 @@
+
+name: format and tests
+on:
+  push:
+    branches:
+      - master
+      - develop
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths-ignore:
+      - '**.md'
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: install
+        run: npm install
+      - name: svelte check
+        run: npx svelte-check
+      - name: check format
+        id: format
+        run: npm run lint
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: install
+        run: npm install
+      - name: run tests
+        run: npm run test:all
