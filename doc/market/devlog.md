@@ -16,13 +16,21 @@
 
 - UI Register View
 
-## 2021/04/02 — Day 24
-- ✔️ Twitch Live Stream https://www.twitch.tv/benjaminbohec + announces
-- ✔️ Stand Up 
-- ✔️ Persistence
+## 2021/04/05 — Day 25
+- Twitch Live Stream https://www.twitch.tv/benjaminbohec + announces
+- Stand Up 
+- Persistence
 - Validate AT & TI
 - Pull Request
 - Summary.
+
+## 2021/04/02 — Day 24
+- ✔️ Twitch Live Stream https://www.twitch.tv/benjaminbohec + announces
+- ✔️ Stand Up 
+- ❌ Persistence
+- ❌ Validate AT & TI
+- ❌ Pull Request
+- ✔️ Summary.
 
 ## 2021/03/29 — Day 23
 - ✔️ Twitch Live Stream https://www.twitch.tv/benjaminbohec + announces

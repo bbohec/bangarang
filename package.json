@@ -24,9 +24,10 @@
     "serve": "serve ___sapper__/export"
   },
   "dependencies": {
+    "@google-cloud/datastore": "^6.3.1",
     "body-parser": "^1.19.0",
     "compression": "^1.7.1",
-    "polka": "next",
+    "express": "^4.17.1",
     "sirv": "^1.0.11"
   },
   "devDependencies": {
@@ -46,7 +47,6 @@
     "@types/compression": "^1.7.0",
     "@types/mocha": "^8.2.1",
     "@types/node": "^14.14.31",
-    "@types/polka": "^0.5.2",
     "@types/uuid": "^8.3.0",
     "autoprefixer": "^10.0.2",
     "axios": "^0.21.1",

@@ -79,6 +79,7 @@ export default {
 		input: { server: config.server.input().server.replace(/\.js$/, ".ts") },
 		output: config.server.output(),
 		plugins: [
+			typescript({ sourceMap: dev }),
 			replace({
 				preventAssignment:true,
 				'process.browser': false,
@@ -102,7 +103,7 @@ export default {
 				dedupe: ['svelte']
 			}),
 			commonjs(),
-			typescript({ sourceMap: dev })
+			
 		],
 		external: Object.keys(pkg.dependencies).concat(require('module').builtinModules),
 

@@ -4,6 +4,7 @@ import type { UserContract } from '../../client/port/UserContact';
 import { FakeBangarangMembersInteractor } from '../../client/adapters/FakeBangarangMembersInteractor';
 import type { ClaimChoice } from '../../client/port/ClaimChoice';
 import type { BangarangMembersInteractorContract } from '../../client/port/interactors/BangarangMembersInteractorContract';
+import { GcpDatastoreBangarangMembersInteractor } from '../../client/adapters/GcpDatastoreBangarangMembersInteractor';
 import { RestBangarangMembersInteractor } from '../../client/adapters/RestBangarangMembersInteractor';
 describe(`Bangarang Member Interactor - Integration Test`,()=>{
     const goodUserPassword = "password"
@@ -15,12 +16,29 @@ describe(`Bangarang Member Interactor - Integration Test`,()=>{
         name:string,
         adapter:BangarangMembersInteractorContract
     }
+    const restAdapter =new RestBangarangMembersInteractor()
+    const restAdapterGCP =new RestBangarangMembersInteractor()
+    restAdapterGCP.specificWithUrlPrefix("api")
     const adapterScenarios:AdapterScenario[] = [
         {name:"fake",adapter:new FakeBangarangMembersInteractor()},
-        {name:"REST",adapter:new RestBangarangMembersInteractor()},
+        {name:"RESTfake",adapter:restAdapter},
+        {name:"RESTGCPDatastore",adapter:restAdapterGCP},
     ]
     adapterScenarios.forEach(adapterScenario => {
         describe(`Integration Test with '${adapterScenario.name}' adapter.`,()=> {
+            before((done)=>{
+                if(adapterScenario.name === "RESTfake") {
+                    restAdapter.specificReset()
+                        .then(()=>done())
+                        .catch(error=>{done(error)})
+                } 
+                else if (adapterScenario.name === "RESTGCPDatastore") {
+                    restAdapterGCP.specificReset()
+                        .then(()=>done())
+                        .catch(error=>{done(error)})
+                } 
+                else done()
+            })
             it(`retrievePreviousMemberClaimChoiceOnClaim - error`,()=>{
                 return adapterScenario.adapter.retrievePreviousMemberClaimChoiceOnClaim(badUser.username,claimTitle)
                     .then(previousMemberClaimChoiceOnClaim =>expect(previousMemberClaimChoiceOnClaim).instanceOf(Error))
@@ -37,7 +55,9 @@ describe(`Bangarang Member Interactor - Integration Test`,()=>{
                         expect(result).not.instanceOf(Error)
                         return adapterScenario.adapter.retrievePreviousMemberClaimChoiceOnClaim(expectedExistingUser.username,claimTitle)
                     })
-                    .then(previousMemberClaimChoiceOnClaim =>{expect(previousMemberClaimChoiceOnClaim).equal(claimChoice).and.is.not.undefined})
+                    .then(previousMemberClaimChoiceOnClaim =>{
+                        expect(previousMemberClaimChoiceOnClaim).equal(claimChoice).and.is.not.undefined
+                    })
                     .catch(error => {throw error})
             })
             it(`saveMember - error - Member not saved`,()=>{
@@ -46,7 +66,7 @@ describe(`Bangarang Member Interactor - Integration Test`,()=>{
                     .catch(error => {throw error})
                 
             })
-            it(`specificFindMemberFromUsername & saveMember - OK - Member saved and exist`,()=>{
+            it(`isMemberExistWithUsername & saveMember - OK - Member saved and exist`,()=>{
                 return adapterScenario.adapter.isMemberExistWithUsername(expectedExistingUser.username)
                     .then(memberExist => {
                         expect(memberExist).to.be.false

@@ -1,53 +1,61 @@
-//import { bangarangMemberNotFoundError, BangarangMembersInteractorContract } from "../port/interactors/BangarangMembersInteractorContract";
 import type { MemberClaim } from "../port/MemberClaim";
 import type { UserContract } from "../port/UserContact";
-//import { Credentials, credentialsMissing } from "../port/bangarangMemberCredential";
 import type { ClaimChoice } from "../port/ClaimChoice";
-import axios, { AxiosError } from 'axios';
 import type { BangarangMembersInteractorContract } from "../port/interactors/BangarangMembersInteractorContract";
 import type { Credentials } from "../port/bangarangMemberCredential";
+import axios, { AxiosError } from 'axios';
 export class RestBangarangMembersInteractor implements BangarangMembersInteractorContract {
-    public isMemberExistWithUsername(username: string): Promise<boolean|Error> {
-        const apiCall = `http://localhost:3000/api/isMemberExistWithUsername/${username}`;
-        return axios
-            .get<{ isMemberExistWithUsername?: boolean }>(apiCall)
-            .then(response => (response.data.isMemberExistWithUsername !== undefined)?response.data.isMemberExistWithUsername:new Error ("isMemberExistWithUsername missing on body."))
-            .catch((error:AxiosError)=> this.handleAxiosError(apiCall,error))
+    public specificWithUrlPrefix(apiPrefix: string) {
+        this.apiPrefix = apiPrefix
     }
-    private handleAxiosError(apiCall:string,error: AxiosError): Error {
-        console.log(apiCall)
-        console.log(error.response?.data)
-        return error
+    public isMemberExistWithUsername(username: string): Promise<boolean|Error> {
+        return this.axiosGet<{ isMemberExistWithUsername?: boolean }>(`/isMemberExistWithUsername/${username}`)
+            .then(data => (data instanceof Error)
+                    ?data:(data.isMemberExistWithUsername !== undefined)
+                    ?data.isMemberExistWithUsername:new Error ("isMemberExistWithUsername missing on body.")
+            )
     }
     public isSignedIn(username: string): Promise<boolean|Error> {
-        const apiCall = `http://localhost:3000/api/isSignedIn/${username}`;
-        return axios
-            .get<{ isSignedIn?: boolean }>(apiCall)
-            .then(response =>(response.data.isSignedIn !== undefined)?response.data.isSignedIn:new Error ("isSignedIn missing on body."))
-            .catch((error:AxiosError)=> this.handleAxiosError(apiCall,error))
+        return this.axiosGet<{ isSignedIn?: boolean }>(`/isSignedIn/${username}`)
+            .then(data =>(data instanceof Error)
+                ?data:(data.isSignedIn !== undefined)
+                ?data.isSignedIn:new Error ("isSignedIn missing on body.")
+            )
     }
     public retrievePreviousMemberClaimChoiceOnClaim(username:string,claimTitle:string): Promise<ClaimChoice|Error> {
-        const apiCall=(`http://localhost:3000/api/retrievePreviousMemberClaimChoiceOnClaim/${username}/${claimTitle}`)
-        return axios
-            .get<{ retrievePreviousMemberClaimChoiceOnClaim?: ClaimChoice }>(`http://localhost:3000/api/retrievePreviousMemberClaimChoiceOnClaim/${username}/${claimTitle}`)
-            .then(response => response.data.retrievePreviousMemberClaimChoiceOnClaim)
-            .catch((error:AxiosError)=> this.handleAxiosError(apiCall,error))
+        return this.axiosGet<{ retrievePreviousMemberClaimChoiceOnClaim?: ClaimChoice }>(`/retrievePreviousMemberClaimChoiceOnClaim/${username}/${claimTitle}`)
+            .then(data => (data instanceof Error)?data:data.retrievePreviousMemberClaimChoiceOnClaim)
     }
     public saveCredentials(credentials: Credentials): Promise<void|Error> {
-        return this.axiosPost(`http://localhost:3000/api/saveCredentials`, credentials)
+        return this.axiosPost(`/saveCredentials`, credentials)
     }
     public saveMember(userContract: UserContract): Promise<void|Error> {
-        return this.axiosPost(`http://localhost:3000/api/saveMember`, userContract)
+        return this.axiosPost(`/saveMember`, userContract)
     }
     public saveMemberClaim(memberClaim: MemberClaim): Promise<void|Error> {
-        return this.axiosPost(`http://localhost:3000/api/saveMemberClaim`, memberClaim)
+        return this.axiosPost(`/saveMemberClaim`, memberClaim)
     }
     public signingIn(credentials: Credentials):Promise<void|Error> {
-        return this.axiosPost(`http://localhost:3000/api/signingIn`, credentials)
+        return this.axiosPost(`/signingIn`, credentials)
     }
-    private axiosPost(url: string, data: any): Promise<void | Error> {
+    public specificReset():Promise<void> {
+        return this.axiosPost(`/reset`,{})
+            .then(result => {if(result instanceof Error) throw result})
+    }
+    private axiosGet<T>(method:string):Promise<T|Error> {
+        const url = `${this.scheme}://${this.endpointFullyQualifiedDomainName}:${this.port}/${this.apiPrefix}${method}`
+        return axios.get<T>(url)
+            .then(response => (response.status===200)?response.data:new Error(response.statusText))
+            .catch((error:AxiosError)=> error)
+    }
+    private axiosPost(request: string, data: any): Promise<void | Error> {
+        const url = `${this.scheme}://${this.endpointFullyQualifiedDomainName}:${this.port}/${this.apiPrefix}${request}`
         return axios({url,method:'POST',data})
-            .then(response => {if (response.status !== 204)throw new Error(response.statusText);})
-            .catch((error: AxiosError) => this.handleAxiosError(url, error));
+            .then(response => {if (response.status !== 200)throw new Error(response.statusText)})
+            .catch((error: AxiosError) => error);
     }
+    private endpointFullyQualifiedDomainName:string = 'localhost'
+    private port:string='3000'
+    private apiPrefix:string='fake'
+    private scheme:"http"|"https"="http"
 }

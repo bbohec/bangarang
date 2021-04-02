@@ -62,6 +62,13 @@ export class FakeBangarangMembersInteractor implements BangarangMembersInteracto
     public specificWithCredentials(credentials:Credentials[]):void {
         this.membersCredentials = credentials
     }
+    public reset():Promise<void> {
+        this.specificWithCredentials([])
+        this.specificWithMembers([])
+        this.specificWithMembersClaims([])
+        this.specificWithSignedInMembers([])
+        return Promise.resolve()
+    }
     private saveOnDatabasePattern<Type>(toSave: Type,database:Type[],finder:(databaseElement: Type) => boolean):Promise<void> {
         const databaseElementIndex = database.findIndex(finder);
         (databaseElementIndex > -1)?database[databaseElementIndex] = toSave:database.push(toSave);

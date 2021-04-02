@@ -5,7 +5,6 @@
         let claim:ClaimContractWithMemberPreviousClaimChoice|undefined;
         retrievingClaimById(claimId) 
         retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => {
-            console.log(retrievingClaimUserNotification)
             if(retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) {
                 claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice
                 currentClaimIdStore.set(claim.id)
