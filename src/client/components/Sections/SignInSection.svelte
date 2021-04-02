@@ -2,10 +2,12 @@
     import { signingIn } from "../../logic/singIn";
     import GenericButton from "../Buttons/GenericButton.svelte"
     import {signingInNotificationStore} from "../../stores/signInStore"
+    import DemoUserCard from "../Cards/DemoUserCard.svelte"
     let userInputUsername="";
     let userInputPassword="";
     const onClickSignInButton = ():void => signingIn(userInputUsername,userInputPassword)
 </script>
+<DemoUserCard/>
 <p class="text-bangarang-lightEmphasis">Sign into your account</p>
 {#if $signingInNotificationStore.status === "Executing"}
     <input 

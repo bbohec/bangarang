@@ -84,7 +84,8 @@ describe(`Feature : Retrieving Claim
             expect(bangarangMembersInteractor.specificFindMemberFromUsername(expectedUser.username)).deep.equal(expectedUser)
         })
         it(`And the user has not claimed on claim '${expectedClaim.title}'`, ()=>{
-            expect(bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(expectedUser.username,expectedClaim.title)).is.undefined
+            return bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(expectedUser.username,expectedClaim.title)
+                .then(previousMemberClaimChoiceOnClaim => expect(previousMemberClaimChoiceOnClaim).is.undefined)
         })
         it(`And the claim '${expectedClaim.title}' is declared on Bangarang`,()=>{
             expect(bangarangClaimInteractor.claimById(expectedClaim.id)).deep.equal(expectedClaim)
@@ -110,7 +111,8 @@ describe(`Feature : Retrieving Claim
             expect(bangarangMembersInteractor.specificFindMemberFromUsername(expectedUser.username)).deep.equal(expectedUser)
         })
         it(`And the user has claimed '${expectedClaimChoice}' on claim '${expectedClaim.title}'`, ()=>{
-            expect(bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(expectedUser.username,expectedClaim.title)).equal(expectedClaimChoice)
+            return bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(expectedUser.username,expectedClaim.title)
+                .then(previousMemberClaimChoiceOnClaim => expect(previousMemberClaimChoiceOnClaim).equal(expectedClaimChoice))
         })
         it(`And the claim '${expectedClaim.title}' is declared on Bangarang`,()=>{
             expect(bangarangClaimInteractor.claimById(expectedClaim.id)).deep.equal(expectedClaim)
@@ -136,7 +138,8 @@ describe(`Feature : Retrieving Claim
             expect(bangarangMembersInteractor.specificFindMemberFromUsername(expectedUser.username)).deep.equal(expectedUser)
         })
         it(`And the user has claimed '${expectedClaimChoice}' on claim '${expectedClaim.title}'`, ()=>{
-            expect(bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(expectedUser.username,expectedClaim.title)).equal(expectedClaimChoice)
+            return bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(expectedUser.username,expectedClaim.title)
+                .then(previousMemberClaimChoiceOnClaim => expect(previousMemberClaimChoiceOnClaim).equal(expectedClaimChoice))
         })
         it(`And the claim '${expectedClaim.title}' is declared on Bangarang`,()=>{
             expect(bangarangClaimInteractor.claimById(expectedClaim.id)).deep.equal(expectedClaim)

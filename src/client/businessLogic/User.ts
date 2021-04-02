@@ -1,11 +1,11 @@
 import type { ClaimContract, ClaimContractWithMemberPreviousClaimChoice, ClaimTitle, ClaimType, Identifier } from "../port/ClaimContract";
 import type { BangarangAdaptersContract } from "../port/BangarangAdaptersContract";
 import type { UserContract } from "../port/UserContact";
-import { alreadySignedInSigningInNotification, badCredentialsSigningInNotification, successSigningInNotification } from "../port/interactors/SigningInUserNotificationInteractorContract";
+import { alreadySignedInSigningInNotification, badCredentialsSigningInNotification, SigningInUserNotificationContract, SigningInUserNotificationInteractorContract, successSigningInNotification } from "../port/interactors/SigningInUserNotificationInteractorContract";
 import { claimAlreadyExistDeclaringClaimUserNotification, claimWithoutTitleDeclaringClaimUserNotification, claimWithoutTypeDeclaringClaimUserNotification, successDeclaringClaimUserNotification } from "../port/interactors/DeclaringClaimUserNotificationInteractorContract";
 import { claimNotDeclaredRetrievingClaimUserNotification, successRetrievingClaimUserNotification, unexpectedErrorRetrievingClaimUserNotification } from "../port/interactors/RetrievingClaimUserNotificationInteractorContract";
 import { successSearchingClaimsUserNotification, unexpectedErrorSearchingClaimsUserNotification } from "../port/interactors/SearchingClaimsUserNotificationInteractorContract";
-import { claimNotDeclaredClaimingUserNotification, multipleTimesClaimingUserNotification, mustBeSignedInClaimingUserNotification, successClaimingUserNotification, unexpectedErrorClaimingUserNotification } from "../port/interactors/ClaimingUserNotificationInteractorContract";
+import { ClaimingUserNotificationContract, claimNotDeclaredClaimingUserNotification, multipleTimesClaimingUserNotification, mustBeSignedInClaimingUserNotification, successClaimingUserNotification, unexpectedErrorClaimingUserNotification } from "../port/interactors/ClaimingUserNotificationInteractorContract";
 import type { ClaimChoice } from "../port/ClaimChoice";
 import { StaticView } from "../port/interactors/BangarangUserInterfaceInteractor";
 import { Claim } from "./Claim";
@@ -17,39 +17,47 @@ export class User implements UserContract  {
         this.email = userContract.email;
         this.bangarangAdapters = bangarangAdapters;
     }
-    public registering(password:string):void {
-        if(this.bangarangAdapters.bangarangMembersInteractor.isMemberExistWithUsername(this.username))
-            this.bangarangAdapters.registeringUserNotificationInteractor.notify(alreadyMemberRegisteringUserNotification)
-        else if(!this.bangarangAdapters.passwordInteractor.isPasswordSecure(password))
-            this.bangarangAdapters.registeringUserNotificationInteractor.notify(unsecurePasswordRegisteringUserNotification)
-        else if(this.bangarangAdapters.emailInteractor.isEmailValid(this.email)){
-            this.bangarangAdapters.bangarangMembersInteractor.saveMember({username:this.username,fullname:this.fullname,email:this.email})
-            this.bangarangAdapters.bangarangMembersInteractor.saveCredentials({username:this.username,password})
-            this.bangarangAdapters.registeringUserNotificationInteractor.notify(successRegisteringUserNotification)
-        } else this.bangarangAdapters.registeringUserNotificationInteractor.notify(badEmailRegisteringUserNotification)
+    public registering(password:string):Promise<void> {
+        return this.bangarangAdapters.bangarangMembersInteractor.isMemberExistWithUsername(this.username)
+            .then(isMemberExistWithUsername => {
+                if(isMemberExistWithUsername instanceof Error) throw new Error("NOT IMPLEMENTED")
+                else if (isMemberExistWithUsername)
+                    return Promise.resolve(this.bangarangAdapters.registeringUserNotificationInteractor.notify(alreadyMemberRegisteringUserNotification))
+                else if(!this.bangarangAdapters.passwordInteractor.isPasswordSecure(password))
+                    return Promise.resolve(this.bangarangAdapters.registeringUserNotificationInteractor.notify(unsecurePasswordRegisteringUserNotification))
+                else if(this.bangarangAdapters.emailInteractor.isEmailValid(this.email)){
+                    return this.bangarangAdapters.bangarangMembersInteractor.saveMember({username:this.username,fullname:this.fullname,email:this.email})
+                        .then(result=>this.bangarangAdapters.bangarangMembersInteractor.saveCredentials({username:this.username,password}))
+                        .then(result => this.bangarangAdapters.registeringUserNotificationInteractor.notify(successRegisteringUserNotification))
+                } else return Promise.resolve(this.bangarangAdapters.registeringUserNotificationInteractor.notify(badEmailRegisteringUserNotification))
+            })
+        
     }
-    public claiming(claimId: string, claimChoice: ClaimChoice):void {
+    public claiming(claimId: string, claimChoice: ClaimChoice):Promise<void> {
         const retreivedClaim = this.bangarangAdapters.bangarangClaimInteractor.claimById(claimId)
-        const isUserHasPreviouslyMadeTheSameClaimChoice=(previousClaimChoice:ClaimChoice,claimChoice:ClaimChoice):boolean => previousClaimChoice !==undefined && previousClaimChoice === claimChoice
-        if (retreivedClaim instanceof Error) 
-            this.bangarangAdapters.claimingUserNotificationInteractor.notify(claimNotDeclaredClaimingUserNotification(claimId))
-        else if (!this.bangarangAdapters.bangarangMembersInteractor.isSignedIn(this.username)){
-            this.bangarangAdapters.claimingUserNotificationInteractor.notify(mustBeSignedInClaimingUserNotification)
-            this.bangarangAdapters.bangarangUserInterfaceInteractor.goToSigningInMenu()
-        }
+        if (retreivedClaim instanceof Error) return Promise.resolve(this.bangarangAdapters.claimingUserNotificationInteractor.notify(claimNotDeclaredClaimingUserNotification(claimId)))
         else{
-            const previousClaimChoice = this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, retreivedClaim.title)
-            if(previousClaimChoice instanceof Error) this.bangarangAdapters.claimingUserNotificationInteractor.notify(unexpectedErrorClaimingUserNotification(previousClaimChoice))
-            else if (isUserHasPreviouslyMadeTheSameClaimChoice(previousClaimChoice,claimChoice))
-                this.bangarangAdapters.claimingUserNotificationInteractor.notify(multipleTimesClaimingUserNotification(claimChoice))
-            else {
-                new Claim(retreivedClaim)
-                    .increasePeopleClaimedWhenNoPreviousClaimChoice(previousClaimChoice)
-                    .removePreviousClaimOnClaim(previousClaimChoice)
-                    .increaseClaimChoiseFromClaimChoice(claimChoice)
-                    .save(this.bangarangAdapters.bangarangClaimInteractor,this.bangarangAdapters.bangarangMembersInteractor,this.username,claimChoice)
-                this.bangarangAdapters.claimingUserNotificationInteractor.notify(successClaimingUserNotification)
-            }
+            return this.bangarangAdapters.bangarangMembersInteractor.isSignedIn(this.username)
+                .then(isSignedIn=>{
+                    if (!isSignedIn){
+                        this.bangarangAdapters.bangarangUserInterfaceInteractor.goToSigningInMenu()
+                        throw mustBeSignedInClaimingUserNotification
+                    }
+                    return this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, retreivedClaim.title)
+                })
+                .then(previousClaimChoice=> {
+                    const isUserHasPreviouslyMadeTheSameClaimChoice=(previousClaimChoice:ClaimChoice,claimChoice:ClaimChoice):boolean => previousClaimChoice !==undefined && previousClaimChoice === claimChoice
+                    if(previousClaimChoice instanceof Error) throw unexpectedErrorClaimingUserNotification(previousClaimChoice)
+                    else if (isUserHasPreviouslyMadeTheSameClaimChoice(previousClaimChoice,claimChoice))throw multipleTimesClaimingUserNotification(claimChoice)
+                    else {
+                        new Claim(retreivedClaim)
+                            .increasePeopleClaimedWhenNoPreviousClaimChoice(previousClaimChoice)
+                            .removePreviousClaimOnClaim(previousClaimChoice)
+                            .increaseClaimChoiseFromClaimChoice(claimChoice)
+                            .save(this.bangarangAdapters.bangarangClaimInteractor,this.bangarangAdapters.bangarangMembersInteractor,this.username,claimChoice)
+                        this.bangarangAdapters.claimingUserNotificationInteractor.notify(successClaimingUserNotification)
+                    }
+                }).catch((notification:ClaimingUserNotificationContract) => this.bangarangAdapters.claimingUserNotificationInteractor.notify(notification))
         }
     }
     public searchingClaims(searchCriteria: string):void {
@@ -89,20 +97,22 @@ export class User implements UserContract  {
         const claim = this.bangarangAdapters.bangarangClaimInteractor.claimById(id)
         if (claim instanceof Error)  this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(claimNotDeclaredRetrievingClaimUserNotification)
         else {
-            const previousMemberClaimChoiceOnClaim = this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, claim.title);
-            if(previousMemberClaimChoiceOnClaim instanceof Error)this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(unexpectedErrorRetrievingClaimUserNotification(previousMemberClaimChoiceOnClaim))
-            else {
-                    const claimWithMemberPreviousClaimChoice:ClaimContractWithMemberPreviousClaimChoice = {
-                    title:claim.title,
-                    type:claim.type,
-                    peopleClaimed:claim.peopleClaimed,
-                    peopleClaimedAgainst:claim.peopleClaimedAgainst,
-                    peopleClaimedFor:claim.peopleClaimedFor,
-                    previousUserClaimChoice:previousMemberClaimChoiceOnClaim,
-                    id:claim.id
-                }
-                this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(successRetrievingClaimUserNotification(claimWithMemberPreviousClaimChoice))
-            }
+            this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, claim.title)
+                .then(previousMemberClaimChoiceOnClaim => {
+                    if(previousMemberClaimChoiceOnClaim instanceof Error)this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(unexpectedErrorRetrievingClaimUserNotification(previousMemberClaimChoiceOnClaim))
+                    else {
+                            const claimWithMemberPreviousClaimChoice:ClaimContractWithMemberPreviousClaimChoice = {
+                            title:claim.title,
+                            type:claim.type,
+                            peopleClaimed:claim.peopleClaimed,
+                            peopleClaimedAgainst:claim.peopleClaimedAgainst,
+                            peopleClaimedFor:claim.peopleClaimedFor,
+                            previousUserClaimChoice:previousMemberClaimChoiceOnClaim,
+                            id:claim.id
+                        }
+                        this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(successRetrievingClaimUserNotification(claimWithMemberPreviousClaimChoice))
+                    }
+                })
         }
     }
     public declaringClaim(claimTitle:ClaimTitle,claimType:ClaimType,claimId:Identifier):void {
@@ -119,14 +129,24 @@ export class User implements UserContract  {
             else this.bangarangAdapters.bangarangUserInterfaceInteractor.goToClaim(retrievedClaim.id)
         } 
     }
-    public signingIn(password:string):void {
-        if(this.bangarangAdapters.bangarangMembersInteractor.isSignedIn(this.username))
-            this.bangarangAdapters.signingInUserNotificationInteractor.notify(alreadySignedInSigningInNotification)
-        else {
-            const error = this.bangarangAdapters.bangarangMembersInteractor.signingIn({username:this.username,password})
-            if (error) this.bangarangAdapters.signingInUserNotificationInteractor.notify(badCredentialsSigningInNotification)
-            else this.bangarangAdapters.signingInUserNotificationInteractor.notify(successSigningInNotification)
-        }
+    public signingIn(password:string):Promise<void> {
+        return this.bangarangAdapters.bangarangMembersInteractor.isSignedIn(this.username)
+            .then(isSignedIn=> {
+                if(isSignedIn instanceof Error)  throw new Error("NOT IMPLEMENTED")
+                else if(isSignedIn === true) throw alreadySignedInSigningInNotification
+                // this.bangarangAdapters.signingInUserNotificationInteractor.notify(alreadySignedInSigningInNotification)
+                else return this.bangarangAdapters.bangarangMembersInteractor.signingIn({username:this.username,password})
+            })
+            .then(signingIn=>{
+                if (signingIn) throw(badCredentialsSigningInNotification)
+                //{
+                    //this.bangarangAdapters.signingInUserNotificationInteractor.notify(badCredentialsSigningInNotification)
+                    //return 
+                //}
+                else return this.bangarangAdapters.signingInUserNotificationInteractor.notify(successSigningInNotification)
+            })
+            .catch((notification:SigningInUserNotificationContract)=>this.bangarangAdapters.signingInUserNotificationInteractor.notify(notification))
+        
     }
     /*
     public isSignedIn():boolean{

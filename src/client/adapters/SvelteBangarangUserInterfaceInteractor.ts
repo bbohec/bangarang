@@ -8,5 +8,4 @@ export class SvelteBangarangUserInterfaceInteractor implements BangarangUserInte
     goToClaim(claimId: string): void {
         goto(linkPrefixes.claimLinkPrefix+claimId)
     }
-
 }

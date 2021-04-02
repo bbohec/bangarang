@@ -2,6 +2,7 @@
 - ? Builder placement on clean architecture
 - Backend
 - Multi-language — /!\ FR /!\
+- Signing-In Security warning
 - Error management
 - Official video >> subscribe to form in order to be informed about demo & launch
 - BDD > Feature scenarios:
@@ -12,19 +13,39 @@
 - 👉 Doing
 - ✔️ Done
 
+
+- UI Register View
+
+## 2021/04/02 — Day 24
+- ✔️ Twitch Live Stream https://www.twitch.tv/benjaminbohec + announces
+- ✔️ Stand Up 
+- ✔️ Persistence
+- Validate AT & TI
+- Pull Request
+- Summary.
+
+## 2021/03/29 — Day 23
+- ✔️ Twitch Live Stream https://www.twitch.tv/benjaminbohec + announces
+- ✔️ Stand Up 
+- ✔️ Feedback
+- ✔️ Bangarang user demo info
+- ❌ Persistence
+- ❌ UI Register View
+- ✔️ Summary.
+
 ## 2021/03/26 — Day 22
 - ✔️ Twitch Live Stream https://www.twitch.tv/benjaminbohec
 - ✔️ Stand Up 
 - ✔️ ATDD/TDD > Logic Repair
-- Link Business Logic <> UI : UI Adapter
+- ✔️ Link Business Logic <> UI : UI Adapter
     - ✔️ Claiming
     - ✔️ searching claim
     - ✔️ Declare claim
     - ✔️ SSR claim link
     - ✔️ registering 
     - ✔️ signing in
-- Backend
-- Summary.
+- ❌ Backend
+- ✔️ Summary.
 
 ## 2021/03/22 — Day 21
 - ✔️ Twitch Live Stream https://www.twitch.tv/benjaminbohec

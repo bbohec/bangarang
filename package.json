@@ -24,6 +24,7 @@
     "serve": "serve ___sapper__/export"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
     "compression": "^1.7.1",
     "polka": "next",
     "sirv": "^1.0.11"
@@ -48,6 +49,7 @@
     "@types/polka": "^0.5.2",
     "@types/uuid": "^8.3.0",
     "autoprefixer": "^10.0.2",
+    "axios": "^0.21.1",
     "chai": "^4.3.0",
     "cross-env": "^7.0.3",
     "cssnano": "^4.1.10",

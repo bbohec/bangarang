@@ -166,12 +166,12 @@ describe(`Feature: Claiming
             expectedView:"claim"
         }
     ]
-    function initScenario (scenario:Scenario){
+    async function initScenario (scenario:Scenario){
         bangarangMembersInteractor.specificWithMembers([userContract]);
         bangarangMembersInteractor.specificWithSignedInMembers([]);
         bangarangMembersInteractor.specificWithMembersClaims([]);
         bangarangMembersInteractor.specificWithCredentials([{username:userContract.username,password:userPassword}])
-        if(scenario.userSignedIn)user.signingIn("")
+        if(scenario.userSignedIn) await user.signingIn("")
         bangarangClaimInteractor.removeAllClaims();
         if(scenario.claimDeclared)bangarangClaimInteractor.saveClaim(scenario.expectedClaim)
         claimingUserNotificationInteractor.currentUserNotification = undefined
@@ -183,7 +183,9 @@ describe(`Feature: Claiming
         ${scenario.description}`,()=> {
             before(()=>initScenario(scenario))
             it(`Given the user is ${(!scenario.userSignedIn)?"not ":""}signed in`,()=>{
-                expect(bangarangMembersInteractor.isSignedIn(userContract.username)).equal(scenario.userSignedIn)
+                return bangarangMembersInteractor.isSignedIn(userContract.username)
+                    .then(isSignedIn=>expect(isSignedIn).equal(scenario.userSignedIn))
+                
             })
             if (scenario.claimDeclared){ 
                 if(scenario.previousClaimChoice)it(`And the claim with id '${scenario.expectedClaim.id}' is declared on Bangarang with the following values:
@@ -208,7 +210,8 @@ describe(`Feature: Claiming
                 expect(bangarangClaimInteractor.declaredClaims.length).equal(0)
             })
             if (scenario.previousClaimChoice) it(`And the user has previously claimed '${scenario.previousClaimChoice}' on claim '${scenario.expectedClaim.title}'`,()=>{
-                expect(bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(userContract.username,scenario.expectedClaim.title)).equal(scenario.previousClaimChoice)
+                return bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(userContract.username,scenario.expectedClaim.title)
+                    .then(previousMemberClaimChoiceOnClaim=>expect(previousMemberClaimChoiceOnClaim).equal(scenario.previousClaimChoice))
             })
             it(`When the user claim '${scenario.userChoice}' on the claim with title '${scenario.expectedClaim.title}'`,(done)=>{
                 user.claiming(scenario.expectedClaim.id,scenario.userChoice)
