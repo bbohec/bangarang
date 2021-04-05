@@ -1,10 +1,11 @@
 # Bangarang — Product Development Log
-- ? Builder placement on clean architecture
-- Backend
-- Multi-language — /!\ FR /!\
+- UI Register Vie
 - Signing-In Security warning
-- Error management
+- Multi-language — /!\ FR /!\
 - Official video >> subscribe to form in order to be informed about demo & launch
+- Signing In Rework
+- ? Builder placement on clean architecture
+- Error management
 - BDD > Feature scenarios:
     - Signing Out.
     - Declaring Multiple Proposal Claim.
@@ -14,15 +15,27 @@
 - ✔️ Done
 
 
-- UI Register View
+## 2021/04/09 — Day 26
+-  Twitch Live https://www.twitch.tv/benjaminbohec + announces
+-  Stand Up 
+-  Change Claim Inter. with Prom
+-  RestFake Claim Inter.
+-  RestGCP Claim Inter.
+-  AT & TI & e2e
+-  Pull Req.
+-  Summ.
 
 ## 2021/04/05 — Day 25
-- ✔️ Twitch Live Stream https://www.twitch.tv/benjaminbohec + announces
+- ✔️ Twitch Live
 - ✔️ Stand Up 
-- 👉 Persistence
-- Validate AT & TI
-- Pull Request
-- Summary.
+- ✔️ Finish Member Inter. Integration
+- ✔️ Prepare GCP & REST Inter.
+- ❌ Change Claim Inter. with Prom
+- ❌ RestFake Claim Inter.
+- ❌ RestGCP Claim Inter.
+- ❌ AT & TI & e2e
+- ❌ Pull Req.
+- ✔️ Summ.
 
 ## 2021/04/02 — Day 24
 - ✔️ Twitch Live Stream https://www.twitch.tv/benjaminbohec + announces

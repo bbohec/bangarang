@@ -5,6 +5,7 @@ import { FakeBangarangClaimInteractor } from "./FakeBangarangClaimInteractor";
 import { FakeBangarangMembersInteractor } from "./FakeBangarangMembersInteractor";
 import { FakeRegisteringUserNotificationInteractor } from "./FakeRegisteringUserNotificationInteractor";
 import { RestBangarangMembersInteractor } from "./RestBangarangMembersInteractor";
+import { RestInteractor } from "./RestInteractor";
 import { SvelteBangarangUserInterfaceInteractor } from "./SvelteBangarangUserInterfaceInteractor";
 import { SvelteClaimingUserNotificationInteractor } from "./SvelteClaimingUserNotificationInteractorContract";
 import { SvelteDeclaringClaimUserNotificationInteractor } from "./SvelteDeclaringClaimUserNotificationInteractor";
@@ -14,8 +15,9 @@ import { SvelteSigningInUserNotificationInteractor } from "./SvelteSigningInUser
 
 
 //const bangarangMembersInteractor = new FakeBangarangMembersInteractor()
-const bangarangMembersInteractor = new RestBangarangMembersInteractor()
-bangarangMembersInteractor.specificWithUrlPrefix("api")
+const restInteractor = new RestInteractor()
+const bangarangMembersInteractor = new RestBangarangMembersInteractor(restInteractor)
+restInteractor.specificWithUrlPrefix("api")
 const bangarangClaimInteractor=new FakeBangarangClaimInteractor()
 demoClaims().forEach(claim => bangarangClaimInteractor.saveClaim(claim))
 export const uiBangarangUserBuilder = new UserBuilder()
