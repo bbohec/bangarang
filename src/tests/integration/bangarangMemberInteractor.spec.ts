@@ -66,7 +66,7 @@ describe(`Bangarang Member Interactor - Integration Test`,()=>{
                     .catch(error => {throw error})
                 
             })
-            it(`isMemberExistWithUsername & saveMember - OK - Member saved and exist`,()=>{
+            it(`isMemberExistWithUsername & saveMember - OK - Member '${expectedExistingUser.username}' saved and exist`,()=>{
                 return adapterScenario.adapter.isMemberExistWithUsername(expectedExistingUser.username)
                     .then(memberExist => {
                         expect(memberExist).to.be.false
