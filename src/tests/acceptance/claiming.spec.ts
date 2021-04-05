@@ -199,12 +199,16 @@ describe(`Feature: Claiming
                         peopleClaimedAgainst:scenario.expectedClaim.peopleClaimedAgainst+((scenario.previousClaimChoice=== "Against")?1:0),
                         id:scenario.expectedClaim.id
                     }
-                    expect(bangarangClaimInteractor.claimById(scenario.expectedClaim.id)).deep.equal(previouslyClaimedClaim)
+                    return bangarangClaimInteractor.claimById(scenario.expectedClaim.id)
+                        .then(claim => expect(claim).deep.equal(previouslyClaimedClaim))
+                    
                 })
                 else it(`And the claim with id '${scenario.expectedClaim.id}' is declared on Bangarang with the following values:
                 | claim title |claimed people| claimed For people | claimed Against people|
                 | ${scenario.expectedClaim.title} | ${scenario.expectedClaim.peopleClaimed}           | ${scenario.expectedClaim.peopleClaimedFor}                 | ${scenario.expectedClaim.peopleClaimedAgainst}                     |`,()=>{
-                    expect(bangarangClaimInteractor.claimById(scenario.expectedClaim.id)).deep.equal(scenario.expectedClaim)
+                    return bangarangClaimInteractor.claimById(scenario.expectedClaim.id)
+                        .then(claim => expect(claim).deep.equal(scenario.expectedClaim))
+                    
                 })
             } else it(`And there is no declared claims on Bangarang`,()=>{
                 expect(bangarangClaimInteractor.declaredClaims.length).equal(0)
@@ -215,7 +219,7 @@ describe(`Feature: Claiming
             })
             it(`When the user claim '${scenario.userChoice}' on the claim with title '${scenario.expectedClaim.title}'`,(done)=>{
                 user.claiming(scenario.expectedClaim.id,scenario.userChoice)
-                done()
+                    .then(()=>done())
             })
             it(`Then the user has a '${notificationType}' notification with '${scenario.expectedNotification.status}' status and '${scenario.expectedNotification.message}' message.`,()=> {
                 expect(claimingUserNotificationInteractor.currentUserNotification?.message).equal(scenario.expectedNotification.message)
@@ -224,9 +228,11 @@ describe(`Feature: Claiming
             scenario.claimChecks.forEach(claimCheck => checkClaimValue(bangarangClaimInteractor, scenario.expectedClaim,claimCheck.propertyName,claimCheck.increased))
             function checkClaimValue(bangarangClaimInteractor: FakeBangarangClaimInteractor, expectedClaim: ClaimContract,claimPropertyToCheck:"peopleClaimedAgainst"|"peopleClaimedFor"|"peopleClaimed",isIncreased:boolean) {
                 it(`And the '${claimPropertyToCheck}' quantity on claim '${expectedClaim.title}' is ${expectedClaim[claimPropertyToCheck]+((isIncreased)?1:0)}`,()=>{
-                    const claim = bangarangClaimInteractor.claimById(expectedClaim.id);
-                    if (claim instanceof Error)throw claim;
-                    expect(claim[claimPropertyToCheck]).equal(expectedClaim[claimPropertyToCheck]+((isIncreased)?1:0));
+                    return bangarangClaimInteractor.claimById(expectedClaim.id)
+                        .then(claim => {
+                            if (claim instanceof Error)throw claim;
+                            expect(claim[claimPropertyToCheck]).equal(expectedClaim[claimPropertyToCheck]+((isIncreased)?1:0));
+                        })
                 })  
             }
             it(`The user view is "${scenario.expectedView}".`,()=>{

@@ -1,8 +1,10 @@
 import 'mocha';
 import {expect} from "chai";
 import type { BangarangClaimInteractorContract } from '../../client/port/interactors/BangarangClaimInteractorContract';
-import { FakeBangarangClaimInteractor } from '../../client/adapters/FakeBangarangClaimInteractor';
 import type { ClaimContract } from '../../client/port/ClaimContract';
+import { FakeBangarangClaimInteractor } from '../../client/adapters/FakeBangarangClaimInteractor';
+import { RestBangarangClaimInteractor } from '../../client/adapters/RestBangarangClaimInteractor';
+import { RestInteractor } from '../../client/adapters/RestInteractor';
 describe(`Bangarang Claim Interactor - Integration Test`,()=>{
    const expectedSavedClaim:ClaimContract= {
        id:"dsolsdfsldfjsdlfjsdflkjjsf",
@@ -28,7 +30,7 @@ describe(`Bangarang Claim Interactor - Integration Test`,()=>{
     }
     const adapterScenarios:AdapterScenario[] = [
         {name:"fake",adapter:new FakeBangarangClaimInteractor(errorClaim.title)},
-        //{name:"prod",adapter:new FakeBangarangMembersInteractor()}
+        //{name:"restFake",adapter:new RestBangarangClaimInteractor(new RestInteractor())}
     ]
     adapterScenarios.forEach(adapterScenario => {
         describe(`Integration Test with '${adapterScenario.name}' adapter.`,()=> {

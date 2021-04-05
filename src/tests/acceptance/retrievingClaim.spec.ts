@@ -61,10 +61,11 @@ describe(`Feature : Retrieving Claim
                 .to.throw(bangarangMemberNotFoundError(expectedUser.username))
         })
         it(`And the claim '${expectedClaim.title}' with id '${expectedClaim.id}' is declared on Bangarang`,()=>{
-            expect(bangarangClaimInteractor.claimById(expectedClaim.id )).deep.equal(expectedClaim)
+            return bangarangClaimInteractor.claimById(expectedClaim.id )
+                .then(claim=>expect(claim).deep.equal(expectedClaim))
         })
-        it(`When the user retrieve the claim with title '${expectedClaim.title}'`,()=>{
-            user.retrievingClaimById(expectedClaim.id)
+        it(`When the user retrieve the claim with title '${expectedClaim.title}'`,(done)=>{
+            user.retrievingClaimById(expectedClaim.id).then(()=>done())
         })
         it(`Then the retrieved claim in the claim user notification has the following information: 
         | title | people claimed    | people claimed for    | people claimed against    | previous user claim choice    |
@@ -88,10 +89,11 @@ describe(`Feature : Retrieving Claim
                 .then(previousMemberClaimChoiceOnClaim => expect(previousMemberClaimChoiceOnClaim).is.undefined)
         })
         it(`And the claim '${expectedClaim.title}' is declared on Bangarang`,()=>{
-            expect(bangarangClaimInteractor.claimById(expectedClaim.id)).deep.equal(expectedClaim)
+            return bangarangClaimInteractor.claimById(expectedClaim.id)
+                .then(claim=>expect(claim).deep.equal(expectedClaim))
         })
-        it(`When the user retrieve the claim with id '${expectedClaim.id}'`,()=>{
-            user.retrievingClaimById(expectedClaim.id)
+        it(`When the user retrieve the claim with id '${expectedClaim.id}'`,(done)=>{
+            user.retrievingClaimById(expectedClaim.id).then(()=>done())
         })
         it(`Then the retrieved claim in the claim user notification has the following information: 
         | title | people claimed    | people claimed for    | people claimed against    | previous user claim choice    |
@@ -115,10 +117,11 @@ describe(`Feature : Retrieving Claim
                 .then(previousMemberClaimChoiceOnClaim => expect(previousMemberClaimChoiceOnClaim).equal(expectedClaimChoice))
         })
         it(`And the claim '${expectedClaim.title}' is declared on Bangarang`,()=>{
-            expect(bangarangClaimInteractor.claimById(expectedClaim.id)).deep.equal(expectedClaim)
+            return bangarangClaimInteractor.claimById(expectedClaim.id)
+                .then(claim=> expect(claim).deep.equal(expectedClaim))
         })
-        it(`When the user retrieve the claim with id '${expectedClaim.id}'`,()=>{
-            user.retrievingClaimById(expectedClaim.id)
+        it(`When the user retrieve the claim with id '${expectedClaim.id}'`,(done)=>{
+            user.retrievingClaimById(expectedClaim.id).then(()=>done())
         })
         it(`Then the retrieved claim in the claim user notification has the following information: 
         | title | people claimed    | people claimed for    | people claimed against    | previous user claim choice    |
@@ -142,10 +145,12 @@ describe(`Feature : Retrieving Claim
                 .then(previousMemberClaimChoiceOnClaim => expect(previousMemberClaimChoiceOnClaim).equal(expectedClaimChoice))
         })
         it(`And the claim '${expectedClaim.title}' is declared on Bangarang`,()=>{
-            expect(bangarangClaimInteractor.claimById(expectedClaim.id)).deep.equal(expectedClaim)
+            bangarangClaimInteractor.claimById(expectedClaim.id)
+                .then(claim=>expect(claim).deep.equal(expectedClaim))
+            
         })
-        it(`When the user retrieve the claim with id '${expectedClaim.id}'`,()=>{
-            user.retrievingClaimById(expectedClaim.id)
+        it(`When the user retrieve the claim with id '${expectedClaim.id}'`,(done)=>{
+            user.retrievingClaimById(expectedClaim.id).then(()=>done())
         })
         it(`Then the retrieved claim in the claim user notification has the following information: 
         | title | people claimed    | people claimed for    | people claimed against    | previous user claim choice    |
@@ -165,11 +170,13 @@ describe(`Feature : Retrieving Claim
                 .to.throw(bangarangMemberNotFoundError(expectedUser.username))
         })
         it(`And the claim '${expectedClaim.title}' is not declared on Bangarang`,()=>{
-            expect(()=>{throw bangarangClaimInteractor.claimById(expectedClaim.id)})
-                .to.throw(bangarangClaimNotFoundById(expectedClaim.id))
+            return bangarangClaimInteractor.claimById(expectedClaim.id)
+                .then(claim=>expect(()=>{throw claim})
+                    .to.throw(bangarangClaimNotFoundById(expectedClaim.id))
+                )
         })
-        it(`When the user retrieve the claim with title '${expectedClaim.id}'`,()=>{
-            user.retrievingClaimById(expectedClaim.id)
+        it(`When the user retrieve the claim with title '${expectedClaim.id}'`,(done)=>{
+            user.retrievingClaimById(expectedClaim.id).then(()=>done())
         })
         it(`Then the retrieved claim is undefined`,()=>{
             expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.claimWithMemberPreviousClaimChoice).is.undefined

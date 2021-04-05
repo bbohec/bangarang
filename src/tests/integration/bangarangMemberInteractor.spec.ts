@@ -1,10 +1,11 @@
 import 'mocha';
 import {expect} from "chai";
 import type { UserContract } from '../../client/port/UserContact';
-import { FakeBangarangMembersInteractor } from '../../client/adapters/FakeBangarangMembersInteractor';
 import type { ClaimChoice } from '../../client/port/ClaimChoice';
 import type { BangarangMembersInteractorContract } from '../../client/port/interactors/BangarangMembersInteractorContract';
+import { FakeBangarangMembersInteractor } from '../../client/adapters/FakeBangarangMembersInteractor';
 import { RestBangarangMembersInteractor } from '../../client/adapters/RestBangarangMembersInteractor';
+import { RestInteractor } from '../../client/adapters/RestInteractor';
 describe(`Bangarang Member Interactor - Integration Test`,()=>{
     const goodUserPassword = "password"
     const badUserPassword = "badpassword"
@@ -15,24 +16,25 @@ describe(`Bangarang Member Interactor - Integration Test`,()=>{
         name:string,
         adapter:BangarangMembersInteractorContract
     }
-    const restAdapter =new RestBangarangMembersInteractor()
-    const restAdapterGCP =new RestBangarangMembersInteractor()
-    restAdapterGCP.specificWithUrlPrefix("api")
+    const restInteractor = new RestInteractor()
+    restInteractor.specificWithUrlPrefix("api")
+    const restFakeAdapter =new RestBangarangMembersInteractor(new RestInteractor())
+    const restGcpAdapter =new RestBangarangMembersInteractor(restInteractor)
     const adapterScenarios:AdapterScenario[] = [
         {name:"fake",adapter:new FakeBangarangMembersInteractor()},
-        {name:"RESTfake",adapter:restAdapter},
-        {name:"RESTGCPDatastore",adapter:restAdapterGCP},
+        {name:"RESTfake",adapter:restFakeAdapter},
+        {name:"RESTGCPDatastore",adapter:restGcpAdapter},
     ]
     adapterScenarios.forEach(adapterScenario => {
         describe(`Integration Test with '${adapterScenario.name}' adapter.`,()=> {
             before((done)=>{
                 if(adapterScenario.name === "RESTfake") {
-                    restAdapter.specificReset()
+                    restFakeAdapter.specificReset()
                         .then(()=>done())
                         .catch(error=>{done(error)})
                 } 
                 else if (adapterScenario.name === "RESTGCPDatastore") {
-                    restAdapterGCP.specificReset()
+                    restGcpAdapter.specificReset()
                         .then(()=>done())
                         .catch(error=>{done(error)})
                 } 

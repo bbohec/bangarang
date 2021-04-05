@@ -25,15 +25,19 @@ describe(`Feature: Declaring Claim
             expect(fakeBangarangUserInterfaceInteractor.currentView).equal(declaringClaimMenuView)
         })
         it(`And the claim with id '${expectedClaim.id}' is not declared on Bangarang.`,()=>{
-            expect(()=> {throw bangarangClaimInteractor.claimById(expectedClaim.id)})
-                .to.throw(bangarangClaimNotFoundById(expectedClaim.id))
+            return bangarangClaimInteractor.claimById(expectedClaim.id)
+                .then(claim => expect(()=> {throw claim})
+                    .to.throw(bangarangClaimNotFoundById(expectedClaim.id))
+                )
+            
         })
         it(`When the user declare a new '${expectedClaim.type}' claim with title '${expectedClaim.title}'.`,(done)=>{
-            declareClaim(expectedClaim)
-            done()
+            declareClaim(expectedClaim).then(()=>done())
         })
         it(`Then the claim with title '${expectedClaim.title}' is declared on Bangarang.`,()=>{
-            expect(bangarangClaimInteractor.claimById(expectedClaim.id)).deep.equal(expectedClaim)
+            return bangarangClaimInteractor.claimById(expectedClaim.id)
+                .then(claim=>expect(claim).deep.equal(expectedClaim))
+            
         })
         it(`And the user has a '${declaringClaimNotificationType}' notification with '${successDeclaringClaimUserNotification.status}' status and '${successDeclaringClaimUserNotification.message}' message.`,()=> {
             expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.status).equal(successDeclaringClaimUserNotification.status)
@@ -49,11 +53,11 @@ describe(`Feature: Declaring Claim
             expect(fakeBangarangUserInterfaceInteractor.currentView).equal(declaringClaimMenuView)
         })
         it(`And the claim with id '${expectedClaim.id}' and title '${expectedClaim.title}' is declared on Bangarang.`,()=>{
-            expect(bangarangClaimInteractor.claimById(expectedClaim.id)).deep.equal(expectedClaim)
+            return bangarangClaimInteractor.claimById(expectedClaim.id)
+                .then(claim=>expect(claim).deep.equal(expectedClaim))
         })
         it(`When the user declare a new '${expectedClaim.type}' claim with title '${expectedClaim.title}'.`,(done)=>{
-            declareClaim(expectedClaim)
-            done()
+            declareClaim(expectedClaim).then(()=>done())
         })
         it(`Then the new claim is not declared on Bangarang.`,()=>{
             expect(bangarangClaimInteractor.declaredClaims.length).equal(1)
@@ -62,7 +66,6 @@ describe(`Feature: Declaring Claim
             expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.message).equal(claimAlreadyExistDeclaringClaimUserNotification(expectedClaim.title).message)
             expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.status).equal(claimAlreadyExistDeclaringClaimUserNotification(expectedClaim.title).status)
         })
-
         it(`And the user current view is the "${expectedClaimView}"`,()=> {
             expect(fakeBangarangUserInterfaceInteractor.currentView).equal(expectedClaimView)
         })
@@ -74,11 +77,12 @@ describe(`Feature: Declaring Claim
             expect(fakeBangarangUserInterfaceInteractor.currentView).equal(declaringClaimMenuView)
         })
         it(`And the claim with id '${expectedClaim.id}' is declared on Bangarang.`,()=>{
-            expect(bangarangClaimInteractor.claimById(expectedClaim.id)).deep.equal(expectedClaim)
+            return bangarangClaimInteractor.claimById(expectedClaim.id)
+                .then(claim=>expect(claim).deep.equal(expectedClaim))
+            
         })
         it(`When the user declare a new '${upperCaseClaim.type}' claim with title '${upperCaseClaim.title}'.`,(done)=>{
-            declareClaim(upperCaseClaim);
-            done()
+            declareClaim(upperCaseClaim).then(()=>done())
         })
         it(`Then the new claim is not declared on Bangarang.`,()=>{
             expect(bangarangClaimInteractor.declaredClaims.length).equal(1)
@@ -98,8 +102,7 @@ describe(`Feature: Declaring Claim
             expect(fakeBangarangUserInterfaceInteractor.currentView).equal(declaringClaimMenuView)
         })
         it(`When the user declare a new '${claimWithoutTitle.type}' claim with title '${claimWithoutTitle.title}'.`,(done)=>{
-            declareClaim(claimWithoutTitle);
-            done()
+            declareClaim(claimWithoutTitle).then(()=>done())
         })
         it(`Then the new claim is not declared on Bangarang.`,()=>{
             expect(bangarangClaimInteractor.declaredClaims.length).equal(0)
@@ -118,8 +121,8 @@ describe(`Feature: Declaring Claim
         fakeDeclaringClaimUserNotificationInteractor.resetNotification();
         fakeBangarangUserInterfaceInteractor.goToClaim(declaringClaimMenuView);
     }
-    function declareClaim( claimToDeclare: ClaimContract) {
-        new UserBuilder()
+    function declareClaim( claimToDeclare: ClaimContract):Promise<void> {
+        return new UserBuilder()
             .withBangarangClaimInteractor(bangarangClaimInteractor)
             .withBangarangUserInterfaceInteractor(fakeBangarangUserInterfaceInteractor)
             .withDeclaringClaimUserNotificationInteractor(fakeDeclaringClaimUserNotificationInteractor)
