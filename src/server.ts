@@ -5,7 +5,7 @@ import * as sapper from '@sapper/server';
 import {json} from 'body-parser'
 import type { ClaimChoice } from './client/port/ClaimChoice';
 import { FakeBangarangMembersInteractor } from './client/adapters/FakeBangarangMembersInteractor';
-import { GcpDatastoreBangarangMembersInteractor } from './client/adapters/GcpDatastoreBangarangMembersInteractor';
+import { GcpDatastoreBangarangMembersInteractor, GcpDatastoreInteractor } from './client/adapters/GcpDatastoreBangarangMembersInteractor';
 import type { BangarangMembersInteractorContract } from './client/port/interactors/BangarangMembersInteractorContract';
 import { Datastore, DatastoreOptions } from '@google-cloud/datastore';
 
@@ -31,7 +31,8 @@ const datastoreOptions:DatastoreOptions = {
         private_key:bangarangPrivateKey
     }
 } 
-const gcpDatastoreBangarangMembersInteractor = new GcpDatastoreBangarangMembersInteractor(new Datastore(datastoreOptions)) 
+const gcpDatastoreInteractor = new GcpDatastoreInteractor(new Datastore(datastoreOptions))
+const gcpDatastoreBangarangMembersInteractor = new GcpDatastoreBangarangMembersInteractor(gcpDatastoreInteractor) 
 interface BangarangMembersInteractor {
 	adapter:BangarangMembersInteractorContract,
 	apiPrefix:ApiPrefix
@@ -104,12 +105,12 @@ App.post(`/${apiPrefix}/saveMember`, (request, response) => {
 })
 App.post(`/${apiPrefix}/saveMemberClaim`, (request, response) => {
 	const sendErrorResponse = (error:Error)=> response.status(500).json({error:error.message})
-	const body:{claimTitle?:string,memberUsername?:string,claimChoice?:ClaimChoice}=request.body
+	const body:{claimId?:string,memberUsername?:string,claimChoice?:ClaimChoice}=request.body
 	const bangarangMemberInteractor = selectBangarangMemberInteractor(request.params.apiPrefix)
-	if(body.claimTitle===undefined || body.memberUsername===undefined || body.claimChoice===undefined) sendErrorResponse(new Error("Missing claimTitle or memberUsername or claimChoice on body."))
+	if(body.claimId===undefined || body.memberUsername===undefined || body.claimChoice===undefined) sendErrorResponse(new Error("Missing claimId or memberUsername or claimChoice on body."))
 	else if(!bangarangMemberInteractor)sendErrorResponse(new Error(`bangarangMemberInteractor undefined`))
 	else bangarangMemberInteractor.adapter
-		.saveMemberClaim({claimTitle:body.claimTitle,memberUsername:body.memberUsername,claimChoice:body.claimChoice})
+		.saveMemberClaim({claimId:body.claimId,memberUsername:body.memberUsername,claimChoice:body.claimChoice})
 		.then(result => {
 			if(result instanceof Error) throw result
 			response.end()

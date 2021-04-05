@@ -4,12 +4,11 @@ import type { UserContract } from '../../client/port/UserContact';
 import { FakeBangarangMembersInteractor } from '../../client/adapters/FakeBangarangMembersInteractor';
 import type { ClaimChoice } from '../../client/port/ClaimChoice';
 import type { BangarangMembersInteractorContract } from '../../client/port/interactors/BangarangMembersInteractorContract';
-import { GcpDatastoreBangarangMembersInteractor } from '../../client/adapters/GcpDatastoreBangarangMembersInteractor';
 import { RestBangarangMembersInteractor } from '../../client/adapters/RestBangarangMembersInteractor';
 describe(`Bangarang Member Interactor - Integration Test`,()=>{
     const goodUserPassword = "password"
     const badUserPassword = "badpassword"
-    const claimTitle="claim"
+    const claimId="claimId"
     const expectedExistingUser:UserContract={username:"test",fullname:"",email:""}
     const badUser:UserContract={username:"error",fullname:"",email:""}
     interface AdapterScenario {
@@ -40,20 +39,20 @@ describe(`Bangarang Member Interactor - Integration Test`,()=>{
                 else done()
             })
             it(`retrievePreviousMemberClaimChoiceOnClaim - error`,()=>{
-                return adapterScenario.adapter.retrievePreviousMemberClaimChoiceOnClaim(badUser.username,claimTitle)
+                return adapterScenario.adapter.retrievePreviousMemberClaimChoiceOnClaim(badUser.username,claimId)
                     .then(previousMemberClaimChoiceOnClaim =>expect(previousMemberClaimChoiceOnClaim).instanceOf(Error))
                     .catch(error => {throw error})
             })
-            it(`retrievePreviousMemberClaimChoiceOnClaim & saveMemberClaim - OK`,()=>{
+            it(`retrievePreviousMemberClaimChoiceOnClaim & saveMemberClaim - ${expectedExistingUser.username+claimId} - OK`,()=>{
                 const claimChoice:ClaimChoice = "For"
-                return adapterScenario.adapter.retrievePreviousMemberClaimChoiceOnClaim(expectedExistingUser.username,claimTitle)
+                return adapterScenario.adapter.retrievePreviousMemberClaimChoiceOnClaim(expectedExistingUser.username,claimId)
                     .then(previousMemberClaimChoiceOnClaim =>{
                         expect(previousMemberClaimChoiceOnClaim).is.undefined
-                        return adapterScenario.adapter.saveMemberClaim({memberUsername:expectedExistingUser.username,claimChoice:claimChoice, claimTitle})
+                        return adapterScenario.adapter.saveMemberClaim({memberUsername:expectedExistingUser.username,claimChoice, claimId})
                     })
                     .then(result => {
                         expect(result).not.instanceOf(Error)
-                        return adapterScenario.adapter.retrievePreviousMemberClaimChoiceOnClaim(expectedExistingUser.username,claimTitle)
+                        return adapterScenario.adapter.retrievePreviousMemberClaimChoiceOnClaim(expectedExistingUser.username,claimId)
                     })
                     .then(previousMemberClaimChoiceOnClaim =>{
                         expect(previousMemberClaimChoiceOnClaim).equal(claimChoice).and.is.not.undefined

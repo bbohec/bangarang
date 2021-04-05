@@ -5,7 +5,7 @@ import type { UserContract } from "../UserContact";
 export interface BangarangMembersInteractorContract {
     isMemberExistWithUsername(username: string):Promise<boolean|Error>;
     isSignedIn(username: string): Promise<boolean|Error>;
-    retrievePreviousMemberClaimChoiceOnClaim(username: string, claimTitle: string): Promise<ClaimChoice|Error>;
+    retrievePreviousMemberClaimChoiceOnClaim(username: string, claimId: string): Promise<ClaimChoice|Error>;
     saveCredentials(credentials:Credentials):Promise<void|Error>;
     saveMember(userContract: UserContract):Promise<void|Error>;
     saveMemberClaim(memberClaim: MemberClaim):Promise<void|Error>;

@@ -210,7 +210,7 @@ describe(`Feature: Claiming
                 expect(bangarangClaimInteractor.declaredClaims.length).equal(0)
             })
             if (scenario.previousClaimChoice) it(`And the user has previously claimed '${scenario.previousClaimChoice}' on claim '${scenario.expectedClaim.title}'`,()=>{
-                return bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(userContract.username,scenario.expectedClaim.title)
+                return bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(userContract.username,scenario.expectedClaim.id)
                     .then(previousMemberClaimChoiceOnClaim=>expect(previousMemberClaimChoiceOnClaim).equal(scenario.previousClaimChoice))
             })
             it(`When the user claim '${scenario.userChoice}' on the claim with title '${scenario.expectedClaim.title}'`,(done)=>{

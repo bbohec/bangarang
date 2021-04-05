@@ -56,7 +56,7 @@ describe(`Feature : Retrieving Claim
     describe(`Scenario: Retrieve Claim as Guest`,()=>{
         const expectedClaimChoice:ClaimChoice=undefined
         before(()=>initScenario([expectedClaim],expectedClaimChoice,[],[]))
-        it(`Given the user is a Bangarang member`, ()=>{
+        it(`Given the user is not a Bangarang member`, ()=>{
             expect(()=>bangarangMembersInteractor.specificFindMemberFromUsername(expectedUser.username))
                 .to.throw(bangarangMemberNotFoundError(expectedUser.username))
         })
@@ -106,12 +106,12 @@ describe(`Feature : Retrieving Claim
     })
     describe(`Scenario: Retrieve Claim as Bangarang member that has claimed For`,()=>{
         const expectedClaimChoice:ClaimChoice="For"
-        before(()=>initScenario([expectedClaim],expectedClaimChoice,[expectedUser],[{memberUsername:expectedUser.username,claimTitle:expectedClaim.title,claimChoice:expectedClaimChoice}]))
+        before(()=>initScenario([expectedClaim],expectedClaimChoice,[expectedUser],[{memberUsername:expectedUser.username,claimId:expectedClaim.id,claimChoice:expectedClaimChoice}]))
         it(`Given the user is a Bangarang member`, ()=>{
             expect(bangarangMembersInteractor.specificFindMemberFromUsername(expectedUser.username)).deep.equal(expectedUser)
         })
         it(`And the user has claimed '${expectedClaimChoice}' on claim '${expectedClaim.title}'`, ()=>{
-            return bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(expectedUser.username,expectedClaim.title)
+            return bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(expectedUser.username,expectedClaim.id)
                 .then(previousMemberClaimChoiceOnClaim => expect(previousMemberClaimChoiceOnClaim).equal(expectedClaimChoice))
         })
         it(`And the claim '${expectedClaim.title}' is declared on Bangarang`,()=>{
@@ -133,12 +133,12 @@ describe(`Feature : Retrieving Claim
     })
     describe(`Scenario: Retrieve Claim as Bangarang member that has claimed Against`,()=>{
         const expectedClaimChoice:ClaimChoice="Against"
-        before(()=>initScenario([expectedClaim],expectedClaimChoice,[expectedUser],[{memberUsername:expectedUser.username,claimTitle:expectedClaim.title,claimChoice:expectedClaimChoice}]))
+        before(()=>initScenario([expectedClaim],expectedClaimChoice,[expectedUser],[{memberUsername:expectedUser.username,claimId:expectedClaim.id,claimChoice:expectedClaimChoice}]))
         it(`Given the user is a Bangarang member`, ()=>{
             expect(bangarangMembersInteractor.specificFindMemberFromUsername(expectedUser.username)).deep.equal(expectedUser)
         })
         it(`And the user has claimed '${expectedClaimChoice}' on claim '${expectedClaim.title}'`, ()=>{
-            return bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(expectedUser.username,expectedClaim.title)
+            return bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(expectedUser.username,expectedClaim.id)
                 .then(previousMemberClaimChoiceOnClaim => expect(previousMemberClaimChoiceOnClaim).equal(expectedClaimChoice))
         })
         it(`And the claim '${expectedClaim.title}' is declared on Bangarang`,()=>{
@@ -159,7 +159,7 @@ describe(`Feature : Retrieving Claim
         })
     })
     describe(`Scenario: Claim not found`,()=>{
-        before(()=>initScenario([],"Against",[],[{memberUsername:"user",claimTitle:"claim",claimChoice:"Against"}]))
+        before(()=>initScenario([],"Against",[],[{memberUsername:"user",claimId:"claim",claimChoice:"Against"}]))
         it(`Given the user is a Bangarang member`, ()=>{
             expect(()=>bangarangMembersInteractor.specificFindMemberFromUsername(expectedUser.username))
                 .to.throw(bangarangMemberNotFoundError(expectedUser.username))

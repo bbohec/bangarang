@@ -13,10 +13,10 @@ export class FakeBangarangMembersInteractor implements BangarangMembersInteracto
         const result = this.signedInMembers.some(signedInUsername => signedInUsername===username)
         return Promise.resolve(result)
     }
-    public retrievePreviousMemberClaimChoiceOnClaim(username:string,claimTitle:string): Promise<ClaimChoice|Error> {
+    public retrievePreviousMemberClaimChoiceOnClaim(username:string,claimId:string): Promise<ClaimChoice|Error> {
         if(username === "error") return Promise.resolve( new Error(`Error, user with username ${username} not supported.`))
         const result =  this.membersClaims
-            .find(memberClaim => memberClaim.memberUsername === username && memberClaim.claimTitle === claimTitle)
+            .find(memberClaim => memberClaim.memberUsername === username && memberClaim.claimId === claimId)
             ?.claimChoice
         return Promise.resolve(result)
     }
@@ -29,7 +29,7 @@ export class FakeBangarangMembersInteractor implements BangarangMembersInteracto
         return this.saveOnDatabasePattern(userContract,this.members,bangarangMember => bangarangMember.username === userContract.username)
     }
     public saveMemberClaim(memberClaim: MemberClaim): Promise<void|Error> {
-        return this.saveOnDatabasePattern(memberClaim,this.membersClaims,bangarangMemberClaim => bangarangMemberClaim.claimTitle === memberClaim.claimTitle)
+        return this.saveOnDatabasePattern(memberClaim,this.membersClaims,bangarangMemberClaim => bangarangMemberClaim.claimId === memberClaim.claimId)
     }
     public signingIn(credentials: Credentials):Promise<void|Error> {
         const resolvePromise=(error?:Error)=>(error)?Promise.resolve(error):Promise.resolve()

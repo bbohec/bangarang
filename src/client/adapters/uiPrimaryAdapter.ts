@@ -4,6 +4,7 @@ import type { UserContract } from "../port/UserContact";
 import { FakeBangarangClaimInteractor } from "./FakeBangarangClaimInteractor";
 import { FakeBangarangMembersInteractor } from "./FakeBangarangMembersInteractor";
 import { FakeRegisteringUserNotificationInteractor } from "./FakeRegisteringUserNotificationInteractor";
+import { RestBangarangMembersInteractor } from "./RestBangarangMembersInteractor";
 import { SvelteBangarangUserInterfaceInteractor } from "./SvelteBangarangUserInterfaceInteractor";
 import { SvelteClaimingUserNotificationInteractor } from "./SvelteClaimingUserNotificationInteractorContract";
 import { SvelteDeclaringClaimUserNotificationInteractor } from "./SvelteDeclaringClaimUserNotificationInteractor";
@@ -12,7 +13,9 @@ import { SvelteSearchingClaimsUserNotificationInteractor } from "./SvelteSearchi
 import { SvelteSigningInUserNotificationInteractor } from "./SvelteSigningInUserNotificationInteractor";
 
 
-const bangarangMembersInteractor = new FakeBangarangMembersInteractor()
+//const bangarangMembersInteractor = new FakeBangarangMembersInteractor()
+const bangarangMembersInteractor = new RestBangarangMembersInteractor()
+bangarangMembersInteractor.specificWithUrlPrefix("api")
 const bangarangClaimInteractor=new FakeBangarangClaimInteractor()
 demoClaims().forEach(claim => bangarangClaimInteractor.saveClaim(claim))
 export const uiBangarangUserBuilder = new UserBuilder()
@@ -25,8 +28,8 @@ export const uiBangarangUserBuilder = new UserBuilder()
     .withSearchingClaimsUserNotificationInteractor(new SvelteSearchingClaimsUserNotificationInteractor())
     .withSigningInUserNotificationInteractor(new SvelteSigningInUserNotificationInteractor())
 
-const guest:UserContract={username:"",fullname:"","email":""}
-const demoUser:UserContract={username:"demo",fullname:"Demo User","email":"demo@demo.demo"}
+const guest:UserContract={username:"guest",fullname:"",email:""}
+const demoUser:UserContract={username:"demo",fullname:"Demo User",email:"demo@demo.demo"}
 const demoUserPassword="demo"
 uiBangarangUserBuilder
     .withUserContract(demoUser)

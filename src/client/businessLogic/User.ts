@@ -43,10 +43,12 @@ export class User implements UserContract  {
                         this.bangarangAdapters.bangarangUserInterfaceInteractor.goToSigningInMenu()
                         throw mustBeSignedInClaimingUserNotification
                     }
-                    return this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, retreivedClaim.title)
+                    return this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, retreivedClaim.id)
                 })
                 .then(previousClaimChoice=> {
                     const isUserHasPreviouslyMadeTheSameClaimChoice=(previousClaimChoice:ClaimChoice,claimChoice:ClaimChoice):boolean => previousClaimChoice !==undefined && previousClaimChoice === claimChoice
+                    console.log(`previousClaimChoice ${previousClaimChoice}`)
+                    console.log(`claimChoice ${claimChoice}`)
                     if(previousClaimChoice instanceof Error) throw unexpectedErrorClaimingUserNotification(previousClaimChoice)
                     else if (isUserHasPreviouslyMadeTheSameClaimChoice(previousClaimChoice,claimChoice))throw multipleTimesClaimingUserNotification(claimChoice)
                     else {
@@ -97,7 +99,7 @@ export class User implements UserContract  {
         const claim = this.bangarangAdapters.bangarangClaimInteractor.claimById(id)
         if (claim instanceof Error)  this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(claimNotDeclaredRetrievingClaimUserNotification)
         else {
-            this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, claim.title)
+            this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, claim.id)
                 .then(previousMemberClaimChoiceOnClaim => {
                     if(previousMemberClaimChoiceOnClaim instanceof Error)this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(unexpectedErrorRetrievingClaimUserNotification(previousMemberClaimChoiceOnClaim))
                     else {

@@ -1,5 +1,5 @@
 export interface MemberClaim {
-    claimTitle: string;
+    claimId: string;
     memberUsername: string;
     claimChoice: "For" | "Against"|undefined;
 }

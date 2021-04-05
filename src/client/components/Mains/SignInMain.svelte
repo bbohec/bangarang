@@ -4,7 +4,7 @@
     //import {connectedUserStore} from "../../stores/connectedUserStore"
     const user = uiBangarangUserBuilder.getUser()
 </script>
-{#if user.username === ""}
+{#if user.username === "guest"}
     <main class="flex flex-col flex-grow items-center">
         <SignInSection/>
     </main>

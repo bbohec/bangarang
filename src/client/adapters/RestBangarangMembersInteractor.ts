@@ -22,8 +22,8 @@ export class RestBangarangMembersInteractor implements BangarangMembersInteracto
                 ?data.isSignedIn:new Error ("isSignedIn missing on body.")
             )
     }
-    public retrievePreviousMemberClaimChoiceOnClaim(username:string,claimTitle:string): Promise<ClaimChoice|Error> {
-        return this.axiosGet<{ retrievePreviousMemberClaimChoiceOnClaim?: ClaimChoice }>(`/retrievePreviousMemberClaimChoiceOnClaim/${username}/${claimTitle}`)
+    public retrievePreviousMemberClaimChoiceOnClaim(username:string,claimId:string): Promise<ClaimChoice|Error> {
+        return this.axiosGet<{ retrievePreviousMemberClaimChoiceOnClaim?: ClaimChoice }>(`/retrievePreviousMemberClaimChoiceOnClaim/${username}/${claimId}`)
             .then(data => (data instanceof Error)?data:data.retrievePreviousMemberClaimChoiceOnClaim)
     }
     public saveCredentials(credentials: Credentials): Promise<void|Error> {
