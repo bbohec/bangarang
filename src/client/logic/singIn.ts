@@ -3,12 +3,8 @@ import { executingSigningInNotification } from "../port/interactors/SigningInUse
 import {signingInNotificationStore as signingInNotificationStore} from "../stores/signInStore"
 export const signingIn = (userInputUsername:string,userInputPassword:string):void => {
     signingInNotificationStore.set(executingSigningInNotification)
-    setTimeout(() => {
-        //connectedUserStore.set({id:"0",username:"johnDoe"})
-        uiBangarangUserBuilder
+    uiBangarangUserBuilder
             .withUserContract({username:userInputUsername,fullname:"",email:""})
             .resetUser()
             .signingIn(userInputPassword)
-    }, signInFakeWaitingTime);
 }
-const signInFakeWaitingTime = 500;

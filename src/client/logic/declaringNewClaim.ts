@@ -13,8 +13,8 @@ export const declaringClaim = (claimTitle:string):void => {
         id:uuid()
     }
     declaringClaimUserNotificationStore.set(executingDeclaringClaimUserNotification(claimToDeclare))
-    setTimeout(() => uiBangarangUserBuilder.getUser().declaringClaim(claimToDeclare.title,claimToDeclare.type,claimToDeclare.id), declaringClaimFakeWaitingTime);
+    uiBangarangUserBuilder.getUser().declaringClaim(claimToDeclare.title,claimToDeclare.type,claimToDeclare.id)
 }
-const declaringClaimFakeWaitingTime = 500;
+
 
 

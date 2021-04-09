@@ -2,8 +2,7 @@ import { UserBuilder } from "../businessLogic/UserBuilder";
 import type { ClaimContract } from "../port/ClaimContract";
 import type { UserContract } from "../port/UserContact";
 import { FakeBangarangClaimInteractor } from "./FakeBangarangClaimInteractor";
-import { FakeBangarangMembersInteractor } from "./FakeBangarangMembersInteractor";
-import { FakeRegisteringUserNotificationInteractor } from "./FakeRegisteringUserNotificationInteractor";
+import { RestBangarangClaimInteractor } from "./RestBangarangClaimInteractor";
 import { RestBangarangMembersInteractor } from "./RestBangarangMembersInteractor";
 import { RestInteractor } from "./RestInteractor";
 import { SvelteBangarangUserInterfaceInteractor } from "./SvelteBangarangUserInterfaceInteractor";
@@ -12,14 +11,10 @@ import { SvelteDeclaringClaimUserNotificationInteractor } from "./SvelteDeclarin
 import { SvelteRetrievingClaimUserNotificationInteractor } from "./SvelteRetrievingClaimUserNotificationInteractor";
 import { SvelteSearchingClaimsUserNotificationInteractor } from "./SvelteSearchingClaimsUserNotificationInteractorContract";
 import { SvelteSigningInUserNotificationInteractor } from "./SvelteSigningInUserNotificationInteractor";
-
-
-//const bangarangMembersInteractor = new FakeBangarangMembersInteractor()
-const restInteractor = new RestInteractor()
-const bangarangMembersInteractor = new RestBangarangMembersInteractor(restInteractor)
-restInteractor.specificWithUrlPrefix("api")
-const bangarangClaimInteractor=new FakeBangarangClaimInteractor()
-demoClaims().forEach(claim => bangarangClaimInteractor.saveClaim(claim))
+const bangarangMembersInteractor = new RestBangarangMembersInteractor(new RestInteractor("restGcpDatastoreMemberInteractor"))
+const bangarangClaimInteractor=new RestBangarangClaimInteractor(new RestInteractor("restGcpDatastoreClaimInteractor"))
+const fakeBangarangClaimInteractor = new FakeBangarangClaimInteractor()
+demoClaims().forEach(claim => fakeBangarangClaimInteractor.saveClaim(claim))
 export const uiBangarangUserBuilder = new UserBuilder()
     .withBangarangClaimInteractor(bangarangClaimInteractor)
     .withBangarangMembersInteractor(bangarangMembersInteractor)
@@ -29,21 +24,12 @@ export const uiBangarangUserBuilder = new UserBuilder()
     .withRetrievingClaimUserNotificationInteractor(new SvelteRetrievingClaimUserNotificationInteractor())
     .withSearchingClaimsUserNotificationInteractor(new SvelteSearchingClaimsUserNotificationInteractor())
     .withSigningInUserNotificationInteractor(new SvelteSigningInUserNotificationInteractor())
-
 const guest:UserContract={username:"guest",fullname:"",email:""}
-const demoUser:UserContract={username:"demo",fullname:"Demo User",email:"demo@demo.demo"}
-const demoUserPassword="demo"
-uiBangarangUserBuilder
-    .withUserContract(demoUser)
-    .getUser()
-    .registering(demoUserPassword)
 uiBangarangUserBuilder
     .withUserContract(guest)
     .resetUser()
-
-
 function demoClaims(): Array<ClaimContract> {
-    const claims = new Array<ClaimContract>();
+const claims = new Array<ClaimContract>();
 claims.push({ 
     peopleClaimed:10,
     peopleClaimedAgainst:9,

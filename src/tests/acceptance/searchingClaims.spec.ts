@@ -246,8 +246,7 @@ describe(`Feature: Searching Claims
                 expect(bangarangClaimInteractor.declaredClaims.map(claim => claim.title)).to.deep.equal(expectedDeclaredClaimsTitles)
             })
             it(`When the user search claims with search criteria '${scenario.searchCriteria}'`,(done)=>{
-                user.searchingClaims(scenario.searchCriteria)
-                done()
+                user.searchingClaims(scenario.searchCriteria).then(()=>done())
             })
             it(`Then the retreived claims is the following:
                 [${scenarioExpectedNotification.retreivedClaims?.map(claim=>claim.title)}]`,()=>{

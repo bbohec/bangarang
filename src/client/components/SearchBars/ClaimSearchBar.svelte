@@ -1,6 +1,6 @@
 <script lang="ts">
     import { afterUpdate } from "svelte";
-    import { searchingClaims } from "../../logic/claim/retreiveClaimsByClaimSearchValue";
+    import { searchingClaims } from "../../logic/retreiveClaimsByClaimSearchValue";
     import {claimSearchCriteriaStore} from "../../stores/claimSearchStore"
     let searchBar:{focus():void};
     let previousSearchCriteria = ""

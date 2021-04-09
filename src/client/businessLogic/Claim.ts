@@ -24,7 +24,10 @@ export class Claim {
         if (previousClaimChoice)(previousClaimChoice === "For") ? this.peopleClaimedFor-- : this.peopleClaimedAgainst--;
         return this
     }
-    public save(
+    public save(bangarangClaimInteractor: BangarangClaimInteractorContract):Promise<void|Error> {
+        return bangarangClaimInteractor.saveClaim(this)
+    }
+    public claiming(
         bangarangClaimInteractor: BangarangClaimInteractorContract, 
         bangarangMembersInteractor: BangarangMembersInteractorContract, 
         username: string, 

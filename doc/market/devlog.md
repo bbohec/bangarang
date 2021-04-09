@@ -1,9 +1,7 @@
 # Bangarang — Product Development Log
-- UI Register Vie
-- Signing-In Security warning
 - Multi-language — /!\ FR /!\
+- UI style rework
 - Official video >> subscribe to form in order to be informed about demo & launch
-- Signing In Rework
 - ? Builder placement on clean architecture
 - Error management
 - BDD > Feature scenarios:
@@ -14,16 +12,26 @@
 - 👉 Doing
 - ✔️ Done
 
-
-## 2021/04/09 — Day 26
+## 2021/04/12 — Day 27
 -  Twitch Live https://www.twitch.tv/benjaminbohec + announces
 -  Stand Up 
--  Change Claim Inter. with Prom
--  RestFake Claim Inter.
--  RestGCP Claim Inter.
--  AT & TI & e2e
+-  Adapter Claim > remove punctuation on word split
+-  UI Register View
+-  Signing-In Security warning
+-  Signing In Rework
 -  Pull Req.
 -  Summ.
+
+## 2021/04/09 — Day 26
+- ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
+- ✔️ Stand Up 
+- ✔️ Change Claim Inter. with Prom + Validate TI
+- ✔️ RestFake Claim Inter.
+- ✔️ RestGCP Claim Inter.
+- ✔️ AT & TI & e2e
+    - ✔️ TI claims with "imporTant dOg"
+- ❌ Pull Req.
+- 👉 Summ.
 
 ## 2021/04/05 — Day 25
 - ✔️ Twitch Live

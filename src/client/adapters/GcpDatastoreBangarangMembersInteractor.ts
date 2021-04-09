@@ -3,12 +3,9 @@ import type { UserContract } from "../port/UserContact";
 import type { ClaimChoice } from "../port/ClaimChoice";
 import type { BangarangMembersInteractorContract } from "../port/interactors/BangarangMembersInteractorContract";
 import type { Credentials } from "../port/bangarangMemberCredential";
-import type {PathType} from '@google-cloud/datastore'
 import type { GcpDatastoreInteractor } from "./GcpDatastoreInteractor";
 export class GcpDatastoreBangarangMembersInteractor implements BangarangMembersInteractorContract {
-    constructor(gcpDatastoreInteractor:GcpDatastoreInteractor) {
-        this.gcpDatastoreInteractor = gcpDatastoreInteractor
-    }
+    constructor( private gcpDatastoreInteractor:GcpDatastoreInteractor) {}
 	reset():Promise<void> {
         const googleDatastoreKeys = [
             "MembersClaims/testclaimId",
@@ -77,7 +74,6 @@ export class GcpDatastoreBangarangMembersInteractor implements BangarangMembersI
                 return result.password
             })
     }
-    private gcpDatastoreInteractor:GcpDatastoreInteractor
 }
 const keyPathFromKindAndIdentifier= (kind:Kind,identifier:string) => `${kind}/${identifier}`.split("/")
 type Kind = "Credentials"|"Users"|"MembersClaims"|"SignedIn_Users"

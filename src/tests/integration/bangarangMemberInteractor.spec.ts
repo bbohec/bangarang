@@ -16,10 +16,8 @@ describe(`Bangarang Member Interactor - Integration Test`,()=>{
         name:string,
         adapter:BangarangMembersInteractorContract
     }
-    const restInteractor = new RestInteractor()
-    restInteractor.specificWithUrlPrefix("api")
-    const restFakeAdapter =new RestBangarangMembersInteractor(new RestInteractor())
-    const restGcpAdapter =new RestBangarangMembersInteractor(restInteractor)
+    const restFakeAdapter =new RestBangarangMembersInteractor(new RestInteractor("restFakeMemberInteractor"))
+    const restGcpAdapter =new RestBangarangMembersInteractor(new RestInteractor("restGcpDatastoreMemberInteractor"))
     const adapterScenarios:AdapterScenario[] = [
         {name:"fake",adapter:new FakeBangarangMembersInteractor()},
         {name:"RESTfake",adapter:restFakeAdapter},
@@ -28,17 +26,27 @@ describe(`Bangarang Member Interactor - Integration Test`,()=>{
     adapterScenarios.forEach(adapterScenario => {
         describe(`Integration Test with '${adapterScenario.name}' adapter.`,()=> {
             before((done)=>{
+                console.log(`   🛠  Reset adapter call : ${adapterScenario.name}`)
                 if(adapterScenario.name === "RESTfake") {
                     restFakeAdapter.specificReset()
-                        .then(()=>done())
+                        .then(()=>{
+                            console.log(`   ✅ Reset adapter OK`)
+                            done()
+                        })
                         .catch(error=>{done(error)})
                 } 
                 else if (adapterScenario.name === "RESTGCPDatastore") {
                     restGcpAdapter.specificReset()
-                        .then(()=>done())
+                        .then(()=>{
+                            console.log(`   ✅ Reset adapter OK`)
+                            done()
+                        })
                         .catch(error=>{done(error)})
                 } 
-                else done()
+                else {
+                    console.log(`   ✅  Nothing to perform on adapter ${adapterScenario.name}`)
+                    done()
+                }
             })
             it(`retrievePreviousMemberClaimChoiceOnClaim - error`,()=>{
                 return adapterScenario.adapter.retrievePreviousMemberClaimChoiceOnClaim(badUser.username,claimId)
