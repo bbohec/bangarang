@@ -16,8 +16,8 @@ describe(`Bangarang Member Interactor - Integration Test`,()=>{
         name:string,
         adapter:BangarangMembersInteractorContract
     }
-    const restFakeAdapter =new RestBangarangMembersInteractor(new RestInteractor("restFakeMemberInteractor"))
-    const restGcpAdapter =new RestBangarangMembersInteractor(new RestInteractor("restGcpDatastoreMemberInteractor"))
+    const restFakeAdapter =new RestBangarangMembersInteractor(new RestInteractor({endpointFullyQualifiedDomainName:"localhost",port:"3000",apiPrefix:"restFakeMemberInteractor",scheme:"http"}))
+    const restGcpAdapter =new RestBangarangMembersInteractor(new RestInteractor({endpointFullyQualifiedDomainName:"localhost",port:"3000",apiPrefix:"restGcpDatastoreMemberInteractor",scheme:"http"}))
     const adapterScenarios:AdapterScenario[] = [
         {name:"fake",adapter:new FakeBangarangMembersInteractor()},
         {name:"RESTfake",adapter:restFakeAdapter},
@@ -132,4 +132,8 @@ describe(`Bangarang Member Interactor - Integration Test`,()=>{
         })
     })
 })
+
+function retrieveScheme(restEndpointScheme: string): "http" | "https" {
+    throw new Error('Function not implemented.');
+}
 

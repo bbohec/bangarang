@@ -33,36 +33,33 @@ export class User implements UserContract  {
         
     }
     public claiming(claimId: string, claimChoice: ClaimChoice):Promise<void> {
-        return this.bangarangAdapters.bangarangClaimInteractor.claimById(claimId)
-            .then(retreivedClaim=> {
-                if (retreivedClaim instanceof Error) return Promise.resolve(this.bangarangAdapters.claimingUserNotificationInteractor.notify(claimNotDeclaredClaimingUserNotification(claimId)))
-                else{
-                    return this.bangarangAdapters.bangarangMembersInteractor.isSignedIn(this.username)
-                        .then(isSignedIn=>{
-                            if (!isSignedIn){
-                                this.bangarangAdapters.bangarangUserInterfaceInteractor.goToSigningInMenu()
-                                throw mustBeSignedInClaimingUserNotification
-                            }
-                            return this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, retreivedClaim.id)
-                        })
-                        .then(previousClaimChoice=> {
-                            const isUserHasPreviouslyMadeTheSameClaimChoice=(previousClaimChoice:ClaimChoice,claimChoice:ClaimChoice):boolean => previousClaimChoice !==undefined && previousClaimChoice === claimChoice
-                            console.log(`previousClaimChoice ${previousClaimChoice}`)
-                            console.log(`claimChoice ${claimChoice}`)
-                            if(previousClaimChoice instanceof Error) throw unexpectedErrorClaimingUserNotification(previousClaimChoice)
-                            else if (isUserHasPreviouslyMadeTheSameClaimChoice(previousClaimChoice,claimChoice))throw multipleTimesClaimingUserNotification(claimChoice)
-                            else {
-                                new Claim(retreivedClaim)
-                                    .increasePeopleClaimedWhenNoPreviousClaimChoice(previousClaimChoice)
-                                    .removePreviousClaimOnClaim(previousClaimChoice)
-                                    .increaseClaimChoiseFromClaimChoice(claimChoice)
-                                    .claiming(this.bangarangAdapters.bangarangClaimInteractor,this.bangarangAdapters.bangarangMembersInteractor,this.username,claimChoice)
-                                this.bangarangAdapters.claimingUserNotificationInteractor.notify(successClaimingUserNotification)
-                            }
-                        }).catch((notification:ClaimingUserNotificationContract) => this.bangarangAdapters.claimingUserNotificationInteractor.notify(notification))
+        return this.bangarangAdapters.bangarangMembersInteractor.isSignedIn(this.username)
+            .then(isSignedIn=>{
+                if (!isSignedIn){
+                    this.bangarangAdapters.bangarangUserInterfaceInteractor.goToSigningInMenu()
+                    throw mustBeSignedInClaimingUserNotification
                 }
+                return Promise.all([
+                    this.bangarangAdapters.bangarangClaimInteractor.claimById(claimId),
+                    this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, claimId)
+                ])
             })
-        
+            .then(([retreivedClaim,previousClaimChoice])=> {
+                const isUserHasPreviouslyMadeTheSameClaimChoice=(previousClaimChoice:ClaimChoice,claimChoice:ClaimChoice):boolean => previousClaimChoice !==undefined && previousClaimChoice === claimChoice
+                if (retreivedClaim instanceof Error) throw claimNotDeclaredClaimingUserNotification(claimId)
+                if (previousClaimChoice instanceof Error) throw unexpectedErrorClaimingUserNotification(previousClaimChoice)
+                else if (isUserHasPreviouslyMadeTheSameClaimChoice(previousClaimChoice,claimChoice))throw multipleTimesClaimingUserNotification(claimChoice)
+                return new Claim(retreivedClaim)
+                    .increasePeopleClaimedWhenNoPreviousClaimChoice(previousClaimChoice)
+                    .removePreviousClaimOnClaim(previousClaimChoice)
+                    .increaseClaimChoiseFromClaimChoice(claimChoice)
+                    .claiming(this.bangarangAdapters.bangarangClaimInteractor,this.bangarangAdapters.bangarangMembersInteractor,this.username,claimChoice)
+            })
+            .then(claimingResult=> {
+                if(claimingResult instanceof Error) throw unexpectedErrorClaimingUserNotification(claimingResult)
+                this.bangarangAdapters.claimingUserNotificationInteractor.notify(successClaimingUserNotification)
+            })
+            .catch((notification:ClaimingUserNotificationContract) => this.bangarangAdapters.claimingUserNotificationInteractor.notify(notification))
     }
     public searchingClaims(searchCriteria: string):Promise<void> {
         enum Order {
@@ -96,9 +93,6 @@ export class User implements UserContract  {
                     this.bangarangAdapters.searchingClaimsUserNotificationInteractor.notify(successSearchingClaimsUserNotification(retreivedClaims))
                 }
             })
-        
-            
-        
     }
     public retrievingClaimById(claimId: string):Promise<void> {
         let claim:ClaimContract

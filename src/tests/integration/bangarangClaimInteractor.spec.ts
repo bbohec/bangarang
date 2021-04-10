@@ -28,8 +28,8 @@ describe(`Bangarang Claim Interactor - Integration Test`,()=>{
         name:string,
         adapter:BangarangClaimInteractorContract
     }
-    const restFakeAdapter = new RestBangarangClaimInteractor(new RestInteractor("restFakeClaimInteractor"))
-    const restGcpDatastoreAdapter = new RestBangarangClaimInteractor(new RestInteractor("restGcpDatastoreClaimInteractor"))
+    const restFakeAdapter = new RestBangarangClaimInteractor(new RestInteractor({endpointFullyQualifiedDomainName:"localhost",port:"3000",apiPrefix:"restFakeClaimInteractor",scheme:"http"}))
+    const restGcpDatastoreAdapter = new RestBangarangClaimInteractor(new RestInteractor({endpointFullyQualifiedDomainName:"localhost",port:"3000",apiPrefix:"restGcpDatastoreClaimInteractor",scheme:"http"}))
     const adapterScenarios:AdapterScenario[] = [
         {name:"fake",adapter:new FakeBangarangClaimInteractor(errorClaim.title)},
         {name:"restFake",adapter:restFakeAdapter},
@@ -116,3 +116,7 @@ describe(`Bangarang Claim Interactor - Integration Test`,()=>{
         })
     })
 })
+
+function retrieveScheme(restEndpointScheme: any): "http" | "https" {
+    throw new Error('Function not implemented.');
+}

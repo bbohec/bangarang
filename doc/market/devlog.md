@@ -1,6 +1,7 @@
 # Bangarang — Product Development Log
 - Multi-language — /!\ FR /!\
 - UI style rework
+- Server secrets
 - Official video >> subscribe to form in order to be informed about demo & launch
 - ? Builder placement on clean architecture
 - Error management
@@ -19,6 +20,7 @@
 -  UI Register View
 -  Signing-In Security warning
 -  Signing In Rework
+-  TI GCP Kind Test Prefix
 -  Pull Req.
 -  Summ.
 

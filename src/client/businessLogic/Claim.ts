@@ -32,11 +32,14 @@ export class Claim {
         bangarangMembersInteractor: BangarangMembersInteractorContract, 
         username: string, 
         claimChoice: ClaimChoice
-    ):Promise<Array<void|Error>> {
+    ):Promise<void|Error> {
             return Promise.all([
                 bangarangClaimInteractor.saveClaim(this),
                 bangarangMembersInteractor.saveMemberClaim({claimId:this.id, memberUsername:username, claimChoice})
             ])
+            .then(([saveClaimResult,saveMemberClaimResult])=> {
+                if(saveClaimResult instanceof Error || saveMemberClaimResult instanceof Error) return new Error("Error while claiming.")
+            })
     }
     public type: ClaimType;
     public title: string;

@@ -1,20 +1,40 @@
-import { UserBuilder } from "../businessLogic/UserBuilder";
 import type { ClaimContract } from "../port/ClaimContract";
 import type { UserContract } from "../port/UserContact";
+import { UserBuilder } from "../businessLogic/UserBuilder";
 import { FakeBangarangClaimInteractor } from "./FakeBangarangClaimInteractor";
+import { RestInteractor } from "./RestInteractor";
 import { RestBangarangClaimInteractor } from "./RestBangarangClaimInteractor";
 import { RestBangarangMembersInteractor } from "./RestBangarangMembersInteractor";
-import { RestInteractor } from "./RestInteractor";
 import { SvelteBangarangUserInterfaceInteractor } from "./SvelteBangarangUserInterfaceInteractor";
 import { SvelteClaimingUserNotificationInteractor } from "./SvelteClaimingUserNotificationInteractorContract";
 import { SvelteDeclaringClaimUserNotificationInteractor } from "./SvelteDeclaringClaimUserNotificationInteractor";
 import { SvelteRetrievingClaimUserNotificationInteractor } from "./SvelteRetrievingClaimUserNotificationInteractor";
 import { SvelteSearchingClaimsUserNotificationInteractor } from "./SvelteSearchingClaimsUserNotificationInteractorContract";
 import { SvelteSigningInUserNotificationInteractor } from "./SvelteSigningInUserNotificationInteractor";
-const bangarangMembersInteractor = new RestBangarangMembersInteractor(new RestInteractor("restGcpDatastoreMemberInteractor"))
-const bangarangClaimInteractor=new RestBangarangClaimInteractor(new RestInteractor("restGcpDatastoreClaimInteractor"))
+const retrieveProcessVariable = (processVariable:string|undefined,processVariableName:string) => {
+	if(processVariable) return processVariable
+	throw new Error(`'process.env.${processVariableName}' is missing from process environment variables.`)
+}
+const retrieveScheme = (restEndpointScheme:string):"http"|"https" => {
+    if(restEndpointScheme === "http" || restEndpointScheme === "https") return restEndpointScheme
+    throw new Error (`restEndpointScheme ${restEndpointScheme} not supported.`)
+}
+const  REST_ENDPOINT_FQDN:string = retrieveProcessVariable(process.env.REST_ENDPOINT_FQDN,"REST_ENDPOINT_FQDN")
+const  PORT:string = retrieveProcessVariable(process.env.PORT,"PORT")
+const  REST_ENDPOINT_SHEME:"http"|"https" = retrieveScheme(retrieveProcessVariable(process.env.REST_ENDPOINT_SHEME,"REST_ENDPOINT_SHEME"))
+const bangarangMembersInteractor = new RestBangarangMembersInteractor(new RestInteractor({
+    endpointFullyQualifiedDomainName:REST_ENDPOINT_FQDN,
+    port:PORT,
+    apiPrefix:"restGcpDatastoreMemberInteractor",
+    scheme:REST_ENDPOINT_SHEME
+}))
+const bangarangClaimInteractor=new RestBangarangClaimInteractor(new RestInteractor({
+    endpointFullyQualifiedDomainName:REST_ENDPOINT_FQDN,
+    port:PORT,
+    apiPrefix:"restGcpDatastoreClaimInteractor",
+    scheme:REST_ENDPOINT_SHEME
+}))
 const fakeBangarangClaimInteractor = new FakeBangarangClaimInteractor()
-demoClaims().forEach(claim => fakeBangarangClaimInteractor.saveClaim(claim))
 export const uiBangarangUserBuilder = new UserBuilder()
     .withBangarangClaimInteractor(bangarangClaimInteractor)
     .withBangarangMembersInteractor(bangarangMembersInteractor)
@@ -28,6 +48,7 @@ const guest:UserContract={username:"guest",fullname:"",email:""}
 uiBangarangUserBuilder
     .withUserContract(guest)
     .resetUser()
+demoClaims().forEach(claim => fakeBangarangClaimInteractor.saveClaim(claim))
 function demoClaims(): Array<ClaimContract> {
 const claims = new Array<ClaimContract>();
 claims.push({ 

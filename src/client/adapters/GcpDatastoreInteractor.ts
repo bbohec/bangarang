@@ -1,9 +1,6 @@
-import type { Datastore, Entity, PathType, Query } from "@google-cloud/datastore";
+import type { Datastore, Entity, PathType } from "@google-cloud/datastore";
 import type { entity } from "@google-cloud/datastore/build/src/entity";
 import type { Operator, RunQueryResponse } from "@google-cloud/datastore/build/src/query";
-import { filter } from "compression";
-import { response } from "express";
-import { bangarangClaimNotFoundByTittleUpperCase } from "../port/interactors/BangarangClaimInteractorContract";
 export class GcpDatastoreInteractor {
     constructor(gcpDatastore:Datastore) {
         this.gcpDatastore = gcpDatastore
@@ -12,7 +9,7 @@ export class GcpDatastoreInteractor {
         console.log(`⚙️  queryRecordsOnGoogleDatastore - ${kind} `)
         const query = this.gcpDatastore.createQuery(kind)
         filters.forEach(filter=> {
-            console.log(`  ⚙️  ${filter.property}${filter.operator}${filter.value}`)
+            console.log(`⚙️  ${filter.property}${filter.operator}${filter.value}`)
             query.filter(filter.property,filter.operator,filter.value)
         })
         return query.run()
