@@ -22,7 +22,7 @@ const apiPrefixFromString = (string: string): ApiPrefix => {
 const GCP_DATASTORE_PROJECT_ID =process.env.GCP_DATASTORE_PROJECT_ID
 const GCP_DATASTORE_CLIENT_EMAIL =process.env.GCP_DATASTORE_CLIENT_EMAIL
 const GCP_DATASTORE_PRIVATE_KEY =process.env.GCP_DATASTORE_PRIVATE_KEY
-if(!GCP_DATASTORE_PROJECT_ID) throw new Error(`Bad GCP_DATASTORE_CONFIG undefined.`)
+if(!GCP_DATASTORE_PROJECT_ID) throw new Error(`Bad GCP_DATASTORE_PROJECT_ID undefined.`)
 if(!GCP_DATASTORE_CLIENT_EMAIL) throw new Error(`Bad GCP_DATASTORE_CLIENT_EMAIL undefined.`)
 if(!GCP_DATASTORE_PRIVATE_KEY) throw new Error(`Bad GCP_DATASTORE_PRIVATE_KEY undefined.`)
 const gcpDatastoreInteractorConfiguration:GcpDatastoreInteractorConfiguration = {

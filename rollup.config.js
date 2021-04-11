@@ -29,8 +29,7 @@ export default {
 					'process.env.NODE_ENV': JSON.stringify(mode),
 					'process.env.REST_ENDPOINT_FQDN': JSON.stringify(process.env.REST_ENDPOINT_FQDN),
 					'process.env.PORT': JSON.stringify(process.env.PORT),
-					'process.env.REST_ENDPOINT_SHEME': JSON.stringify(process.env.REST_ENDPOINT_SHEME),
-					'process.env.GCP_DATASTORE_CONFIG': JSON.stringify(process.env.GCP_DATASTORE_CONFIG)
+					'process.env.REST_ENDPOINT_SHEME': JSON.stringify(process.env.REST_ENDPOINT_SHEME)
 				}
 			}),
 			svelte({
@@ -87,7 +86,6 @@ export default {
 				preventAssignment:true,
 				'process.browser': false,
 				'process.env.NODE_ENV': JSON.stringify(mode),
-				'process.env.GCP_DATASTORE_CONFIG': JSON.stringify(process.env.GCP_DATASTORE_CONFIG),
 				'process.env.REST_ENDPOINT_FQDN': JSON.stringify(process.env.REST_ENDPOINT_FQDN),
 				//'process.env.PORT': JSON.stringify(process.env.PORT),
 				'process.env.GCP_DATASTORE_PRIVATE_KEY': JSON.stringify(process.env.GCP_DATASTORE_PRIVATE_KEY),
