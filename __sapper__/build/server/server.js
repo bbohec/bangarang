@@ -8568,3 +8568,4 @@ App$1.post(`/${apiPrefix}/signingIn`, (request, response) => {
 App$1.use(compression__default['default']({ threshold: 0 }), sirv__default['default']('static', { dev: "development" === 'development' }), middleware());
 App$1.listen(process.env.PORT);
 //export default App
+module.exports = App$1;
