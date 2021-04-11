@@ -11,28 +11,21 @@ import { SvelteDeclaringClaimUserNotificationInteractor } from "./SvelteDeclarin
 import { SvelteRetrievingClaimUserNotificationInteractor } from "./SvelteRetrievingClaimUserNotificationInteractor";
 import { SvelteSearchingClaimsUserNotificationInteractor } from "./SvelteSearchingClaimsUserNotificationInteractorContract";
 import { SvelteSigningInUserNotificationInteractor } from "./SvelteSigningInUserNotificationInteractor";
-const retrieveProcessVariable = (processVariable:string|undefined,processVariableName:string) => {
-	if(processVariable) return processVariable
-	throw new Error(`'process.env.${processVariableName}' is missing from process environment variables.`)
-}
-const retrieveScheme = (restEndpointScheme:string):"http"|"https" => {
-    if(restEndpointScheme === "http" || restEndpointScheme === "https") return restEndpointScheme
-    throw new Error (`restEndpointScheme ${restEndpointScheme} not supported.`)
-}
-const  REST_ENDPOINT_FQDN:string = retrieveProcessVariable(process.env.REST_ENDPOINT_FQDN,"REST_ENDPOINT_FQDN")
-const  PORT:string = retrieveProcessVariable(process.env.PORT,"PORT")
-const  REST_ENDPOINT_SHEME:"http"|"https" = retrieveScheme(retrieveProcessVariable(process.env.REST_ENDPOINT_SHEME,"REST_ENDPOINT_SHEME"))
+console.log(`REST_ENDPOINT_FQDN:${process.env.REST_ENDPOINT_FQDN}`)
+console.log(`PORT:${(process.env.PORT)?process.env.PORT:(process.env.NODE_ENV === 'development')?"3000":undefined}`)
+console.log(`REST_ENDPOINT_SHEME:${process.env.REST_ENDPOINT_SHEME}`)
+
 const bangarangMembersInteractor = new RestBangarangMembersInteractor(new RestInteractor({
-    endpointFullyQualifiedDomainName:REST_ENDPOINT_FQDN,
-    port:PORT,
+    endpointFullyQualifiedDomainName:process.env.REST_ENDPOINT_FQDN,
+    port:(process.env.PORT)?process.env.PORT:(process.env.NODE_ENV === 'development')?"3000":undefined,
     apiPrefix:"restGcpDatastoreMemberInteractor",
-    scheme:REST_ENDPOINT_SHEME
+    scheme:process.env.REST_ENDPOINT_SHEME
 }))
 const bangarangClaimInteractor=new RestBangarangClaimInteractor(new RestInteractor({
-    endpointFullyQualifiedDomainName:REST_ENDPOINT_FQDN,
-    port:PORT,
+    endpointFullyQualifiedDomainName:process.env.REST_ENDPOINT_FQDN,
+    port:(process.env.PORT)?process.env.PORT:(process.env.NODE_ENV === 'development')?"3000":undefined,
     apiPrefix:"restGcpDatastoreClaimInteractor",
-    scheme:REST_ENDPOINT_SHEME
+    scheme:process.env.REST_ENDPOINT_SHEME
 }))
 const fakeBangarangClaimInteractor = new FakeBangarangClaimInteractor()
 export const uiBangarangUserBuilder = new UserBuilder()

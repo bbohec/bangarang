@@ -1,9 +1,24 @@
-import type { Datastore, Entity, PathType } from "@google-cloud/datastore";
+import { Datastore, DatastoreOptions, Entity, PathType } from "@google-cloud/datastore";
 import type { entity } from "@google-cloud/datastore/build/src/entity";
 import type { Operator, RunQueryResponse } from "@google-cloud/datastore/build/src/query";
+interface GcpDatastoreInteractorConfiguration {
+    gcpProjectId:string|undefined,gcpClientEmail:string|undefined,gcpPrivateKey:string|undefined
+}
 export class GcpDatastoreInteractor {
-    constructor(gcpDatastore:Datastore) {
-        this.gcpDatastore = gcpDatastore
+    constructor(gcpDatastoreInteractorConfiguration:GcpDatastoreInteractorConfiguration) {
+        if(
+            gcpDatastoreInteractorConfiguration.gcpClientEmail === undefined ||
+            gcpDatastoreInteractorConfiguration.gcpPrivateKey === undefined ||
+            gcpDatastoreInteractorConfiguration.gcpProjectId === undefined
+            ) throw new Error(`gcpDatastoreInteractorConfiguration bad configuration : ${JSON.stringify(gcpDatastoreInteractorConfiguration)}`)
+        const datastoreOptions:DatastoreOptions = {
+            projectId:gcpDatastoreInteractorConfiguration.gcpProjectId,
+            credentials:{
+                client_email:gcpDatastoreInteractorConfiguration.gcpClientEmail,
+                private_key:gcpDatastoreInteractorConfiguration.gcpPrivateKey
+            }
+        } 
+        this.gcpDatastore = new Datastore(datastoreOptions)
     }
     public queryRecordsOnGoogleDatastore<T>(kind:string,filters:{property: string, operator: Operator, value: {}}[]):Promise<T[]|Error> {
         console.log(`⚙️  queryRecordsOnGoogleDatastore - ${kind} `)

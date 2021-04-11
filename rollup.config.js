@@ -23,6 +23,7 @@ export default {
 		plugins: [
 			replace({
 				preventAssignment:true,
+				'process.env.PORT': JSON.stringify(process.env.PORT),
 				values: {
 					'process.browser': true,
 					'process.env.NODE_ENV': JSON.stringify(mode),
@@ -89,7 +90,7 @@ export default {
 				'process.env.GCP_CLIENT_EMAIL': JSON.stringify(process.env.GCP_CLIENT_EMAIL),
 				'process.env.GCP_PRIVATE_KEY': JSON.stringify(process.env.GCP_PRIVATE_KEY),
 				'process.env.REST_ENDPOINT_FQDN': JSON.stringify(process.env.REST_ENDPOINT_FQDN),
-				'process.env.PORT': JSON.stringify(process.env.PORT),
+				//'process.env.PORT': JSON.stringify(process.env.PORT),
 				'process.env.REST_ENDPOINT_SHEME': JSON.stringify(process.env.REST_ENDPOINT_SHEME)
 			}),
 			svelte({

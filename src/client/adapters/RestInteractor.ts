@@ -2,14 +2,24 @@ import axios, { AxiosError } from "axios";
 import type { ApiPrefix } from "../../server";
 export class RestInteractor {
     constructor (restEndpointConfiguration:RestEndpointConfiguration){
-        this.baseUrl = `${restEndpointConfiguration.scheme}://${restEndpointConfiguration.endpointFullyQualifiedDomainName}:${restEndpointConfiguration.port}/${restEndpointConfiguration.apiPrefix}`
+        if(
+            restEndpointConfiguration.scheme === "http" || 
+            restEndpointConfiguration.scheme === "https" ||
+            restEndpointConfiguration.endpointFullyQualifiedDomainName !== undefined
+        ) {
+            const ressourceName = `${restEndpointConfiguration.endpointFullyQualifiedDomainName}${(restEndpointConfiguration.port)?`:${restEndpointConfiguration.port}`:``}`
+            this.baseUrl = `${restEndpointConfiguration.scheme}://${ressourceName}/${restEndpointConfiguration.apiPrefix}`
+        } else throw new Error (`restEndpointConfiguration not supported: ${JSON.stringify(restEndpointConfiguration)} `)
+        
     }
     public get<T>(request:string,queryParams?:Record<string, string>):Promise<T|Error> {
+        console.log(`${this.baseUrl}${request}`)
         return axios.get<T>(`${this.baseUrl}${request}`,{params:new URLSearchParams(queryParams)})
             .then(response => (response.status===200)?response.data:new Error(response.statusText))
             .catch((error:AxiosError)=> this.axiosErrorToError(error))
     }
     public post(request: string, data: any): Promise<void | Error> {
+        console.log(`${this.baseUrl}${request}`)
         return axios({url:`${this.baseUrl}${request}`,method:'POST',data})
             .then(response => {if (response.status !== 200)throw new Error(response.statusText)})
             .catch((error: AxiosError) => this.axiosErrorToError(error));
@@ -21,9 +31,9 @@ export class RestInteractor {
     private baseUrl:string
 }
 interface RestEndpointConfiguration {
-    endpointFullyQualifiedDomainName:string,
-    port:string,
-    scheme:"http"|"https"
+    endpointFullyQualifiedDomainName:string|undefined,
+    port:string|undefined,
+    scheme:string|undefined
     apiPrefix:ApiPrefix,
 
 }

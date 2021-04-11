@@ -12,9 +12,6 @@ import { FakeBangarangClaimInteractor } from './client/adapters/FakeBangarangCla
 import { GcpDatastoreInteractor } from './client/adapters/GcpDatastoreInteractor';
 import { GcpDatastoreBangarangMembersInteractor } from './client/adapters/GcpDatastoreBangarangMembersInteractor';
 import { GcpDatastoreBangarangClaimInteractor } from './client/adapters/GcpDatastoreBangarangClaimInteractor';
-import { Datastore, DatastoreOptions } from '@google-cloud/datastore';
-const { NODE_ENV } = process.env;
-const dev = NODE_ENV === 'development';
 const SUPPORTED_API_PREFIXES = ['restFakeMemberInteractor', 'restGcpDatastoreMemberInteractor','restFakeClaimInteractor','restGcpDatastoreClaimInteractor'] as const;
 export type ApiPrefix = typeof SUPPORTED_API_PREFIXES[number];
 const isApiPrefix = (apiPrefix: string): apiPrefix is ApiPrefix => SUPPORTED_API_PREFIXES.includes(apiPrefix as ApiPrefix)
@@ -22,18 +19,11 @@ const apiPrefixFromString = (string: string): ApiPrefix => {
     if (isApiPrefix(string)) return string
     throw new Error(`'${string} is not a supported API Prefix.`)
 }
-const retrieveProcessVariable = (processVariable:string|undefined,processVariableName:string) => {
-	if(processVariable) return processVariable
-	throw new Error(`'process.env.${processVariableName}' is missing from process environment variables.`)
-}
-const datastoreOptions:DatastoreOptions = {
-    projectId:retrieveProcessVariable(process.env.GCP_PROJECT_ID,"GCP_PROJECT_ID"),
-    credentials:{
-        client_email:retrieveProcessVariable(process.env.GCP_CLIENT_EMAIL,"GCP_CLIENT_EMAIL"),
-        private_key:retrieveProcessVariable(process.env.GCP_PRIVATE_KEY,"GCP_PRIVATE_KEY")
-    }
-} 
-const gcpDatastoreInteractor = new GcpDatastoreInteractor(new Datastore(datastoreOptions))
+console.log(`GCP_PROJECT_ID:${process.env.GCP_PROJECT_ID}`)
+console.log(`GCP_CLIENT_EMAIL:${process.env.GCP_CLIENT_EMAIL}`)
+console.log(`GCP_PRIVATE_KEY:${process.env.GCP_PRIVATE_KEY}`)
+console.log(`PORT:${process.env.PORT}`)
+const gcpDatastoreInteractor = new GcpDatastoreInteractor({gcpClientEmail:process.env.GCP_CLIENT_EMAIL,gcpPrivateKey:process.env.GCP_PRIVATE_KEY,gcpProjectId:process.env.GCP_PROJECT_ID})
 const fakeBangarangMemberInteractor = new FakeBangarangMembersInteractor()
 const gcpDatastoreBangarangMembersInteractor = new GcpDatastoreBangarangMembersInteractor(gcpDatastoreInteractor) 
 interface BangarangMembersInteractor {
@@ -257,8 +247,8 @@ App.post(`/${apiPrefix}/signingIn`, (request, response) => {
 })
 App.use(
 	compression({ threshold: 0 }),
-	sirv('static', { dev }),
+	sirv('static', { dev:process.env.NODE_ENV === 'development' }),
 	sapper.middleware()
 )
-App.listen(retrieveProcessVariable(process.env.PORT,"PORT"));
+App.listen(process.env.PORT);
 //export default App
