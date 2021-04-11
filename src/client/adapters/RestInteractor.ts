@@ -2,15 +2,11 @@ import axios, { AxiosError } from "axios";
 import type { ApiPrefix } from "../../server";
 export class RestInteractor {
     constructor (restEndpointConfiguration:RestEndpointConfiguration){
-        if(
-            restEndpointConfiguration.scheme === "http" || 
-            restEndpointConfiguration.scheme === "https" ||
-            restEndpointConfiguration.endpointFullyQualifiedDomainName !== undefined
-        ) {
-            const ressourceName = `${restEndpointConfiguration.endpointFullyQualifiedDomainName}${(restEndpointConfiguration.port)?`:${restEndpointConfiguration.port}`:``}`
-            this.baseUrl = `${restEndpointConfiguration.scheme}://${ressourceName}/${restEndpointConfiguration.apiPrefix}`
-        } else throw new Error (`restEndpointConfiguration not supported: ${JSON.stringify(restEndpointConfiguration)} `)
-        
+        if(!(restEndpointConfiguration.scheme === "http" || restEndpointConfiguration.scheme === "https") ||
+            restEndpointConfiguration.endpointFullyQualifiedDomainName === undefined
+        ) throw new Error (`restEndpointConfiguration not supported: ${JSON.stringify(restEndpointConfiguration)} `)
+        const ressourceName = `${restEndpointConfiguration.endpointFullyQualifiedDomainName}${(restEndpointConfiguration.port)?`:${restEndpointConfiguration.port}`:``}`
+        this.baseUrl = `${restEndpointConfiguration.scheme}://${ressourceName}/${restEndpointConfiguration.apiPrefix}`   
     }
     public get<T>(request:string,queryParams?:Record<string, string>):Promise<T|Error> {
         console.log(`${this.baseUrl}${request}`)

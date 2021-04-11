@@ -1085,14 +1085,11 @@ class UserBuilder {
 
 class RestInteractor {
     constructor(restEndpointConfiguration) {
-        if (restEndpointConfiguration.scheme === "http" ||
-            restEndpointConfiguration.scheme === "https" ||
-            restEndpointConfiguration.endpointFullyQualifiedDomainName !== undefined) {
-            const ressourceName = `${restEndpointConfiguration.endpointFullyQualifiedDomainName}${(restEndpointConfiguration.port) ? `:${restEndpointConfiguration.port}` : ``}`;
-            this.baseUrl = `${restEndpointConfiguration.scheme}://${ressourceName}/${restEndpointConfiguration.apiPrefix}`;
-        }
-        else
+        if (!(restEndpointConfiguration.scheme === "http" || restEndpointConfiguration.scheme === "https") ||
+            restEndpointConfiguration.endpointFullyQualifiedDomainName === undefined)
             throw new Error(`restEndpointConfiguration not supported: ${JSON.stringify(restEndpointConfiguration)} `);
+        const ressourceName = `${restEndpointConfiguration.endpointFullyQualifiedDomainName}${(restEndpointConfiguration.port) ? `:${restEndpointConfiguration.port}` : ``}`;
+        this.baseUrl = `${restEndpointConfiguration.scheme}://${ressourceName}/${restEndpointConfiguration.apiPrefix}`;
     }
     get(request, queryParams) {
         console.log(`${this.baseUrl}${request}`);
@@ -1249,18 +1246,18 @@ class SvelteSigningInUserNotificationInteractor {
 
 //console.log(`REST_ENDPOINT_FQDN:${"localhost"}`)
 //console.log(`PORT:${(process.env.PORT)?process.env.PORT:("development" === 'development')?"3000":undefined}`)
-//console.log(`REST_ENDPOINT_SHEME:${process.env.REST_ENDPOINT_SHEME}`)
+//console.log(`REST_ENDPOINT_SHEME:${"http"}`)
 const bangarangMembersInteractor = new RestBangarangMembersInteractor(new RestInteractor({
     endpointFullyQualifiedDomainName: "localhost",
     port: (process.env.PORT) ? process.env.PORT : "3000" ,
     apiPrefix: "restGcpDatastoreMemberInteractor",
-    scheme: process.env.REST_ENDPOINT_SHEME
+    scheme: "http"
 }));
 const bangarangClaimInteractor = new RestBangarangClaimInteractor(new RestInteractor({
     endpointFullyQualifiedDomainName: "localhost",
     port: (process.env.PORT) ? process.env.PORT : "3000" ,
     apiPrefix: "restGcpDatastoreClaimInteractor",
-    scheme: process.env.REST_ENDPOINT_SHEME
+    scheme: "http"
 }));
 const fakeBangarangClaimInteractor = new FakeBangarangClaimInteractor();
 const uiBangarangUserBuilder = new UserBuilder()
