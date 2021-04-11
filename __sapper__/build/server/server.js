@@ -1092,13 +1092,11 @@ class RestInteractor {
         this.baseUrl = `${restEndpointConfiguration.scheme}://${ressourceName}/${restEndpointConfiguration.apiPrefix}`;
     }
     get(request, queryParams) {
-        console.log(`${this.baseUrl}${request}`);
         return axios__default['default'].get(`${this.baseUrl}${request}`, { params: new URLSearchParams(queryParams) })
             .then(response => (response.status === 200) ? response.data : new Error(response.statusText))
             .catch((error) => this.axiosErrorToError(error));
     }
     post(request, data) {
-        console.log(`${this.baseUrl}${request}`);
         return axios__default['default']({ url: `${this.baseUrl}${request}`, method: 'POST', data })
             .then(response => { if (response.status !== 200)
             throw new Error(response.statusText); })
@@ -1244,9 +1242,6 @@ class SvelteSigningInUserNotificationInteractor {
     }
 }
 
-//console.log(`REST_ENDPOINT_FQDN:${"localhost"}`)
-//console.log(`PORT:${(process.env.PORT)?process.env.PORT:("development" === 'development')?"3000":undefined}`)
-//console.log(`REST_ENDPOINT_SHEME:${"http"}`)
 const bangarangMembersInteractor = new RestBangarangMembersInteractor(new RestInteractor({
     endpointFullyQualifiedDomainName: "localhost",
     port: (process.env.PORT) ? process.env.PORT : "3000" ,
@@ -8318,7 +8313,6 @@ const gcpDatastoreInteractorConfiguration = {
     gcpClientEmail: JSON.parse(GCP_DATASTORE_CLIENT_EMAIL).gcpClientEmail,
     gcpPrivateKey: JSON.parse(GCP_DATASTORE_PRIVATE_KEY).gcpPrivateKey
 };
-//console.log(`PORT:${process.env.PORT}`)
 const gcpDatastoreInteractor = new GcpDatastoreInteractor(gcpDatastoreInteractorConfiguration);
 const fakeBangarangMemberInteractor = new FakeBangarangMembersInteractor();
 const gcpDatastoreBangarangMembersInteractor = new GcpDatastoreBangarangMembersInteractor(gcpDatastoreInteractor);

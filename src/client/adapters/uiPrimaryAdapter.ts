@@ -11,9 +11,6 @@ import { SvelteDeclaringClaimUserNotificationInteractor } from "./SvelteDeclarin
 import { SvelteRetrievingClaimUserNotificationInteractor } from "./SvelteRetrievingClaimUserNotificationInteractor";
 import { SvelteSearchingClaimsUserNotificationInteractor } from "./SvelteSearchingClaimsUserNotificationInteractorContract";
 import { SvelteSigningInUserNotificationInteractor } from "./SvelteSigningInUserNotificationInteractor";
-//console.log(`REST_ENDPOINT_FQDN:${process.env.REST_ENDPOINT_FQDN}`)
-//console.log(`PORT:${(process.env.PORT)?process.env.PORT:(process.env.NODE_ENV === 'development')?"3000":undefined}`)
-//console.log(`REST_ENDPOINT_SHEME:${process.env.REST_ENDPOINT_SHEME}`)
 const bangarangMembersInteractor = new RestBangarangMembersInteractor(new RestInteractor({
     endpointFullyQualifiedDomainName:process.env.REST_ENDPOINT_FQDN,
     port:(process.env.PORT)?process.env.PORT:(process.env.NODE_ENV === 'development')?"3000":undefined,

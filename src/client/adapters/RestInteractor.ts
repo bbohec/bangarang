@@ -9,13 +9,11 @@ export class RestInteractor {
         this.baseUrl = `${restEndpointConfiguration.scheme}://${ressourceName}/${restEndpointConfiguration.apiPrefix}`   
     }
     public get<T>(request:string,queryParams?:Record<string, string>):Promise<T|Error> {
-        console.log(`${this.baseUrl}${request}`)
         return axios.get<T>(`${this.baseUrl}${request}`,{params:new URLSearchParams(queryParams)})
             .then(response => (response.status===200)?response.data:new Error(response.statusText))
             .catch((error:AxiosError)=> this.axiosErrorToError(error))
     }
     public post(request: string, data: any): Promise<void | Error> {
-        console.log(`${this.baseUrl}${request}`)
         return axios({url:`${this.baseUrl}${request}`,method:'POST',data})
             .then(response => {if (response.status !== 200)throw new Error(response.statusText)})
             .catch((error: AxiosError) => this.axiosErrorToError(error));

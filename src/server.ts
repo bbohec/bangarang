@@ -30,7 +30,6 @@ const gcpDatastoreInteractorConfiguration:GcpDatastoreInteractorConfiguration = 
 	gcpClientEmail:JSON.parse(GCP_DATASTORE_CLIENT_EMAIL).gcpClientEmail,
 	gcpPrivateKey:JSON.parse(GCP_DATASTORE_PRIVATE_KEY).gcpPrivateKey
 }
-//console.log(`PORT:${process.env.PORT}`)
 const gcpDatastoreInteractor = new GcpDatastoreInteractor(gcpDatastoreInteractorConfiguration)
 const fakeBangarangMemberInteractor = new FakeBangarangMembersInteractor()
 const gcpDatastoreBangarangMembersInteractor = new GcpDatastoreBangarangMembersInteractor(gcpDatastoreInteractor) 
