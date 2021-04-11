@@ -14,6 +14,9 @@ import { SvelteSigningInUserNotificationInteractor } from "./SvelteSigningInUser
 console.log(`REST_ENDPOINT_FQDN:${process.env.REST_ENDPOINT_FQDN}`)
 console.log(`PORT:${(process.env.PORT)?process.env.PORT:(process.env.NODE_ENV === 'development')?"3000":undefined}`)
 console.log(`REST_ENDPOINT_SHEME:${process.env.REST_ENDPOINT_SHEME}`)
+console.log(`GCP_PROJECT_ID:${process.env.GCP_PROJECT_ID}`)
+console.log(`GCP_CLIENT_EMAIL:${process.env.GCP_CLIENT_EMAIL}`)
+console.log(`GCP_PRIVATE_KEY:${process.env.GCP_PRIVATE_KEY}`)
 
 const bangarangMembersInteractor = new RestBangarangMembersInteractor(new RestInteractor({
     endpointFullyQualifiedDomainName:process.env.REST_ENDPOINT_FQDN,

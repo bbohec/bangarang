@@ -2,92 +2,92 @@
   "bundler": "rollup",
   "shimport": "2.0.4",
   "assets": {
-    "main": "client.40f29ccb.js"
+    "main": "client.5d9a4579.js"
   },
   "css": {},
   "dependencies": {
     "index.svelte": [
-      "index.6c84b58d.js",
-      "MainMenu.f967d413.js",
-      "WelcomeTitle.c22df354.js",
-      "uiPrimaryAdapter.4205d851.js",
+      "index.d7b41b74.js",
+      "MainMenu.6eac5c9c.js",
+      "WelcomeTitle.751c4683.js",
+      "uiPrimaryAdapter.d7f17c63.js",
       "linkPrefixes.05019212.js",
-      "GenericButton.b63464c6.js",
-      "Link.dd62ab3e.js",
+      "GenericButton.9ea6da8d.js",
+      "Link.8c20bdc9.js",
       "links.755f0175.js",
-      "GenericTaskNotification.7e51d1c9.js"
+      "GenericTaskNotification.1a209949.js"
     ],
     "valuePropositions/[valuePropositionPageLink].svelte": [
-      "[valuePropositionPageLink].1a682b27.js",
-      "HeaderTitle.f901363e.js",
-      "Link.dd62ab3e.js",
+      "[valuePropositionPageLink].b0b69822.js",
+      "HeaderTitle.4283ac2d.js",
+      "Link.8c20bdc9.js",
       "links.755f0175.js",
       "retreiveValuePropositionFromValuePropositionPageLink.fe1397da.js",
       "valuePropositions.30979aea.js"
     ],
     "businessModel.svelte": [
-      "BusinessModel.8940ea6c.js",
-      "HeaderTitle.f901363e.js",
-      "DescriptionCard.cfe2cfcf.js",
-      "Link.dd62ab3e.js",
+      "BusinessModel.d1ea33d0.js",
+      "HeaderTitle.4283ac2d.js",
+      "DescriptionCard.04a23a45.js",
+      "Link.8c20bdc9.js",
       "links.755f0175.js"
     ],
     "signingInMenu.svelte": [
-      "SigningInMenu.b8e89781.js",
-      "uiPrimaryAdapter.4205d851.js",
+      "SigningInMenu.8aa6ee2e.js",
+      "uiPrimaryAdapter.d7f17c63.js",
       "linkPrefixes.05019212.js",
-      "WelcomeTitle.c22df354.js",
-      "GenericButton.b63464c6.js",
-      "Link.dd62ab3e.js",
-      "GenericTaskNotification.7e51d1c9.js",
+      "WelcomeTitle.751c4683.js",
+      "GenericButton.9ea6da8d.js",
+      "Link.8c20bdc9.js",
+      "GenericTaskNotification.1a209949.js",
       "links.755f0175.js",
-      "currentClaimIdStore.a94a758e.js"
+      "currentClaimIdStore.71ce24bc.js"
     ],
     "declareClaim.svelte": [
-      "DeclareClaim.ae62d642.js",
-      "uiPrimaryAdapter.4205d851.js",
+      "DeclareClaim.fde71e5c.js",
+      "uiPrimaryAdapter.d7f17c63.js",
       "linkPrefixes.05019212.js",
-      "currentClaimIdStore.a94a758e.js",
-      "Link.dd62ab3e.js",
+      "currentClaimIdStore.71ce24bc.js",
+      "Link.8c20bdc9.js",
       "links.755f0175.js"
     ],
     "landingPages/[audience]/[landingPageId].svelte": [
-      "[landingPageId].0d67e4d5.js",
-      "MainTitle.924ea94a.js",
-      "GenericButton.b63464c6.js",
+      "[landingPageId].d13d9de3.js",
+      "MainTitle.6644a8ad.js",
+      "GenericButton.9ea6da8d.js",
       "links.755f0175.js",
       "retreiveValuePropositionFromValuePropositionPageLink.fe1397da.js",
       "valuePropositions.30979aea.js"
     ],
     "leanCanvas.svelte": [
-      "LeanCanvas.7df6771a.js",
-      "HeaderTitle.f901363e.js",
+      "LeanCanvas.7c105d3f.js",
+      "HeaderTitle.4283ac2d.js",
       "linkPrefixes.05019212.js",
       "valuePropositions.30979aea.js",
-      "MainTitle.924ea94a.js",
-      "DescriptionCard.cfe2cfcf.js",
-      "Link.dd62ab3e.js",
+      "MainTitle.6644a8ad.js",
+      "DescriptionCard.04a23a45.js",
+      "Link.8c20bdc9.js",
       "links.755f0175.js"
     ],
     "mainMenu.svelte": [
-      "MainMenu.f967d413.js",
-      "WelcomeTitle.c22df354.js",
-      "uiPrimaryAdapter.4205d851.js",
+      "MainMenu.6eac5c9c.js",
+      "WelcomeTitle.751c4683.js",
+      "uiPrimaryAdapter.d7f17c63.js",
       "linkPrefixes.05019212.js",
-      "GenericButton.b63464c6.js",
-      "Link.dd62ab3e.js",
+      "GenericButton.9ea6da8d.js",
+      "Link.8c20bdc9.js",
       "links.755f0175.js",
-      "GenericTaskNotification.7e51d1c9.js"
+      "GenericTaskNotification.1a209949.js"
     ],
     "claims/[claimId].svelte": [
-      "[claimId].8b997321.js",
-      "currentClaimIdStore.a94a758e.js",
-      "uiPrimaryAdapter.4205d851.js",
+      "[claimId].6d93a5bd.js",
+      "currentClaimIdStore.71ce24bc.js",
+      "uiPrimaryAdapter.d7f17c63.js",
       "linkPrefixes.05019212.js",
       "links.755f0175.js",
-      "Link.dd62ab3e.js",
-      "GenericTaskNotification.7e51d1c9.js",
-      "GenericButton.b63464c6.js"
+      "Link.8c20bdc9.js",
+      "GenericTaskNotification.1a209949.js",
+      "GenericButton.9ea6da8d.js"
     ]
   }
 }
