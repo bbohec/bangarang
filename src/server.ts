@@ -252,3 +252,4 @@ App.use(
 )
 App.listen(process.env.PORT);
 //export default App
+module.exports = App
