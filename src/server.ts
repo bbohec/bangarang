@@ -22,9 +22,9 @@ const apiPrefixFromString = (string: string): ApiPrefix => {
 const GCP_DATASTORE_PROJECT_ID =process.env.GCP_DATASTORE_PROJECT_ID
 const GCP_DATASTORE_CLIENT_EMAIL =process.env.GCP_DATASTORE_CLIENT_EMAIL
 const GCP_DATASTORE_PRIVATE_KEY =process.env.GCP_DATASTORE_PRIVATE_KEY
-if(!GCP_DATASTORE_PROJECT_ID) throw new Error(`GCP_DATASTORE_PROJECT_ID missing from environment variables.`)
-if(!GCP_DATASTORE_CLIENT_EMAIL) throw new Error(`GCP_DATASTORE_CLIENT_EMAIL missing from environment variables.`)
-if(!GCP_DATASTORE_PRIVATE_KEY) throw new Error(`GCP_DATASTORE_PRIVATE_KEY missing from environment variables.`)
+if(GCP_DATASTORE_PROJECT_ID === undefined) throw new Error(`GCP_DATASTORE_PROJECT_ID missing from environment variables : ${GCP_DATASTORE_PROJECT_ID}`)
+if(GCP_DATASTORE_CLIENT_EMAIL === undefined) throw new Error(`GCP_DATASTORE_CLIENT_EMAIL missing from environment variables : ${GCP_DATASTORE_CLIENT_EMAIL}`)
+if(GCP_DATASTORE_PRIVATE_KEY === undefined) throw new Error(`GCP_DATASTORE_PRIVATE_KEY missing from environment variables : ${GCP_DATASTORE_PRIVATE_KEY}`)
 const gcpDatastoreInteractorConfiguration:GcpDatastoreInteractorConfiguration = {
 	gcpProjectId:JSON.parse(GCP_DATASTORE_PROJECT_ID).gcpProjectId,
 	gcpClientEmail:JSON.parse(GCP_DATASTORE_CLIENT_EMAIL).gcpClientEmail,
