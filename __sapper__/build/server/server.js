@@ -2,6 +2,7 @@
 
 var sirv = require('sirv');
 var express = require('express');
+var cors = require('cors');
 var compression = require('compression');
 var fs = require('fs');
 var path = require('path');
@@ -18,6 +19,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var sirv__default = /*#__PURE__*/_interopDefaultLegacy(sirv);
 var express__default = /*#__PURE__*/_interopDefaultLegacy(express);
+var cors__default = /*#__PURE__*/_interopDefaultLegacy(cors);
 var compression__default = /*#__PURE__*/_interopDefaultLegacy(compression);
 var fs__default = /*#__PURE__*/_interopDefaultLegacy(fs);
 var path__default = /*#__PURE__*/_interopDefaultLegacy(path);
@@ -1092,12 +1094,22 @@ class RestInteractor {
         this.baseUrl = `${restEndpointConfiguration.scheme}://${ressourceName}/${restEndpointConfiguration.apiPrefix}`;
     }
     get(request, queryParams) {
-        return axios__default['default'].get(`${this.baseUrl}${request}`, { params: new URLSearchParams(queryParams) })
+        const axiosRequestConfig = {
+            params: new URLSearchParams(queryParams),
+            headers: { 'Access-Control-Allow-Origin': '*' }
+        };
+        return axios__default['default'].get(`${this.baseUrl}${request}`, axiosRequestConfig)
             .then(response => (response.status === 200) ? response.data : new Error(response.statusText))
             .catch((error) => this.axiosErrorToError(error));
     }
     post(request, data) {
-        return axios__default['default']({ url: `${this.baseUrl}${request}`, method: 'POST', data })
+        const axiosRequestConfig = {
+            url: `${this.baseUrl}${request}`,
+            method: 'POST',
+            headers: { 'Access-Control-Allow-Origin': '*' },
+            data
+        };
+        return axios__default['default'](axiosRequestConfig)
             .then(response => { if (response.status !== 200)
             throw new Error(response.statusText); })
             .catch((error) => this.axiosErrorToError(error));
@@ -8330,7 +8342,7 @@ const selectBangarangMemberInteractor = (apiPrefix) => bangarangMembersInteracto
 const selectBangarangClaimInteractor = (apiPrefix) => bangarangClaimInteractors.find(interactor => interactor.apiPrefix === apiPrefixFromString(apiPrefix));
 const apiPrefix = `:apiPrefix`;
 const App$1 = express__default['default']();
-App$1.use(bodyParser.json());
+App$1.use(bodyParser.json(), cors__default['default']());
 var BangarangQueryParameters;
 (function (BangarangQueryParameters) {
     BangarangQueryParameters["ClaimTitle"] = "claimTitle";

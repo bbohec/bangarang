@@ -1,5 +1,6 @@
 import sirv from 'sirv';
 import express from 'express';
+import cors from 'cors'
 import compression from 'compression';
 import * as sapper from '@sapper/server';
 import {json} from 'body-parser'
@@ -55,7 +56,7 @@ const selectBangarangMemberInteractor = (apiPrefix:string)=> bangarangMembersInt
 const selectBangarangClaimInteractor = (apiPrefix:string)=> bangarangClaimInteractors.find(interactor=> interactor.apiPrefix===apiPrefixFromString(apiPrefix))
 const apiPrefix = `:apiPrefix`
 const App = express();
-App.use(json())
+App.use(json(),cors())
 enum BangarangQueryParameters {
 	ClaimTitle = "claimTitle"
 }
