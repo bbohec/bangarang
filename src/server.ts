@@ -9,7 +9,7 @@ import type { BangarangClaimInteractorContract } from './client/port/interactors
 import type { ClaimContract, ClaimTitle, ClaimType, Identifier, PeopleClaimed, PeopleClaimedAgainst, PeopleClaimedFor } from './client/port/ClaimContract';
 import { FakeBangarangMembersInteractor } from './client/adapters/FakeBangarangMembersInteractor';
 import { FakeBangarangClaimInteractor } from './client/adapters/FakeBangarangClaimInteractor'
-import { GcpDatastoreInteractor } from './client/adapters/GcpDatastoreInteractor';
+import { GcpDatastoreInteractor, GcpDatastoreInteractorConfiguration } from './client/adapters/GcpDatastoreInteractor';
 import { GcpDatastoreBangarangMembersInteractor } from './client/adapters/GcpDatastoreBangarangMembersInteractor';
 import { GcpDatastoreBangarangClaimInteractor } from './client/adapters/GcpDatastoreBangarangClaimInteractor';
 const SUPPORTED_API_PREFIXES = ['restFakeMemberInteractor', 'restGcpDatastoreMemberInteractor','restFakeClaimInteractor','restGcpDatastoreClaimInteractor'] as const;
@@ -19,11 +19,19 @@ const apiPrefixFromString = (string: string): ApiPrefix => {
     if (isApiPrefix(string)) return string
     throw new Error(`'${string} is not a supported API Prefix.`)
 }
-console.log(`GCP_PROJECT_ID:${process.env.GCP_PROJECT_ID}`)
-console.log(`GCP_CLIENT_EMAIL:${process.env.GCP_CLIENT_EMAIL}`)
-console.log(`GCP_PRIVATE_KEY:${process.env.GCP_PRIVATE_KEY}`)
-console.log(`PORT:${process.env.PORT}`)
-const gcpDatastoreInteractor = new GcpDatastoreInteractor({gcpClientEmail:process.env.GCP_CLIENT_EMAIL,gcpPrivateKey:process.env.GCP_PRIVATE_KEY,gcpProjectId:process.env.GCP_PROJECT_ID})
+const GCP_DATASTORE_PROJECT_ID =process.env.GCP_DATASTORE_PROJECT_ID
+const GCP_DATASTORE_CLIENT_EMAIL =process.env.GCP_DATASTORE_CLIENT_EMAIL
+const GCP_DATASTORE_PRIVATE_KEY =process.env.GCP_DATASTORE_PRIVATE_KEY
+if(!GCP_DATASTORE_PROJECT_ID) throw new Error(`Bad GCP_DATASTORE_CONFIG undefined.`)
+if(!GCP_DATASTORE_CLIENT_EMAIL) throw new Error(`Bad GCP_DATASTORE_CLIENT_EMAIL undefined.`)
+if(!GCP_DATASTORE_PRIVATE_KEY) throw new Error(`Bad GCP_DATASTORE_PRIVATE_KEY undefined.`)
+const gcpDatastoreInteractorConfiguration:GcpDatastoreInteractorConfiguration = {
+	gcpProjectId:JSON.parse(GCP_DATASTORE_PROJECT_ID).gcpProjectId,
+	gcpClientEmail:JSON.parse(GCP_DATASTORE_CLIENT_EMAIL).gcpClientEmail,
+	gcpPrivateKey:JSON.parse(GCP_DATASTORE_PRIVATE_KEY).gcpPrivateKey
+}
+//console.log(`PORT:${process.env.PORT}`)
+const gcpDatastoreInteractor = new GcpDatastoreInteractor(gcpDatastoreInteractorConfiguration)
 const fakeBangarangMemberInteractor = new FakeBangarangMembersInteractor()
 const gcpDatastoreBangarangMembersInteractor = new GcpDatastoreBangarangMembersInteractor(gcpDatastoreInteractor) 
 interface BangarangMembersInteractor {

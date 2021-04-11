@@ -30,9 +30,7 @@ export default {
 					'process.env.REST_ENDPOINT_FQDN': JSON.stringify(process.env.REST_ENDPOINT_FQDN),
 					'process.env.PORT': JSON.stringify(process.env.PORT),
 					'process.env.REST_ENDPOINT_SHEME': JSON.stringify(process.env.REST_ENDPOINT_SHEME),
-					'process.env.GCP_PROJECT_ID': JSON.stringify(process.env.GCP_PROJECT_ID),
-					'process.env.GCP_CLIENT_EMAIL': JSON.stringify(process.env.GCP_CLIENT_EMAIL),
-					'process.env.GCP_PRIVATE_KEY': JSON.stringify(process.env.GCP_PRIVATE_KEY),
+					'process.env.GCP_DATASTORE_CONFIG': JSON.stringify(process.env.GCP_DATASTORE_CONFIG)
 				}
 			}),
 			svelte({
@@ -89,12 +87,12 @@ export default {
 				preventAssignment:true,
 				'process.browser': false,
 				'process.env.NODE_ENV': JSON.stringify(mode),
-				'process.env.GCP_PROJECT_ID': JSON.stringify(process.env.GCP_PROJECT_ID),
-				'process.env.GCP_CLIENT_EMAIL': JSON.stringify(process.env.GCP_CLIENT_EMAIL),
-				'process.env.GCP_PRIVATE_KEY': JSON.stringify(process.env.GCP_PRIVATE_KEY),
+				'process.env.GCP_DATASTORE_CONFIG': JSON.stringify(process.env.GCP_DATASTORE_CONFIG),
 				'process.env.REST_ENDPOINT_FQDN': JSON.stringify(process.env.REST_ENDPOINT_FQDN),
 				//'process.env.PORT': JSON.stringify(process.env.PORT),
-				'process.env.REST_ENDPOINT_SHEME': JSON.stringify(process.env.REST_ENDPOINT_SHEME)
+				'process.env.GCP_DATASTORE_PRIVATE_KEY': JSON.stringify(process.env.GCP_DATASTORE_PRIVATE_KEY),
+				'process.env.GCP_DATASTORE_CLIENT_EMAIL': JSON.stringify(process.env.GCP_DATASTORE_CLIENT_EMAIL),
+				'process.env.GCP_DATASTORE_PROJECT_ID': JSON.stringify(process.env.GCP_DATASTORE_PROJECT_ID)
 			}),
 			svelte({
 				preprocess: sveltePreprocess({ sourceMap: dev, postcss: true }),
