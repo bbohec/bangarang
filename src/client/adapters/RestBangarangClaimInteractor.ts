@@ -10,10 +10,10 @@ export class RestBangarangClaimInteractor implements BangarangClaimInteractorCon
     claimById(id: string): Promise<ClaimContract | Error> {
         return this.restInteractor.get<ClaimContract>(`/claims`,{id})
     }
-    claimByTitleUpperCase(claimTitle: string): Promise<ClaimContract | Error> {
+    claimByTitleIncencitiveCase(claimTitle: string): Promise<ClaimContract | Error> {
         return this.restInteractor.get<ClaimContract>(`/claims`,{claimTitle})
     }
-    isClaimExistByTitleUpperCase(claimTitle: string): Promise<boolean | Error> {
+    isClaimExistByTitleIncensitiveCase(claimTitle: string): Promise<boolean | Error> {
         return this.restInteractor.get<{isClaimExistByTitleUpperCase?:boolean}>(`/isClaimExistByTitleUpperCase`,{claimTitle})
             .then(data => (data instanceof Error)
                 ?data:
@@ -22,8 +22,8 @@ export class RestBangarangClaimInteractor implements BangarangClaimInteractorCon
                 new Error ("isMemberExistWithUsername missing on body.")
             )
     }
-    retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(searchCriteriaWords: string[]): Promise<ClaimContract[]|Error> {
-        return this.restInteractor.get<ClaimContract[]>(`/claims`,{searchCriteriaWords:searchCriteriaWords.join(",")})
+    retrieveClaimsThatContainInIncensitiveCaseTitleOneOrMoreIncencitiveCaseSearchCriteriaWords(searchCriteria: string): Promise<ClaimContract[]|Error> {
+        return this.restInteractor.get<ClaimContract[]>(`/claims`,{searchCriteria})
     }
     saveClaim(claimToSave: ClaimContract): Promise<void | Error> {
         return this.restInteractor.post(`/saveClaim`,claimToSave)

@@ -64,16 +64,16 @@ describe(`Bangarang Claim Interactor - Integration Test`,()=>{
                 return adapterScenario.adapter.claimById(expectedSavedClaim.id)
                     .then(result=> expect(result).instanceOf(Error))
             })
-            it(`claimByTitleUpperCase - error`,()=>{
-                return adapterScenario.adapter.claimByTitleUpperCase(expectedSavedClaim.title)
+            it(`claimByTitleIncencitiveCase - error`,()=>{
+                return adapterScenario.adapter.claimByTitleIncencitiveCase(expectedSavedClaim.title)
                     .then(result=> expect(result).instanceOf(Error))
             })
-            it(`isClaimExistByTitleUpperCase - error`,()=>{
-                return adapterScenario.adapter.isClaimExistByTitleUpperCase(errorClaim.title)
+            it(`isClaimExistByTitleIncensitiveCase - error`,()=>{
+                return adapterScenario.adapter.isClaimExistByTitleIncensitiveCase(errorClaim.title)
                     .then(result=> expect(result).instanceOf(Error))
             })
-            it(`retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords - error`,()=>{
-                return adapterScenario.adapter.retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords([errorClaim.title])
+            it(`retrieveClaimsThatContainInIncensitiveCaseTitleOneOrMoreIncencitiveCaseSearchCriteriaWords - error`,()=>{
+                return adapterScenario.adapter.retrieveClaimsThatContainInIncensitiveCaseTitleOneOrMoreIncencitiveCaseSearchCriteriaWords(errorClaim.title)
                     .then(result=> expect(result).instanceOf(Error))
             })
             it(`saveClaim - error`,()=>{
@@ -81,32 +81,32 @@ describe(`Bangarang Claim Interactor - Integration Test`,()=>{
                     .then(result=> expect(result).instanceOf(Error))
             })
             describe('save claim scenario',()=>{
-                it(`isClaimExistByTitleUpperCase - The claim '${expectedSavedClaim.title}' don't exist.`,()=>{
-                    return adapterScenario.adapter.isClaimExistByTitleUpperCase(expectedSavedClaim.title)
+                it(`isClaimExistByTitleIncensitiveCase - The claim '${expectedSavedClaim.title}' don't exist.`,()=>{
+                    return adapterScenario.adapter.isClaimExistByTitleIncensitiveCase(expectedSavedClaim.title)
                         .then(result => expect(result).to.be.false)
                 })
                 it(`saveClaim - The claim '${expectedSavedClaim.title}' is saved.`,()=>{
                     return adapterScenario.adapter.saveClaim(expectedSavedClaim)
                         .then(result =>expect(result).not.instanceOf(Error))
                 })
-                it(`isClaimExistByTitleUpperCase - The claim '${expectedSavedClaim.title}' exist.`,()=>{
-                    return adapterScenario.adapter.isClaimExistByTitleUpperCase(expectedSavedClaim.title)
+                it(`isClaimExistByTitleIncensitiveCase - The claim '${expectedSavedClaim.title}' exist.`,()=>{
+                    return adapterScenario.adapter.isClaimExistByTitleIncensitiveCase(expectedSavedClaim.title)
                         .then(result =>expect(result).to.be.true)
                 })
                 it(`claimById - The claim '${expectedSavedClaim.title}' can be retrieved by Id.`,()=>{
                     return adapterScenario.adapter.claimById(expectedSavedClaim.id)
                         .then(result =>expect(result).deep.equal(expectedSavedClaim))
                 })
-                it(`claimByTitleUpperCase - The claim '${expectedSavedClaim.title}' can be retrieved by it's title.`,()=>{
-                    return adapterScenario.adapter.claimByTitleUpperCase(expectedSavedClaim.title)
+                it(`claimByTitleIncencitiveCase - The claim '${expectedSavedClaim.title}' can be retrieved by it's title.`,()=>{
+                    return adapterScenario.adapter.claimByTitleIncencitiveCase(expectedSavedClaim.title)
                         .then(result =>expect(result).deep.equal(expectedSavedClaim))
                 })
-                it(`retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords - The claim '${expectedSavedClaim.title}' is retrieved with '${goodSearchCriteria}' search criteria.`,()=>{
-                    return adapterScenario.adapter.retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(goodSearchCriteria.split(" "))
+                it(`retrieveClaimsThatContainInIncensitiveCaseTitleOneOrMoreIncencitiveCaseSearchCriteriaWords - The claim '${expectedSavedClaim.title}' is retrieved with '${goodSearchCriteria}' search criteria.`,()=>{
+                    return adapterScenario.adapter.retrieveClaimsThatContainInIncensitiveCaseTitleOneOrMoreIncencitiveCaseSearchCriteriaWords(goodSearchCriteria)
                         .then(result =>expect(result).deep.equal([expectedSavedClaim]))
                 })
-                it(`retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords - No claim is retrieved with '${badSearchCriteria}' search criteria.`,()=>{
-                    return adapterScenario.adapter.retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(badSearchCriteria.split(" "))
+                it(`retrieveClaimsThatContainInIncensitiveCaseTitleOneOrMoreIncencitiveCaseSearchCriteriaWords - No claim is retrieved with '${badSearchCriteria}' search criteria.`,()=>{
+                    return adapterScenario.adapter.retrieveClaimsThatContainInIncensitiveCaseTitleOneOrMoreIncencitiveCaseSearchCriteriaWords(badSearchCriteria)
                         .then(result =>{
                             if (result instanceof Error) throw result
                             expect(result.length).equal(0)

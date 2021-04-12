@@ -1,7 +1,6 @@
 # Bangarang — Product Development Log
 - Multi-language — /!\ FR /!\
 - UI style rework
-- Server secrets
 - Official video >> subscribe to form in order to be informed about demo & launch
 - ? Builder placement on clean architecture
 - Error management
@@ -14,9 +13,10 @@
 - ✔️ Done
 
 ## 2021/04/12 — Day 27
--  Twitch Live https://www.twitch.tv/benjaminbohec + announces
--  Stand Up 
--  Adapter Claim > remove punctuation on word split
+- ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
+- ✔️ Stand Up 
+- ✔️ Coding weekend
+- 👉 Adapter Claim > remove punctuation on word split
 -  UI Register View
 -  Signing-In Security warning
 -  Signing In Rework
@@ -33,7 +33,7 @@
 - ✔️ AT & TI & e2e
     - ✔️ TI claims with "imporTant dOg"
 - ❌ Pull Req.
-- 👉 Summ.
+- ✔️ Summ.
 
 ## 2021/04/05 — Day 25
 - ✔️ Twitch Live

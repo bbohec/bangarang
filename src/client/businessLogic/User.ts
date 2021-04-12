@@ -85,7 +85,7 @@ export class User implements UserContract  {
             return Order.keep;
         }
         return this.bangarangAdapters.bangarangClaimInteractor
-            .retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(sentenceIntoWords(searchCriteria.toLowerCase(),wordSeparator))
+            .retrieveClaimsThatContainInIncensitiveCaseTitleOneOrMoreIncencitiveCaseSearchCriteriaWords(searchCriteria)
             .then(retreivedClaims => {
                 if (retreivedClaims instanceof Error) {this.bangarangAdapters.searchingClaimsUserNotificationInteractor.notify(unexpectedErrorSearchingClaimsUserNotification(retreivedClaims))}
                 else {
@@ -135,13 +135,13 @@ export class User implements UserContract  {
             this.bangarangAdapters.declaringClaimUserNotificationInteractor.notify(claimWithoutTitleDeclaringClaimUserNotification)
             return Promise.resolve()
         }
-        else return this.bangarangAdapters.bangarangClaimInteractor.isClaimExistByTitleUpperCase(claimTitle)
+        else return this.bangarangAdapters.bangarangClaimInteractor.isClaimExistByTitleIncensitiveCase(claimTitle)
             .then(isClaimExistByTitleUpperCase => {
                 if (isClaimExistByTitleUpperCase instanceof Error) throw new Error (`MISSIGN SPECS : ${isClaimExistByTitleUpperCase}`)
                 return shouldSaveClaimWhenClaimDontExistByTitleUpperCase(isClaimExistByTitleUpperCase)
             })
             .then(isClaimExistByTitleUpperCase => (isClaimExistByTitleUpperCase)?
-                this.bangarangAdapters.bangarangClaimInteractor.claimByTitleUpperCase(claimTitle):
+                this.bangarangAdapters.bangarangClaimInteractor.claimByTitleIncencitiveCase(claimTitle):
                 this.bangarangAdapters.bangarangClaimInteractor.claimById(claimId)
             )
             .then(claim => {

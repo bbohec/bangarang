@@ -66,7 +66,7 @@ App.get(`/${apiPrefix}/claims`, (request, response) => {
 	const sendErrorResponse = (error:Error)=> response.status(500).json({error:error.message})
 	if(!bangarangClaimInteractor)sendErrorResponse(new Error(`bangarangMemberInteractor undefined`))
 	else {
-		const params = ["searchCriteriaWords","claimTitle","id"]
+		const params = ["searchCriteria","claimTitle","id"]
 		const paramFound = params.find(param => request.query[param] !== undefined)
 		if (paramFound === undefined) sendErrorResponse(new Error(`No query params supported.'`))
 		else {
@@ -74,8 +74,8 @@ App.get(`/${apiPrefix}/claims`, (request, response) => {
 			if (!isQueryStringQuery(query)) sendErrorResponse(new Error(`Query not supported : '${query}'`))
 			else {
 				const useCaseFromParamFound = (paramFound:string):Promise<ClaimContract[] | Error | ClaimContract> => {
-					if(paramFound === "searchCriteriaWords") return bangarangClaimInteractor.adapter.retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(query.split(","))
-					if(paramFound === "claimTitle") return bangarangClaimInteractor.adapter.claimByTitleUpperCase(query)
+					if(paramFound === "searchCriteria") return bangarangClaimInteractor.adapter.retrieveClaimsThatContainInIncensitiveCaseTitleOneOrMoreIncencitiveCaseSearchCriteriaWords(query)
+					if(paramFound === "claimTitle") return bangarangClaimInteractor.adapter.claimByTitleIncencitiveCase(query)
 					if(paramFound === "id") return bangarangClaimInteractor.adapter.claimById(query)
 					throw new Error ("unsupported param")
 				}
@@ -97,7 +97,7 @@ App.get(`/${apiPrefix}/isClaimExistByTitleUpperCase`, (request, response) => {
 		const query = request.query[BangarangQueryParameters.ClaimTitle]
 		if (!isQueryStringQuery(query)) sendErrorResponse(new Error(`Query not supported : '${query}'`))
 		else return bangarangClaimInteractor.adapter
-			.isClaimExistByTitleUpperCase(query)
+			.isClaimExistByTitleIncensitiveCase(query)
 			.then(isClaimExistByTitleUpperCase => {
 				if(isClaimExistByTitleUpperCase instanceof Error) throw isClaimExistByTitleUpperCase
 				response.end(JSON.stringify({isClaimExistByTitleUpperCase}))
