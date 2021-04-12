@@ -1,5 +1,5 @@
 <script lang="ts">
-import { uiBangarangUserBuilder } from "../../adapters/uiPrimaryAdapter";
+    import { uiBangarangUserBuilder } from "../../adapters/uiPrimaryAdapter";
     import WelcomeTitle from "../Titles/WelcomeTitle.svelte"
     const user = uiBangarangUserBuilder.getUser()
 </script>

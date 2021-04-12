@@ -7,11 +7,11 @@ import type { SigningInUserNotificationInteractorContract } from "./interactors/
 import type { SearchingClaimsUserNotificationInteractorContract } from "./interactors/SearchingClaimsUserNotificationInteractorContract";
 import type { ClaimingUserNotificationInteractorContract } from "./interactors/ClaimingUserNotificationInteractorContract";
 import type { RegisteringUserNotificationInteractorContract } from "./interactors/RegisteringUserNotificationInteractorContract";
-import type { EmaimInteractorContract } from "./interactors/EmailInteractorContract";
+import type { EmailInteractorContract } from "./interactors/EmailInteractorContract";
 import type { PasswordInteractorContract } from "./interactors/PasswordInteractorContract";
 export interface BangarangAdaptersContract {
     passwordInteractor: PasswordInteractorContract;
-    emailInteractor: EmaimInteractorContract;
+    emailInteractor: EmailInteractorContract;
     bangarangClaimInteractor:BangarangClaimInteractorContract
     bangarangMembersInteractor: BangarangMembersInteractorContract;
     bangarangUserInterfaceInteractor:BangarangUserInterfaceInteractorContract;

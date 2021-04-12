@@ -8,7 +8,7 @@ import { successSearchingClaimsUserNotification, unexpectedErrorSearchingClaimsU
 import { ClaimingUserNotificationContract, claimNotDeclaredClaimingUserNotification, multipleTimesClaimingUserNotification, mustBeSignedInClaimingUserNotification, successClaimingUserNotification, unexpectedErrorClaimingUserNotification } from "../port/interactors/ClaimingUserNotificationInteractorContract";
 import type { ClaimChoice } from "../port/ClaimChoice";
 import { Claim } from "./Claim";
-import { alreadyMemberRegisteringUserNotification, badEmailRegisteringUserNotification, successRegisteringUserNotification, unsecurePasswordRegisteringUserNotification } from "../port/interactors/RegisteringUserNotificationInteractorContract";
+import { alreadyMemberRegisteringUserNotification, badEmailRegisteringUserNotification, RegisteringUserNotificationContract, successRegisteringUserNotification, unsecurePasswordRegisteringUserNotification } from "../port/interactors/RegisteringUserNotificationInteractorContract";
 export class User implements UserContract  {
     constructor(userContract: UserContract, bangarangAdapters: BangarangAdaptersContract) {
         this.username = userContract.username;
@@ -20,15 +20,22 @@ export class User implements UserContract  {
         return this.bangarangAdapters.bangarangMembersInteractor.isMemberExistWithUsername(this.username)
             .then(isMemberExistWithUsername => {
                 if(isMemberExistWithUsername instanceof Error) throw new Error("NOT IMPLEMENTED")
-                else if (isMemberExistWithUsername)
-                    return Promise.resolve(this.bangarangAdapters.registeringUserNotificationInteractor.notify(alreadyMemberRegisteringUserNotification))
-                else if(!this.bangarangAdapters.passwordInteractor.isPasswordSecure(password))
-                    return Promise.resolve(this.bangarangAdapters.registeringUserNotificationInteractor.notify(unsecurePasswordRegisteringUserNotification))
-                else if(this.bangarangAdapters.emailInteractor.isEmailValid(this.email)){
-                    return this.bangarangAdapters.bangarangMembersInteractor.saveMember({username:this.username,fullname:this.fullname,email:this.email})
-                        .then(result=>this.bangarangAdapters.bangarangMembersInteractor.saveCredentials({username:this.username,password}))
-                        .then(result => this.bangarangAdapters.registeringUserNotificationInteractor.notify(successRegisteringUserNotification))
-                } else return Promise.resolve(this.bangarangAdapters.registeringUserNotificationInteractor.notify(badEmailRegisteringUserNotification))
+                if(isMemberExistWithUsername) throw alreadyMemberRegisteringUserNotification
+                if(!this.bangarangAdapters.passwordInteractor.isPasswordSecure(password)) throw unsecurePasswordRegisteringUserNotification
+                if(!this.bangarangAdapters.emailInteractor.isEmailValid(this.email)) throw badEmailRegisteringUserNotification
+                return this.bangarangAdapters.bangarangMembersInteractor.saveMember({username:this.username,fullname:this.fullname,email:this.email})
+            })
+            .then(result=>{
+                if (result instanceof Error ) throw result
+                return this.bangarangAdapters.bangarangMembersInteractor.saveCredentials({username:this.username,password})
+            })
+            .then(result =>{
+                if (result instanceof Error ) throw result
+                this.bangarangAdapters.registeringUserNotificationInteractor.notify(successRegisteringUserNotification)
+            })
+            .catch((result:RegisteringUserNotificationContract|Error) => {
+                if(result instanceof Error) throw result
+                this.bangarangAdapters.registeringUserNotificationInteractor.notify(result)
             })
         
     }

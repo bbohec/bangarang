@@ -11,3 +11,5 @@ export const successRegisteringUserNotification:RegisteringUserNotificationContr
 export const badEmailRegisteringUserNotification:RegisteringUserNotificationContract = {status:"Failed", message:"Email invalid.",type:"Registering."}
 export const unsecurePasswordRegisteringUserNotification:RegisteringUserNotificationContract = {status:"Failed", message:"Unsecure password.",type:"Registering."}
 export const alreadyMemberRegisteringUserNotification:RegisteringUserNotificationContract = {status:"Failed", message:"Already member of Bangarang.",type:"Registering."}
+export const idleMemberRegisteringUserNotification:RegisteringUserNotificationContract = {status:"Idle", message:"Waiting for Registering Event.",type:"Registering."}
+export const executingMemberRegisteringUserNotification:RegisteringUserNotificationContract = {status:"Executing", message:"Executing registering use case.",type:"Registering."}
