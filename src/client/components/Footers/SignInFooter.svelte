@@ -17,7 +17,7 @@
         <SignInInformation/>
     {:else}
         <section class="flex justify-center items-center">
-            <!-- <Link size="small" linkHref={links.MainMenu} linkName="Would you like to register on Bangarang?" textAlign={"text-center"}/>-->
+            <Link size="small" linkHref={links.Register} linkName="Would you like to register on Bangarang?" textAlign={"text-center"}/>
         </section>
         <section class="flex justify-between items-center">
             <Link size="small" linkHref={linkFromCurrentClaimId(currentClaimId).href} linkName={linkFromCurrentClaimId(currentClaimId).name} textAlign={"text-left"}/>

@@ -1,7 +1,6 @@
 <script lang="ts">
     import { uiBangarangUserBuilder } from "../../adapters/uiPrimaryAdapter";
     import SignInSection from "../Sections/SignInSection.svelte"
-    //import {connectedUserStore} from "../../stores/connectedUserStore"
     const user = uiBangarangUserBuilder.getUser()
 </script>
 {#if user.username === "guest"}

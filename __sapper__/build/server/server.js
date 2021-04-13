@@ -358,11 +358,19 @@ const routes = (d => [
 	},
 
 	{
+		// Register.svelte
+		pattern: /^\/Register\/?$/,
+		parts: [
+			{ i: 8 }
+		]
+	},
+
+	{
 		// claims/[claimId].svelte
 		pattern: /^\/claims\/([^/]+?)\/?$/,
 		parts: [
 			null,
-			{ i: 8, params: match => ({ claimId: d(match[1]) }) }
+			{ i: 9, params: match => ({ claimId: d(match[1]) }) }
 		]
 	}
 ])(decodeURIComponent);
@@ -541,7 +549,6 @@ stores.session.subscribe((value) => __awaiter(void 0, void 0, void 0, function* 
 }));
 
 const idleSigningInNotification = { status: "Idle", message: "Waiting for SigningIn Event.", type: "Signing In" };
-const executingSigningInNotification = { status: "Executing", message: "Executing signing in use case.", type: "Signing In" };
 const successSigningInNotification = { status: "Success", message: "Signed In", type: "Signing In" };
 const alreadySignedInSigningInNotification = { status: "Failed", message: "You are already signed in. Please signout.", type: "Signing In" };
 const badCredentialsSigningInNotification = { status: "Failed", message: "Bad credentials. Please verify your credentials or register to Bangarang.", type: "Signing In" };
@@ -615,6 +622,7 @@ const successRegisteringUserNotification = { status: "Success", message: "Regist
 const badEmailRegisteringUserNotification = { status: "Failed", message: "Email invalid.", type: "Registering." };
 const unsecurePasswordRegisteringUserNotification = { status: "Failed", message: "Unsecure password.", type: "Registering." };
 const alreadyMemberRegisteringUserNotification = { status: "Failed", message: "Already member of Bangarang.", type: "Registering." };
+const idleMemberRegisteringUserNotification = { status: "Idle", message: "Waiting for Registering Event.", type: "Registering." };
 
 class User {
     constructor(userContract, bangarangAdapters) {
@@ -628,17 +636,28 @@ class User {
             .then(isMemberExistWithUsername => {
             if (isMemberExistWithUsername instanceof Error)
                 throw new Error("NOT IMPLEMENTED");
-            else if (isMemberExistWithUsername)
-                return Promise.resolve(this.bangarangAdapters.registeringUserNotificationInteractor.notify(alreadyMemberRegisteringUserNotification));
-            else if (!this.bangarangAdapters.passwordInteractor.isPasswordSecure(password))
-                return Promise.resolve(this.bangarangAdapters.registeringUserNotificationInteractor.notify(unsecurePasswordRegisteringUserNotification));
-            else if (this.bangarangAdapters.emailInteractor.isEmailValid(this.email)) {
-                return this.bangarangAdapters.bangarangMembersInteractor.saveMember({ username: this.username, fullname: this.fullname, email: this.email })
-                    .then(result => this.bangarangAdapters.bangarangMembersInteractor.saveCredentials({ username: this.username, password }))
-                    .then(result => this.bangarangAdapters.registeringUserNotificationInteractor.notify(successRegisteringUserNotification));
-            }
-            else
-                return Promise.resolve(this.bangarangAdapters.registeringUserNotificationInteractor.notify(badEmailRegisteringUserNotification));
+            if (isMemberExistWithUsername)
+                throw alreadyMemberRegisteringUserNotification;
+            if (!this.bangarangAdapters.passwordInteractor.isPasswordSecure(password))
+                throw unsecurePasswordRegisteringUserNotification;
+            if (!this.bangarangAdapters.emailInteractor.isEmailValid(this.email))
+                throw badEmailRegisteringUserNotification;
+            return this.bangarangAdapters.bangarangMembersInteractor.saveMember({ username: this.username, fullname: this.fullname, email: this.email });
+        })
+            .then(result => {
+            if (result instanceof Error)
+                throw result;
+            return this.bangarangAdapters.bangarangMembersInteractor.saveCredentials({ username: this.username, password });
+        })
+            .then(result => {
+            if (result instanceof Error)
+                throw result;
+            this.bangarangAdapters.registeringUserNotificationInteractor.notify(successRegisteringUserNotification);
+        })
+            .catch((result) => {
+            if (result instanceof Error)
+                throw result;
+            this.bangarangAdapters.registeringUserNotificationInteractor.notify(result);
         });
     }
     claiming(claimId, claimChoice) {
@@ -703,7 +722,7 @@ class User {
             return Order.keep;
         }
         return this.bangarangAdapters.bangarangClaimInteractor
-            .retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(sentenceIntoWords(searchCriteria.toLowerCase(), wordSeparator))
+            .retrieveClaimsThatContainInIncensitiveCaseTitleOneOrMoreIncencitiveCaseSearchCriteriaWords(searchCriteria)
             .then(retreivedClaims => {
             if (retreivedClaims instanceof Error) {
                 this.bangarangAdapters.searchingClaimsUserNotificationInteractor.notify(unexpectedErrorSearchingClaimsUserNotification(retreivedClaims));
@@ -760,14 +779,14 @@ class User {
             return Promise.resolve();
         }
         else
-            return this.bangarangAdapters.bangarangClaimInteractor.isClaimExistByTitleUpperCase(claimTitle)
+            return this.bangarangAdapters.bangarangClaimInteractor.isClaimExistByTitleIncensitiveCase(claimTitle)
                 .then(isClaimExistByTitleUpperCase => {
                 if (isClaimExistByTitleUpperCase instanceof Error)
                     throw new Error(`MISSIGN SPECS : ${isClaimExistByTitleUpperCase}`);
                 return shouldSaveClaimWhenClaimDontExistByTitleUpperCase(isClaimExistByTitleUpperCase);
             })
                 .then(isClaimExistByTitleUpperCase => (isClaimExistByTitleUpperCase) ?
-                this.bangarangAdapters.bangarangClaimInteractor.claimByTitleUpperCase(claimTitle) :
+                this.bangarangAdapters.bangarangClaimInteractor.claimByTitleIncencitiveCase(claimTitle) :
                 this.bangarangAdapters.bangarangClaimInteractor.claimById(claimId))
                 .then(claim => {
                 if (claim instanceof Error)
@@ -807,16 +826,16 @@ class FakeBangarangClaimInteractor {
         this.removeAllClaims();
         return Promise.resolve();
     }
-    claimByTitleUpperCase(claimTitle) {
-        const claimFound = this.declaredClaims.find(declaredClaim => declaredClaim.title.toUpperCase() === claimTitle.toUpperCase());
+    claimByTitleIncencitiveCase(claimTitle) {
+        const claimFound = this.declaredClaims.find(declaredClaim => declaredClaim.title.toLowerCase() === claimTitle.toLowerCase());
         if (claimFound)
             return Promise.resolve(claimFound);
-        return Promise.resolve(new Error(bangarangClaimNotFoundByTittleUpperCase(claimTitle.toUpperCase())));
+        return Promise.resolve(new Error(bangarangClaimNotFoundByTittleUpperCase(claimTitle.toLowerCase())));
     }
-    isClaimExistByTitleUpperCase(claimTitle) {
+    isClaimExistByTitleIncensitiveCase(claimTitle) {
         if (this.forceErrorKeyword && this.forceErrorKeyword === claimTitle)
             return Promise.resolve(new Error(`Error, claim with title '${claimTitle}' not supported.`));
-        return Promise.resolve((this.findClaimByTitleUpperCase(claimTitle)) ? true : false);
+        return Promise.resolve((this.findClaimByTitleIncencitiveCase(claimTitle)) ? true : false);
     }
     saveClaim(claimToSave) {
         if (this.forceErrorKeyword && this.forceErrorKeyword === claimToSave.title)
@@ -828,10 +847,10 @@ class FakeBangarangClaimInteractor {
             this.declaredClaims.push(claimToSave);
         return Promise.resolve();
     }
-    retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(searchCriteriaWords) {
-        if (this.forceErrorKeyword && searchCriteriaWords.includes(this.forceErrorKeyword))
-            return Promise.resolve(new Error(`Error, search criteria containing '${searchCriteriaWords}' not supported.`));
-        return Promise.resolve(this.declaredClaims.filter(claim => searchCriteriaWords.some(searchCriteriaWord => claim.title.toLowerCase().includes(searchCriteriaWord.toLowerCase()))));
+    retrieveClaimsThatContainInIncensitiveCaseTitleOneOrMoreIncencitiveCaseSearchCriteriaWords(searchCriteria) {
+        if (this.forceErrorKeyword && searchCriteria.includes(this.forceErrorKeyword))
+            return Promise.resolve(new Error(`Error, search criteria containing '${searchCriteria}' not supported.`));
+        return Promise.resolve(this.declaredClaims.filter(claim => searchCriteria.split(" ").some(searchCriteriaWord => claim.title.toLowerCase().includes(searchCriteriaWord.toLowerCase()))));
     }
     claimById(id) {
         const claimFound = this.declaredClaims.find(declaredClaim => declaredClaim.id === id);
@@ -842,8 +861,8 @@ class FakeBangarangClaimInteractor {
     declareClaim(claim) {
         this.declaredClaims.push(claim);
     }
-    findClaimByTitleUpperCase(claimTitle) {
-        return this.declaredClaims.find(declaredClaim => declaredClaim.title.toUpperCase() === claimTitle.toUpperCase());
+    findClaimByTitleIncencitiveCase(claimTitle) {
+        return this.declaredClaims.find(declaredClaim => declaredClaim.title.toLowerCase() === claimTitle.toLowerCase());
     }
     removeAllClaims() {
         this.declaredClaims = [];
@@ -1005,15 +1024,15 @@ class FakeRegisteringUserNotificationInteractor {
     }
 }
 
-class InternalEmailInteractor {
-    isEmailValid(email) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
-}
-
 class FakePasswordInteractor {
     isPasswordSecure(password) {
         return password !== "password";
+    }
+}
+
+class InternalEmailInteractor {
+    isEmailValid(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 }
 
@@ -1134,10 +1153,10 @@ class RestBangarangClaimInteractor {
     claimById(id) {
         return this.restInteractor.get(`/claims`, { id });
     }
-    claimByTitleUpperCase(claimTitle) {
+    claimByTitleIncencitiveCase(claimTitle) {
         return this.restInteractor.get(`/claims`, { claimTitle });
     }
-    isClaimExistByTitleUpperCase(claimTitle) {
+    isClaimExistByTitleIncensitiveCase(claimTitle) {
         return this.restInteractor.get(`/isClaimExistByTitleUpperCase`, { claimTitle })
             .then(data => (data instanceof Error)
             ? data :
@@ -1145,8 +1164,8 @@ class RestBangarangClaimInteractor {
                 ? data.isClaimExistByTitleUpperCase :
                 new Error("isMemberExistWithUsername missing on body."));
     }
-    retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(searchCriteriaWords) {
-        return this.restInteractor.get(`/claims`, { searchCriteriaWords: searchCriteriaWords.join(",") });
+    retrieveClaimsThatContainInIncensitiveCaseTitleOneOrMoreIncencitiveCaseSearchCriteriaWords(searchCriteria) {
+        return this.restInteractor.get(`/claims`, { searchCriteria });
     }
     saveClaim(claimToSave) {
         return this.restInteractor.post(`/saveClaim`, claimToSave);
@@ -1254,6 +1273,16 @@ class SvelteSigningInUserNotificationInteractor {
     }
 }
 
+const registeringUserNotificationStore = writable(idleMemberRegisteringUserNotification);
+
+class SvelteRegisteringUserNotificationInteractor {
+    notify(userNotification) {
+        const timeOfClaimDeclaredNotification = 1500;
+        registeringUserNotificationStore.set(userNotification);
+        setTimeout(() => registeringUserNotificationStore.set(idleMemberRegisteringUserNotification), timeOfClaimDeclaredNotification);
+    }
+}
+
 const bangarangMembersInteractor = new RestBangarangMembersInteractor(new RestInteractor({
     endpointFullyQualifiedDomainName: "localhost",
     port: (process.env.PORT) ? process.env.PORT : "3000" ,
@@ -1275,7 +1304,8 @@ const uiBangarangUserBuilder = new UserBuilder()
     .withDeclaringClaimUserNotificationInteractor(new SvelteDeclaringClaimUserNotificationInteractor())
     .withRetrievingClaimUserNotificationInteractor(new SvelteRetrievingClaimUserNotificationInteractor())
     .withSearchingClaimsUserNotificationInteractor(new SvelteSearchingClaimsUserNotificationInteractor())
-    .withSigningInUserNotificationInteractor(new SvelteSigningInUserNotificationInteractor());
+    .withSigningInUserNotificationInteractor(new SvelteSigningInUserNotificationInteractor())
+    .withRegisteringUserNotificationInteractor(new SvelteRegisteringUserNotificationInteractor());
 const guest = { username: "guest", fullname: "", email: "" };
 uiBangarangUserBuilder
     .withUserContract(guest)
@@ -1524,7 +1554,8 @@ const links = {
     MainMenu: "/MainMenu",
     BusinessModel: "/BusinessModel",
     LeanCanvas: "/LeanCanvas",
-    DeclareClaim: "/DeclareClaim"
+    DeclareClaim: "/DeclareClaim",
+    Register: "/Register"
 };
 
 /* src\client\components\Footers\MainMenuFooter.svelte generated by Svelte v3.34.0 */
@@ -2106,14 +2137,6 @@ const SignInHeader = create_ssr_component(($$result, $$props, $$bindings, slots)
 	: ``}</header>`;
 });
 
-const signingIn = (userInputUsername, userInputPassword) => {
-    signingInNotificationStore.set(executingSigningInNotification);
-    uiBangarangUserBuilder
-        .withUserContract({ username: userInputUsername, fullname: "", email: "" })
-        .resetUser()
-        .signingIn(userInputPassword);
-};
-
 /* src\client\components\Cards\DemoUserCard.svelte generated by Svelte v3.34.0 */
 
 const DemoUserCard = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -2121,35 +2144,101 @@ const DemoUserCard = create_ssr_component(($$result, $$props, $$bindings, slots)
 	return `<div class="${"border rounded my-6 border-bangarang-failed bg-bangarang-light flex flex-col items-center"}"><p class="${"m-1 text-bangarang-lightEmphasis flex-grow text-center text-xs"}">${message}</p></div>`;
 });
 
-/* src\client\components\Sections\SignInSection.svelte generated by Svelte v3.34.0 */
+/* src\client\components\Form\Fields\GenericTextField.svelte generated by Svelte v3.34.0 */
 
-const SignInSection = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+const GenericTextField = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { isReadOnly } = $$props;
+	let { fieldName } = $$props;
+	let { fieldId } = $$props;
+	let { isRequired } = $$props;
+	if ($$props.isReadOnly === void 0 && $$bindings.isReadOnly && isReadOnly !== void 0) $$bindings.isReadOnly(isReadOnly);
+	if ($$props.fieldName === void 0 && $$bindings.fieldName && fieldName !== void 0) $$bindings.fieldName(fieldName);
+	if ($$props.fieldId === void 0 && $$bindings.fieldId && fieldId !== void 0) $$bindings.fieldId(fieldId);
+	if ($$props.isRequired === void 0 && $$bindings.isRequired && isRequired !== void 0) $$bindings.isRequired(isRequired);
+
+	return `<label${add_attribute("for", fieldId, 0)} class="${"text-xs text-bangarang-lightEmphasis"}">${escape(fieldName)}</label>
+<input ${isReadOnly ? "readonly" : ""} type="${"text"}"${add_attribute("name", fieldName, 0)}${add_attribute("id", fieldId, 0)} ${isRequired ? "required" : ""} class="${"text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}">`;
+});
+
+/* src\client\components\Form\Fields\GenericPasswordField.svelte generated by Svelte v3.34.0 */
+
+const GenericPasswordField = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { isReadOnly } = $$props;
+	let { fieldName } = $$props;
+	let { fieldId } = $$props;
+	let { isRequired } = $$props;
+	if ($$props.isReadOnly === void 0 && $$bindings.isReadOnly && isReadOnly !== void 0) $$bindings.isReadOnly(isReadOnly);
+	if ($$props.fieldName === void 0 && $$bindings.fieldName && fieldName !== void 0) $$bindings.fieldName(fieldName);
+	if ($$props.fieldId === void 0 && $$bindings.fieldId && fieldId !== void 0) $$bindings.fieldId(fieldId);
+	if ($$props.isRequired === void 0 && $$bindings.isRequired && isRequired !== void 0) $$bindings.isRequired(isRequired);
+
+	return `<label${add_attribute("for", fieldId, 0)} class="${"text-xs text-bangarang-lightEmphasis"}">${escape(fieldName)}</label>
+<input ${isReadOnly ? "readonly" : ""} type="${"password"}"${add_attribute("name", fieldName, 0)}${add_attribute("id", fieldId, 0)} ${isRequired ? "required" : ""} class="${"text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}">`;
+});
+
+/* src\client\components\Form\Fields\GenericSubmitField.svelte generated by Svelte v3.34.0 */
+
+const GenericSubmitField = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { fieldName } = $$props;
+	let { fieldId } = $$props;
+	let { isReadOnly } = $$props;
+	if ($$props.fieldName === void 0 && $$bindings.fieldName && fieldName !== void 0) $$bindings.fieldName(fieldName);
+	if ($$props.fieldId === void 0 && $$bindings.fieldId && fieldId !== void 0) $$bindings.fieldId(fieldId);
+	if ($$props.isReadOnly === void 0 && $$bindings.isReadOnly && isReadOnly !== void 0) $$bindings.isReadOnly(isReadOnly);
+
+	return `<label${add_attribute("for", fieldId, 0)} class="${"text-xs text-bangarang-lightEmphasis sr-only"}">${escape(fieldName)}</label>
+<input type="${"submit"}"${add_attribute("id", fieldId, 0)} ${isReadOnly ? "disabled" : ""}${add_attribute("value", fieldName, 0)} class="${"text-xl text-bangarang-dark border-bangarang-dark bg-bangarang-light my-1 px-1 pb-1 border rounded-md"}">`;
+});
+
+/* src\client\components\Form\SignInForm.svelte generated by Svelte v3.34.0 */
+
+const SignInForm = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	let $signingInNotificationStore, $$unsubscribe_signingInNotificationStore;
 	validate_store(signingInNotificationStore, "signingInNotificationStore");
 	$$unsubscribe_signingInNotificationStore = subscribe(signingInNotificationStore, value => $signingInNotificationStore = value);
-	let userInputUsername = "";
-	let userInputPassword = "";
-	const onClickSignInButton = () => signingIn(userInputUsername, userInputPassword);
+
 	$$unsubscribe_signingInNotificationStore();
 
+	return `<form class="${"form-example flex flex-col"}">${validate_component(GenericTextField, "GenericTextField").$$render(
+		$$result,
+		{
+			fieldId: "username",
+			fieldName: "Username:",
+			isRequired: true,
+			isReadOnly: $signingInNotificationStore.status !== "Idle"
+		},
+		{},
+		{}
+	)}
+    ${validate_component(GenericPasswordField, "GenericPasswordField").$$render(
+		$$result,
+		{
+			fieldId: "password",
+			fieldName: "Password:",
+			isRequired: true,
+			isReadOnly: $signingInNotificationStore.status !== "Idle"
+		},
+		{},
+		{}
+	)}
+    ${validate_component(GenericSubmitField, "GenericSubmitField").$$render(
+		$$result,
+		{
+			fieldId: "signin",
+			fieldName: "Sign In",
+			isReadOnly: $signingInNotificationStore.status !== "Idle"
+		},
+		{},
+		{}
+	)}</form>`;
+});
+
+/* src\client\components\Sections\SignInSection.svelte generated by Svelte v3.34.0 */
+
+const SignInSection = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	return `${validate_component(DemoUserCard, "DemoUserCard").$$render($$result, {}, {}, {})}
 <p class="${"text-bangarang-lightEmphasis"}">Sign into your account</p>
-${$signingInNotificationStore.status === "Executing"
-	? `<input class="${"text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}" type="${"text"}" placeholder="${"Username ..."}" readonly${add_attribute("value", userInputUsername, 1)}>
-    <input class="${"text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}" type="${"password"}" placeholder="${"Password ..."}" readonly${add_attribute("value", userInputPassword, 1)}>
-    ${validate_component(GenericButton, "GenericButton").$$render(
-			$$result,
-			{
-				textbutton: "Sign in",
-				onClickAction: onClickSignInButton,
-				disabled: true
-			},
-			{},
-			{}
-		)}`
-	: `<input class="${"text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}" type="${"text"}" placeholder="${"Username ..."}"${add_attribute("value", userInputUsername, 1)}>
-    <input class="${"text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}" type="${"password"}" placeholder="${"Password ..."}"${add_attribute("value", userInputPassword, 1)}>
-    ${``}`}`;
+${validate_component(SignInForm, "SignInForm").$$render($$result, {}, {}, {})}`;
 });
 
 /* src\client\components\Mains\SignInMain.svelte generated by Svelte v3.34.0 */
@@ -2207,7 +2296,17 @@ const SignInFooter = create_ssr_component(($$result, $$props, $$bindings, slots)
 
 	return `<footer class="${"flex flex-col p-1 mx-auto max-w-screen-2xl"}">${$signingInNotificationStore.status === "Executing"
 	? `${validate_component(SignInInformation, "SignInInformation").$$render($$result, {}, {}, {})}`
-	: `<section class="${"flex justify-center items-center"}"></section>
+	: `<section class="${"flex justify-center items-center"}">${validate_component(Link, "Link").$$render(
+			$$result,
+			{
+				size: "small",
+				linkHref: links.Register,
+				linkName: "Would you like to register on Bangarang?",
+				textAlign: "text-center"
+			},
+			{},
+			{}
+		)}</section>
         <section class="${"flex justify-between items-center"}">${validate_component(Link, "Link").$$render(
 			$$result,
 			{
@@ -2241,93 +2340,119 @@ var component_3 = /*#__PURE__*/Object.freeze({
     'default': SigningInMenu
 });
 
-/* src\client\components\Inputs\NewClaimTitleInput.svelte generated by Svelte v3.34.0 */
-
-const rows = 10;
-
-const NewClaimTitleInput = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	const placeholder = `Describe the claim ...`;
-	let { value = "" } = $$props;
-	if ($$props.value === void 0 && $$bindings.value && value !== void 0) $$bindings.value(value);
-	return `<textarea class="${"w-full border rounded p-1 m-1 placeholder-bangarang-lightEmphasis text-bangarang-darkEmphasis border-bangarang-lightEmphasis"}"${add_attribute("placeholder", placeholder, 0)}${add_attribute("rows", rows, 0)}>${value || ""}</textarea>`;
-});
-
-/* src\client\components\Inputs\DeclareNewClaimSubmitButton.svelte generated by Svelte v3.34.0 */
-
-const DeclareNewClaimSubmitButton = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<input class="${"m-1 rounded border border-bangarang-lightEmphasis bg-bangarang-light text-bangarang-darkEmphasis"}" type="${"submit"}" value="${"Declare"}">`;
-});
-
 /* src\client\components\Inputs\ClaimAsProposalRadioButton.svelte generated by Svelte v3.34.0 */
 
 const ClaimAsProposalRadioButton = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	return `<input type="${"radio"}" name="${"claimType"}" id="${"claimType"}" checked> <label for="${"claimType"}" class="${"text-bangarang-lightEmphasis"}">Claim as a proposal.</label>`;
 });
 
+/* src\client\components\Form\Fields\GenericTextAreaField.svelte generated by Svelte v3.34.0 */
+
+const rows = 10;
+
+const GenericTextAreaField = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { fieldId } = $$props;
+	let { fieldName } = $$props;
+	let { placeholder } = $$props;
+	let { isRequired } = $$props;
+	let { isReadOnly } = $$props;
+	if ($$props.fieldId === void 0 && $$bindings.fieldId && fieldId !== void 0) $$bindings.fieldId(fieldId);
+	if ($$props.fieldName === void 0 && $$bindings.fieldName && fieldName !== void 0) $$bindings.fieldName(fieldName);
+	if ($$props.placeholder === void 0 && $$bindings.placeholder && placeholder !== void 0) $$bindings.placeholder(placeholder);
+	if ($$props.isRequired === void 0 && $$bindings.isRequired && isRequired !== void 0) $$bindings.isRequired(isRequired);
+	if ($$props.isReadOnly === void 0 && $$bindings.isReadOnly && isReadOnly !== void 0) $$bindings.isReadOnly(isReadOnly);
+
+	return `<label${add_attribute("for", fieldId, 0)} class="${"text-xs text-bangarang-lightEmphasis"}">${escape(fieldName)}</label>
+<textarea ${isReadOnly ? "readonly" : ""}${add_attribute("name", fieldName, 0)}${add_attribute("id", fieldId, 0)} ${isRequired ? "required" : ""}${add_attribute("placeholder", placeholder, 0)}${add_attribute("rows", rows, 0)} class="${"text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}"></textarea>`;
+});
+
 /* src\client\components\Form\NewClaimForm.svelte generated by Svelte v3.34.0 */
 
 const NewClaimForm = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	
-	let claimTitle;
-
-	let $$settled;
-	let $$rendered;
-
-	do {
-		$$settled = true;
-
-		$$rendered = `<form class="${"w-full flex flex-col items-center"}">${validate_component(NewClaimTitleInput, "NewClaimTitleInput").$$render(
-			$$result,
-			{ value: claimTitle },
-			{
-				value: $$value => {
-					claimTitle = $$value;
-					$$settled = false;
-				}
-			},
-			{}
-		)}
-    <fieldset><legend class="${"text-bangarang-lightEmphasis"}">Claim type</legend>
-        ${validate_component(ClaimAsProposalRadioButton, "ClaimAsProposalRadioButton").$$render($$result, {}, {}, {})}</fieldset>
-    ${claimTitle !== ""
-		? `${validate_component(DeclareNewClaimSubmitButton, "DeclareNewClaimSubmitButton").$$render($$result, {}, {}, {})}`
-		: ``}</form>`;
-	} while (!$$settled);
-
-	return $$rendered;
-});
-
-/* src\client\components\Mains\DeclareClaimMain.svelte generated by Svelte v3.34.0 */
-
-const DeclareClaimMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	let $declaringClaimUserNotificationStore,
 		$$unsubscribe_declaringClaimUserNotificationStore;
 
 	validate_store(declaringClaimUserNotificationStore, "declaringClaimUserNotificationStore");
 	$$unsubscribe_declaringClaimUserNotificationStore = subscribe(declaringClaimUserNotificationStore, value => $declaringClaimUserNotificationStore = value);
-	
-	
+
 	$$unsubscribe_declaringClaimUserNotificationStore();
 
-	return `<main class="${"flex-grow overflow-y-auto flex flex-col items-center justify-center p-1 mx-auto max-w-screen-2xl"}">${$declaringClaimUserNotificationStore.status === "Idle"
-	? `${validate_component(NewClaimForm, "NewClaimForm").$$render($$result, {}, {}, {})}`
-	: ``}</main>`;
+	return `<form class="${"w-full flex flex-col items-center"}">${validate_component(GenericTextAreaField, "GenericTextAreaField").$$render(
+		$$result,
+		{
+			placeholder: "Describe the claim ...",
+			fieldId: "claimTitle",
+			fieldName: "Claim Title",
+			isRequired: true,
+			isReadOnly: $declaringClaimUserNotificationStore.status !== "Idle"
+		},
+		{},
+		{}
+	)}
+    <fieldset><legend class="${"text-bangarang-lightEmphasis"}">Claim type</legend>
+        ${validate_component(ClaimAsProposalRadioButton, "ClaimAsProposalRadioButton").$$render($$result, {}, {}, {})}</fieldset>
+    ${validate_component(GenericSubmitField, "GenericSubmitField").$$render(
+		$$result,
+		{
+			fieldId: "declare",
+			fieldName: "Declare",
+			isReadOnly: $declaringClaimUserNotificationStore.status !== "Idle"
+		},
+		{},
+		{}
+	)}</form>`;
+});
+
+/* src\client\components\Mains\DeclareClaimMain.svelte generated by Svelte v3.34.0 */
+
+const DeclareClaimMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `<main class="${"flex-grow overflow-y-auto flex flex-col items-center justify-center p-1 mx-auto max-w-screen-2xl"}">${validate_component(NewClaimForm, "NewClaimForm").$$render($$result, {}, {}, {})}</main>`;
+});
+
+/* src\client\components\Notification\DeclaringInformation.svelte generated by Svelte v3.34.0 */
+
+const DeclaringInformation = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $declaringClaimUserNotificationStore,
+		$$unsubscribe_declaringClaimUserNotificationStore;
+
+	validate_store(declaringClaimUserNotificationStore, "declaringClaimUserNotificationStore");
+	$$unsubscribe_declaringClaimUserNotificationStore = subscribe(declaringClaimUserNotificationStore, value => $declaringClaimUserNotificationStore = value);
+	$$unsubscribe_declaringClaimUserNotificationStore();
+
+	return `${validate_component(GenericTaskNotification, "GenericTaskNotification").$$render(
+		$$result,
+		{
+			taskNotification: $declaringClaimUserNotificationStore
+		},
+		{},
+		{}
+	)}`;
 });
 
 /* src\client\components\Footers\DeclareClaimFooter.svelte generated by Svelte v3.34.0 */
 
 const DeclareClaimFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<footer class="${"flex flex-col mb-1 mx-auto max-w-screen-2xl"}">${validate_component(Link, "Link").$$render(
-		$$result,
-		{
-			size: "small",
-			linkHref: links.MainMenu,
-			linkName: "<< Back to main menu.",
-			textAlign: "text-left"
-		},
-		{},
-		{}
-	)}</footer>`;
+	let $declaringClaimUserNotificationStore,
+		$$unsubscribe_declaringClaimUserNotificationStore;
+
+	validate_store(declaringClaimUserNotificationStore, "declaringClaimUserNotificationStore");
+	$$unsubscribe_declaringClaimUserNotificationStore = subscribe(declaringClaimUserNotificationStore, value => $declaringClaimUserNotificationStore = value);
+	$$unsubscribe_declaringClaimUserNotificationStore();
+
+	return `<footer class="${"flex flex-col mb-1 mx-auto max-w-screen-2xl"}">${$declaringClaimUserNotificationStore.status === "Executing"
+	? `${validate_component(DeclaringInformation, "DeclaringInformation").$$render($$result, {}, {}, {})}`
+	: `<section class="${"flex justify-between items-center"}">${validate_component(Link, "Link").$$render(
+			$$result,
+			{
+				size: "small",
+				linkHref: links.MainMenu,
+				linkName: "<< Back to main menu.",
+				textAlign: "text-left"
+			},
+			{},
+			{}
+		)}
+            ${validate_component(DeclaringInformation, "DeclaringInformation").$$render($$result, {}, {}, {})}</section>`}</footer>`;
 });
 
 /* src\client\views\DeclareClaimView.svelte generated by Svelte v3.34.0 */
@@ -2718,6 +2843,171 @@ var component_6 = /*#__PURE__*/Object.freeze({
     'default': LeanCanvas
 });
 
+/* src\client\components\Titles\RegisterTitle.svelte generated by Svelte v3.34.0 */
+
+const RegisterTitle = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `<p class="${"text-2xl text-bangarang-darkEmphasis my-1"}">Register on</p>
+<h1 class="${"text-4xl text-bangarang-darkEmphasis my-1"}">BANGARANG</h1>`;
+});
+
+/* src\client\components\Headers\RegisterHeader.svelte generated by Svelte v3.34.0 */
+
+const RegisterHeader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `<header class="${"flex flex-col flex-grow justify-center items-center content-center mx-auto max-w-screen-2xl"}">${validate_component(RegisterTitle, "RegisterTitle").$$render($$result, {}, {}, {})}</header>`;
+});
+
+/* src\client\components\Cards\SecurityUserCard.svelte generated by Svelte v3.34.0 */
+
+const SecurityUserCard = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	const message = `The current stage of development of Bangarang implies that the security of the accounts is not guaranteed. Please only create accounts with credentials that can be used for testing and demonstration purposes.`;
+	return `<div class="${"border rounded my-6 border-bangarang-failed bg-bangarang-light flex flex-col items-center"}"><p class="${"m-1 text-bangarang-lightEmphasis flex-grow text-center text-xs"}">${message}</p></div>`;
+});
+
+/* src\client\components\Form\RegisterForm.svelte generated by Svelte v3.34.0 */
+
+const RegisterForm = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $registeringUserNotificationStore,
+		$$unsubscribe_registeringUserNotificationStore;
+
+	validate_store(registeringUserNotificationStore, "registeringUserNotificationStore");
+	$$unsubscribe_registeringUserNotificationStore = subscribe(registeringUserNotificationStore, value => $registeringUserNotificationStore = value);
+
+	$$unsubscribe_registeringUserNotificationStore();
+
+	return `<form class="${"form-example flex flex-col"}">${validate_component(GenericTextField, "GenericTextField").$$render(
+		$$result,
+		{
+			fieldId: "username",
+			fieldName: "Username:",
+			isReadOnly: $registeringUserNotificationStore.status !== "Idle",
+			isRequired: true
+		},
+		{},
+		{}
+	)}
+    ${validate_component(GenericTextField, "GenericTextField").$$render(
+		$$result,
+		{
+			fieldId: "fullname",
+			fieldName: "Fullname:",
+			isReadOnly: $registeringUserNotificationStore.status !== "Idle",
+			isRequired: true
+		},
+		{},
+		{}
+	)}
+    ${validate_component(GenericTextField, "GenericTextField").$$render(
+		$$result,
+		{
+			fieldId: "email",
+			fieldName: "E-mail:",
+			isReadOnly: $registeringUserNotificationStore.status !== "Idle",
+			isRequired: true
+		},
+		{},
+		{}
+	)}
+    ${validate_component(GenericPasswordField, "GenericPasswordField").$$render(
+		$$result,
+		{
+			fieldId: "password",
+			fieldName: "Password:",
+			isReadOnly: $registeringUserNotificationStore.status !== "Idle",
+			isRequired: true
+		},
+		{},
+		{}
+	)}
+    ${validate_component(GenericSubmitField, "GenericSubmitField").$$render(
+		$$result,
+		{
+			fieldId: "register",
+			fieldName: "Register",
+			isReadOnly: $registeringUserNotificationStore.status !== "Idle"
+		},
+		{},
+		{}
+	)}</form>`;
+});
+
+/* src\client\components\Sections\RegisterSection.svelte generated by Svelte v3.34.0 */
+
+const RegisterSection = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `${validate_component(SecurityUserCard, "SecurityUserCard").$$render($$result, {}, {}, {})}
+<p class="${"text-bangarang-lightEmphasis"}">Create your account.</p>
+${validate_component(RegisterForm, "RegisterForm").$$render($$result, {}, {}, {})}`;
+});
+
+/* src\client\components\Mains\RegisterMain.svelte generated by Svelte v3.34.0 */
+
+const RegisterMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `<main class="${"flex flex-col flex-grow items-center"}">${validate_component(RegisterSection, "RegisterSection").$$render($$result, {}, {}, {})}</main>`;
+});
+
+/* src\client\components\Notification\RegisteringInformation.svelte generated by Svelte v3.34.0 */
+
+const RegisteringInformation = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $registeringUserNotificationStore,
+		$$unsubscribe_registeringUserNotificationStore;
+
+	validate_store(registeringUserNotificationStore, "registeringUserNotificationStore");
+	$$unsubscribe_registeringUserNotificationStore = subscribe(registeringUserNotificationStore, value => $registeringUserNotificationStore = value);
+	$$unsubscribe_registeringUserNotificationStore();
+
+	return `${validate_component(GenericTaskNotification, "GenericTaskNotification").$$render(
+		$$result,
+		{
+			taskNotification: $registeringUserNotificationStore
+		},
+		{},
+		{}
+	)}`;
+});
+
+/* src\client\components\Footers\RegisterFooter.svelte generated by Svelte v3.34.0 */
+
+const RegisterFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $registeringUserNotificationStore,
+		$$unsubscribe_registeringUserNotificationStore;
+
+	validate_store(registeringUserNotificationStore, "registeringUserNotificationStore");
+	$$unsubscribe_registeringUserNotificationStore = subscribe(registeringUserNotificationStore, value => $registeringUserNotificationStore = value);
+	$$unsubscribe_registeringUserNotificationStore();
+
+	return `<footer class="${"flex flex-col p-1 mx-auto max-w-screen-2xl"}">${$registeringUserNotificationStore.status === "Executing"
+	? `${validate_component(RegisteringInformation, "RegisteringInformation").$$render($$result, {}, {}, {})}`
+	: `<section class="${"flex justify-between items-center"}">${validate_component(Link, "Link").$$render(
+			$$result,
+			{
+				size: "small",
+				linkName: "<< Back to Sign In menu.",
+				linkHref: StaticView.SigningInMenu
+			},
+			{},
+			{}
+		)}
+            ${validate_component(RegisteringInformation, "RegisteringInformation").$$render($$result, {}, {}, {})}</section>`}</footer>`;
+});
+
+/* src\client\views\RegisterView.svelte generated by Svelte v3.34.0 */
+
+const RegisterView = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `${validate_component(RegisterHeader, "RegisterHeader").$$render($$result, {}, {}, {})}
+${validate_component(RegisterMain, "RegisterMain").$$render($$result, {}, {}, {})}
+${validate_component(RegisterFooter, "RegisterFooter").$$render($$result, {}, {}, {})}`;
+});
+
+/* src\routes\Register.svelte generated by Svelte v3.34.0 */
+
+const Register = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `${validate_component(RegisterView, "RegisterView").$$render($$result, {}, {}, {})}`;
+});
+
+var component_8 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    'default': Register
+});
+
 /* src\client\components\Links\ClaimShare.svelte generated by Svelte v3.34.0 */
 
 const ClaimShare = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -2738,26 +3028,6 @@ const ClaimingInformation = create_ssr_component(($$result, $$props, $$bindings,
 		$$result,
 		{
 			taskNotification: $claimingUserNotificationStore
-		},
-		{},
-		{}
-	)}`;
-});
-
-/* src\client\components\Notification\DeclaringInformation.svelte generated by Svelte v3.34.0 */
-
-const DeclaringInformation = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $declaringClaimUserNotificationStore,
-		$$unsubscribe_declaringClaimUserNotificationStore;
-
-	validate_store(declaringClaimUserNotificationStore, "declaringClaimUserNotificationStore");
-	$$unsubscribe_declaringClaimUserNotificationStore = subscribe(declaringClaimUserNotificationStore, value => $declaringClaimUserNotificationStore = value);
-	$$unsubscribe_declaringClaimUserNotificationStore();
-
-	return `${validate_component(GenericTaskNotification, "GenericTaskNotification").$$render(
-		$$result,
-		{
-			taskNotification: $declaringClaimUserNotificationStore
 		},
 		{},
 		{}
@@ -3024,7 +3294,7 @@ const U5BclaimIdu5D = create_ssr_component(($$result, $$props, $$bindings, slots
 	: ``}`;
 });
 
-var component_8 = /*#__PURE__*/Object.freeze({
+var component_9 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     'default': U5BclaimIdu5D,
     preload: preload$2
@@ -3108,11 +3378,19 @@ const manifest = {
 		},
 
 		{
+			// Register.svelte
+			pattern: /^\/Register\/?$/,
+			parts: [
+				{ name: "Register", file: "Register.svelte", component: component_8 }
+			]
+		},
+
+		{
 			// claims/[claimId].svelte
 			pattern: /^\/claims\/([^/]+?)\/?$/,
 			parts: [
 				null,
-				{ name: "claims_$claimId", file: "claims/[claimId].svelte", component: component_8, params: match => ({ claimId: d(match[1]) }) }
+				{ name: "claims_$claimId", file: "claims/[claimId].svelte", component: component_9, params: match => ({ claimId: d(match[1]) }) }
 			]
 		}
 	],
@@ -8233,8 +8511,12 @@ class GcpDatastoreBangarangClaimInteractor {
             return claim;
         });
     }
-    claimByTitleUpperCase(claimTitle) {
-        const filters = claimTitle.split(" ").map(word => ({ property: "incensitiveCaseWords", operator: "=", value: word.toUpperCase() }));
+    claimByTitleIncencitiveCase(claimTitle) {
+        if (claimTitle.includes("error"))
+            return Promise.resolve(new Error("claimTitle includes 'error'."));
+        const filters = this.sentenceIntoUniqueWords(claimTitle)
+            .map(word => word.toLocaleLowerCase())
+            .map(word => ({ property: incensitiveCaseUniqueWordsPropertyName, operator: "=", value: word }));
         return this.gcpDatastoreInteractor.queryRecordsOnGoogleDatastore(this.kind, filters)
             .then(results => {
             if (results instanceof Error)
@@ -8254,18 +8536,20 @@ class GcpDatastoreBangarangClaimInteractor {
         })
             .catch(error => error);
     }
-    isClaimExistByTitleUpperCase(claimTitle) {
-        return this.claimByTitleUpperCase(claimTitle)
+    isClaimExistByTitleIncensitiveCase(claimTitle) {
+        return this.claimByTitleIncencitiveCase(claimTitle)
             .then(result => (!(result instanceof Error)) ?
             true :
             (result.message === `No claims found with exact title ${claimTitle}`) ? false : result)
             .catch(error => error);
     }
-    retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(searchCriteriaWords) {
-        if (searchCriteriaWords.includes("error"))
+    retrieveClaimsThatContainInIncensitiveCaseTitleOneOrMoreIncencitiveCaseSearchCriteriaWords(searchCriteria) {
+        if (searchCriteria.includes("error"))
             return Promise.resolve(new Error("Search criteria includes 'error'."));
-        return Promise.all(searchCriteriaWords.map(searchCriteriaWord => {
-            const filters = [{ property: "incensitiveCaseWords", operator: "=", value: searchCriteriaWord.toUpperCase() }];
+        return Promise.all(this.sentenceIntoUniqueWords(searchCriteria)
+            .map(word => word.toLowerCase())
+            .map(word => {
+            const filters = [{ property: incensitiveCaseUniqueWordsPropertyName, operator: "=", value: word }];
             return this.gcpDatastoreInteractor.queryRecordsOnGoogleDatastore(this.kind, filters);
         }))
             .then(resultsOfResults => {
@@ -8304,11 +8588,19 @@ class GcpDatastoreBangarangClaimInteractor {
             peopleClaimed: claimToSave.peopleClaimed,
             peopleClaimedAgainst: claimToSave.peopleClaimedAgainst,
             peopleClaimedFor: claimToSave.peopleClaimedFor,
-            incensitiveCaseWords: claimToSave.title.split(" ").map(word => word.toUpperCase())
+            incensitiveCaseUniqueWords: this.sentenceIntoUniqueWords(claimToSave.title).map(word => word.toLowerCase())
         };
         return this.gcpDatastoreInteractor.saveRecordOnGoogleDatastore(path, GcpClaimContract);
     }
+    sentenceIntoUniqueWords(sentence) {
+        const words = sentence.split(/\W+/);
+        return words.filter(onlyUnique);
+        function onlyUnique(value, index, self) {
+            return self.indexOf(value) === index;
+        }
+    }
 }
+const incensitiveCaseUniqueWordsPropertyName = "incensitiveCaseUniqueWords";
 
 const SUPPORTED_API_PREFIXES = ['restFakeMemberInteractor', 'restGcpDatastoreMemberInteractor', 'restFakeClaimInteractor', 'restGcpDatastoreClaimInteractor'];
 const isApiPrefix = (apiPrefix) => SUPPORTED_API_PREFIXES.includes(apiPrefix);
@@ -8354,7 +8646,7 @@ App$1.get(`/${apiPrefix}/claims`, (request, response) => {
     if (!bangarangClaimInteractor)
         sendErrorResponse(new Error(`bangarangMemberInteractor undefined`));
     else {
-        const params = ["searchCriteriaWords", "claimTitle", "id"];
+        const params = ["searchCriteria", "claimTitle", "id"];
         const paramFound = params.find(param => request.query[param] !== undefined);
         if (paramFound === undefined)
             sendErrorResponse(new Error(`No query params supported.'`));
@@ -8364,10 +8656,10 @@ App$1.get(`/${apiPrefix}/claims`, (request, response) => {
                 sendErrorResponse(new Error(`Query not supported : '${query}'`));
             else {
                 const useCaseFromParamFound = (paramFound) => {
-                    if (paramFound === "searchCriteriaWords")
-                        return bangarangClaimInteractor.adapter.retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(query.split(","));
+                    if (paramFound === "searchCriteria")
+                        return bangarangClaimInteractor.adapter.retrieveClaimsThatContainInIncensitiveCaseTitleOneOrMoreIncencitiveCaseSearchCriteriaWords(query);
                     if (paramFound === "claimTitle")
-                        return bangarangClaimInteractor.adapter.claimByTitleUpperCase(query);
+                        return bangarangClaimInteractor.adapter.claimByTitleIncencitiveCase(query);
                     if (paramFound === "id")
                         return bangarangClaimInteractor.adapter.claimById(query);
                     throw new Error("unsupported param");
@@ -8394,7 +8686,7 @@ App$1.get(`/${apiPrefix}/isClaimExistByTitleUpperCase`, (request, response) => {
             sendErrorResponse(new Error(`Query not supported : '${query}'`));
         else
             return bangarangClaimInteractor.adapter
-                .isClaimExistByTitleUpperCase(query)
+                .isClaimExistByTitleIncensitiveCase(query)
                 .then(isClaimExistByTitleUpperCase => {
                 if (isClaimExistByTitleUpperCase instanceof Error)
                     throw isClaimExistByTitleUpperCase;

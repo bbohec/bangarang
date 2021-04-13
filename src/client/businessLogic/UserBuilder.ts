@@ -14,13 +14,13 @@ import { FakeClaimingUserNotificationInteractor } from '../adapters/FakeClaiming
 import { FakeRegisteringUserNotificationInteractor } from '../adapters/FakeRegisteringUserNotificationInteractor';
 import type { BangarangClaimInteractorContract } from '../port/interactors/BangarangClaimInteractorContract';
 import type { SearchingClaimsUserNotificationInteractorContract } from '../port/interactors/SearchingClaimsUserNotificationInteractorContract';
-import { InternalEmailInteractor } from '../port/interactors/InternalEmailInteractor';
 import type { ClaimingUserNotificationInteractorContract } from '../port/interactors/ClaimingUserNotificationInteractorContract';
 import type { BangarangUserInterfaceInteractorContract } from '../port/interactors/BangarangUserInterfaceInteractor';
 import type { SigningInUserNotificationInteractorContract } from '../port/interactors/SigningInUserNotificationInteractorContract';
 import type { RetrievingClaimUserNotificationInteractorContract } from '../port/interactors/RetrievingClaimUserNotificationInteractorContract';
 import type { DeclaringClaimUserNotificationInteractorContract } from '../port/interactors/DeclaringClaimUserNotificationInteractorContract';
 import { FakePasswordInteractor } from '../adapters/FakePasswordInteractor';
+import { InternalEmailInteractor } from '../adapters/InternalEmailInteractor';
 export class UserBuilder {
     withDeclaringClaimUserNotificationInteractor(declaringClaimUserNotificationInteractor: DeclaringClaimUserNotificationInteractorContract):UserBuilder  {
         this.bangarangAdapters.declaringClaimUserNotificationInteractor=declaringClaimUserNotificationInteractor

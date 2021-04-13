@@ -1,7 +1,6 @@
 # Bangarang — Product Development Log
 - Multi-language — /!\ FR /!\
 - UI style rework
-- Server secrets
 - Official video >> subscribe to form in order to be informed about demo & launch
 - ? Builder placement on clean architecture
 - Error management
@@ -13,16 +12,30 @@
 - 👉 Doing
 - ✔️ Done
 
-## 2021/04/12 — Day 27
--  Twitch Live https://www.twitch.tv/benjaminbohec + announces
+## 16/04/2021 — Day 28
 -  Stand Up 
--  Adapter Claim > remove punctuation on word split
--  UI Register View
 -  Signing-In Security warning
 -  Signing In Rework
 -  TI GCP Kind Test Prefix
 -  Pull Req.
+-  Merge Prod > change DB claims "" upper case with punct to lower case without punct
+-  Multi-language — /!\ FR /!\
+-  UI style rework
 -  Summ.
+
+## 2021/04/12 — Day 27
+- ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
+- ✔️ Stand Up 
+- ✔️ Coding weekend
+- ✔️ Adapter Claim > remove punctuation on word split
+- ✔️ UI Register View
+- ~✔️ Signing-In Security warning
+- ❌ Signing In Rework
+- ❌ TI GCP Kind Test Prefix
+- ❌ Pull Req.
+- ❌ Merge Prod > change DB claims "" upper case with punct to lower case without punct
+- demo >>> https://bangarang.sometimesuseful.com/
+- ✔️ Summ.
 
 ## 2021/04/09 — Day 26
 - ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
@@ -33,7 +46,7 @@
 - ✔️ AT & TI & e2e
     - ✔️ TI claims with "imporTant dOg"
 - ❌ Pull Req.
-- 👉 Summ.
+- ✔️ Summ.
 
 ## 2021/04/05 — Day 25
 - ✔️ Twitch Live

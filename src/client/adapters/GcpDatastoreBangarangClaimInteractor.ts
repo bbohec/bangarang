@@ -33,12 +33,15 @@ export class GcpDatastoreBangarangClaimInteractor implements BangarangClaimInter
                 return claim
             })
     }
-    claimByTitleUpperCase(claimTitle: string): Promise<ClaimContract | Error> {
+    claimByTitleIncencitiveCase(claimTitle: string): Promise<ClaimContract | Error> {
+        if(claimTitle.includes("error")) return Promise.resolve(new Error ("claimTitle includes 'error'."))
         const filters:{
             property: string;
             operator: Operator;
             value: {};
-        }[] = claimTitle.split(" ").map(word=> ({property:"incensitiveCaseWords",operator:"=",value:word.toUpperCase()}))
+        }[] = this.sentenceIntoUniqueWords(claimTitle)
+            .map(word=>word.toLocaleLowerCase())
+            .map(word=> ({property:incensitiveCaseUniqueWordsPropertyName,operator:"=",value:word}))
         return this.gcpDatastoreInteractor.queryRecordsOnGoogleDatastore<GcpClaimContract>(this.kind,filters)
             .then(results => {
                 if (results instanceof Error) throw results
@@ -56,21 +59,23 @@ export class GcpDatastoreBangarangClaimInteractor implements BangarangClaimInter
             })
             .catch(error=> error)
     }
-    isClaimExistByTitleUpperCase(claimTitle: string): Promise<boolean | Error> {
-        return this.claimByTitleUpperCase(claimTitle)
+    isClaimExistByTitleIncensitiveCase(claimTitle: string): Promise<boolean | Error> {
+        return this.claimByTitleIncencitiveCase(claimTitle)
             .then(result => (!(result instanceof Error))?
                 true:
                 (result.message ===`No claims found with exact title ${claimTitle}`)?false:result)
             .catch(error=>error)
     }
-    retrieveClaimsThatContainInNotCaseSensitiveTitleOneOrMoreSearchCriteriaWords(searchCriteriaWords: string[]): Promise<Error | ClaimContract[]> {
-        if(searchCriteriaWords.includes("error")) return Promise.resolve(new Error ("Search criteria includes 'error'."))
-        return Promise.all(searchCriteriaWords.map(searchCriteriaWord => {
+    retrieveClaimsThatContainInIncensitiveCaseTitleOneOrMoreIncencitiveCaseSearchCriteriaWords(searchCriteria: string): Promise<Error | ClaimContract[]> {
+        if(searchCriteria.includes("error")) return Promise.resolve(new Error ("Search criteria includes 'error'."))
+        return Promise.all(this.sentenceIntoUniqueWords(searchCriteria)
+            .map(word => word.toLowerCase())
+            .map(word => {
             const filters:{
                 property: string;
                 operator: Operator;
                 value: {};
-            }[] = [{property:"incensitiveCaseWords",operator:"=",value:searchCriteriaWord.toUpperCase()}]
+            }[] = [{property:incensitiveCaseUniqueWordsPropertyName,operator:"=",value:word}]
             return this.gcpDatastoreInteractor.queryRecordsOnGoogleDatastore<GcpClaimContract>(this.kind,filters)
         }))
         .then(resultsOfResults => {
@@ -104,14 +109,24 @@ export class GcpDatastoreBangarangClaimInteractor implements BangarangClaimInter
             peopleClaimed:claimToSave.peopleClaimed,
             peopleClaimedAgainst:claimToSave.peopleClaimedAgainst,
             peopleClaimedFor:claimToSave.peopleClaimedFor,
-            incensitiveCaseWords:claimToSave.title.split(" ").map(word => word.toUpperCase())
+            incensitiveCaseUniqueWords: this.sentenceIntoUniqueWords(claimToSave.title).map(word => word.toLowerCase())
         }
         return this.gcpDatastoreInteractor.saveRecordOnGoogleDatastore(path,GcpClaimContract)
+    }
+    private sentenceIntoUniqueWords(sentence:string):string[]{
+        const words=sentence.split(/\W+/);
+        return words.filter(onlyUnique)
+        function onlyUnique(value:string, index:number, self:string[]) {
+            return self.indexOf(value) === index;
+          }
+
     }
     private kind = "Claims"
 }
 
+const incensitiveCaseUniqueWordsPropertyName = "incensitiveCaseUniqueWords"
+
 interface GcpClaimContract extends ClaimContract {
-    incensitiveCaseWords:string[]
+    [incensitiveCaseUniqueWordsPropertyName]:string[]
 }
 

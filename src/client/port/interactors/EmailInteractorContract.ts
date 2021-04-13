@@ -1,3 +1,3 @@
-export interface EmaimInteractorContract {
+export interface EmailInteractorContract {
     isEmailValid(email:string):boolean;
 }

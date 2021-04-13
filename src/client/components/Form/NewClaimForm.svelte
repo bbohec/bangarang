@@ -1,20 +1,23 @@
 <script lang="ts">
-    import NewClaimTitleInput from "../Inputs/NewClaimTitleInput.svelte"
-    import DeclareNewClaimSubmitButton from "../Inputs/DeclareNewClaimSubmitButton.svelte"
-    import ClaimAsProposalRadioButton from "../Inputs/ClaimAsProposalRadioButton.svelte"
-    import type { ClaimType } from "../../interfaces/ClaimType";
+    import type { ClaimType } from "../../port/ClaimContract";
     import { declaringClaim } from "../../logic/declaringNewClaim";
-    let claimTitle:string
-    let claimChoice:ClaimType="Claim as proposal"
-    const declareNewClaim = ():void => {declaringClaim(claimTitle) }
+    import { declaringClaimUserNotificationStore } from "../../stores/declaringClaimStore";
+    import ClaimAsProposalRadioButton from "../Inputs/ClaimAsProposalRadioButton.svelte"
+    import GenericTextAreaField from "./Fields/GenericTextAreaField.svelte"
+    import GenericSubmitField from "./Fields/GenericSubmitField.svelte"
+    let claimChoice:ClaimType="Simple"
+    const eventHandler:svelte.JSX.FormEventHandler<HTMLFormElement> = (event: Event & {currentTarget: EventTarget & HTMLFormElement;})=> {
+        const target = event.target as typeof event.target & {
+            claimTitle: { value: string };
+        };
+        declaringClaim(target.claimTitle.value)
+    }
 </script>
-<form class="w-full flex flex-col items-center" on:submit|preventDefault={declareNewClaim}>
-    <NewClaimTitleInput bind:value={claimTitle}/>
+<form class="w-full flex flex-col items-center" on:submit|preventDefault={eventHandler}>
+    <GenericTextAreaField placeholder="Describe the claim ..." fieldId=claimTitle fieldName="Claim Title" isRequired={true} isReadOnly={$declaringClaimUserNotificationStore.status !== "Idle"}/>
     <fieldset>
         <legend class="text-bangarang-lightEmphasis">Claim type</legend>
         <ClaimAsProposalRadioButton/>
     </fieldset>
-    {#if claimTitle!== ""}
-        <DeclareNewClaimSubmitButton/>
-    {/if}
+    <GenericSubmitField fieldId=declare fieldName=Declare isReadOnly={$declaringClaimUserNotificationStore.status !== "Idle"}/>
 </form>

@@ -11,6 +11,7 @@ import { SvelteDeclaringClaimUserNotificationInteractor } from "./SvelteDeclarin
 import { SvelteRetrievingClaimUserNotificationInteractor } from "./SvelteRetrievingClaimUserNotificationInteractor";
 import { SvelteSearchingClaimsUserNotificationInteractor } from "./SvelteSearchingClaimsUserNotificationInteractorContract";
 import { SvelteSigningInUserNotificationInteractor } from "./SvelteSigningInUserNotificationInteractor";
+import { SvelteRegisteringUserNotificationInteractor } from "./SvelteRegisteringUserNotificationInteractor";
 const bangarangMembersInteractor = new RestBangarangMembersInteractor(new RestInteractor({
     endpointFullyQualifiedDomainName:process.env.REST_ENDPOINT_FQDN,
     port:(process.env.PORT)?process.env.PORT:(process.env.NODE_ENV === 'development')?"3000":undefined,
@@ -33,6 +34,7 @@ export const uiBangarangUserBuilder = new UserBuilder()
     .withRetrievingClaimUserNotificationInteractor(new SvelteRetrievingClaimUserNotificationInteractor())
     .withSearchingClaimsUserNotificationInteractor(new SvelteSearchingClaimsUserNotificationInteractor())
     .withSigningInUserNotificationInteractor(new SvelteSigningInUserNotificationInteractor())
+    .withRegisteringUserNotificationInteractor(new SvelteRegisteringUserNotificationInteractor())
 const guest:UserContract={username:"guest",fullname:"",email:""}
 uiBangarangUserBuilder
     .withUserContract(guest)

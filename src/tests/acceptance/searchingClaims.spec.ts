@@ -222,6 +222,16 @@ describe(`Feature: Searching Claims
                 {type:"Simple", title:"CLOUME5", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""}
             ],
             searchCriteria:"clOUm"
+        },
+        {
+            scenarioTitle:"Claim with punctuation & search criteria without punctuation",
+            expectedDeclaredClaims:[
+                {type:"Simple", title:"Guillermo Lasso est-il le président de l'Equateur?", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""}
+            ],
+            retreivedClaims:[
+                {type:"Simple", title:"Guillermo Lasso est-il le président de l'Equateur?", peopleClaimed:0, peopleClaimedFor:0, peopleClaimedAgainst:0,id:""}
+            ],
+            searchCriteria:"equateur"
         }
     ]
     const bangarangClaimInteractor = new FakeBangarangClaimInteractor()
