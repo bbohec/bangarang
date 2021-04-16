@@ -11,18 +11,24 @@
 - 👉 Doing
 - ✔️ Done
 
+## 19/04/2021 — Day 29
+-  Multi-language — /!\ FR /!\
+-  UI style rework
+-  Pull Req.
+-  Summary.
+
 ## 16/04/2021 — Day 28
 - ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
 - ✔️ Stand Up
 - ✔️ Signing In Rework
 - ✔️ Remove demo account warning
 - ✔️ TI GCP Kind Test Prefix
--  Pull Req.
--  Merge Prod > Delete DB claims "" upper case with punct to lower case without punct
--  Delete demo account & claims
--  Multi-language — /!\ FR /!\
--  UI style rework
--  Summ.
+- ❌ Pull Req.
+- ✔️ Merge Prod > Delete DB claims upper case with punctuation to lower case without punctuation
+- ✔️ Delete demo account & claims
+- ❌ Multi-language — /!\ FR /!\
+- ❌ UI style rework
+- ✔️ Summary.
 
 ## 2021/04/12 — Day 27
 - ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
@@ -34,32 +40,32 @@
 - ❌ Signing In Rework
 - ❌ TI GCP Kind Test Prefix
 - ❌ Pull Req.
-- ❌ Merge Prod > change DB claims "" upper case with punct to lower case without punct
+- ❌ Merge Prod > Delete DB claims upper case with punctuation to lower case without punctuation
 - demo >>> https://bangarang.sometimesuseful.com/
-- ✔️ Summ.
+- ✔️ Summary
 
 ## 2021/04/09 — Day 26
 - ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
 - ✔️ Stand Up 
-- ✔️ Change Claim Inter. with Prom + Validate TI
-- ✔️ RestFake Claim Inter.
-- ✔️ RestGCP Claim Inter.
+- ✔️ Change Claim Interactor with Prom + Validate TI
+- ✔️ Rest Fake Claim Interactor.
+- ✔️ Rest GCP Claim Interactor.
 - ✔️ AT & TI & e2e
-    - ✔️ TI claims with "imporTant dOg"
+    - ✔️ TI claims with 'imporTant dOg'
 - ❌ Pull Req.
-- ✔️ Summ.
+- ✔️ Summary
 
 ## 2021/04/05 — Day 25
 - ✔️ Twitch Live
 - ✔️ Stand Up 
 - ✔️ Finish Member Inter. Integration
 - ✔️ Prepare GCP & REST Inter.
-- ❌ Change Claim Inter. with Prom
-- ❌ RestFake Claim Inter.
-- ❌ RestGCP Claim Inter.
+- ❌ Change Claim Interactor with Prom
+- ❌ Rest Fake Claim Interactor.
+- ❌ Rest GCP Claim Interactor.
 - ❌ AT & TI & e2e
 - ❌ Pull Req.
-- ✔️ Summ.
+- ✔️ Summary
 
 ## 2021/04/02 — Day 24
 - ✔️ Twitch Live Stream https://www.twitch.tv/benjaminbohec + announces
