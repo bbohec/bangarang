@@ -2,3 +2,4 @@
 {"rule":"DASH_RULE","sentence":"^\\Q> - Link.\\E$"}
 {"rule":"DASH_RULE","sentence":"^\\Q> - Notification (mail / SMS / ....).\\E$"}
 {"rule":"DASH_RULE","sentence":"^\\Q> - Simple Option\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\Q✔️ AT & TI & e2e\n✔️ TI claims with 'imporTant dOg'\n❌ Pull Req.\\E$"}

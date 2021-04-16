@@ -76,9 +76,7 @@ describe(`Feature: Registering
     scenarios.forEach(scenario => {
         describe(`
     Scenario: ${scenario.title}`,()=>{
-            
             const user =new UserBuilder()
-                .withUserContract(scenario.userContract)
                 .withBangarangMembersInteractor(scenario.bangarangMemberInteractor)
                 .withRegisteringUserNotificationInteractor(scenario.registeringUserNotificationInteractor)
                 .getUser()
@@ -88,10 +86,8 @@ describe(`Feature: Registering
                     scenario.bangarangMemberInteractor.specificWithCredentials([{username:scenario.alreadyHaveBangarangMember.user.username,password:scenario.alreadyHaveBangarangMember.password}])
                 }
             })
-            
-            it(`Given the user is not signed in as '${user.username}'.`,()=>{
-                return scenario.bangarangMemberInteractor.isSignedIn(scenario.userContract.username)
-                    .then(isSignedIn=>expect(isSignedIn).to.be.false)
+            it(`Given the user is not signed in as '${scenario.userContract.username}'.`,()=>{
+                expect(user.retrieveUserContract()).to.be.undefined
             })
             if (!scenario.alreadyHaveBangarangMember)it(`And there is no '${scenario.userContract.username}' Bangarang member'`,()=> {
                     expect(()=>{scenario.bangarangMemberInteractor.specificFindMemberFromUsername(scenario.userContract.username)})
@@ -111,7 +107,7 @@ describe(`Feature: Registering
             it(`When the user register on Bangarang with the following parameters:
             | username | password           | email         | fullname  |
             | ${scenario.userContract.username}  | ${scenario.userPassword}   |  ${scenario.userContract.email} | ${scenario.userContract.fullname}  |`,(done)=> {
-                user.registering(scenario.userPassword).then(()=>done())
+                user.registering(scenario.userContract,scenario.userPassword).then(()=>done())
                 
             })
             if (scenario.alreadyHaveBangarangMember) {

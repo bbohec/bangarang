@@ -15,19 +15,17 @@ describe(`Feature: Claiming
     In order to claim
     I want to claim on claim`,()=> {
     const notificationType:ClaimingNotificationType = "Claiming."
-    const userContract:UserContract = { username: "", fullname: "",email:"" }
-    const userPassword = ""
+    const userContract:UserContract = { username: "user", fullname: "",email:"" }
+    const userPassword = "passwd"
     const bangarangClaimInteractor = new FakeBangarangClaimInteractor();
     const bangarangMembersInteractor = new FakeBangarangMembersInteractor();
     const bangarangUserInterfaceInteractor = new FakeBangarangUserInterfaceInteractor();
     const claimingUserNotificationInteractor = new FakeClaimingUserNotificationInteractor()
-    const user = new UserBuilder()
-        .withUserContract(userContract)
+    const userBuilder = new UserBuilder()
         .withBangarangClaimInteractor(bangarangClaimInteractor)
         .withBangarangMembersInteractor(bangarangMembersInteractor)
         .withBangarangUserInterfaceInteractor(bangarangUserInterfaceInteractor)
         .withClaimingUserNotificationInteractor(claimingUserNotificationInteractor)
-        .getUser()
     interface Scenario {
         userSignedIn: boolean;
         description:string
@@ -166,26 +164,25 @@ describe(`Feature: Claiming
             expectedView:"claim"
         }
     ]
-    async function initScenario (scenario:Scenario){
+    async function initScenario (scenario:Scenario):Promise<void>{
+        userBuilder.resetUser()
         bangarangMembersInteractor.specificWithMembers([userContract]);
-        bangarangMembersInteractor.specificWithSignedInMembers([]);
         bangarangMembersInteractor.specificWithMembersClaims([]);
         bangarangMembersInteractor.specificWithCredentials([{username:userContract.username,password:userPassword}])
-        if(scenario.userSignedIn) await user.signingIn("")
+        if(scenario.userSignedIn) await userBuilder.getUser().signingIn(userContract.username,userPassword)
         bangarangClaimInteractor.removeAllClaims();
         if(scenario.claimDeclared)bangarangClaimInteractor.saveClaim(scenario.expectedClaim)
         claimingUserNotificationInteractor.currentUserNotification = undefined
         bangarangUserInterfaceInteractor.currentView=scenario.currentView
-        if(scenario.previousClaimChoice)user.claiming(scenario.expectedClaim.id,scenario.previousClaimChoice)
+        if(scenario.previousClaimChoice)await userBuilder.getUser().claiming(scenario.expectedClaim.id,scenario.previousClaimChoice)
     }
     scenarios.forEach(scenario => {
         describe(`
         ${scenario.description}`,()=> {
             before(()=>initScenario(scenario))
             it(`Given the user is ${(!scenario.userSignedIn)?"not ":""}signed in`,()=>{
-                return bangarangMembersInteractor.isSignedIn(userContract.username)
-                    .then(isSignedIn=>expect(isSignedIn).equal(scenario.userSignedIn))
-                
+                if(!scenario.userSignedIn)expect(userBuilder.getUser().retrieveUserContract()).to.be.undefined
+                else expect(userBuilder.getUser().retrieveUserContract()).deep.equal(userContract)
             })
             if (scenario.claimDeclared){ 
                 if(scenario.previousClaimChoice)it(`And the claim with id '${scenario.expectedClaim.id}' is declared on Bangarang with the following values:
@@ -218,7 +215,7 @@ describe(`Feature: Claiming
                     .then(previousMemberClaimChoiceOnClaim=>expect(previousMemberClaimChoiceOnClaim).equal(scenario.previousClaimChoice))
             })
             it(`When the user claim '${scenario.userChoice}' on the claim with title '${scenario.expectedClaim.title}'`,(done)=>{
-                user.claiming(scenario.expectedClaim.id,scenario.userChoice)
+                userBuilder.getUser().claiming(scenario.expectedClaim.id,scenario.userChoice)
                     .then(()=>done())
             })
             it(`Then the user has a '${notificationType}' notification with '${scenario.expectedNotification.status}' status and '${scenario.expectedNotification.message}' message.`,()=> {

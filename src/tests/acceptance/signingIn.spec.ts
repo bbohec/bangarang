@@ -23,32 +23,31 @@ describe(`Feature: Signing In
         bangarangMembersInteractor.specificWithMembers([expectedUser])
         bangarangMembersInteractor.specificWithCredentials([{username:expectedUser.username,password:expectedUserPassword}])
         const user:User = new UserBuilder()
-            .withUserContract(expectedUser)
             .withBangarangMembersInteractor(bangarangMembersInteractor)
             .withBangarangClaimInteractor(fakeBangarangClaimInteractor)
             .withSigningInUserNotificationInteractor(fakeSigningInUserNotificationInteractor)
             .getUser()
         it(`Given the user is not signed in`,()=> {
-            return bangarangMembersInteractor.isSignedIn(expectedUser.username)
-                .then(isSignedIn => expect(isSignedIn).is.false) 
+            expect(user.retrieveUserContract()).to.be.undefined
         })
         it(`And there is '${expectedUser.username}' Bangarang member with password '${expectedUserPassword}'`,()=> {
             expect(bangarangMembersInteractor.specificFindMemberFromUsername(expectedUser.username)).deep.equal(expectedUser)
             expect(bangarangMembersInteractor.specificFindMemberPasswordFromUsername(expectedUser.username)).deep.equal(expectedUserPassword)
         })
         it(`When the user signin as '${expectedUser.username}' with password '${expectedUserPassword}'`,(done)=> {
-            user.signingIn(expectedUserPassword).then(()=>done())
+            user.signingIn(expectedUser.username,expectedUserPassword).then(()=>done())
         })
         it(`Then the user is signed in as a Bangarang member with the following information:
             | username | user fullname |
             | ${expectedUser.username}  | ${expectedUser.fullname}      |`,()=> {
-            expect(user.username).equal(expectedUser.username)
-            expect(user.fullname).equal(expectedUser.fullname)
+            expect(user.retrieveUserContract()).deep.equal(expectedUser)
         })
+        /*
         it(`And the user is Signed In`,()=> {
             return bangarangMembersInteractor.isSignedIn(expectedUser.username)
                 .then(isSignedIn => expect(isSignedIn).is.true) 
         })
+        */
         it(`And the user has a '${signingInNotificationType}' notification with '${successSigningInNotification.status}' status and '${successSigningInNotification.message}' message.`,()=> {
             expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.message).equal(successSigningInNotification.message)
             expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.status).equal(successSigningInNotification.status)
@@ -59,19 +58,16 @@ describe(`Feature: Signing In
         bangarangMembersInteractor.specificWithMembers([expectedUser])
         bangarangMembersInteractor.specificWithCredentials([{username:expectedUser.username,password:expectedUserPassword}])
         const user:User = new UserBuilder()
-            .withUserContract(expectedUser)
             .withBangarangMembersInteractor(bangarangMembersInteractor)
             .withBangarangClaimInteractor(fakeBangarangClaimInteractor)
             .withSigningInUserNotificationInteractor(fakeSigningInUserNotificationInteractor)
             .getUser()
-        before(()=>user.signingIn(expectedUserPassword))
+        before(()=>user.signingIn(expectedUser.username,expectedUserPassword))
         it(`Given the user is already SignedIn`,()=>{
-            return bangarangMembersInteractor.isSignedIn(expectedUser.username)
-                .then(isSignedIn => expect(isSignedIn).is.true) 
+            expect(user.retrieveUserContract()).deep.equal(expectedUser)
         })
         it(`When the user signin as '${expectedUser.username}' with password '${expectedUserPassword}'`,(done)=> {
-            user.signingIn(expectedUserPassword)
-            done()
+            user.signingIn(expectedUser.username,expectedUserPassword).then(()=> done())
         })
         it(`Then the user has a '${signingInNotificationType}' notification with '${alreadySignedInSigningInNotification.status}' status and '${alreadySignedInSigningInNotification.message}' message.`,()=> {
             expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.message).equal(alreadySignedInSigningInNotification.message)
@@ -82,22 +78,19 @@ describe(`Feature: Signing In
         const bangarangMembersInteractor = new FakeBangarangMembersInteractor()
         bangarangMembersInteractor.specificWithCredentials([{username:expectedUser.username,password:expectedUserPassword}])
         const user:User = new UserBuilder()
-            .withUserContract(expectedUser)
             .withBangarangMembersInteractor(bangarangMembersInteractor)
             .withBangarangClaimInteractor(fakeBangarangClaimInteractor)
             .withSigningInUserNotificationInteractor(fakeSigningInUserNotificationInteractor)
             .getUser()
         it(`Given the user is not signed in`,()=>{
-            return bangarangMembersInteractor.isSignedIn(expectedUser.username)
-                .then(isSignedIn => expect(isSignedIn).is.false) 
+            expect(user.retrieveUserContract()).to.be.undefined
         })
         it(`And there is no '${expectedUser.username}' Bangarang member'`,()=> {
             expect(()=>{bangarangMembersInteractor.specificFindMemberFromUsername(expectedUser.username)})
                 .to.throw(bangarangMemberNotFoundError(expectedUser.username))
         })
         it(`When the user signin as '${expectedUser.username}' with password '${expectedUserPassword}'`,(done)=> {
-            user.signingIn(expectedUserPassword)
-            done()
+            user.signingIn(expectedUser.username,expectedUserPassword).then(()=> done())
         })
         it(`Then the user has a '${signingInNotificationType}' notification with '${badCredentialsSigningInNotification.status}' status and '${badCredentialsSigningInNotification.message}' message.`,()=> {
             expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.message).equal(badCredentialsSigningInNotification.message)
@@ -111,22 +104,19 @@ describe(`Feature: Signing In
         const badPassword="baspassword"
         //const badPasswordUser:UserContract = {username:"johndoe",fullname:"",email:""}
         const user:User = new UserBuilder()
-            .withUserContract(expectedUser)
             .withBangarangMembersInteractor(bangarangMembersInteractor)
             .withBangarangClaimInteractor(fakeBangarangClaimInteractor)
             .withSigningInUserNotificationInteractor(fakeSigningInUserNotificationInteractor)
             .getUser()
         it(`Given the user is not signed in`,()=>{
-            return bangarangMembersInteractor.isSignedIn(expectedUser.username)
-                .then(isSignedIn => expect(isSignedIn).is.false) 
+            expect(user.retrieveUserContract()).to.be.undefined
         })
         it(`And there is '${expectedUser.username}' Bangarang member with password '${expectedUserPassword}'`,()=> {
             expect(bangarangMembersInteractor.specificFindMemberFromUsername(expectedUser.username)).deep.equal(expectedUser)
             expect(bangarangMembersInteractor.specificFindMemberPasswordFromUsername(expectedUser.username)).deep.equal(expectedUserPassword)
         })
         it(`When the user signin as '${expectedUser.username}' with password '${badPassword}'`,(done)=> {
-            user.signingIn(badPassword)
-            done()
+            user.signingIn(expectedUser.username,badPassword).then(()=> done())
         })
         it(`Then the user has a '${signingInNotificationType}' notification with '${badCredentialsSigningInNotification.status}' status and '${badCredentialsSigningInNotification.message}' message.`,()=> {
             expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.status).equal(badCredentialsSigningInNotification.status)

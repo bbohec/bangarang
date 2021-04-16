@@ -23,13 +23,16 @@ const apiPrefixFromString = (string: string): ApiPrefix => {
 const GCP_DATASTORE_PROJECT_ID =process.env.GCP_DATASTORE_PROJECT_ID
 const GCP_DATASTORE_CLIENT_EMAIL =process.env.GCP_DATASTORE_CLIENT_EMAIL
 const GCP_DATASTORE_PRIVATE_KEY =process.env.GCP_DATASTORE_PRIVATE_KEY
+let GCP_DATASTORE_KIND_PREFIX =process.env.GCP_DATASTORE_KIND_PREFIX
 if(GCP_DATASTORE_PROJECT_ID === undefined) throw new Error(`GCP_DATASTORE_PROJECT_ID missing from environment variables.`)
 if(GCP_DATASTORE_CLIENT_EMAIL === undefined) throw new Error(`GCP_DATASTORE_CLIENT_EMAIL missing from environment variables.`)
 if(GCP_DATASTORE_PRIVATE_KEY === undefined) throw new Error(`GCP_DATASTORE_PRIVATE_KEY missing from environment variables.`)
+if(GCP_DATASTORE_KIND_PREFIX === undefined) GCP_DATASTORE_KIND_PREFIX = '{"gcpKindPrefix":""}'
 const gcpDatastoreInteractorConfiguration:GcpDatastoreInteractorConfiguration = {
 	gcpProjectId:JSON.parse(GCP_DATASTORE_PROJECT_ID).gcpProjectId,
 	gcpClientEmail:JSON.parse(GCP_DATASTORE_CLIENT_EMAIL).gcpClientEmail,
-	gcpPrivateKey:JSON.parse(GCP_DATASTORE_PRIVATE_KEY).gcpPrivateKey
+	gcpPrivateKey:JSON.parse(GCP_DATASTORE_PRIVATE_KEY).gcpPrivateKey,
+	gcpKindPrefix:JSON.parse(GCP_DATASTORE_KIND_PREFIX).gcpKindPrefix
 }
 const gcpDatastoreInteractor = new GcpDatastoreInteractor(gcpDatastoreInteractorConfiguration)
 const fakeBangarangMemberInteractor = new FakeBangarangMembersInteractor()
@@ -58,7 +61,9 @@ const apiPrefix = `:apiPrefix`
 const App = express();
 App.use(json(),cors())
 enum BangarangQueryParameters {
-	ClaimTitle = "claimTitle"
+	ClaimTitle = "claimTitle",
+	Username = "username",
+	Password = "password"
 }
 const isQueryStringQuery = (query:unknown) : query is string => typeof query === 'string'
 App.get(`/${apiPrefix}/claims`, (request, response) => {
@@ -147,15 +152,6 @@ App.get(`/${apiPrefix}/isMemberExistWithUsername/:username`, (request, response)
 		.then(isMemberExistWithUsername => response.end(JSON.stringify({isMemberExistWithUsername})))
 		.catch((error:Error) => sendErrorResponse(error))
 })
-App.get(`/${apiPrefix}/isSignedIn/:username`, (request, response) => {
-	const bangarangMemberInteractor = selectBangarangMemberInteractor(request.params.apiPrefix)
-	const sendErrorResponse = (error:Error)=> response.status(500).json({error:error.message})
-	if(!bangarangMemberInteractor)sendErrorResponse(new Error(`bangarangMemberInteractor undefined`))
-	else bangarangMemberInteractor.adapter
-		.isSignedIn(request.params.username)
-		.then(isSignedIn => response.end(JSON.stringify({isSignedIn})))
-		.catch((error:Error) => sendErrorResponse(error))
-})
 App.get(`/${apiPrefix}/retrievePreviousMemberClaimChoiceOnClaim/:username/:claimTitle`, (request, response) => {
 	const bangarangMemberInteractor = selectBangarangMemberInteractor(request.params.apiPrefix)
 	const sendErrorResponse = (error:Error)=> response.status(500).json({error:error.message})
@@ -239,19 +235,40 @@ App.post(`/${apiPrefix}/reset`, (request, response) => {
 	}
 	else sendErrorResponse(new Error (`Not bangarang member interactor with api prefix '${apiPrefixFromString(request.params.apiPrefix)}'.`))
 })
-App.post(`/${apiPrefix}/signingIn`, (request, response) => {
+App.get(`/${apiPrefix}/isCredentialsValid`, (request, response) => {
 	const sendErrorResponse = (error:Error)=> response.status(500).json({error:error.message})
 	const bangarangMemberInteractor = selectBangarangMemberInteractor(request.params.apiPrefix)
-	const body:{username?:string,password?:string}=request.body
-	if(body.username===undefined || body.password===undefined)sendErrorResponse(new Error("Missing username or password on body."));
-	else if(!bangarangMemberInteractor)sendErrorResponse(new Error(`bangarangMemberInteractor undefined`))
-	else bangarangMemberInteractor.adapter
-		.signingIn({username:body.username,password:body.password})
-		.then(result => {
-			if(result instanceof Error) throw result
-			response.end()
-		})
-		.catch((error:Error) => sendErrorResponse(error))
+	if(!bangarangMemberInteractor)sendErrorResponse(new Error(`bangarangMemberInteractor undefined`))
+	else {
+		const queryUsername = request.query[BangarangQueryParameters.Username]
+		const queryPassword = request.query[BangarangQueryParameters.Password]
+		if (!isQueryStringQuery(queryUsername)) sendErrorResponse(new Error(`queryUsername not supported : '${queryUsername}'`))
+		else if (!isQueryStringQuery(queryPassword)) sendErrorResponse(new Error(`queryPassword not supported : '${queryPassword}'`))
+		else return bangarangMemberInteractor.adapter
+			.isCredentialsValid({username:queryUsername,password:queryPassword})
+			.then(isCredentialsValid => {
+				if(isCredentialsValid instanceof Error) throw isCredentialsValid
+				response.end(JSON.stringify({isCredentialsValid}))
+			})
+			.catch((error:Error) => sendErrorResponse(error))
+	}
+})
+App.get(`/${apiPrefix}/retrieveUserContract`, (request, response) => {
+	const sendErrorResponse = (error:Error)=> response.status(500).json({error:error.message})
+	const bangarangMemberInteractor = selectBangarangMemberInteractor(request.params.apiPrefix)
+	if(!bangarangMemberInteractor)sendErrorResponse(new Error(`bangarangMemberInteractor undefined`))
+	else {
+		const queryUsername = request.query[BangarangQueryParameters.Username]
+		if (!isQueryStringQuery(queryUsername)) sendErrorResponse(new Error(`queryUsername not supported : '${queryUsername}'`))
+		else return bangarangMemberInteractor.adapter
+			.retrieveUserContract(queryUsername)
+			.then(userContract => {
+				if(userContract instanceof Error) throw userContract
+				if(userContract === undefined) response.end()
+				else response.end(JSON.stringify(userContract))
+			})
+			.catch((error:Error) => sendErrorResponse(error))
+	}
 })
 App.use(
 	compression({ threshold: 0 }),

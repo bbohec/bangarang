@@ -35,10 +35,6 @@ export const uiBangarangUserBuilder = new UserBuilder()
     .withSearchingClaimsUserNotificationInteractor(new SvelteSearchingClaimsUserNotificationInteractor())
     .withSigningInUserNotificationInteractor(new SvelteSigningInUserNotificationInteractor())
     .withRegisteringUserNotificationInteractor(new SvelteRegisteringUserNotificationInteractor())
-const guest:UserContract={username:"guest",fullname:"",email:""}
-uiBangarangUserBuilder
-    .withUserContract(guest)
-    .resetUser()
 demoClaims().forEach(claim => fakeBangarangClaimInteractor.saveClaim(claim))
 function demoClaims(): Array<ClaimContract> {
 const claims = new Array<ClaimContract>();

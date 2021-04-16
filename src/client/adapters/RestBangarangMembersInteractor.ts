@@ -8,6 +8,13 @@ export class RestBangarangMembersInteractor implements BangarangMembersInteracto
     constructor(restInteractor:RestInteractor) {
         this.restInteractor= restInteractor
     }
+    retrieveUserContract(username: string): Promise<Error | UserContract | undefined> {
+        return this.restInteractor.get<UserContract|string>(`/retrieveUserContract`,{username})
+            .then(userContract=> {
+                if(typeof userContract === "string") return undefined
+                return userContract
+            })
+    }
     public isMemberExistWithUsername(username: string): Promise<boolean|Error> {
         return this.restInteractor.get<{ isMemberExistWithUsername?: boolean }>(`/isMemberExistWithUsername/${username}`)
             .then(data => (data instanceof Error)
@@ -35,8 +42,9 @@ export class RestBangarangMembersInteractor implements BangarangMembersInteracto
     public saveMemberClaim(memberClaim: MemberClaim): Promise<void|Error> {
         return this.restInteractor.post(`/saveMemberClaim`, memberClaim)
     }
-    public signingIn(credentials: Credentials):Promise<void|Error> {
-        return this.restInteractor.post(`/signingIn`, credentials)
+    public isCredentialsValid(credentials: Credentials):Promise<boolean|Error> {
+        return this.restInteractor.get<{isCredentialsValid:boolean}>(`/isCredentialsValid`, {username:credentials.username,password:credentials.password})
+            .then(data =>(data instanceof Error)?data:data.isCredentialsValid)
     }
     public specificReset():Promise<void> {
         return this.restInteractor.post(`/reset`,{})

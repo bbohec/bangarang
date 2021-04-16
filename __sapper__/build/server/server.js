@@ -625,14 +625,11 @@ const alreadyMemberRegisteringUserNotification = { status: "Failed", message: "A
 const idleMemberRegisteringUserNotification = { status: "Idle", message: "Waiting for Registering Event.", type: "Registering." };
 
 class User {
-    constructor(userContract, bangarangAdapters) {
-        this.username = userContract.username;
-        this.fullname = userContract.fullname;
-        this.email = userContract.email;
+    constructor(bangarangAdapters) {
         this.bangarangAdapters = bangarangAdapters;
     }
-    registering(password) {
-        return this.bangarangAdapters.bangarangMembersInteractor.isMemberExistWithUsername(this.username)
+    registering(userContract, password) {
+        return this.bangarangAdapters.bangarangMembersInteractor.isMemberExistWithUsername(userContract.username)
             .then(isMemberExistWithUsername => {
             if (isMemberExistWithUsername instanceof Error)
                 throw new Error("NOT IMPLEMENTED");
@@ -640,14 +637,14 @@ class User {
                 throw alreadyMemberRegisteringUserNotification;
             if (!this.bangarangAdapters.passwordInteractor.isPasswordSecure(password))
                 throw unsecurePasswordRegisteringUserNotification;
-            if (!this.bangarangAdapters.emailInteractor.isEmailValid(this.email))
+            if (!this.bangarangAdapters.emailInteractor.isEmailValid(userContract.email))
                 throw badEmailRegisteringUserNotification;
-            return this.bangarangAdapters.bangarangMembersInteractor.saveMember({ username: this.username, fullname: this.fullname, email: this.email });
+            return this.bangarangAdapters.bangarangMembersInteractor.saveMember(userContract);
         })
             .then(result => {
             if (result instanceof Error)
                 throw result;
-            return this.bangarangAdapters.bangarangMembersInteractor.saveCredentials({ username: this.username, password });
+            return this.bangarangAdapters.bangarangMembersInteractor.saveCredentials({ username: userContract.username, password });
         })
             .then(result => {
             if (result instanceof Error)
@@ -656,42 +653,44 @@ class User {
         })
             .catch((result) => {
             if (result instanceof Error)
-                throw result;
-            this.bangarangAdapters.registeringUserNotificationInteractor.notify(result);
+                console.warn(`Unhandled error : ${result}`);
+            else
+                this.bangarangAdapters.registeringUserNotificationInteractor.notify(result);
         });
     }
     claiming(claimId, claimChoice) {
-        return this.bangarangAdapters.bangarangMembersInteractor.isSignedIn(this.username)
-            .then(isSignedIn => {
-            if (!isSignedIn) {
-                this.bangarangAdapters.bangarangUserInterfaceInteractor.goToSigningInMenu();
-                throw mustBeSignedInClaimingUserNotification;
-            }
+        if (this.userContract === undefined) {
+            this.bangarangAdapters.bangarangUserInterfaceInteractor.goToSigningInMenu();
+            this.bangarangAdapters.claimingUserNotificationInteractor.notify(mustBeSignedInClaimingUserNotification);
+            return Promise.resolve();
+        }
+        else {
+            const userContract = this.userContract;
             return Promise.all([
                 this.bangarangAdapters.bangarangClaimInteractor.claimById(claimId),
-                this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, claimId)
-            ]);
-        })
-            .then(([retreivedClaim, previousClaimChoice]) => {
-            const isUserHasPreviouslyMadeTheSameClaimChoice = (previousClaimChoice, claimChoice) => previousClaimChoice !== undefined && previousClaimChoice === claimChoice;
-            if (retreivedClaim instanceof Error)
-                throw claimNotDeclaredClaimingUserNotification(claimId);
-            if (previousClaimChoice instanceof Error)
-                throw unexpectedErrorClaimingUserNotification(previousClaimChoice);
-            else if (isUserHasPreviouslyMadeTheSameClaimChoice(previousClaimChoice, claimChoice))
-                throw multipleTimesClaimingUserNotification(claimChoice);
-            return new Claim(retreivedClaim)
-                .increasePeopleClaimedWhenNoPreviousClaimChoice(previousClaimChoice)
-                .removePreviousClaimOnClaim(previousClaimChoice)
-                .increaseClaimChoiseFromClaimChoice(claimChoice)
-                .claiming(this.bangarangAdapters.bangarangClaimInteractor, this.bangarangAdapters.bangarangMembersInteractor, this.username, claimChoice);
-        })
-            .then(claimingResult => {
-            if (claimingResult instanceof Error)
-                throw unexpectedErrorClaimingUserNotification(claimingResult);
-            this.bangarangAdapters.claimingUserNotificationInteractor.notify(successClaimingUserNotification);
-        })
-            .catch((notification) => this.bangarangAdapters.claimingUserNotificationInteractor.notify(notification));
+                this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(userContract.username, claimId)
+            ])
+                .then(([retreivedClaim, previousClaimChoice]) => {
+                const isUserHasPreviouslyMadeTheSameClaimChoice = (previousClaimChoice, claimChoice) => previousClaimChoice !== undefined && previousClaimChoice === claimChoice;
+                if (retreivedClaim instanceof Error)
+                    throw claimNotDeclaredClaimingUserNotification(claimId);
+                if (previousClaimChoice instanceof Error)
+                    throw unexpectedErrorClaimingUserNotification(previousClaimChoice);
+                else if (isUserHasPreviouslyMadeTheSameClaimChoice(previousClaimChoice, claimChoice))
+                    throw multipleTimesClaimingUserNotification(claimChoice);
+                return new Claim(retreivedClaim)
+                    .increasePeopleClaimedWhenNoPreviousClaimChoice(previousClaimChoice)
+                    .removePreviousClaimOnClaim(previousClaimChoice)
+                    .increaseClaimChoiseFromClaimChoice(claimChoice)
+                    .claiming(this.bangarangAdapters.bangarangClaimInteractor, this.bangarangAdapters.bangarangMembersInteractor, userContract.username, claimChoice);
+            })
+                .then(claimingResult => {
+                if (claimingResult instanceof Error)
+                    throw unexpectedErrorClaimingUserNotification(claimingResult);
+                this.bangarangAdapters.claimingUserNotificationInteractor.notify(successClaimingUserNotification);
+            })
+                .catch((notification) => this.bangarangAdapters.claimingUserNotificationInteractor.notify(notification));
+        }
     }
     searchingClaims(searchCriteria) {
         let Order;
@@ -740,7 +739,7 @@ class User {
             if (claimById instanceof Error)
                 throw (claimNotDeclaredRetrievingClaimUserNotification);
             claim = claimById;
-            return this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.username, claimId);
+            return (this.userContract === undefined) ? undefined : this.bangarangAdapters.bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(this.userContract.username, claimId);
         })
             .then(previousMemberClaimChoiceOnClaim => {
             if (previousMemberClaimChoiceOnClaim instanceof Error)
@@ -782,7 +781,7 @@ class User {
             return this.bangarangAdapters.bangarangClaimInteractor.isClaimExistByTitleIncensitiveCase(claimTitle)
                 .then(isClaimExistByTitleUpperCase => {
                 if (isClaimExistByTitleUpperCase instanceof Error)
-                    throw new Error(`MISSIGN SPECS : ${isClaimExistByTitleUpperCase}`);
+                    throw isClaimExistByTitleUpperCase;
                 return shouldSaveClaimWhenClaimDontExistByTitleUpperCase(isClaimExistByTitleUpperCase);
             })
                 .then(isClaimExistByTitleUpperCase => (isClaimExistByTitleUpperCase) ?
@@ -793,24 +792,44 @@ class User {
                     this.bangarangAdapters.retrievingClaimUserNotificationInteractor.notify(claimNotDeclaredRetrievingClaimUserNotification);
                 else
                     this.bangarangAdapters.bangarangUserInterfaceInteractor.goToClaim(claim.id);
+            })
+                .catch(error => {
+                console.warn(`Unhandled error : ${error}`);
             });
     }
-    signingIn(password) {
-        return this.bangarangAdapters.bangarangMembersInteractor.isSignedIn(this.username)
-            .then(isSignedIn => {
-            if (isSignedIn instanceof Error)
-                throw new Error(`MISSIGN SPECS : ${isSignedIn}`);
-            else if (isSignedIn === true)
-                throw alreadySignedInSigningInNotification;
-            return this.bangarangAdapters.bangarangMembersInteractor.signingIn({ username: this.username, password });
-        })
-            .then(signingIn => {
-            if (signingIn)
-                throw (badCredentialsSigningInNotification);
-            else
-                return this.bangarangAdapters.signingInUserNotificationInteractor.notify(successSigningInNotification);
-        })
-            .catch((notification) => this.bangarangAdapters.signingInUserNotificationInteractor.notify(notification));
+    signingIn(username, password) {
+        if (this.userContract !== undefined) {
+            this.bangarangAdapters.signingInUserNotificationInteractor.notify(alreadySignedInSigningInNotification);
+            return Promise.resolve();
+        }
+        else {
+            return this.bangarangAdapters.bangarangMembersInteractor.isCredentialsValid({ username: username, password })
+                .then(isCredentialsValid => {
+                if (isCredentialsValid instanceof Error)
+                    throw isCredentialsValid;
+                if (isCredentialsValid === false)
+                    throw (badCredentialsSigningInNotification);
+                return this.bangarangAdapters.bangarangMembersInteractor.retrieveUserContract(username);
+            })
+                .then(userContract => {
+                if (userContract instanceof Error)
+                    throw userContract;
+                this.userContract = userContract;
+                if (userContract === undefined)
+                    this.bangarangAdapters.signingInUserNotificationInteractor.notify(badCredentialsSigningInNotification);
+                else
+                    this.bangarangAdapters.signingInUserNotificationInteractor.notify(successSigningInNotification);
+            })
+                .catch((notification) => {
+                if (notification instanceof Error)
+                    console.warn(`Unhandled error : ${notification}`);
+                else
+                    this.bangarangAdapters.signingInUserNotificationInteractor.notify(notification);
+            });
+        }
+    }
+    retrieveUserContract() {
+        return this.userContract;
     }
 }
 
@@ -873,21 +892,20 @@ const bangarangMemberNotFoundError = (username) => `Bangarang member with userna
 
 const credentialsMissing = (username) => `Credentials missing for username ${username}`;
 
-const retrievingClaimUserNotificationStore = writable(idleRetrievingClaimUserNotification);
-
 class FakeBangarangMembersInteractor {
     constructor() {
         this.membersCredentials = [];
         this.members = [];
         this.membersClaims = [];
-        this.signedInMembers = [];
+    }
+    retrieveUserContract(username) {
+        if (username === "error")
+            return Promise.resolve(new Error(`${username} error!`));
+        const userContract = this.members.find(user => user.username === username);
+        return Promise.resolve(userContract);
     }
     isMemberExistWithUsername(username) {
         const result = this.members.some(member => member.username === username);
-        return Promise.resolve(result);
-    }
-    isSignedIn(username) {
-        const result = this.signedInMembers.some(signedInUsername => signedInUsername === username);
         return Promise.resolve(result);
     }
     retrievePreviousMemberClaimChoiceOnClaim(username, claimId) {
@@ -911,19 +929,11 @@ class FakeBangarangMembersInteractor {
     saveMemberClaim(memberClaim) {
         return this.saveOnDatabasePattern(memberClaim, this.membersClaims, bangarangMemberClaim => bangarangMemberClaim.claimId === memberClaim.claimId);
     }
-    signingIn(credentials) {
-        const resolvePromise = (error) => (error) ? Promise.resolve(error) : Promise.resolve();
-        try {
-            if (this.specificFindMemberPasswordFromUsername(credentials.username) === credentials.password) {
-                this.signedInMembers.push(this.specificFindMemberFromUsername(credentials.username).username);
-                return resolvePromise();
-            }
-            else
-                return resolvePromise(new Error(`Bad credentials for user '${credentials.username}'`));
-        }
-        catch (error) {
-            return resolvePromise(error);
-        }
+    isCredentialsValid(credentials) {
+        const validCredentials = this.membersCredentials.find(credentialOnDatabase => credentialOnDatabase.username === credentials.username && credentialOnDatabase.password === credentials.password);
+        if (validCredentials === undefined)
+            return Promise.resolve(false);
+        return Promise.resolve(true);
     }
     specificFindMemberFromUsername(username) {
         const bangarangMember = this.members.find(member => member.username === username);
@@ -943,9 +953,6 @@ class FakeBangarangMembersInteractor {
     specificWithMembers(members) {
         this.members = members;
     }
-    specificWithSignedInMembers(signedInMembers) {
-        this.signedInMembers = signedInMembers;
-    }
     specificWithCredentials(credentials) {
         this.membersCredentials = credentials;
     }
@@ -953,7 +960,6 @@ class FakeBangarangMembersInteractor {
         this.specificWithCredentials([]);
         this.specificWithMembers([]);
         this.specificWithMembersClaims([]);
-        this.specificWithSignedInMembers([]);
         return Promise.resolve();
     }
     saveOnDatabasePattern(toSave, database, finder) {
@@ -1038,7 +1044,6 @@ class InternalEmailInteractor {
 
 class UserBuilder {
     constructor() {
-        this.userContract = { username: "", fullname: "", email: "" };
         this.bangarangAdapters = {
             bangarangClaimInteractor: new FakeBangarangClaimInteractor(),
             bangarangMembersInteractor: new FakeBangarangMembersInteractor(),
@@ -1083,15 +1088,11 @@ class UserBuilder {
     }
     getUser() {
         if (!this.user)
-            this.user = new User(this.userContract, this.bangarangAdapters);
+            this.user = new User(this.bangarangAdapters);
         return this.user;
     }
     resetUser() {
-        this.user = new User(this.userContract, this.bangarangAdapters);
-        return this.user;
-    }
-    withUserContract(userContract) {
-        this.userContract = userContract;
+        this.user = new User(this.bangarangAdapters);
         return this;
     }
     withBangarangMembersInteractor(bangarangMembersInteractor) {
@@ -1176,6 +1177,14 @@ class RestBangarangMembersInteractor {
     constructor(restInteractor) {
         this.restInteractor = restInteractor;
     }
+    retrieveUserContract(username) {
+        return this.restInteractor.get(`/retrieveUserContract`, { username })
+            .then(userContract => {
+            if (typeof userContract === "string")
+                return undefined;
+            return userContract;
+        });
+    }
     isMemberExistWithUsername(username) {
         return this.restInteractor.get(`/isMemberExistWithUsername/${username}`)
             .then(data => (data instanceof Error)
@@ -1201,8 +1210,9 @@ class RestBangarangMembersInteractor {
     saveMemberClaim(memberClaim) {
         return this.restInteractor.post(`/saveMemberClaim`, memberClaim);
     }
-    signingIn(credentials) {
-        return this.restInteractor.post(`/signingIn`, credentials);
+    isCredentialsValid(credentials) {
+        return this.restInteractor.get(`/isCredentialsValid`, { username: credentials.username, password: credentials.password })
+            .then(data => (data instanceof Error) ? data : data.isCredentialsValid);
     }
     specificReset() {
         return this.restInteractor.post(`/reset`, {})
@@ -1244,6 +1254,8 @@ class SvelteDeclaringClaimUserNotificationInteractor {
         setTimeout(() => declaringClaimUserNotificationStore.set(idleDeclaringClaimUserNotification), timeOfClaimDeclaredNotification);
     }
 }
+
+const retrievingClaimUserNotificationStore = writable(idleRetrievingClaimUserNotification);
 
 class SvelteRetrievingClaimUserNotificationInteractor {
     notify(userNotification) {
@@ -1306,10 +1318,6 @@ const uiBangarangUserBuilder = new UserBuilder()
     .withSearchingClaimsUserNotificationInteractor(new SvelteSearchingClaimsUserNotificationInteractor())
     .withSigningInUserNotificationInteractor(new SvelteSigningInUserNotificationInteractor())
     .withRegisteringUserNotificationInteractor(new SvelteRegisteringUserNotificationInteractor());
-const guest = { username: "guest", fullname: "", email: "" };
-uiBangarangUserBuilder
-    .withUserContract(guest)
-    .resetUser();
 demoClaims().forEach(claim => fakeBangarangClaimInteractor.saveClaim(claim));
 function demoClaims() {
     const claims = new Array();
@@ -2126,22 +2134,20 @@ var component_2 = /*#__PURE__*/Object.freeze({
     'default': BusinessModel
 });
 
+const currentUserContractStore = writable(uiBangarangUserBuilder.getUser().retrieveUserContract());
+
 /* src\client\components\Headers\SignInHeader.svelte generated by Svelte v3.34.0 */
 
 const SignInHeader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	const user = uiBangarangUserBuilder.getUser();
+	let $currentUserContractStore, $$unsubscribe_currentUserContractStore;
+	validate_store(currentUserContractStore, "currentUserContractStore");
+	$$unsubscribe_currentUserContractStore = subscribe(currentUserContractStore, value => $currentUserContractStore = value);
+	$$unsubscribe_currentUserContractStore();
 
-	return `<header class="${"flex flex-col flex-grow justify-center items-center content-center mx-auto max-w-screen-2xl"}">${validate_component(WelcomeTitle, "WelcomeTitle").$$render($$result, {}, {}, {})}
-    ${user.username !== "guest"
-	? `<h2 class="${"text-2xl text-bangarang-darkEmphasis my-1"}">${escape(user.username)}</h2>`
+	return `<header class="${"flex flex-col flex-grow justify-end items-center content-center mx-auto max-w-screen-2xl"}">${validate_component(WelcomeTitle, "WelcomeTitle").$$render($$result, {}, {}, {})}
+    ${$currentUserContractStore !== undefined
+	? `<h2 class="${"text-2xl text-bangarang-darkEmphasis my-1"}">${escape($currentUserContractStore.username)}</h2>`
 	: ``}</header>`;
-});
-
-/* src\client\components\Cards\DemoUserCard.svelte generated by Svelte v3.34.0 */
-
-const DemoUserCard = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	const message = `There is only one demo user actually available with the following credentials <b>demo/demo</b>.`;
-	return `<div class="${"border rounded my-6 border-bangarang-failed bg-bangarang-light flex flex-col items-center"}"><p class="${"m-1 text-bangarang-lightEmphasis flex-grow text-center text-xs"}">${message}</p></div>`;
 });
 
 /* src\client\components\Form\Fields\GenericTextField.svelte generated by Svelte v3.34.0 */
@@ -2236,19 +2242,21 @@ const SignInForm = create_ssr_component(($$result, $$props, $$bindings, slots) =
 /* src\client\components\Sections\SignInSection.svelte generated by Svelte v3.34.0 */
 
 const SignInSection = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `${validate_component(DemoUserCard, "DemoUserCard").$$render($$result, {}, {}, {})}
-<p class="${"text-bangarang-lightEmphasis"}">Sign into your account</p>
+	return `<p class="${"text-bangarang-lightEmphasis"}">Your account credentials</p>
 ${validate_component(SignInForm, "SignInForm").$$render($$result, {}, {}, {})}`;
 });
 
 /* src\client\components\Mains\SignInMain.svelte generated by Svelte v3.34.0 */
 
 const SignInMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	const user = uiBangarangUserBuilder.getUser();
+	let $currentUserContractStore, $$unsubscribe_currentUserContractStore;
+	validate_store(currentUserContractStore, "currentUserContractStore");
+	$$unsubscribe_currentUserContractStore = subscribe(currentUserContractStore, value => $currentUserContractStore = value);
+	$$unsubscribe_currentUserContractStore();
 
-	return `${user.username === "guest"
-	? `<main class="${"flex flex-col flex-grow items-center"}">${validate_component(SignInSection, "SignInSection").$$render($$result, {}, {}, {})}</main>`
-	: `<main class="${"flex flex-col items-center my-10 mx-auto max-w-screen-2xl"}"><p class="${"invisible"}">SignOut</p></main>`}`;
+	return `${$currentUserContractStore === undefined
+	? `<main class="${"flex flex-col flex-grow justify-center items-center"}">${validate_component(SignInSection, "SignInSection").$$render($$result, {}, {}, {})}</main>`
+	: `<main class="${"flex flex-col flex-grow justify-center items-center"}"><p class="${"invisible"}">SignOut</p></main>`}`;
 });
 
 /* src\client\components\Notification\SignInInformation.svelte generated by Svelte v3.34.0 */
@@ -2853,7 +2861,7 @@ const RegisterTitle = create_ssr_component(($$result, $$props, $$bindings, slots
 /* src\client\components\Headers\RegisterHeader.svelte generated by Svelte v3.34.0 */
 
 const RegisterHeader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<header class="${"flex flex-col flex-grow justify-center items-center content-center mx-auto max-w-screen-2xl"}">${validate_component(RegisterTitle, "RegisterTitle").$$render($$result, {}, {}, {})}</header>`;
+	return `<header class="${"flex flex-col flex-grow justify-end items-center content-center mx-auto max-w-screen-2xl"}">${validate_component(RegisterTitle, "RegisterTitle").$$render($$result, {}, {}, {})}</header>`;
 });
 
 /* src\client\components\Cards\SecurityUserCard.svelte generated by Svelte v3.34.0 */
@@ -2941,7 +2949,7 @@ ${validate_component(RegisterForm, "RegisterForm").$$render($$result, {}, {}, {}
 /* src\client\components\Mains\RegisterMain.svelte generated by Svelte v3.34.0 */
 
 const RegisterMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<main class="${"flex flex-col flex-grow items-center"}">${validate_component(RegisterSection, "RegisterSection").$$render($$result, {}, {}, {})}</main>`;
+	return `<main class="${"flex flex-col flex-grow items-center justify-center"}">${validate_component(RegisterSection, "RegisterSection").$$render($$result, {}, {}, {})}</main>`;
 });
 
 /* src\client\components\Notification\RegisteringInformation.svelte generated by Svelte v3.34.0 */
@@ -8297,9 +8305,11 @@ function noop$1() { }
 
 class GcpDatastoreInteractor {
     constructor(gcpDatastoreInteractorConfiguration) {
+        this.keyPathSeparator = "/";
         if (gcpDatastoreInteractorConfiguration.gcpClientEmail === undefined ||
             gcpDatastoreInteractorConfiguration.gcpPrivateKey === undefined ||
-            gcpDatastoreInteractorConfiguration.gcpProjectId === undefined)
+            gcpDatastoreInteractorConfiguration.gcpProjectId === undefined ||
+            gcpDatastoreInteractorConfiguration.gcpKindPrefix === undefined)
             throw new Error(`gcpDatastoreInteractorConfiguration bad configuration : ${JSON.stringify(gcpDatastoreInteractorConfiguration)}`);
         const datastoreOptions = {
             projectId: gcpDatastoreInteractorConfiguration.gcpProjectId,
@@ -8308,9 +8318,11 @@ class GcpDatastoreInteractor {
                 private_key: gcpDatastoreInteractorConfiguration.gcpPrivateKey
             }
         };
+        this.kindPrefix = gcpDatastoreInteractorConfiguration.gcpKindPrefix;
         this.gcpDatastore = new datastore.Datastore(datastoreOptions);
     }
     queryRecordsOnGoogleDatastore(kind, filters) {
+        kind = this.kindPrefix.concat(kind);
         console.log(`⚙️  queryRecordsOnGoogleDatastore - ${kind} `);
         const query = this.gcpDatastore.createQuery(kind);
         filters.forEach(filter => {
@@ -8329,8 +8341,9 @@ class GcpDatastoreInteractor {
     }
     retreiveRecordOnGoogleDatastore(keyPath) {
         return new Promise((resolve) => {
-            console.log(`⚙️  retreiveRecordOnGoogleDatastore - ${keyPath.join("/")}`);
-            const keyOption = { path: keyPath };
+            const keyPathString = this.kindPrefix.concat(keyPath.join(this.keyPathSeparator));
+            console.log(`⚙️  retreiveRecordOnGoogleDatastore - ${keyPathString}`);
+            const keyOption = { path: keyPathString.split(this.keyPathSeparator) };
             const key = this.gcpDatastore.key(keyOption);
             this.gcpDatastore.get(key, (error, entity) => {
                 if (error) {
@@ -8338,11 +8351,11 @@ class GcpDatastoreInteractor {
                     resolve(error);
                 }
                 else if (!entity) {
-                    console.log(`⚠️  ${noEntityWithPathErrorMessage(keyPath)}`);
+                    console.log(`⚠️  ${noEntityWithPathErrorMessage(keyPathString)}`);
                     resolve(undefined);
                 }
                 else {
-                    console.log(`✔️  Entity with key path ${keyPath.join("/")} retreived from datastore.`);
+                    console.log(`✔️  Entity with key path ${keyPathString} retreived from datastore.`);
                     resolve(entity);
                 }
             });
@@ -8350,8 +8363,9 @@ class GcpDatastoreInteractor {
     }
     deleteRecordOnGoogleDatastore(keyPath) {
         return new Promise((resolve) => {
-            console.log(`⚙️  deleteRecordOnGoogleDatastore - ${keyPath.join("/")}`);
-            const keyOption = { path: keyPath };
+            const keyPathString = this.kindPrefix.concat(keyPath.join(this.keyPathSeparator));
+            console.log(`⚙️  deleteRecordOnGoogleDatastore - ${keyPathString}`);
+            const keyOption = { path: keyPathString.split(this.keyPathSeparator) };
             const key = this.gcpDatastore.key(keyOption);
             this.gcpDatastore.delete(key, (error) => {
                 if (error) {
@@ -8359,7 +8373,7 @@ class GcpDatastoreInteractor {
                     resolve(error);
                 }
                 else {
-                    console.log(`✔️  Entity with key path ${keyPath.join("/")} deleted on datastore.`);
+                    console.log(`✔️  Entity with key path ${keyPathString} deleted on datastore.`);
                     resolve();
                 }
             });
@@ -8367,8 +8381,9 @@ class GcpDatastoreInteractor {
     }
     saveRecordOnGoogleDatastore(keyPath, entity) {
         return new Promise((resolve) => {
-            console.log(`⚙️  saveRecordOnGoogleDatastore - ${keyPath.join("/")}`);
-            const keyOption = { path: keyPath };
+            const keyPathString = this.kindPrefix.concat(keyPath.join(this.keyPathSeparator));
+            console.log(`⚙️  saveRecordOnGoogleDatastore - ${keyPathString}`);
+            const keyOption = { path: keyPathString.split(this.keyPathSeparator) };
             const key = this.gcpDatastore.key(keyOption);
             const callback = (error) => {
                 if (error) {
@@ -8376,19 +8391,25 @@ class GcpDatastoreInteractor {
                     resolve(error);
                 }
                 else {
-                    console.log(`✔️  Entity with key path ${keyPath.join("/")} saved on datastore.`);
+                    console.log(`✔️  Entity with key path ${keyPathString} saved on datastore.`);
                     resolve();
                 }
             };
-            this.gcpDatastore.save({ key: key, data: entity }, () => callback());
+            this.gcpDatastore.save({ key, data: entity }, () => callback());
         });
     }
 }
-const noEntityWithPathErrorMessage = (keyPath) => `No entity with path ${keyPath.join("/")}`;
+const noEntityWithPathErrorMessage = (keyPath) => `No entity with path ${keyPath}`;
 
 class GcpDatastoreBangarangMembersInteractor {
     constructor(gcpDatastoreInteractor) {
         this.gcpDatastoreInteractor = gcpDatastoreInteractor;
+    }
+    retrieveUserContract(username) {
+        if (username === "error")
+            return Promise.resolve(new Error(`${username} error:!`));
+        return this.gcpDatastoreInteractor.retreiveRecordOnGoogleDatastore(keyPathFromKindAndIdentifier("Users", username))
+            .catch(error => error);
     }
     reset() {
         const googleDatastoreKeys = [
@@ -8404,17 +8425,19 @@ class GcpDatastoreBangarangMembersInteractor {
                 errors.push(result); });
             if (errors.length > 0)
                 throw new Error(`Errors on reset : ${errors.map(error => error.message)}`);
-        });
+        })
+            .catch(error => error);
     }
     isMemberExistWithUsername(username) {
-        return this.gcpDatastoreInteractor.retreiveRecordOnGoogleDatastore(keyPathFromKindAndIdentifier("Users", username))
+        return this.retrieveUserContract(username)
             .then(result => {
-            if (!result)
+            if (result === undefined)
                 return false;
             else if (result instanceof Error)
                 return result;
             return true;
-        });
+        })
+            .catch(error => error);
     }
     isSignedIn(username) {
         return this.gcpDatastoreInteractor.retreiveRecordOnGoogleDatastore(keyPathFromKindAndIdentifier("SignedIn_Users", username))
@@ -8424,7 +8447,8 @@ class GcpDatastoreBangarangMembersInteractor {
             else if (result instanceof Error)
                 return result;
             return true;
-        });
+        })
+            .catch(error => error);
     }
     retrievePreviousMemberClaimChoiceOnClaim(username, claimId) {
         return this.gcpDatastoreInteractor.retreiveRecordOnGoogleDatastore(keyPathFromKindAndIdentifier("MembersClaims", username + claimId))
@@ -8435,42 +8459,37 @@ class GcpDatastoreBangarangMembersInteractor {
                 return result;
             }
             return result.claimChoice;
-        });
+        })
+            .catch(error => error);
     }
     saveCredentials(credentials) {
         if (credentials.username === "error")
             return Promise.resolve(new Error("Error with error user"));
-        return this.gcpDatastoreInteractor.saveRecordOnGoogleDatastore(keyPathFromKindAndIdentifier("Credentials", credentials.username), credentials);
+        return this.gcpDatastoreInteractor.saveRecordOnGoogleDatastore(keyPathFromKindAndIdentifier("Credentials", credentials.username), credentials)
+            .catch(error => error);
     }
     saveMember(userContract) {
         if (userContract.username === "error")
             return Promise.resolve(new Error("Error with error user"));
-        return this.gcpDatastoreInteractor.saveRecordOnGoogleDatastore(keyPathFromKindAndIdentifier("Users", userContract.username), userContract);
+        return this.gcpDatastoreInteractor.saveRecordOnGoogleDatastore(keyPathFromKindAndIdentifier("Users", userContract.username), userContract)
+            .catch(error => error);
     }
     saveMemberClaim(memberClaim) {
         if (memberClaim.memberUsername === "error")
             return Promise.resolve(new Error("Error with error user"));
-        return this.gcpDatastoreInteractor.saveRecordOnGoogleDatastore(keyPathFromKindAndIdentifier("MembersClaims", memberClaim.memberUsername + memberClaim.claimId), memberClaim);
+        return this.gcpDatastoreInteractor.saveRecordOnGoogleDatastore(keyPathFromKindAndIdentifier("MembersClaims", memberClaim.memberUsername + memberClaim.claimId), memberClaim)
+            .catch(error => error);
     }
-    signingIn(credentials) {
-        return this.retreiveUserPasswordFromUsername(credentials.username)
-            .then(userPassword => {
-            if (userPassword instanceof Error)
-                return userPassword;
-            if (userPassword === credentials.password)
-                return this.gcpDatastoreInteractor.saveRecordOnGoogleDatastore(keyPathFromKindAndIdentifier("SignedIn_Users", credentials.username), { username: credentials.username });
-            return new Error("Bad credentials.");
-        });
-    }
-    retreiveUserPasswordFromUsername(username) {
-        return this.gcpDatastoreInteractor.retreiveRecordOnGoogleDatastore(keyPathFromKindAndIdentifier("Credentials", username))
+    isCredentialsValid(credentials) {
+        return this.gcpDatastoreInteractor.retreiveRecordOnGoogleDatastore(keyPathFromKindAndIdentifier("Credentials", credentials.username))
             .then(result => {
-            if (!result)
-                return new Error(`Credential ${username} of missing on Credentials kind.`);
+            if (result === undefined)
+                return false;
             else if (result instanceof Error)
                 return result;
-            return result.password;
-        });
+            return (result.password === credentials.password) ? true : false;
+        })
+            .catch(error => error);
     }
 }
 const keyPathFromKindAndIdentifier = (kind, identifier) => `${kind}/${identifier}`.split("/");
@@ -8612,10 +8631,14 @@ const apiPrefixFromString = (string) => {
 const GCP_DATASTORE_PROJECT_ID = "{\"gcpProjectId\":\"bangarang-309019\"}";
 const GCP_DATASTORE_CLIENT_EMAIL = "{\"gcpClientEmail\":\"publicdatastore@bangarang-309019.iam.gserviceaccount.com\"}";
 const GCP_DATASTORE_PRIVATE_KEY = "{\"gcpPrivateKey\":\"-----BEGIN PRIVATE KEY-----\\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDFn4dnGWOcijgC\\nzesWMOgv8wOUn4OM210bI+IQ3Gh1Wl9RtggiWHtKsKU3cumJKj39o1Z2c11J+tJQ\\nw45gxk3HQoZmczJZ5G8KZkZ9RAMsm9rW7HUcxPC+Z2qePlzWEZXBxhkLVgJU20Yb\\n4PrEkpN1Yuf2dfU9RKQWWIf4od8ufrZR5FLymIU/W+smDCjlxaWlcN3N+vNlkF5H\\n4XLeupj3+lqO/fmpxL4OFA2PDlGJuD00aMhJCQ/l1jpO3g7cYA7tjYZXg77ODuLh\\nx3+syQYHiNJpb/pdi5ELtimc4qNdDb+q3oBiFOu5CVUxBfvcUdurM5/MyJdeGz7q\\nvFVe/MMfAgMBAAECggEAMXtfwmNbizMaki0wG0bUpEjjUR/dpvO4LNb/wDwH1bZy\\nnnmHMN5ZxJpVS/x0WBlhGzR+Ljt1lNP+PCWy7S1KBUX1dAqNBXAKk56HMM9KQi2m\\nDmF3c2QmaW5ohkXUJe+SQUoSNEHtZITg2ZMsBvMyg9ZngVEIvjYFJek15n3VbYTw\\n7F1uzl69yk16drQFeZE4C9nGYdoFFK9AoIq5YuBsuZJ/8cRY++vdZc/d39Hwi8WM\\nd+XIPpacgEzahCPVNnmsJgulyAe2YqIQb70G0kA+L8IE5ccpr2K9ahFwvsFpLKTl\\nE/71cLMwIXCaSOWngPg5gYEUelZpbbE/vTvng4JNqQKBgQDrm2km5Wa9QQzT/QrQ\\nG8ue1AjIwnliLpV+f9f/gW8hSe5svLFxB8zJ8kfOr9+1lmiJuPhtp6Bpx4Z5N54P\\nd9GKi6OsLmbXXIEULvWEE7dMkkNKNrGp7t3fvEeNetWTW1ejc7FgdxTqQQsjIdDj\\n3BkRW+ltavLC5umC4ZivPBFMxwKBgQDWungokV7tXT4w1A1BVPffOOePUkfChISl\\npAZk3qqtVq3XPjpc3lSB9JLRAjVlyAyPRhScnaK6nn9C5Y5mviVH0SxWXOpJ8ux2\\ntKtkvBGFydsCBQRKssTc4NdBL4EUD+Awj4HIcTgD1IpjTZZ7mAtif7yM5BpeF/D6\\nHHle/Z0O6QKBgBI6DaJysMYHWES2GLYM0G3THXLaiKVt0SbeIQmlK8G5hHZpCpkh\\n71fYJHH67SWRIzk0VBO3mhNU2jRadyHfNRiwwNK7LD2Q7HNxRpEXLWEBF6+QF6J7\\n1jJO0IJDdG5X7Km6c4hw7e9JZOEs5ooaJt5O6/oJAgrN7lavuS4lSXlVAoGAJPwJ\\nJjOjvg6JX6+meNJBv1j1yWHKql5Y2o7d6xHPI/wCBUjalJRWyetuPkG7IMTMJQFV\\nG4SrOqmCEeuoE1o84ZnNoTJvyDznLasAumEKQ5j49+gVTShtb/3qFXgxK1twqeyN\\n1hBqLX62N1RtzuvpShXmS/4d7IcDIpE09n+IRcECgYEAkdSraAmC250Bjz+WM3p+\\nCpvQAZwy6KQNJBMMjMWWpA8FUTTKeGPuOkv1PB38Vz+e/3GSmPuOvZ5qJutUTmBL\\n16GRsL96lHizJr1RvoN20JYg9Vzo7agIWbk3p2yvCNQi4zLzWhuSMB8bqVcTkiGk\\nV76c6Sphhk93GhOP1g2JDlA=\\n-----END PRIVATE KEY-----\\n\"}";
+let GCP_DATASTORE_KIND_PREFIX = process.env.GCP_DATASTORE_KIND_PREFIX;
+if (GCP_DATASTORE_KIND_PREFIX === undefined)
+    GCP_DATASTORE_KIND_PREFIX = '{"gcpKindPrefix":""}';
 const gcpDatastoreInteractorConfiguration = {
     gcpProjectId: JSON.parse(GCP_DATASTORE_PROJECT_ID).gcpProjectId,
     gcpClientEmail: JSON.parse(GCP_DATASTORE_CLIENT_EMAIL).gcpClientEmail,
-    gcpPrivateKey: JSON.parse(GCP_DATASTORE_PRIVATE_KEY).gcpPrivateKey
+    gcpPrivateKey: JSON.parse(GCP_DATASTORE_PRIVATE_KEY).gcpPrivateKey,
+    gcpKindPrefix: JSON.parse(GCP_DATASTORE_KIND_PREFIX).gcpKindPrefix
 };
 const gcpDatastoreInteractor = new GcpDatastoreInteractor(gcpDatastoreInteractorConfiguration);
 const fakeBangarangMemberInteractor = new FakeBangarangMembersInteractor();
@@ -8638,6 +8661,8 @@ App$1.use(bodyParser.json(), cors__default['default']());
 var BangarangQueryParameters;
 (function (BangarangQueryParameters) {
     BangarangQueryParameters["ClaimTitle"] = "claimTitle";
+    BangarangQueryParameters["Username"] = "username";
+    BangarangQueryParameters["Password"] = "password";
 })(BangarangQueryParameters || (BangarangQueryParameters = {}));
 const isQueryStringQuery = (query) => typeof query === 'string';
 App$1.get(`/${apiPrefix}/claims`, (request, response) => {
@@ -8734,17 +8759,6 @@ App$1.get(`/${apiPrefix}/isMemberExistWithUsername/:username`, (request, respons
         bangarangMemberInteractor.adapter
             .isMemberExistWithUsername(request.params.username)
             .then(isMemberExistWithUsername => response.end(JSON.stringify({ isMemberExistWithUsername })))
-            .catch((error) => sendErrorResponse(error));
-});
-App$1.get(`/${apiPrefix}/isSignedIn/:username`, (request, response) => {
-    const bangarangMemberInteractor = selectBangarangMemberInteractor(request.params.apiPrefix);
-    const sendErrorResponse = (error) => response.status(500).json({ error: error.message });
-    if (!bangarangMemberInteractor)
-        sendErrorResponse(new Error(`bangarangMemberInteractor undefined`));
-    else
-        bangarangMemberInteractor.adapter
-            .isSignedIn(request.params.username)
-            .then(isSignedIn => response.end(JSON.stringify({ isSignedIn })))
             .catch((error) => sendErrorResponse(error));
 });
 App$1.get(`/${apiPrefix}/retrievePreviousMemberClaimChoiceOnClaim/:username/:claimTitle`, (request, response) => {
@@ -8847,23 +8861,51 @@ App$1.post(`/${apiPrefix}/reset`, (request, response) => {
     else
         sendErrorResponse(new Error(`Not bangarang member interactor with api prefix '${apiPrefixFromString(request.params.apiPrefix)}'.`));
 });
-App$1.post(`/${apiPrefix}/signingIn`, (request, response) => {
+App$1.get(`/${apiPrefix}/isCredentialsValid`, (request, response) => {
     const sendErrorResponse = (error) => response.status(500).json({ error: error.message });
     const bangarangMemberInteractor = selectBangarangMemberInteractor(request.params.apiPrefix);
-    const body = request.body;
-    if (body.username === undefined || body.password === undefined)
-        sendErrorResponse(new Error("Missing username or password on body."));
-    else if (!bangarangMemberInteractor)
+    if (!bangarangMemberInteractor)
         sendErrorResponse(new Error(`bangarangMemberInteractor undefined`));
-    else
-        bangarangMemberInteractor.adapter
-            .signingIn({ username: body.username, password: body.password })
-            .then(result => {
-            if (result instanceof Error)
-                throw result;
-            response.end();
-        })
-            .catch((error) => sendErrorResponse(error));
+    else {
+        const queryUsername = request.query[BangarangQueryParameters.Username];
+        const queryPassword = request.query[BangarangQueryParameters.Password];
+        if (!isQueryStringQuery(queryUsername))
+            sendErrorResponse(new Error(`queryUsername not supported : '${queryUsername}'`));
+        else if (!isQueryStringQuery(queryPassword))
+            sendErrorResponse(new Error(`queryPassword not supported : '${queryPassword}'`));
+        else
+            return bangarangMemberInteractor.adapter
+                .isCredentialsValid({ username: queryUsername, password: queryPassword })
+                .then(isCredentialsValid => {
+                if (isCredentialsValid instanceof Error)
+                    throw isCredentialsValid;
+                response.end(JSON.stringify({ isCredentialsValid }));
+            })
+                .catch((error) => sendErrorResponse(error));
+    }
+});
+App$1.get(`/${apiPrefix}/retrieveUserContract`, (request, response) => {
+    const sendErrorResponse = (error) => response.status(500).json({ error: error.message });
+    const bangarangMemberInteractor = selectBangarangMemberInteractor(request.params.apiPrefix);
+    if (!bangarangMemberInteractor)
+        sendErrorResponse(new Error(`bangarangMemberInteractor undefined`));
+    else {
+        const queryUsername = request.query[BangarangQueryParameters.Username];
+        if (!isQueryStringQuery(queryUsername))
+            sendErrorResponse(new Error(`queryUsername not supported : '${queryUsername}'`));
+        else
+            return bangarangMemberInteractor.adapter
+                .retrieveUserContract(queryUsername)
+                .then(userContract => {
+                if (userContract instanceof Error)
+                    throw userContract;
+                if (userContract === undefined)
+                    response.end();
+                else
+                    response.end(JSON.stringify(userContract));
+            })
+                .catch((error) => sendErrorResponse(error));
+    }
 });
 App$1.use(compression__default['default']({ threshold: 0 }), sirv__default['default']('static', { dev: "development" === 'development' }), middleware());
 App$1.listen(process.env.PORT);
