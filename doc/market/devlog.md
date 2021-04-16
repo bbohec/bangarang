@@ -1,6 +1,4 @@
 # Bangarang — Product Development Log
-- Multi-language — /!\ FR /!\
-- UI style rework
 - Official video >> subscribe to form in order to be informed about demo & launch
 - ? Builder placement on clean architecture
 - Error management
@@ -8,17 +6,20 @@
     - Signing Out.
     - Declaring Multiple Proposal Claim.
     - Unregistering. (remove claims)
+    - Delete Account
 - ❌ To-do / Not Finished
 - 👉 Doing
 - ✔️ Done
 
 ## 16/04/2021 — Day 28
--  Stand Up 
--  Signing-In Security warning
--  Signing In Rework
--  TI GCP Kind Test Prefix
+- ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
+- ✔️ Stand Up
+- ✔️ Signing In Rework
+- ✔️ Remove demo account warning
+- ✔️ TI GCP Kind Test Prefix
 -  Pull Req.
--  Merge Prod > change DB claims "" upper case with punct to lower case without punct
+-  Merge Prod > Delete DB claims "" upper case with punct to lower case without punct
+-  Delete demo account & claims
 -  Multi-language — /!\ FR /!\
 -  UI style rework
 -  Summ.

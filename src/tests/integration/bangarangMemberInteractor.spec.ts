@@ -11,6 +11,7 @@ describe(`Bangarang Member Interactor - Integration Test`,()=>{
     const badUserPassword = "badpassword"
     const claimId="claimId"
     const expectedExistingUser:UserContract={username:"test",fullname:"",email:""}
+    const expectedUnexistingUser:UserContract={username:"idontexist",fullname:"",email:""}
     const badUser:UserContract={username:"error",fullname:"",email:""}
     interface AdapterScenario {
         name:string,
@@ -100,32 +101,37 @@ describe(`Bangarang Member Interactor - Integration Test`,()=>{
                     .then(result=> expect(result).instanceOf(Error))
                     .catch(error => {throw error})
             })
-            it(`isSignedIn & signingIn - OK - NotSignedIn & SigningIn with bad credentials`,()=>{
-                return adapterScenario.adapter.isSignedIn(expectedExistingUser.username)
-                    .then( isSignedIn => {
-                        expect(isSignedIn).is.false
-                        return adapterScenario.adapter.signingIn({username:expectedExistingUser.username,password:badUserPassword})
-                    })
-                    .then(result=>{
-                        expect(result).instanceOf(Error)
-                        return adapterScenario.adapter.isSignedIn(expectedExistingUser.username)
-                    })
-                    .then( isSignedIn => {expect(isSignedIn).is.false})
+            it(`isCredentialsValid - OK - isCredentialsValid with bad password`,()=>{
+                return adapterScenario.adapter.isCredentialsValid({username:expectedExistingUser.username,password:badUserPassword})
+                    .then(result=> {expect(result).is.false})
                     .catch(error => {throw error})
-                
             })
-            it(`isSignedIn & signingIn - OK - NotSignedIn & SigningIn with good credentials`,()=>{
-                return adapterScenario.adapter.isSignedIn(expectedExistingUser.username)
-                    .then( isSignedIn => {
-                        expect(isSignedIn).is.false
-                        return adapterScenario.adapter.signingIn({username:expectedExistingUser.username,password:goodUserPassword})
+            it(`isCredentialsValid - OK - isCredentialsValid with unexisting credentials`,()=>{
+                return adapterScenario.adapter.isCredentialsValid({username:expectedUnexistingUser.username,password:goodUserPassword})
+                    .then(result=> {expect(result).is.false})
+                    .catch(error => {throw error})
+            })
+            it(`isCredentialsValid - OK - isCredentialsValid with good credentials`,()=>{
+                return adapterScenario.adapter.isCredentialsValid({username:expectedExistingUser.username,password:goodUserPassword})
+                    .then(result=> {expect(result).is.true})
+                    .catch(error => {throw error})
+            })
+            it(`retrieveUserContract - Error`,()=>{
+                return adapterScenario.adapter.retrieveUserContract(badUser.username)
+                    .then(result => expect(result).instanceOf(Error))
+                    .catch(error => {throw error})
+            })
+            it(`retrieveUserContract - OK - UserExist`,()=>{
+                return adapterScenario.adapter.retrieveUserContract(expectedExistingUser.username)
+                    .then(result => {
+                        expect(result).deep.equal(expectedExistingUser)
                     })
-                    .then(result=> {
-                        expect(result).not.instanceOf(Error)
-                        return adapterScenario.adapter.isSignedIn(expectedExistingUser.username)
-                    })
-                    .then( isSignedIn => {
-                        expect(isSignedIn).is.true
+                    .catch(error => {throw error})
+            })
+            it(`retrieveUserContract - OK - User don't exist`,()=>{
+                return adapterScenario.adapter.retrieveUserContract(expectedUnexistingUser.username)
+                    .then(result => {
+                        expect(result).is.undefined
                     })
                     .catch(error => {throw error})
             })

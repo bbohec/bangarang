@@ -1,14 +1,13 @@
 <script lang="ts">
-    import { uiBangarangUserBuilder } from "../../adapters/uiPrimaryAdapter";
+    import { currentUserContractStore } from "../../stores/currentUserContract";
     import SignInSection from "../Sections/SignInSection.svelte"
-    const user = uiBangarangUserBuilder.getUser()
 </script>
-{#if user.username === "guest"}
-    <main class="flex flex-col flex-grow items-center">
+{#if $currentUserContractStore === undefined}
+    <main class="flex flex-col flex-grow justify-center items-center">
         <SignInSection/>
     </main>
 {:else}
-    <main class="flex flex-col items-center my-10 mx-auto max-w-screen-2xl">
+    <main class="flex flex-col flex-grow justify-center items-center">
         <p class="invisible">SignOut</p>
     </main>
 {/if}

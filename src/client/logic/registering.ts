@@ -5,10 +5,6 @@ import { registeringUserNotificationStore } from "../stores/registeringStore";
 export const registering = (userContract:UserContract,userpassword:string):void => {
     registeringUserNotificationStore.set(executingMemberRegisteringUserNotification)
     uiBangarangUserBuilder
-            .withUserContract(userContract)
-            .resetUser()
-            .registering(userpassword)
-    uiBangarangUserBuilder
-            .withUserContract({username:"guest",fullname:"",email:""})
-            .resetUser()
+            .getUser()
+            .registering(userContract,userpassword)
 }

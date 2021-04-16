@@ -3,14 +3,14 @@ import type { MemberClaim } from "../port/MemberClaim";
 import type { UserContract } from "../port/UserContact";
 import { Credentials, credentialsMissing } from "../port/bangarangMemberCredential";
 import type { ClaimChoice } from "../port/ClaimChoice";
-import { retrievingClaimUserNotificationStore } from "../stores/retrievingClaimStore";
 export class FakeBangarangMembersInteractor implements BangarangMembersInteractorContract {
+    public retrieveUserContract(username: string): Promise<UserContract | undefined | Error> {
+        if(username === "error") return Promise.resolve(new Error(`${username} error!`))
+        const userContract = this.members.find(user => user.username === username)
+        return Promise.resolve(userContract)
+    }
     public isMemberExistWithUsername(username: string): Promise<boolean> {
         const result = this.members.some(member => member.username === username)
-        return Promise.resolve(result)
-    }
-    public isSignedIn(username: string): Promise<boolean|Error> {
-        const result = this.signedInMembers.some(signedInUsername => signedInUsername===username)
         return Promise.resolve(result)
     }
     public retrievePreviousMemberClaimChoiceOnClaim(username:string,claimId:string): Promise<ClaimChoice|Error> {
@@ -31,14 +31,10 @@ export class FakeBangarangMembersInteractor implements BangarangMembersInteracto
     public saveMemberClaim(memberClaim: MemberClaim): Promise<void|Error> {
         return this.saveOnDatabasePattern(memberClaim,this.membersClaims,bangarangMemberClaim => bangarangMemberClaim.claimId === memberClaim.claimId)
     }
-    public signingIn(credentials: Credentials):Promise<void|Error> {
-        const resolvePromise=(error?:Error)=>(error)?Promise.resolve(error):Promise.resolve()
-        try {
-            if (this.specificFindMemberPasswordFromUsername(credentials.username) === credentials.password) {
-                this.signedInMembers.push(this.specificFindMemberFromUsername(credentials.username).username)
-                return resolvePromise()
-            } else return resolvePromise(new Error(`Bad credentials for user '${credentials.username}'`))
-        } catch (error) {return resolvePromise(error)}
+    public isCredentialsValid(credentials: Credentials):Promise<boolean|Error> {
+        const validCredentials = this.membersCredentials.find(credentialOnDatabase => credentialOnDatabase.username === credentials.username && credentialOnDatabase.password === credentials.password)
+        if (validCredentials === undefined) return Promise.resolve(false)
+        return Promise.resolve(true)
     }
     public specificFindMemberFromUsername(username: string): UserContract {
         const bangarangMember = this.members.find(member => member.username === username);
@@ -56,9 +52,6 @@ export class FakeBangarangMembersInteractor implements BangarangMembersInteracto
     public specificWithMembers(members:UserContract[]):void {
         this.members=members
     }
-    public specificWithSignedInMembers(signedInMembers:string[]):void{
-        this.signedInMembers=signedInMembers
-    }
     public specificWithCredentials(credentials:Credentials[]):void {
         this.membersCredentials = credentials
     }
@@ -66,7 +59,6 @@ export class FakeBangarangMembersInteractor implements BangarangMembersInteracto
         this.specificWithCredentials([])
         this.specificWithMembers([])
         this.specificWithMembersClaims([])
-        this.specificWithSignedInMembers([])
         return Promise.resolve()
     }
     private saveOnDatabasePattern<Type>(toSave: Type,database:Type[],finder:(databaseElement: Type) => boolean):Promise<void> {
@@ -77,5 +69,4 @@ export class FakeBangarangMembersInteractor implements BangarangMembersInteracto
     private membersCredentials:Credentials[] = []
     private members: UserContract[]= []
     private membersClaims:MemberClaim[]=[]
-    private signedInMembers:string[] = []
 }

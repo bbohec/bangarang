@@ -51,16 +51,12 @@ export class UserBuilder {
         return this
     }
     getUser(): User {
-        if (!this.user) this.user =  new User(this.userContract, this.bangarangAdapters);
+        if (!this.user) this.user =  new User(this.bangarangAdapters);
         return this.user
     }
-    resetUser(): User {
-        this.user =  new User(this.userContract, this.bangarangAdapters);
-        return this.user
-    }
-    withUserContract(userContract: UserContract): UserBuilder {
-        this.userContract = userContract;
-        return this;
+    resetUser(): UserBuilder {
+        this.user =  new User(this.bangarangAdapters);
+        return this
     }
     withBangarangMembersInteractor(bangarangMembersInteractor: BangarangMembersInteractorContract): UserBuilder {
         this.bangarangAdapters.bangarangMembersInteractor = bangarangMembersInteractor;
@@ -70,7 +66,6 @@ export class UserBuilder {
         this.bangarangAdapters.registeringUserNotificationInteractor = registeringUserNotificationInteractor;
         return this;
     }
-    private userContract: UserContract = { username: "", fullname: "", email: "" };
     private bangarangAdapters: BangarangAdaptersContract = {
         bangarangClaimInteractor: new FakeBangarangClaimInteractor(),
         bangarangMembersInteractor: new FakeBangarangMembersInteractor(),
