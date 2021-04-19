@@ -1,8 +1,19 @@
 <script lang="ts">
+    import { Message } from '../../logic/language';
+    import { leanCanvasLinkMessage, useBangarangLinkMessage } from '../../logic/messages';
+    import { StaticView } from '../../port/interactors/BangarangUserInterfaceInteractor';
+    import { languageStore } from '../../stores/languageStore';
     import Link from '../Links/Link.svelte'
-    import {links} from '../../navigation/links'
 </script>
 <footer class="flex flex-col">
-    <Link size="small" linkName="The Lean Canvas" linkHref={links.LeanCanvas}/>
-    <Link size="small" linkName="Use Bangarang!" linkHref={links.MainMenu}/>
+    <Link 
+        linkName={new Message(leanCanvasLinkMessage).getMessage($languageStore)} 
+        linkHref={`/${$languageStore}/${StaticView.LeanCanvas}`}
+        size="small"
+    />
+    <Link 
+        linkName={new Message(useBangarangLinkMessage).getMessage($languageStore)} 
+        linkHref={`/${$languageStore}/${StaticView.MainMenu}`}
+        size="small" 
+    />
 </footer>
