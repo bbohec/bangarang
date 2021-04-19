@@ -1,10 +1,14 @@
+import type { MessageContract } from "../logic/language";
+
 export interface ValuePropositionDesignCanvasContract {
-    audience:string
-    customerJobs:string[],
-    pains: string[],
-    painRelievers: string[],
-    productAndServices:string[],
-    gainCreators:string[],
-    gains: string[],
+    title:MessageContract,
+    audience:MessageContract
+    customerJobs:MessageContract[],
+    pains: MessageContract[],
+    painRelievers: MessageContract[],
+    productAndServices:MessageContract[],
+    gainCreators:MessageContract[],
+    gains: MessageContract[],
+    linkName:MessageContract,
     pageLink:string
 }

@@ -3,5 +3,11 @@ export interface BangarangUserInterfaceInteractorContract {
     goToClaim(claimId: string):void;
 }
 export enum StaticView {
-    SigningInMenu = "SigningInMenu"
+SigningInMenu="SigningInMenu",
+LanguageSelect="LanguageSelect",
+MainMenu="MainMenu",
+DeclareClaim="DeclareClaim",
+BusinessModel="BusinessModel",
+LeanCanvas="LeanCanvas",
+Register="Register"
 }

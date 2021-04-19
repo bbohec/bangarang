@@ -11,11 +11,22 @@
 - 👉 Doing
 - ✔️ Done
 
-## 19/04/2021 — Day 29
--  Multi-language — /!\ FR /!\
--  UI style rework
+## 23/04/2021 — Day 29
+-  Twitch Live https://www.twitch.tv/benjaminbohec + announces
+-  Stand Up
 -  Pull Req.
+-  Multi-language — /!\ FR /!\
+    -  Notifications
+-  UI style rework
 -  Summary.
+
+## 19/04/2021 — Day 29
+- ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
+- ✔️ Stand Up
+- ❌ Multi-language — /!\ FR /!\
+    - ❌ Notifications
+- ❌ UI style rework
+- ✔️ Summary.
 
 ## 16/04/2021 — Day 28
 - ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces

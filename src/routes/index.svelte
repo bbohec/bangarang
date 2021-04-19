@@ -1,4 +1,4 @@
 <script lang="ts">
-	import MainMenu from './MainMenu.svelte'
+	import MainMenu from './[language]/MainMenu.svelte'
 </script>
-<MainMenu/>
+<MainMenu selectedLanguage="unknown"/>
