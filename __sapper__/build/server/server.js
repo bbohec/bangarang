@@ -580,107 +580,284 @@ const linkPrefixes = {
 
 const valuePropositionsDesignCanvas = [
     {
-        title: { en: "Activist Value Proposition", fr: `*** TRADUCTION MANQUANTE ***` },
-        audience: { en: "Activist", fr: `*** TRADUCTION MANQUANTE ***` },
+        title: {
+            en: "Activist Value Proposition",
+            fr: `Proposition de Valeur des Activistes`
+        },
+        audience: {
+            en: "Activist",
+            fr: `Activiste`
+        },
         customerJobs: [
-            { en: "You revendicate your ideas.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You collectively commit to a cause.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "Your are pacifist.", fr: `*** TRADUCTION MANQUANTE ***` }
+            {
+                en: "You revendicate your ideas.",
+                fr: `Tu revendiques tes idées.`
+            },
+            {
+                en: "You collectively commit to a cause.",
+                fr: `Tu t'engages collectivement pour une cause.`
+            },
+            {
+                en: "Your are pacifist.",
+                fr: `Tu es pacifiste.`
+            }
         ],
         pains: [
-            { en: "You suffer too much violence during protest.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You have to be disobedient.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You die or you are hurt while you protest.", fr: `*** TRADUCTION MANQUANTE ***` }
+            {
+                en: "You suffer too much violence during protest.",
+                fr: `Tu subis trop de violences quand tu manifestes.`
+            },
+            {
+                en: "You have to be disobedient.",
+                fr: `Tu es obligé de faire de la désobéissance.`
+            },
+            {
+                en: "You die or you are hurt while you protest.",
+                fr: `Tu meurts ou tu es blessé lorsque du manifestes.`
+            }
         ],
         painRelievers: [
-            { en: "You will claim from anyware.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "Does claiming from home is a disobedience?", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You will not claim by protesting anymore.", fr: `*** TRADUCTION MANQUANTE ***` }
+            {
+                en: "You will claim from anyware.",
+                fr: `Est-ce qu'on va venir t'aggresser chez toi parceque tu as revendiqué sur Bangarang?`
+            },
+            {
+                en: "Does claiming from home is a disobedience?",
+                fr: `Est-ce que revendiquer depuis chez toi c'est de la désobéissance?`
+            },
+            {
+                en: "You will not claim by protesting anymore.",
+                fr: `Tu n'as plus besoin de manifester pour revendiquer.`
+            }
         ],
         productAndServices: [
-            { en: "Bangarang is an open source and free direct democratic claim system. It allows anybody to declare or search for claim and claiming for them anonymously.", fr: `*** TRADUCTION MANQUANTE ***` }
+            {
+                en: "Bangarang is an open source and free direct democratic claim system. It allows anybody to declare or search for claim and claiming for them anonymously.",
+                fr: `Bangarang est système Open Source et gratuit de démocratie directe à base de revendications permettant à chacun de déclarer ou rechercher une revendication et de revendiquer anonymement.`
+            }
         ],
         gainCreators: [
-            { en: "You can claim whatever you want.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You can change your mind.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You have as much power as the others.", fr: `*** TRADUCTION MANQUANTE ***` }
+            {
+                en: "You can claim whatever you want.",
+                fr: `Tu peux revendiquer où tu veux.`
+            },
+            {
+                en: "You can change your mind.",
+                fr: `Tu peux changer d'avis.`
+            },
+            {
+                en: "You have as much power as the others.",
+                fr: `Tu as autant de pouvoir que les autres.`
+            }
         ],
         gains: [
-            { en: "You can claim on what makes sense to you.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You have the right like everyone else to make mistakes.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You do direct democracy.", fr: `*** TRADUCTION MANQUANTE ***` }
+            {
+                en: "You can claim on what makes sense to you.",
+                fr: `Tu peux revendiquer sur les sujets qui font sens pour toi.`
+            },
+            {
+                en: "You have the right like everyone else to make mistakes.",
+                fr: `Tu as le droit de faire des erreurs comme tout le monde et donc tu dois pouvoir changer d'avis.`
+            },
+            {
+                en: "You do direct democracy.",
+                fr: `Tu fais de la démocratie directe. Tu décides comme tout le monde.`
+            }
         ],
-        linkName: { en: "Are you an activist?", fr: `*** TRADUCTION MANQUANTE ***` },
+        linkName: {
+            en: "Are you an activist?",
+            fr: `Es-tu un activiste?`
+        },
         pageLink: "activist"
     },
     {
-        title: { en: "Syndicalist Value Proposition", fr: `*** TRADUCTION MANQUANTE ***` },
-        audience: { en: "Syndicalist", fr: `*** TRADUCTION MANQUANTE ***` },
+        title: {
+            en: "Syndicalist Value Proposition",
+            fr: `Proposition de Valeur pour les Syndicalistes`
+        },
+        audience: {
+            en: "Syndicalist",
+            fr: `Syndicaliste`
+        },
         customerJobs: [
-            { en: "You defend your interests as a worker.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You show solidarity with your colleagues.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You struggle daily for immediate improvements in work but also for the disappearance of salaried workers and employers.", fr: `*** TRADUCTION MANQUANTE ***` }
+            {
+                en: "You defend your interests as a worker.",
+                fr: `Tu défends tes intérets en tant que travailleur.`
+            },
+            {
+                en: "You show solidarity with your colleagues.",
+                fr: `Tu es solidaire avec tes collègues.`
+            },
+            {
+                en: "You struggle daily for immediate improvements in work but also for the disappearance of salaried workers and employers.",
+                fr: `Tu agis tout les jours pour l'amélioration de tes conditions de travail mais aussi contre les inégalités entre les salariés et les employeurs.`
+            }
         ],
         pains: [
-            { en: "You are often divided.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You are individualist.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You die at work.", fr: `*** TRADUCTION MANQUANTE ***` }
+            {
+                en: "You are often divided.",
+                fr: `Tu es souvent divisé.`
+            },
+            {
+                en: "You are individualist.",
+                fr: `Chaque organisation syndicale est très souvent individualiste.`
+            },
+            {
+                en: "You die at work.",
+                fr: `Tu meurs encore au travail.`
+            }
         ],
         painRelievers: [
-            { en: "You will claim on common causes.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You will be free to claim without being unionized.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "We will make a strong claim on workplace safety.", fr: `*** TRADUCTION MANQUANTE ***` }
+            {
+                en: "You will claim on common causes.",
+                fr: `Tu vas revendiquer sur des causes communes.`
+            },
+            {
+                en: "You will be free to claim without being unionized.",
+                fr: `Tu seras libre de revendiquer quand être forcément avoir les mêmes avis uniques.`
+            },
+            {
+                en: "We will make a strong claim on workplace safety.",
+                fr: `Tu pourras revendiquer sur la sécurité au travail.`
+            }
         ],
         productAndServices: [
-            { en: "Bangarang is an open source and free direct democratic claim system. It allows anybody to declare or search for claim and claiming for them anonymously.", fr: `*** TRADUCTION MANQUANTE ***` }
+            {
+                en: "Bangarang is an open source and free direct democratic claim system. It allows anybody to declare or search for claim and claiming for them anonymously.",
+                fr: `Bangarang est système Open Source et gratuit de démocratie directe à base de revendications permettant à chacun de déclarer ou rechercher une revendication et de revendiquer anonymement.`
+            }
         ],
         gainCreators: [
-            { en: "You are unified by the number but independent by your choices.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You can change your mind.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You can claim as much as your employer.", fr: `*** TRADUCTION MANQUANTE ***` }
+            {
+                en: "You are unified by the number but independent by your choices.",
+                fr: `Tu es unis par le nombre mais tu reste indépendant sur tes propres choix.`
+            },
+            {
+                en: "You can change your mind.",
+                fr: `Tu peux changer d'avis.`
+            },
+            {
+                en: "You can claim as much as your employer.",
+                fr: `Tu peux revendiquer autant que ton employeur.`
+            }
         ],
         gains: [
-            { en: "You and your colleagues will be more united.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You have the right like everyone else to make mistakes.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You greatly reduce the disparities between employers and employees.", fr: `*** TRADUCTION MANQUANTE ***` }
+            {
+                en: "You and your colleagues will be more united.",
+                fr: `Toi et tes collègues, vous serez plus unis.`
+            },
+            {
+                en: "You have the right like everyone else to make mistakes.",
+                fr: `Tu as le droits comme tout le monde de faire des erreures.`
+            },
+            {
+                en: "You greatly reduce the disparities between employers and employees.",
+                fr: `Tu peux réduire drastiquement les disparités entre les salariés et les employeurs.`
+            }
         ],
-        linkName: { en: "Are you a syndicalist?", fr: `*** TRADUCTION MANQUANTE ***` },
+        linkName: {
+            en: "Are you a syndicalist?",
+            fr: `Es-tu syndicaliste?`
+        },
         pageLink: "syndicalist"
     },
     {
-        title: { en: "Agile Team Member Value Proposition", fr: `*** TRADUCTION MANQUANTE ***` },
-        audience: { en: "Agile Team Member", fr: `*** TRADUCTION MANQUANTE ***` },
+        title: {
+            en: "Agile Team Member Value Proposition",
+            fr: `Proposition de Valeur des Equipes Agiles`
+        },
+        audience: {
+            en: "Agile Team Member",
+            fr: `Membre d'Equipe Agile`
+        },
         customerJobs: [
-            { en: "We are uncovering better ways of developing software by doing it and helping others do it.", fr: `*** TRADUCTION MANQUANTE ***` }
+            {
+                en: "Tu are uncovering better ways of developing software by doing it and helping others do it.",
+                fr: `Tu découvres comment mieux développer des logiciels par la pratique et en aidant les autres à le faire.`
+            }
         ],
         pains: [
-            { en: "You have more process and tools instead of individuals and interactions.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You have focus documentation instead of working software.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You take lot of time on contract negotiation over customer collaboration.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You have to follow THE PLAN instead of responding to change.", fr: `*** TRADUCTION MANQUANTE ***` }
+            {
+                en: "You have more process and tools instead of individuals and interactions.",
+                fr: `Tu dois focus plus sur les processus et d'outils que les individus et des intéractions entre eux.`
+            },
+            {
+                en: "You have focus documentation instead of working software.",
+                fr: `Tu dois focus la documentation au lieu de créer du logiciel opérationnel.`
+            },
+            {
+                en: "You take lot of time on contract negotiation over customer collaboration.",
+                fr: `Tu passes beaucoup de temps sur la négociation contractuelle au lieu de collaborer avec les parties prennantes.`
+            },
+            {
+                en: "You have to follow THE PLAN instead of responding to change.",
+                fr: `Tu dois suivre LE PLAN au lieu de t'adapter au changement.`
+            }
         ],
         painRelievers: [
-            { en: "You claim how the software should be.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You claim the rule that documentation is optionnal but working software is mandatory.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You claim NO ESTIMATE.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You claim that customer feedback drive what must be done.", fr: `*** TRADUCTION MANQUANTE ***` }
+            {
+                en: "You claim how the software should be.",
+                fr: `Tu revendiques comment le logiciel doit être.`
+            },
+            {
+                en: "You claim the rule that documentation is optionnal but working software is mandatory.",
+                fr: `Tu revendiques comme règle d'équipe qu'une documentation est optionnelle mais qu'un logiciel fonctionnel est indispensable.`
+            },
+            {
+                en: "You claim NO ESTIMATE.",
+                fr: `Tu revendiques le NO ESTIMATE.`
+            },
+            {
+                en: "You claim that customer feedback drive what must be done.",
+                fr: `Tu revendiques que l'utilisateur final est la source de décision sur ce qui doit être fait.`
+            }
         ],
         productAndServices: [
-            { en: "Bangarang is an open source and free direct democratic claim system. It allows anybody to declare or search for claim and claiming for them anonymously.", fr: `*** TRADUCTION MANQUANTE ***` }
+            {
+                en: "Bangarang is an open source and free direct democratic claim system. It allows anybody to declare or search for claim and claiming for them anonymously.",
+                fr: `Bangarang est système Open Source et gratuit de démocratie directe à base de revendications permettant à chacun de déclarer ou rechercher une revendication et de revendiquer anonymement.`
+            }
         ],
         gainCreators: [
-            { en: "Your software will be more focused on customer needs.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "Your business objectives will be reach with better results.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You are owners of the product.", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "Your customers satisfaction will be enhanced.", fr: `*** TRADUCTION MANQUANTE ***` }
+            {
+                en: "Your software will be more focused on adding value for customers.",
+                fr: `Ton logiciel sera plus focus sur l'apport de valeur pour ses utilisateurs.`
+            },
+            {
+                en: "Your business objectives will be reach with better results.",
+                fr: `Tes objectifs métiers seront atteints avec de meilleurs résultats.`
+            },
+            {
+                en: "You are owners of the product.",
+                fr: `Tu es propriétaire et souverain du produit.`
+            },
+            {
+                en: "Your customers satisfaction will be enhanced.",
+                fr: `La satisfaction de tes utilisateurs sera améliorée.`
+            }
         ],
         gains: [
-            { en: "You value individuals and interactions over processes and tools", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You value a working software over comprehensive documentation", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You value customer collaboration over contract negotiation", fr: `*** TRADUCTION MANQUANTE ***` },
-            { en: "You value responding to change over following a plan", fr: `*** TRADUCTION MANQUANTE ***` }
+            {
+                en: "You value individuals and interactions over processes and tools.",
+                fr: `Tu mets en valeur les individus et leurs intéractions plus que les processus et les outils.`
+            },
+            {
+                en: "You value a working software over comprehensive documentation.",
+                fr: `Tu mets en valeur un logiciel opérationnel plus qu'une documentation exhaustive.`
+            },
+            {
+                en: "You value customer collaboration over contract negotiation.",
+                fr: `Tu mets en valeur la collaboration avec les parties prennantes plus que la négociation contractuelle.`
+            },
+            {
+                en: "You value responding to change over following a plan.",
+                fr: `Tu mets en valeur l'adaptation au changement plus que le suivi d'un plan.`
+            }
         ],
-        linkName: { en: "Are you an agile team member?", fr: `*** TRADUCTION MANQUANTE ***` },
+        linkName: {
+            en: "Are you an agile team member?",
+            fr: `Es-tu membre d'équipe agile?`
+        },
         pageLink: "agileTeamMember"
     }
 ];
@@ -712,297 +889,297 @@ const demoWarningMessage = {
 };
 const leanCanvasCustomerPartNameMessage = {
     en: `Customers`,
-    fr: `*** TRADUCTION MANQUANTE ***`
+    fr: `Audiences`
 };
 const leanCanvasProblemPartNameMessage = {
     en: `Problem`,
-    fr: `*** TRADUCTION MANQUANTE ***`
+    fr: `Problème`
 };
 const leanCanvasSolutionPartNameMessage = {
     en: `Solution`,
-    fr: `*** TRADUCTION MANQUANTE ***`
+    fr: `Solution`
 };
 const leanCanvasChannelsPartNameMessage = {
     en: `Channels`,
-    fr: `*** TRADUCTION MANQUANTE ***`
+    fr: `Cannaux`
 };
 const leanCanvasRevenueStreamsPartNameMessage = {
     en: `Revenue Streams`,
-    fr: `*** TRADUCTION MANQUANTE ***`
+    fr: `Sources de Revenus`
 };
 const leanCanvasCostStructurePartNameMessage = {
     en: `Cost Structure`,
-    fr: `*** TRADUCTION MANQUANTE ***`
+    fr: `Structure de Coût`
 };
 const leanCanvasKeyMetricsPartNameMessage = {
     en: `Key Metrics`,
-    fr: `*** TRADUCTION MANQUANTE ***`
+    fr: `Indicateurs clés`
 };
 const leanCanvasUnfairAdvantagePartNameMessage = {
     en: `Unfair Advantage`,
-    fr: `*** TRADUCTION MANQUANTE ***`
+    fr: `Avantage Compétitif`
 };
 const leanCanvasUniqueValuePropositionPartNameMessage = {
     en: `Unique Value Proposition`,
-    fr: `*** TRADUCTION MANQUANTE ***`
+    fr: `Proposition de Valeur Unique`
 };
 const leanCanvasUnfairAdvantageMessages = {
     title: {
         en: ``,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: ``
     },
     description: {
         en: `Can't be easily copied or bought.`,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: `Ce qui ne peut pas être copié ou achetté ailleurs.`
     },
     bulletPoints: [
         {
             en: `Open Source / Transparancy.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Open Source / Transparence.`
         },
         {
             en: `Free of use.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Gratuit à l'usage.`
         },
         {
-            en: `Not fully skilled but can do it.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            en: `Not fully skilled but can do it 🙂.`,
+            fr: `Pas compétent sur tout mais on s'éxécute 🙂.`
         },
         {
             en: `Crazy Dude with crazy ideas 🙃.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Contributeur fou avec des idées folles 🙃.`
         },
         {
             en: `Cost effective.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Faibles coûts.`
         }
     ]
 };
 const leanCanvasKeyMetricsMessages = {
     title: {
         en: ``,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: ``
     },
     description: {
         en: `Key activities Bangarang measure.`,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: `Les indicateurs clés de Bangarang.`
     },
     bulletPoints: [
         {
-            en: `Daily votes/ballot.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            en: `Quantity of claims.`,
+            fr: `Nombre de revendications / acte de revendiquer.`
         },
         {
-            en: `HOT votes/ballot.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            en: `HOT claims of the day.`,
+            fr: `Les revendications chaudes du moment.`
         },
         {
             en: `Organisations that are not supporting us 🙂.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Organisations qui ne nous supportent pas 🙂.`
         },
         {
             en: `People not already registered/voting for HOT vote 🙂.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Personnes qui ne sont pas encore enregistrées ou qui n'ont pas encore votées sur les votes chauds 🙂.`
         }
     ]
 };
 const leanCanvasCostStructureMessages = {
     title: {
         en: ``,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: ``
     },
     description: {
         en: `Fixed and variable costs list.`,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: `Centres de cout fixes et variables.`
     },
     bulletPoints: [
         {
             en: `One producter > Me > self financing for 7 months 2 days per week > full time 80k/yr and decreasing.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Un contributeur de Bangarang > moi > auto financement pendant 7 mois sur 2 jours par semaines > temps plein 80k/an et prévu en baisse.`
         },
         {
             en: `Additionnal producters > bonus or maybe free help > not needed on early stage.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Contributeurs additionnels > bonus ou peut être pour de l'aide bénévole > pas nécéssaire en premier lieu.`
         },
         {
             en: `Infrastructure cost > not needed on early stage.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Couts d'infrastructure > pas nécéssaire ou minime en premier lieu`
         },
         {
             en: `Organizations financial/political/marketing aggressivity.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Aggréssivité financières/politiques/marketing de certaines organisations.`
         }
     ]
 };
 const leanCanvasRevenueStreamsMessages = {
     title: {
         en: ``,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: ``
     },
     description: {
         en: `Sources of revenue list.`,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: `Liste des sources de financement.`
     },
     bulletPoints: [
         {
-            en: `++ User Support in exchange of being part of credits`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            en: `👍👍 User Support in exchange of being part of credits / goodies.`,
+            fr: `👍👍 Support des utilisateurs en échange de faire partie des crédits / goodies.`
         },
         {
-            en: `-- Organisation Support in exchange of being part of credits`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            en: `👎👎 Organisation Support in exchange of being part of credits`,
+            fr: `👎👎 Support des organisations en échange de faire partie des crédits / sponsors.`
         },
         {
-            en: `---- Paid features (money give advantage / power)`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            en: `👎👎👎👎 Paid features (money give advantage / power)`,
+            fr: `👎👎👎👎 Fonctionnalités payantes (l'argent apporte des avantages / du pouvoir)`
         }
     ]
 };
 const leanCanvasChannelsMessages = {
     title: {
         en: ``,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: ``
     },
     description: {
         en: `Path list to customers.`,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: `Comment informer les utilisateurs au sujet de Bangarang?`
     },
     bulletPoints: [
         {
             en: `YouTube - Daily Marketing Videos.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `YouTube - Vidéos Marketing Journalières.`
         },
         {
             en: `Responce to daily news.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Revendications basées sur l'actualité journalière.`
         },
         {
             en: `Dev/Marketing Transparant Streaming.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Streaming transparant sur les actions de développement et de marketing.`
         }
     ]
 };
 const leanCanvasSolutionMessages = {
     title: {
         en: ``,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: ``
     },
     description: {
         en: `Top features.`,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: `Les fonctionnalités importantes.`
     },
     bulletPoints: [
         {
             en: `Users can interact with Claims.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Les utilisateurs peuvent intéragir avec l'ensemble des revendications.`
         },
         {
             en: `User actions are only tracked at the user level.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Les actions de chaque utilisateur ne sont suivies qu'au niveau de l'utilisateur lui-même.`
         },
         {
             en: `Anyone can subscribe.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Tout le monde peut s'inscrire.`
         },
         {
-            en: `Free.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            en: `Bangarang is free.`,
+            fr: `Bangarang est gratuit.`
         }
     ]
 };
 const leanCanvasUniqueValuePropositionMessages = {
     title: {
         en: ``,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: ``
     },
     description: {
         en: `Single, clear, compelling message that states why Bangarang is different and worth paying attention.`,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: `Message unique, clair et convaincant qui explique pourquoi Bangarang est différent et mérite une attention particulière.`
     },
     bulletPoints: [
         {
             en: `Provide people sovereignty.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Rendre le peuple souverain.`
         },
         {
             en: `Improve human rights: freedom, equality & justice for all.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Améliorer les droits de l'homme: liberté, égalité et justice pour tous.`
         },
         {
             en: `Remove power & authority.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Réduire les abus de pouvoir et d'autorité.`
         },
         {
             en: `Solution with energy efficiency by design.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Solution optimale énergiquement de par sa conception.`
         }
     ]
 };
 const leanCanvasProblemMessages = {
     title: {
         en: ``,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: ``
     },
     description: {
         en: `List your customer's top 3 problems.`,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: `Liste des 3 principaux problèmes des utilisateurs.`
     },
     bulletPoints: [
         {
             en: `Individuals can't give their opinion anonymously.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Les individus ne peuvent pas donner leurs opinions annonymement.`
         },
         {
             en: `Individuals can't give their opinion for subjects that matters to them.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Les individus ne peuvent pas donner leurs opinnions sur des sujets qui font sens pour eux.`
         },
         {
             en: `Individuals can't pay for giving their opinion.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Les individus ne peuvent pas payer pour donner leurs opinions.`
         },
         {
             en: `Individuals don't want to move for giving their opinion.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Les individues ne veulent pas se déplacer pour donner leurs opinions.`
         }
     ]
 };
 const leanCanvasCustomerEarlyAdoptersMessages = {
     title: {
         en: `Early Adopters`,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: `Premières audiences`
     },
     description: {
         en: `Characteristics list of ideal customers.`,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: `Les caractéristiques de notre utilisateur idéal.`
     },
     bulletPoints: [
         {
             en: `Syndicates`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Syndicats`
         },
         {
             en: `Activits`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Activistes`
         },
         {
             en: `Team members where there is lot of control`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Membres d'équipe agile`
         }
     ]
 };
 const leanCanvasCustomerSegmentsMessages = {
     title: {
         en: `Customer Segments`,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: `Audiences`
     },
     description: {
         en: `List of target customers and users.`,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: `Liste des principaux groupes et utilisateurs cibles`
     },
     bulletPoints: [
         {
             en: `Anyone that want to give his opinion about a subject.`,
-            fr: `*** TRADUCTION MANQUANTE ***`
+            fr: `Toute personne qui souhaite donner son opinion à propos d'un sujet.`
         }
     ]
 };
@@ -1061,7 +1238,7 @@ const whyThisNameMessages = {
     },
     description: {
         en: ``,
-        fr: `*** TRADUCTION MANQUANTE ***`
+        fr: ``
     },
     bulletPoints: [
         {
@@ -1229,22 +1406,22 @@ const leanCanvas = (language) => ([
 ]);
 const retrieveSubTitleFromType = (type) => {
     if (type === 'customerJobs')
-        return { en: `You have activities`, fr: `*** TRADUCTION MANQUANTE ***` };
+        return { en: `You have activities`, fr: `Tu fais des actions au quotidien` };
     if (type === 'pains')
-        return { en: `But you have pains`, fr: `*** TRADUCTION MANQUANTE ***` };
+        return { en: `But you have pains`, fr: `Mais tu rencontres des douleurs` };
     if (type === 'painRelievers')
-        return { en: `We want to help you`, fr: `*** TRADUCTION MANQUANTE ***` };
+        return { en: `We want to help you`, fr: `Nous voulons t'aider` };
     if (type === 'productAndServices')
-        return { en: `We have a solution`, fr: `*** TRADUCTION MANQUANTE ***` };
+        return { en: `We have a solution`, fr: `Nous avons une solution` };
     if (type === 'gainCreators')
-        return { en: `We provide additionnal capabilities`, fr: `*** TRADUCTION MANQUANTE ***` };
+        return { en: `We provide additionnal capabilities`, fr: `Nous apportons encore plus` };
     if (type === 'gains')
-        return { en: `You can acheive more`, fr: `*** TRADUCTION MANQUANTE ***` };
-    return { en: `!!!ERROR UNKNOWN TYPE!!!`, fr: `*** TRADUCTION MANQUANTE ***` };
+        return { en: `You can acheive more`, fr: `Tu pourras ainsi aller au delà` };
+    return { en: `!!!ERROR UNKNOWN TYPE!!!`, fr: `!!!ERREUR TYPE INCONU!!!` };
 };
 const callToActionMessage = {
-    en: `Get started`,
-    fr: `*** TRADUCTION MANQUANTE ***`
+    en: `I claim!`,
+    fr: `Je revendique!`
 };
 
 /* src\client\components\Titles\WelcomeTitle.svelte generated by Svelte v3.34.0 */
@@ -3722,7 +3899,6 @@ const BusinessModelMain = create_ssr_component(($$result, $$props, $$bindings, s
 	validate_store(languageStore, "languageStore");
 	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
 	
-	console.log($languageStore);
 
 	const BusinessModelValues = [
 		{

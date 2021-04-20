@@ -4,7 +4,6 @@
     import { definitionOfBangarangMessages, whatIsBangarangMessages, whyThisNameMessages } from "../../logic/messages";
     import { languageStore } from "../../stores/languageStore";
     import DescriptionCard from "../Cards/DescriptionCard.svelte"
-    console.log($languageStore)
     const BusinessModelValues:Array<DescriptionCardContract> = [
         {
             title:new Message(whatIsBangarangMessages.title).getMessage($languageStore),

@@ -2,114 +2,114 @@
   "bundler": "rollup",
   "shimport": "2.0.4",
   "assets": {
-    "main": "client.b653b9c4.js"
+    "main": "client.df96235b.js"
   },
   "css": {},
   "dependencies": {
     "index.svelte": [
-      "index.04bb8946.js",
-      "MainMenu.c3bc5bb7.js",
-      "WelcomeTitle.e6620aad.js",
-      "messages.76a6385c.js",
+      "index.78b61ec3.js",
+      "MainMenu.36688461.js",
+      "WelcomeTitle.2230a8de.js",
+      "messages.5ed29594.js",
       "linkPrefixes.50c0e772.js",
-      "GenericTaskNotification.f13dd461.js",
-      "GenericButton.f6bea749.js",
-      "Link.d017d26d.js"
+      "GenericTaskNotification.bbb9e756.js",
+      "GenericButton.5a6b42b3.js",
+      "Link.075f64e6.js"
     ],
     "languageSelect.svelte": [
-      "LanguageSelect.7533416e.js",
-      "messages.76a6385c.js",
+      "LanguageSelect.c4429c75.js",
+      "messages.5ed29594.js",
       "linkPrefixes.50c0e772.js",
-      "MainTitle.af69e989.js",
-      "Link.d017d26d.js"
+      "MainTitle.35eb0e45.js",
+      "Link.075f64e6.js"
     ],
     "signingInMenu.svelte": [
-      "SigningInMenu.00e63b41.js",
-      "GenericTaskNotification.f13dd461.js",
+      "SigningInMenu.e7c9191a.js",
+      "GenericTaskNotification.bbb9e756.js",
       "linkPrefixes.50c0e772.js",
-      "WelcomeTitle.e6620aad.js",
-      "messages.76a6385c.js",
-      "GenericPasswordField.f02dfa5b.js",
-      "GenericSubmitField.cd26a317.js",
-      "Link.d017d26d.js",
-      "currentClaimIdStore.5ff136c2.js"
+      "WelcomeTitle.2230a8de.js",
+      "messages.5ed29594.js",
+      "GenericPasswordField.4c7ac525.js",
+      "GenericSubmitField.90eef316.js",
+      "Link.075f64e6.js",
+      "currentClaimIdStore.b9e54e15.js"
     ],
     "declareClaim.svelte": [
-      "DeclareClaim.d002284e.js",
-      "GenericTaskNotification.f13dd461.js",
+      "DeclareClaim.ddfd3887.js",
+      "GenericTaskNotification.bbb9e756.js",
       "linkPrefixes.50c0e772.js",
-      "GenericSubmitField.cd26a317.js",
-      "Link.d017d26d.js",
-      "DeclaringInformation.f2d42da9.js"
+      "GenericSubmitField.90eef316.js",
+      "Link.075f64e6.js",
+      "DeclaringInformation.16b783fd.js"
     ],
     "register.svelte": [
-      "Register.f64a516e.js",
-      "GenericTaskNotification.f13dd461.js",
+      "Register.1f98571b.js",
+      "GenericTaskNotification.bbb9e756.js",
       "linkPrefixes.50c0e772.js",
-      "GenericPasswordField.f02dfa5b.js",
-      "GenericSubmitField.cd26a317.js",
-      "Link.d017d26d.js"
+      "GenericPasswordField.4c7ac525.js",
+      "GenericSubmitField.90eef316.js",
+      "Link.075f64e6.js"
     ],
     "claims/[claimId].svelte": [
-      "[claimId].d7390d75.js",
-      "currentClaimIdStore.5ff136c2.js",
-      "GenericTaskNotification.f13dd461.js",
+      "[claimId].79d04321.js",
+      "currentClaimIdStore.b9e54e15.js",
+      "GenericTaskNotification.bbb9e756.js",
       "linkPrefixes.50c0e772.js",
-      "Link.d017d26d.js",
-      "DeclaringInformation.f2d42da9.js",
-      "GenericButton.f6bea749.js"
+      "Link.075f64e6.js",
+      "DeclaringInformation.16b783fd.js",
+      "GenericButton.5a6b42b3.js"
     ],
     "[language]/index.svelte": [
-      "index.9fbc62d0.js",
-      "MainMenu.c3bc5bb7.js",
-      "WelcomeTitle.e6620aad.js",
-      "messages.76a6385c.js",
+      "index.b10adce7.js",
+      "MainMenu.36688461.js",
+      "WelcomeTitle.2230a8de.js",
+      "messages.5ed29594.js",
       "linkPrefixes.50c0e772.js",
-      "GenericTaskNotification.f13dd461.js",
-      "GenericButton.f6bea749.js",
-      "Link.d017d26d.js"
+      "GenericTaskNotification.bbb9e756.js",
+      "GenericButton.5a6b42b3.js",
+      "Link.075f64e6.js"
     ],
     "[language]/valuePropositions/[valuePropositionPageLink].svelte": [
-      "[valuePropositionPageLink].d9ab3d9f.js",
-      "messages.76a6385c.js",
+      "[valuePropositionPageLink].1336044a.js",
+      "messages.5ed29594.js",
       "linkPrefixes.50c0e772.js",
-      "HeaderTitle.f89bcfd0.js",
-      "Link.d017d26d.js",
-      "retreiveValuePropositionFromValuePropositionPageLink.ca2da91b.js"
+      "HeaderTitle.265239bd.js",
+      "Link.075f64e6.js",
+      "retreiveValuePropositionFromValuePropositionPageLink.47401cce.js"
     ],
     "[language]/BusinessModel.svelte": [
-      "BusinessModel.e4b85815.js",
-      "messages.76a6385c.js",
+      "BusinessModel.3d43525d.js",
+      "messages.5ed29594.js",
       "linkPrefixes.50c0e772.js",
-      "HeaderTitle.f89bcfd0.js",
-      "DescriptionCard.1b3c3879.js",
-      "Link.d017d26d.js"
+      "HeaderTitle.265239bd.js",
+      "DescriptionCard.3943de95.js",
+      "Link.075f64e6.js"
     ],
     "[language]/landingPages/[audience]/[landingPageId].svelte": [
-      "[landingPageId].f8191af1.js",
-      "MainTitle.af69e989.js",
-      "GenericButton.f6bea749.js",
+      "[landingPageId].e0048d45.js",
+      "MainTitle.35eb0e45.js",
+      "GenericButton.5a6b42b3.js",
       "linkPrefixes.50c0e772.js",
-      "messages.76a6385c.js",
-      "retreiveValuePropositionFromValuePropositionPageLink.ca2da91b.js"
+      "messages.5ed29594.js",
+      "retreiveValuePropositionFromValuePropositionPageLink.47401cce.js"
     ],
     "[language]/LeanCanvas.svelte": [
-      "LeanCanvas.80408efe.js",
-      "messages.76a6385c.js",
+      "LeanCanvas.5084e403.js",
+      "messages.5ed29594.js",
       "linkPrefixes.50c0e772.js",
-      "HeaderTitle.f89bcfd0.js",
-      "MainTitle.af69e989.js",
-      "DescriptionCard.1b3c3879.js",
-      "Link.d017d26d.js"
+      "HeaderTitle.265239bd.js",
+      "MainTitle.35eb0e45.js",
+      "DescriptionCard.3943de95.js",
+      "Link.075f64e6.js"
     ],
     "[language]/MainMenu.svelte": [
-      "MainMenu.c3bc5bb7.js",
-      "WelcomeTitle.e6620aad.js",
-      "messages.76a6385c.js",
+      "MainMenu.36688461.js",
+      "WelcomeTitle.2230a8de.js",
+      "messages.5ed29594.js",
       "linkPrefixes.50c0e772.js",
-      "GenericTaskNotification.f13dd461.js",
-      "GenericButton.f6bea749.js",
-      "Link.d017d26d.js"
+      "GenericTaskNotification.bbb9e756.js",
+      "GenericButton.5a6b42b3.js",
+      "Link.075f64e6.js"
     ]
   }
 }

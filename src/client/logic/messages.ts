@@ -3,7 +3,6 @@ import { linkPrefixes } from "../navigation/linkPrefixes";
 import { StaticView } from "../port/interactors/BangarangUserInterfaceInteractor";
 import type { Language, MessageContract, SelectLanguage } from "./language";
 import { Message} from "./language";
-
 import { valuePropositionsDesignCanvas } from "./valueProposition/valuePropositions";
 export const welcomeMessage:MessageContract={
     en:"Welcome to",
@@ -28,39 +27,39 @@ export const demoWarningMessage:MessageContract= {
 }
 export const leanCanvasCustomerPartNameMessage:MessageContract ={
     en:`Customers`,
-    fr:`*** TRADUCTION MANQUANTE ***`
+    fr:`Audiences`
 }
 export const leanCanvasProblemPartNameMessage:MessageContract ={
     en:`Problem`,
-    fr:`*** TRADUCTION MANQUANTE ***`
+    fr:`Problème`
 }
 export const leanCanvasSolutionPartNameMessage:MessageContract ={
     en:`Solution`,
-    fr:`*** TRADUCTION MANQUANTE ***`
+    fr:`Solution`
 }
 export const leanCanvasChannelsPartNameMessage:MessageContract ={
     en:`Channels`,
-    fr:`*** TRADUCTION MANQUANTE ***`
+    fr:`Cannaux`
 }
 export const leanCanvasRevenueStreamsPartNameMessage:MessageContract ={
     en:`Revenue Streams`,
-    fr:`*** TRADUCTION MANQUANTE ***`
+    fr:`Sources de Revenus`
 }
 export const leanCanvasCostStructurePartNameMessage:MessageContract ={
     en:`Cost Structure`,
-    fr:`*** TRADUCTION MANQUANTE ***`
+    fr:`Structure de Coût`
 }
 export const leanCanvasKeyMetricsPartNameMessage:MessageContract ={
     en:`Key Metrics`,
-    fr:`*** TRADUCTION MANQUANTE ***`
+    fr:`Indicateurs clés`
 }
 export const leanCanvasUnfairAdvantagePartNameMessage:MessageContract ={
     en:`Unfair Advantage`,
-    fr:`*** TRADUCTION MANQUANTE ***`
+    fr:`Avantage Compétitif`
 }
 export const leanCanvasUniqueValuePropositionPartNameMessage:MessageContract ={
     en:`Unique Value Proposition`,
-    fr:`*** TRADUCTION MANQUANTE ***`
+    fr:`Proposition de Valeur Unique`
 }
 export const leanCanvasUnfairAdvantageMessages: {
     title:MessageContract,
@@ -70,32 +69,32 @@ export const leanCanvasUnfairAdvantageMessages: {
 }= {
     title: {
         en:``,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:``
     },
     description: {
         en:`Can't be easily copied or bought.`,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:`Ce qui ne peut pas être copié ou achetté ailleurs.`
     },
     bulletPoints:[
         {
             en:`Open Source / Transparancy.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Open Source / Transparence.`
         },
         {
             en:`Free of use.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Gratuit à l'usage.`
         },
         {
-            en:`Not fully skilled but can do it.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            en:`Not fully skilled but can do it 🙂.`,
+            fr:`Pas compétent sur tout mais on s'éxécute 🙂.`
         },
         {
             en:`Crazy Dude with crazy ideas 🙃.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Contributeur fou avec des idées folles 🙃.`
         },
         {
             en:`Cost effective.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Faibles coûts.`
         }
     ]
 }
@@ -107,28 +106,28 @@ export const leanCanvasKeyMetricsMessages: {
 }= {
     title: {
         en:``,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:``
     },
     description: {
         en:`Key activities Bangarang measure.`,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:`Les indicateurs clés de Bangarang.`
     },
     bulletPoints:[
         {
-            en:`Daily votes/ballot.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            en:`Quantity of claims.`,
+            fr:`Nombre de revendications / acte de revendiquer.`
         },
         {
-            en:`HOT votes/ballot.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            en:`HOT claims of the day.`,
+            fr:`Les revendications chaudes du moment.`
         },
         {
             en:`Organisations that are not supporting us 🙂.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Organisations qui ne nous supportent pas 🙂.`
         },
         {
             en:`People not already registered/voting for HOT vote 🙂.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Personnes qui ne sont pas encore enregistrées ou qui n'ont pas encore votées sur les votes chauds 🙂.`
         }
     ]
 }
@@ -140,28 +139,28 @@ export const leanCanvasCostStructureMessages: {
 }= {
     title: {
         en:``,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:``
     },
     description: {
         en:`Fixed and variable costs list.`,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:`Centres de cout fixes et variables.`
     },
     bulletPoints:[
         {
             en:`One producter > Me > self financing for 7 months 2 days per week > full time 80k/yr and decreasing.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Un contributeur de Bangarang > moi > auto financement pendant 7 mois sur 2 jours par semaines > temps plein 80k/an et prévu en baisse.`
         },
         {
             en:`Additionnal producters > bonus or maybe free help > not needed on early stage.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Contributeurs additionnels > bonus ou peut être pour de l'aide bénévole > pas nécéssaire en premier lieu.`
         },
         {
             en:`Infrastructure cost > not needed on early stage.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Couts d'infrastructure > pas nécéssaire ou minime en premier lieu`
         },
         {
             en:`Organizations financial/political/marketing aggressivity.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Aggréssivité financières/politiques/marketing de certaines organisations.`
         }
     ]
 }
@@ -173,24 +172,24 @@ export const leanCanvasRevenueStreamsMessages: {
 }= {
     title: {
         en:``,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:``
     },
     description: {
         en:`Sources of revenue list.`,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:`Liste des sources de financement.`
     },
     bulletPoints:[
         {
-            en:`++ User Support in exchange of being part of credits`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            en:`👍👍 User Support in exchange of being part of credits / goodies.`,
+            fr:`👍👍 Support des utilisateurs en échange de faire partie des crédits / goodies.`
         },
         {
-            en:`-- Organisation Support in exchange of being part of credits`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            en:`👎👎 Organisation Support in exchange of being part of credits`,
+            fr:`👎👎 Support des organisations en échange de faire partie des crédits / sponsors.`
         },
         {
-            en:`---- Paid features (money give advantage / power)`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            en:`👎👎👎👎 Paid features (money give advantage / power)`,
+            fr:`👎👎👎👎 Fonctionnalités payantes (l'argent apporte des avantages / du pouvoir)`
         }
     ]
 }
@@ -202,24 +201,24 @@ export const leanCanvasChannelsMessages: {
 }= {
     title: {
         en:``,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:``
     },
     description: {
         en:`Path list to customers.`,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:`Comment informer les utilisateurs au sujet de Bangarang?`
     },
     bulletPoints:[
         {
             en:`YouTube - Daily Marketing Videos.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`YouTube - Vidéos Marketing Journalières.`
         },
         {
             en:`Responce to daily news.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Revendications basées sur l'actualité journalière.`
         },
         {
             en:`Dev/Marketing Transparant Streaming.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Streaming transparant sur les actions de développement et de marketing.`
         }
     ]
 }
@@ -231,28 +230,28 @@ export const leanCanvasSolutionMessages: {
 }= {
     title: {
         en:``,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:``
     },
     description: {
         en:`Top features.`,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:`Les fonctionnalités importantes.`
     },
     bulletPoints:[
         {
             en:`Users can interact with Claims.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Les utilisateurs peuvent intéragir avec l'ensemble des revendications.`
         },
         {
             en:`User actions are only tracked at the user level.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Les actions de chaque utilisateur ne sont suivies qu'au niveau de l'utilisateur lui-même.`
         },
         {
             en:`Anyone can subscribe.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Tout le monde peut s'inscrire.`
         },
         {
-            en:`Free.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            en:`Bangarang is free.`,
+            fr:`Bangarang est gratuit.`
         }
     ]
 }
@@ -264,28 +263,28 @@ export const leanCanvasUniqueValuePropositionMessages: {
 }= {
     title: {
         en:``,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:``
     },
     description: {
         en:`Single, clear, compelling message that states why Bangarang is different and worth paying attention.`,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:`Message unique, clair et convaincant qui explique pourquoi Bangarang est différent et mérite une attention particulière.`
     },
     bulletPoints:[
         {
             en:`Provide people sovereignty.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Rendre le peuple souverain.`
         },
         {
             en:`Improve human rights: freedom, equality & justice for all.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Améliorer les droits de l'homme: liberté, égalité et justice pour tous.`
         },
         {
             en:`Remove power & authority.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Réduire les abus de pouvoir et d'autorité.`
         },
         {
             en:`Solution with energy efficiency by design.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Solution optimale énergiquement de par sa conception.`
         }
     ]
 }
@@ -297,28 +296,28 @@ export const leanCanvasProblemMessages: {
 }= {
     title: {
         en:``,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:``
     },
     description: {
         en:`List your customer's top 3 problems.`,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:`Liste des 3 principaux problèmes des utilisateurs.`
     },
     bulletPoints:[
         {
             en:`Individuals can't give their opinion anonymously.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Les individus ne peuvent pas donner leurs opinions annonymement.`
         },
         {
             en:`Individuals can't give their opinion for subjects that matters to them.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Les individus ne peuvent pas donner leurs opinnions sur des sujets qui font sens pour eux.`
         },
         {
             en:`Individuals can't pay for giving their opinion.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Les individus ne peuvent pas payer pour donner leurs opinions.`
         },
         {
             en:`Individuals don't want to move for giving their opinion.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Les individues ne veulent pas se déplacer pour donner leurs opinions.`
         }
     ]
 }
@@ -330,24 +329,24 @@ export const leanCanvasCustomerEarlyAdoptersMessages: {
 }= {
     title: {
         en:`Early Adopters`,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:`Premières audiences`
     },
     description: {
         en:`Characteristics list of ideal customers.`,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:`Les caractéristiques de notre utilisateur idéal.`
     },
     bulletPoints:[
         {
             en:`Syndicates`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Syndicats`
         },
         {
             en:`Activits`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Activistes`
         },
         {
             en:`Team members where there is lot of control`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Membres d'équipe agile`
         }
     ]
 }
@@ -359,16 +358,16 @@ export const leanCanvasCustomerSegmentsMessages: {
 }= {
     title: {
         en:`Customer Segments`,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:`Audiences`
     },
     description: {
         en:`List of target customers and users.`,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:`Liste des principaux groupes et utilisateurs cibles`
     },
     bulletPoints:[
         {
             en:`Anyone that want to give his opinion about a subject.`,
-            fr:`*** TRADUCTION MANQUANTE ***`
+            fr:`Toute personne qui souhaite donner son opinion à propos d'un sujet.`
         }
     ]
 }
@@ -439,7 +438,7 @@ export const whyThisNameMessages: {
     },
     description: {
         en:``,
-        fr:`*** TRADUCTION MANQUANTE ***`
+        fr:``
     },
     bulletPoints:[
         {
@@ -608,16 +607,16 @@ export const leanCanvas=(language:Language):Array<{partName:string,sections:Arra
     }
 ])
 export const retrieveSubTitleFromType = (type:string):MessageContract => {
-    if (type === 'customerJobs')return {en:`You have activities`,fr:`*** TRADUCTION MANQUANTE ***`}
-    if (type === 'pains')return {en:`But you have pains`,fr:`*** TRADUCTION MANQUANTE ***`}
-    if (type === 'painRelievers')return {en:`We want to help you`,fr:`*** TRADUCTION MANQUANTE ***`}
-    if (type === 'productAndServices')return {en:`We have a solution`,fr:`*** TRADUCTION MANQUANTE ***`}
-    if (type === 'gainCreators')return {en:`We provide additionnal capabilities`,fr:`*** TRADUCTION MANQUANTE ***`}
-    if (type === 'gains')return {en:`You can acheive more`,fr:`*** TRADUCTION MANQUANTE ***`}
-    return {en:`!!!ERROR UNKNOWN TYPE!!!`,fr:`*** TRADUCTION MANQUANTE ***`}
+    if (type === 'customerJobs')return {en:`You have activities`,fr:`Tu fais des actions au quotidien`}
+    if (type === 'pains')return {en:`But you have pains`,fr:`Mais tu rencontres des douleurs`}
+    if (type === 'painRelievers')return {en:`We want to help you`,fr:`Nous voulons t'aider`}
+    if (type === 'productAndServices')return {en:`We have a solution`,fr:`Nous avons une solution`}
+    if (type === 'gainCreators')return {en:`We provide additionnal capabilities`,fr:`Nous apportons encore plus`}
+    if (type === 'gains')return {en:`You can acheive more`,fr:`Tu pourras ainsi aller au delà`}
+    return {en:`!!!ERROR UNKNOWN TYPE!!!`,fr:`!!!ERREUR TYPE INCONU!!!`}
 }
 
 export const callToActionMessage:MessageContract={
-    en:`Get started`,
-    fr:`*** TRADUCTION MANQUANTE ***`
+    en:`I claim!`,
+    fr:`Je revendique!`
 }
