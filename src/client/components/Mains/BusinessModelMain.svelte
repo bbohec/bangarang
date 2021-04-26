@@ -4,6 +4,7 @@
     import { definitionOfBangarangMessages, whatIsBangarangMessages, whyThisNameMessages } from "../../logic/messages";
     import { languageStore } from "../../stores/languageStore";
     import DescriptionCard from "../Cards/DescriptionCard.svelte"
+    import { mainWithOverflowClass } from "../Styles/componentStyles";
     const BusinessModelValues:Array<DescriptionCardContract> = [
         {
             title:new Message(whatIsBangarangMessages.title).getMessage($languageStore),
@@ -22,7 +23,7 @@
         }
     ];
 </script>
-<main class="flex-grow overflow-y-auto">
+<main class={`${mainWithOverflowClass}`}>
     {#each BusinessModelValues as businessModelValue }
         <DescriptionCard descriptionCardContract={businessModelValue}/>
     {/each}

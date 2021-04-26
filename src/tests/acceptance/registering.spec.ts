@@ -132,7 +132,7 @@ describe(`Feature: Registering
                         .to.throw(credentialsMissing(scenario.userContract.username))
                 })
             it(`And the user has a '${registeringNotificationType}' notification with '${scenario.expectedNotification.status}' status and '${scenario.expectedNotification.message}' message.`,()=> {
-                expect(scenario.registeringUserNotificationInteractor.currentUserNotification?.message).equal(scenario.expectedNotification.message)
+                expect(scenario.registeringUserNotificationInteractor.currentUserNotification?.message.en).equal(scenario.expectedNotification.message.en)
                 expect(scenario.registeringUserNotificationInteractor.currentUserNotification?.status).equal(scenario.expectedNotification.status)
             })
         })

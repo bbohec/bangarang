@@ -39,9 +39,9 @@ describe(`Feature: Declaring Claim
                 .then(claim=>expect(claim).deep.equal(expectedClaim))
             
         })
-        it(`And the user has a '${declaringClaimNotificationType}' notification with '${successDeclaringClaimUserNotification.status}' status and '${successDeclaringClaimUserNotification.message}' message.`,()=> {
+        it(`And the user has a '${declaringClaimNotificationType}' notification with '${successDeclaringClaimUserNotification.status}' status and '${successDeclaringClaimUserNotification.message.en}' message.`,()=> {
             expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.status).equal(successDeclaringClaimUserNotification.status)
-            expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.message).equal(successDeclaringClaimUserNotification.message)
+            expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.message.en).equal(successDeclaringClaimUserNotification.message.en)
         })
         it(`And the user current view is the "${expectedClaimView}"`,()=> {
             expect(fakeBangarangUserInterfaceInteractor.currentView).equal(expectedClaimView)
@@ -62,8 +62,8 @@ describe(`Feature: Declaring Claim
         it(`Then the new claim is not declared on Bangarang.`,()=>{
             expect(bangarangClaimInteractor.declaredClaims.length).equal(1)
         })
-        it(`And the user has a '${declaringClaimNotificationType}' notification with '${claimAlreadyExistDeclaringClaimUserNotification(expectedClaim.title).status}' status and '${claimAlreadyExistDeclaringClaimUserNotification(expectedClaim.title).message}' message.`,()=> {
-            expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.message).equal(claimAlreadyExistDeclaringClaimUserNotification(expectedClaim.title).message)
+        it(`And the user has a '${declaringClaimNotificationType}' notification with '${claimAlreadyExistDeclaringClaimUserNotification(expectedClaim.title).status}' status and '${claimAlreadyExistDeclaringClaimUserNotification(expectedClaim.title).message.en}' message.`,()=> {
+            expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.message.en).equal(claimAlreadyExistDeclaringClaimUserNotification(expectedClaim.title).message.en)
             expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.status).equal(claimAlreadyExistDeclaringClaimUserNotification(expectedClaim.title).status)
         })
         it(`And the user current view is the "${expectedClaimView}"`,()=> {
@@ -87,8 +87,8 @@ describe(`Feature: Declaring Claim
         it(`Then the new claim is not declared on Bangarang.`,()=>{
             expect(bangarangClaimInteractor.declaredClaims.length).equal(1)
         })
-        it(`And the user has a '${declaringClaimNotificationType}' notification with '${claimAlreadyExistDeclaringClaimUserNotification(upperCaseClaim.title).status}' status and '${claimAlreadyExistDeclaringClaimUserNotification(upperCaseClaim.title).message}' message.`,()=> {
-            expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.message).equal(claimAlreadyExistDeclaringClaimUserNotification(upperCaseClaim.title).message)
+        it(`And the user has a '${declaringClaimNotificationType}' notification with '${claimAlreadyExistDeclaringClaimUserNotification(upperCaseClaim.title).status}' status and '${claimAlreadyExistDeclaringClaimUserNotification(upperCaseClaim.title).message.en}' message.`,()=> {
+            expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.message.en).equal(claimAlreadyExistDeclaringClaimUserNotification(upperCaseClaim.title).message.en)
             expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.status).equal(claimAlreadyExistDeclaringClaimUserNotification(upperCaseClaim.title).status)
         })
         it(`And the user current view is the "${expectedClaimView}"`,()=> {
@@ -107,8 +107,8 @@ describe(`Feature: Declaring Claim
         it(`Then the new claim is not declared on Bangarang.`,()=>{
             expect(bangarangClaimInteractor.declaredClaims.length).equal(0)
         })
-        it(`And the user has a '${declaringClaimNotificationType}' notification with '${claimWithoutTitleDeclaringClaimUserNotification.status}' status and '${claimWithoutTitleDeclaringClaimUserNotification.message}' message.`,()=> {
-            expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.message).equal(claimWithoutTitleDeclaringClaimUserNotification.message)
+        it(`And the user has a '${declaringClaimNotificationType}' notification with '${claimWithoutTitleDeclaringClaimUserNotification.status}' status and '${claimWithoutTitleDeclaringClaimUserNotification.message.en}' message.`,()=> {
+            expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.message.en).equal(claimWithoutTitleDeclaringClaimUserNotification.message.en)
             expect(fakeDeclaringClaimUserNotificationInteractor.currentUserNotification?.status).equal(claimWithoutTitleDeclaringClaimUserNotification.status)
         })
         it(`And the user current view is the "${declaringClaimMenuView}"`,()=> {

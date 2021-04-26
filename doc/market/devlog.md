@@ -3,22 +3,42 @@
 - ? Builder placement on clean architecture
 - Error management
 - BDD > Feature scenarios:
-    - Signing Out.
     - Declaring Multiple Proposal Claim.
+    - Signing Out.
     - Unregistering. (remove claims)
     - Delete Account
 - ❌ To-do / Not Finished
 - 👉 Doing
 - ✔️ Done
 
-## 23/04/2021 — Day 29
+## 30/04/2021 — Day 32
 -  Twitch Live https://www.twitch.tv/benjaminbohec + announces
--  Stand Up
--  Pull Req.
--  Multi-language — /!\ FR /!\
-    -  Notifications
+-  Stand Up — Done i18n
 -  UI style rework
+    -  Sign In Footer
+    -  Value Proposition Footer
+    -  Notification snack bar
+-  Pull Req.
 -  Summary.
+
+## 26/04/2021 — Day 31
+- ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
+- ✔️ Stand Up — Done i18n
+- ✔️ Multi-language — /!\ FR /!\
+    - ✔️ Declare back to main link URL
+    - ✔️ claims
+    - ✔️ Notifications
+- ❌ UI style rework
+- ❌ Pull Req.
+- ✔️ Summary.
+
+## 23/04/2021 — Day 30
+- ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
+- ✔️ Stand Up — Done translating FR
+- ❌ Multi-language — /!\ FR /!\
+    - ❌ Notifications
+- ❌ UI style rework
+- ✔️ Summary.
 
 ## 19/04/2021 — Day 29
 - ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces

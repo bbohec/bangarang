@@ -1,6 +1,7 @@
 <script lang="ts">
     import RegisterSection from "../Sections/RegisterSection.svelte"
+    import { mainClass } from "../Styles/componentStyles";
 </script>
-<main class="flex flex-col flex-grow items-center justify-center">
+<main class={mainClass}>
     <RegisterSection/>
 </main>

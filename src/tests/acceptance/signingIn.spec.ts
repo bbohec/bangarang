@@ -49,7 +49,7 @@ describe(`Feature: Signing In
         })
         */
         it(`And the user has a '${signingInNotificationType}' notification with '${successSigningInNotification.status}' status and '${successSigningInNotification.message}' message.`,()=> {
-            expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.message).equal(successSigningInNotification.message)
+            expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.message.en).equal(successSigningInNotification.message.en)
             expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.status).equal(successSigningInNotification.status)
         })
     })
@@ -70,7 +70,7 @@ describe(`Feature: Signing In
             user.signingIn(expectedUser.username,expectedUserPassword).then(()=> done())
         })
         it(`Then the user has a '${signingInNotificationType}' notification with '${alreadySignedInSigningInNotification.status}' status and '${alreadySignedInSigningInNotification.message}' message.`,()=> {
-            expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.message).equal(alreadySignedInSigningInNotification.message)
+            expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.message.en).equal(alreadySignedInSigningInNotification.message.en)
             expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.status).equal(alreadySignedInSigningInNotification.status)
         })
     })
@@ -93,7 +93,7 @@ describe(`Feature: Signing In
             user.signingIn(expectedUser.username,expectedUserPassword).then(()=> done())
         })
         it(`Then the user has a '${signingInNotificationType}' notification with '${badCredentialsSigningInNotification.status}' status and '${badCredentialsSigningInNotification.message}' message.`,()=> {
-            expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.message).equal(badCredentialsSigningInNotification.message)
+            expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.message.en).equal(badCredentialsSigningInNotification.message.en)
             expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.status).equal(badCredentialsSigningInNotification.status)
         })
     })
@@ -120,7 +120,7 @@ describe(`Feature: Signing In
         })
         it(`Then the user has a '${signingInNotificationType}' notification with '${badCredentialsSigningInNotification.status}' status and '${badCredentialsSigningInNotification.message}' message.`,()=> {
             expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.status).equal(badCredentialsSigningInNotification.status)
-            expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.message).equal(badCredentialsSigningInNotification.message)
+            expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.message.en).equal(badCredentialsSigningInNotification.message.en)
         })
     })
 })

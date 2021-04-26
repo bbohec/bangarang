@@ -1,6 +1,7 @@
 <script lang="ts">
     import SearchedClaims from "../Lists/SearchedClaims.svelte"
+    import { mainClass } from "../Styles/componentStyles";
 </script>
-<main class="flex-grow overflow-y-auto ml-1 mr-4 mx-auto max-w-screen-2xl">
+<main class={mainClass}>
     <SearchedClaims/>
 </main>

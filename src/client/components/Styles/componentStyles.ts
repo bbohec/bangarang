@@ -1,0 +1,6 @@
+export const headerCenteredClass = "flex flex-col flex-grow mx-auto px-1 justify-center items-center max-w-screen-md"
+export const headerEndClass = "flex flex-col flex-grow mx-auto px-1 justify-end items-center max-w-screen-md"
+export const mainClass = "flex flex-col flex-grow m-auto p-1 justify-center items-center max-w-screen-md"
+export const mainWithOverflowClass = "flex flex-col flex-grow m-auto p-1 items-center max-w-screen-md overflow-y-auto"
+export const footerClass = "flex flex-col pt-2 pb-16 lg:pb-1 bg-bangarang-veryLightEmphasis"
+export const appBarClass = "flex w-full max-w-screen-md justify-between m-auto"

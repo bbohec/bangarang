@@ -1,16 +1,18 @@
 <script lang="ts">
-    import Link from "../Links/Link.svelte"
     import DeclaringInformation from "../Notification/DeclaringInformation.svelte"
     import { declaringClaimUserNotificationStore } from "../../stores/declaringClaimStore";
-    import { StaticView } from "../../port/interactors/BangarangUserInterfaceInteractor";
+    import NavigateBackToMainMenu from "../Destination/NavigateBackToMainMenu.svelte"
+    import { appBarClass, footerClass } from "../Styles/componentStyles";
 </script>
-<footer class="flex flex-col mb-1 mx-auto max-w-screen-2xl">
-    {#if $declaringClaimUserNotificationStore.status === "Executing"}
-        <DeclaringInformation/>
-    {:else}
-        <section class="flex justify-between items-center">
-            <Link size="small" linkHref={StaticView.MainMenu} linkName="<< Back to main menu." textAlign={"text-left"}/>
+<footer class={footerClass}>
+    {#if $declaringClaimUserNotificationStore.status !== "Executing"}
+        <section class={appBarClass}>
+            <NavigateBackToMainMenu/>
+        </section>
+        {#if $declaringClaimUserNotificationStore.status !== "Idle"}
             <DeclaringInformation/>
-        </section>        
+        {/if}
+    {:else}
+        <DeclaringInformation/> 
     {/if}
 </footer>

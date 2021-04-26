@@ -1,8 +1,9 @@
 <script lang="ts">
+    import { headerCenteredClass } from "../Styles/componentStyles";
     import MainTitle from "../Titles/MainTitle.svelte"
     export let currentSelectYourLanguageMessage:string
 </script>
-<header class="flex flex-col flex-grow items-center justify-end">
+<header class={headerCenteredClass}>
     <MainTitle
         title={currentSelectYourLanguageMessage}
         position="center"

@@ -55,6 +55,10 @@ function subscribe(store, ...callbacks) {
     const unsub = store.subscribe(...callbacks);
     return unsub.unsubscribe ? () => unsub.unsubscribe() : unsub;
 }
+function set_store_value(store, ret, value = ret) {
+    store.set(value);
+    return ret;
+}
 
 let current_component;
 function set_current_component(component) {
@@ -290,43 +294,10 @@ const routes = (d => [
 	},
 
 	{
-		// SigningInMenu.svelte
-		pattern: /^\/SigningInMenu\/?$/,
-		parts: [
-			{ i: 2 }
-		]
-	},
-
-	{
-		// DeclareClaim.svelte
-		pattern: /^\/DeclareClaim\/?$/,
-		parts: [
-			{ i: 3 }
-		]
-	},
-
-	{
-		// Register.svelte
-		pattern: /^\/Register\/?$/,
-		parts: [
-			{ i: 4 }
-		]
-	},
-
-	{
-		// claims/[claimId].svelte
-		pattern: /^\/claims\/([^/]+?)\/?$/,
-		parts: [
-			null,
-			{ i: 5, params: match => ({ claimId: d(match[1]) }) }
-		]
-	},
-
-	{
 		// [language]/index.svelte
 		pattern: /^\/([^/]+?)\/?$/,
 		parts: [
-			{ i: 6, params: match => ({ language: d(match[1]) }) }
+			{ i: 2, params: match => ({ language: d(match[1]) }) }
 		]
 	},
 
@@ -336,7 +307,7 @@ const routes = (d => [
 		parts: [
 			null,
 			null,
-			{ i: 7, params: match => ({ language: d(match[1]), valuePropositionPageLink: d(match[2]) }) }
+			{ i: 3, params: match => ({ language: d(match[1]), valuePropositionPageLink: d(match[2]) }) }
 		]
 	},
 
@@ -345,7 +316,25 @@ const routes = (d => [
 		pattern: /^\/([^/]+?)\/BusinessModel\/?$/,
 		parts: [
 			null,
-			{ i: 8, params: match => ({ language: d(match[1]) }) }
+			{ i: 4, params: match => ({ language: d(match[1]) }) }
+		]
+	},
+
+	{
+		// [language]/SigningInMenu.svelte
+		pattern: /^\/([^/]+?)\/SigningInMenu\/?$/,
+		parts: [
+			null,
+			{ i: 5, params: match => ({ language: d(match[1]) }) }
+		]
+	},
+
+	{
+		// [language]/DeclareClaim.svelte
+		pattern: /^\/([^/]+?)\/DeclareClaim\/?$/,
+		parts: [
+			null,
+			{ i: 6, params: match => ({ language: d(match[1]) }) }
 		]
 	},
 
@@ -356,7 +345,7 @@ const routes = (d => [
 			null,
 			null,
 			null,
-			{ i: 9, params: match => ({ language: d(match[1]), audience: d(match[2]), landingPageId: d(match[3]) }) }
+			{ i: 7, params: match => ({ language: d(match[1]), audience: d(match[2]), landingPageId: d(match[3]) }) }
 		]
 	},
 
@@ -365,7 +354,7 @@ const routes = (d => [
 		pattern: /^\/([^/]+?)\/LeanCanvas\/?$/,
 		parts: [
 			null,
-			{ i: 10, params: match => ({ language: d(match[1]) }) }
+			{ i: 8, params: match => ({ language: d(match[1]) }) }
 		]
 	},
 
@@ -374,7 +363,26 @@ const routes = (d => [
 		pattern: /^\/([^/]+?)\/MainMenu\/?$/,
 		parts: [
 			null,
-			{ i: 11, params: match => ({ language: d(match[1]) }) }
+			{ i: 9, params: match => ({ language: d(match[1]) }) }
+		]
+	},
+
+	{
+		// [language]/Register.svelte
+		pattern: /^\/([^/]+?)\/Register\/?$/,
+		parts: [
+			null,
+			{ i: 10, params: match => ({ language: d(match[1]) }) }
+		]
+	},
+
+	{
+		// [language]/claims/[claimId].svelte
+		pattern: /^\/([^/]+?)\/claims\/([^/]+?)\/?$/,
+		parts: [
+			null,
+			null,
+			{ i: 11, params: match => ({ language: d(match[1]), claimId: d(match[2]) }) }
 		]
 	}
 ])(decodeURIComponent);
@@ -559,6 +567,7 @@ class Message {
         this.messageContract = messageContract;
     }
     getMessage(language) {
+        console.log(language);
         return this.messageContract[language];
     }
 }
@@ -1272,24 +1281,24 @@ const bangarangContactFormMessage = {
     fr: `Formulaire de contact Bangarang.`
 };
 const declareClaimTextButtonMessage = {
-    en: `Declare new claim`,
-    fr: `Déclarer une nouvelle revendication`
+    en: `Declare claim`,
+    fr: `Déclarer une revendication`
 };
 const bangarangBusinessModelTitleMessage = {
     en: `Bangarang Business Model`,
     fr: `Le Business Model de Bangarang`
 };
 const faqLinkNameMessage = {
-    en: `What is Bangarang?`,
-    fr: `C'est quoi Bangarang?`
+    en: `FAQ`,
+    fr: `Questions fréquentes`
 };
 const claimSearchBarPlaceholderMessage = {
-    en: `Find a claim...`,
-    fr: "Chercher une revendication..."
+    en: `Find ...`,
+    fr: "Rechercher ..."
 };
 const backToMainMenuLinkMessage = {
-    en: `Back to main menu.`,
-    fr: `Retour au menu principal.`
+    en: `Main menu`,
+    fr: `Menu principal`
 };
 const selectLanguages = {
     en: {
@@ -1423,6 +1432,114 @@ const callToActionMessage = {
     en: `I claim!`,
     fr: `Je revendique!`
 };
+const claimTypeMessage = {
+    en: `Claim type`,
+    fr: `Type de revendication`
+};
+const claimTitlePlaceholderMessage = {
+    en: `Describe the claim ...`,
+    fr: `Décris la revendication...`
+};
+const claimTitleFieldNameMessage = {
+    en: `Claim Title`,
+    fr: `Titre de la Revendication.`
+};
+const declareClaimSubmitMessage = {
+    en: `Declare`,
+    fr: `Déclarer`
+};
+const simpleClaimTypeMessage = {
+    en: `Claim as a proposal.`,
+    fr: `Revendication considérée comme unique proposition.`
+};
+const signOutMessage = {
+    en: `SignOut`,
+    fr: `Déconnexion`
+};
+const signInFormTitleMessage = {
+    en: `Your account credentials`,
+    fr: `Tes identifiants`
+};
+const signInFormUsernameMessage = {
+    en: `Username:`,
+    fr: `Nom du compte:`
+};
+const signInFormPasswordMessage = {
+    en: `Password:`,
+    fr: `Mot de passe:`
+};
+const signInFormSubmitMessage = {
+    en: `Sign In`,
+    fr: `Connexion`
+};
+const signInRegisterMessage = {
+    en: `Would you like to register on Bangarang?`,
+    fr: `Veux-tu t'enregistrer sur Bangarang?`
+};
+const backToTheClaimMessage = {
+    en: `Back to the claim.`,
+    fr: `Retourner sur la revendication.`
+};
+const backToSignInMenuMessage = {
+    en: `Sign In`,
+    fr: `Connexion`
+};
+const registerOnBangarangTitleMessage = {
+    en: `Register on`,
+    fr: `Enregistres-toi sur`
+};
+const registerSecurityMessage = {
+    en: `The current stage of development of Bangarang implies that the security of the accounts is not guaranteed. Please only create accounts with credentials that can be used for testing and demonstration purposes.`,
+    fr: `Le stage actuel de développement de Bangarang implique que la sécurité des comptes n'est pas garantie. Ne crées un compte qu'avec des identifiants qui peuvent être utilisées à des fins de test ou de démo.`
+};
+const registerFormTitleMessage = {
+    en: `Create your account.`,
+    fr: `Crées ton compte.`
+};
+const registerFormUsernameMessage = {
+    en: `Username:`,
+    fr: `Nom d'utilisateur:`
+};
+const registerFormFullnameMessage = {
+    en: `Fullname:`,
+    fr: `Nom/Prénom:`
+};
+const registerFormEmailMessage = {
+    en: `E-mail:`,
+    fr: `E-mail:`
+};
+const registerFormPasswordMessage = {
+    en: `Password:`,
+    fr: `Mot de passe:`
+};
+const registerFormSubmitMessage = {
+    en: `Register`,
+    fr: `S'inscrire`
+};
+const peopleClaimedMessage = {
+    en: `people claimed`,
+    fr: `personnes ont revendiqués`
+};
+const claimAgainstMessage = {
+    en: `Against`,
+    fr: `Contre`
+};
+const claimForMessage = {
+    en: `For`,
+    fr: `Pour`
+};
+const shareClaimMessage = {
+    en: `Share claim`,
+    fr: `Partager la revendication`
+};
+const claimCopiedSuccessMessage = {
+    en: `Claim address copied to clipboard.`,
+    fr: `Lien de partage de la revendication copié dans le presse-papier.`
+};
+const claimCopiedErrorMessage = {
+    en: `Failed to copy claim address to clipboard`,
+    fr: `Erreur lors de la copie de la revendication dans le presse-papier`
+};
 
 /* src\client\components\Titles\WelcomeTitle.svelte generated by Svelte v3.34.0 */
 
@@ -1459,45 +1576,52 @@ const DemoPreviewCard = create_ssr_component(($$result, $$props, $$bindings, slo
     <a${add_attribute("href", googleFormUrl, 0)} target="${"_blank"}" class="${" m-1 underline text-bangarang-darkEmphasis text-sm"}">${escape(new Message(bangarangContactFormMessage).getMessage($languageStore))}</a></div>`;
 });
 
+const headerCenteredClass = "flex flex-col flex-grow mx-auto px-1 justify-center items-center max-w-screen-md";
+const headerEndClass = "flex flex-col flex-grow mx-auto px-1 justify-end items-center max-w-screen-md";
+const mainClass = "flex flex-col flex-grow m-auto p-1 justify-center items-center max-w-screen-md";
+const mainWithOverflowClass = "flex flex-col flex-grow m-auto p-1 items-center max-w-screen-md overflow-y-auto";
+const footerClass = "flex flex-col pt-2 pb-16 lg:pb-1 bg-bangarang-veryLightEmphasis";
+const appBarClass = "flex w-full max-w-screen-md justify-between m-auto";
+
 /* src\client\components\Mains\MainMenuMain.svelte generated by Svelte v3.34.0 */
 
 const MainMenuMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<main class="${"flex-grow overflow-y-auto flex flex-col items-center justify-center mx-auto max-w-screen-2xl p-1"}">${validate_component(WelcomeTitle, "WelcomeTitle").$$render($$result, {}, {}, {})}
+	return `<main${add_attribute("class", mainClass, 0)}>${validate_component(WelcomeTitle, "WelcomeTitle").$$render($$result, {}, {}, {})}
     ${validate_component(BangarangDescription, "BangarangDescription").$$render($$result, {}, {}, {})}
     ${validate_component(DemoPreviewCard, "DemoPreviewCard").$$render($$result, {}, {}, {})}</main>`;
 });
 
-const idleSigningInNotification = { status: "Idle", message: "Waiting for SigningIn Event.", type: "Signing In" };
-const successSigningInNotification = { status: "Success", message: "Signed In", type: "Signing In" };
-const alreadySignedInSigningInNotification = { status: "Failed", message: "You are already signed in. Please signout.", type: "Signing In" };
-const badCredentialsSigningInNotification = { status: "Failed", message: "Bad credentials. Please verify your credentials or register to Bangarang.", type: "Signing In" };
+const idleSigningInNotification = { status: "Idle", message: { en: "Waiting for SigningIn Event.", fr: `En attente d'un événément de connexion.` }, type: "Signing In" };
+const successSigningInNotification = { status: "Success", message: { en: "Signed In.", fr: `Connecté.` }, type: "Signing In" };
+const alreadySignedInSigningInNotification = { status: "Failed", message: { en: "Already signed in.", fr: `Déjà connecté.` }, type: "Signing In" };
+const badCredentialsSigningInNotification = { status: "Failed", message: { en: "Bad credentials. Verify credentials or register to Bangarang.", fr: `Mauvais identifiants. Vérifier les identifiants ou s'enregistrer sur Bangarang.` }, type: "Signing In" };
 
-const idleDeclaringClaimUserNotification = { status: "Idle", message: "Waiting for claim declaration event.", type: "Declaring claim." };
-const successDeclaringClaimUserNotification = { status: "Success", message: "Declared.", type: "Declaring claim." };
-const claimWithoutTitleDeclaringClaimUserNotification = { status: "Failed", message: "A claim must have a title.", type: "Declaring claim." };
-const claimAlreadyExistDeclaringClaimUserNotification = (claimTitle) => ({ status: "Failed", message: `The claim "${claimTitle}" already exist`, type: "Declaring claim." });
+const idleDeclaringClaimUserNotification = { status: "Idle", message: { en: "Waiting for claim declaration event.", fr: `En attente d'événement de déclaration.` }, type: "Declaring claim." };
+const successDeclaringClaimUserNotification = { status: "Success", message: { en: "Declared.", fr: `Déclaré.` }, type: "Declaring claim." };
+const claimWithoutTitleDeclaringClaimUserNotification = { status: "Failed", message: { en: "A claim must have a title.", fr: `Une revendication doit avoir un titre.` }, type: "Declaring claim." };
+const claimAlreadyExistDeclaringClaimUserNotification = (claimTitle) => ({ status: "Failed", message: { en: `The claim "${claimTitle}" already exist.`, fr: `La revendication "${claimTitle}" existe déjà.` }, type: "Declaring claim." });
 
-const idleRetrievingClaimUserNotification = { status: "Idle", message: "Waiting for retrieving claim event.", type: "Retrieving claim." };
-const executingRetrievingClaimUserNotification = { status: "Executing", message: "Waiting for retrieving claim event.", type: "Retrieving claim." };
-const successRetrievingClaimUserNotification = (claim) => ({ status: "Success", message: "Claim retrieved.", type: "Retrieving claim.", claimWithMemberPreviousClaimChoice: claim });
-const claimNotDeclaredRetrievingClaimUserNotification = ({ status: "Failed", message: "The claim is not declared on Bangarang.", type: "Retrieving claim." });
-const unexpectedErrorRetrievingClaimUserNotification = (error) => ({ status: "Failed", message: `Unexpected Error: '${error.message}'.`, type: "Retrieving claim." });
+const idleRetrievingClaimUserNotification = { status: "Idle", message: { en: "Waiting for retrieving claim event.", fr: `En attente d'événement de récupération de revendication.` }, type: "Retrieving claim." };
+const executingRetrievingClaimUserNotification = { status: "Executing", message: { en: "Retrieving claim...", fr: `Récupération de revendication en cours...` }, type: "Retrieving claim." };
+const successRetrievingClaimUserNotification = (claim) => ({ status: "Success", message: { en: "Claim retrieved.", fr: `Revendication récupérée.` }, type: "Retrieving claim.", claimWithMemberPreviousClaimChoice: claim });
+const claimNotDeclaredRetrievingClaimUserNotification = ({ status: "Failed", message: { en: "The claim is not declared on Bangarang.", fr: `La revendication n'est pas déclarée sur Bangarang.` }, type: "Retrieving claim." });
+const unexpectedErrorRetrievingClaimUserNotification = (error) => ({ status: "Failed", message: { en: `Unexpected Error: '${error.message}'.`, fr: `Erreur inatendue: '${error.message}'` }, type: "Retrieving claim." });
 
-const executingSearchingClaimsUserNotification = { status: "Executing", message: `Searching claims...`, type: "Searching Claims" };
-const idleSearchingClaimsUserNotification = { status: "Idle", message: `Waiting for searching claims event.`, type: "Searching Claims" };
-const successSearchingClaimsUserNotification = (retreivedClaims) => ({ status: "Success", message: `${retreivedClaims.length} claims found.`, type: "Searching Claims", retreivedClaims });
-const unexpectedErrorSearchingClaimsUserNotification = (error) => ({ status: "Failed", message: `Unexpected error '${error.message}'.`, type: "Searching Claims" });
+const executingSearchingClaimsUserNotification = { status: "Executing", message: { en: `Searching claims...`, fr: `Recherche de revendications en cours...` }, type: "Searching Claims" };
+const idleSearchingClaimsUserNotification = { status: "Idle", message: { en: `Waiting for searching claims event.`, fr: `En attente d'événement de recherche de revendication.` }, type: "Searching Claims" };
+const successSearchingClaimsUserNotification = (retreivedClaims) => ({ status: "Success", message: { en: `${retreivedClaims.length} claims found.`, fr: `${retreivedClaims.length} revendications trouvées.` }, type: "Searching Claims", retreivedClaims });
+const unexpectedErrorSearchingClaimsUserNotification = (error) => ({ status: "Failed", message: { en: `Unexpected error '${error.message}'.`, fr: `Erreur innatendue: '${error.message}'` }, type: "Searching Claims" });
 /*
 export const claimNotDeclaredRetrievingClaimUserNotification:RetrievingClaimUserNotificationContract = ({status:"Failed", message:"The claim is not declared on Bangarang.",type:"Retrieving claim."})
 */
 
-const idleClaimingUserNotification = { status: "Idle", message: `Wainting for claiming event.`, type: "Claiming." };
-const executingClaimingUserNotification = { status: "Executing", message: `Executing claiming event.`, type: "Claiming." };
-const successClaimingUserNotification = { status: "Success", message: `Claimed.`, type: "Claiming." };
-const claimNotDeclaredClaimingUserNotification = (claimId) => ({ status: "Failed", message: `The claim '${claimId}' is not declared on Bangarang.`, type: "Claiming." });
-const mustBeSignedInClaimingUserNotification = { status: "Failed", message: `You must be signed in in order to claim.`, type: "Claiming." };
-const multipleTimesClaimingUserNotification = (claimChoice) => ({ status: "Failed", message: `Claiming '${claimChoice}' multiple times on a claim is forbidden.`, type: "Claiming." });
-const unexpectedErrorClaimingUserNotification = (error) => ({ status: "Failed", message: `Unexpected Error: '${error.message}'.`, type: "Claiming." });
+const idleClaimingUserNotification = { status: "Idle", message: { en: `Waiting for claiming event.`, fr: `En attente de l'événementer revendiquer.` }, type: "Claiming." };
+const executingClaimingUserNotification = { status: "Executing", message: { en: `Executing claiming event.`, fr: `Revendication en cours.` }, type: "Claiming." };
+const successClaimingUserNotification = { status: "Success", message: { en: `Claimed.`, fr: `Revendiqué.` }, type: "Claiming." };
+const claimNotDeclaredClaimingUserNotification = (claimId) => ({ status: "Failed", message: { en: `The claim '${claimId}' is not declared on Bangarang.`, fr: `La revendication '${claimId}' n'est pas déclarée dans Bangarang.` }, type: "Claiming." });
+const mustBeSignedInClaimingUserNotification = { status: "Failed", message: { en: `You must be signed in in order to claim.`, fr: `Tu dois être connecté afin de pouvoir revendiquer.` }, type: "Claiming." };
+const multipleTimesClaimingUserNotification = (claimChoice) => ({ status: "Failed", message: { en: `Claiming '${claimChoice}' multiple times on a claim is forbidden.`, fr: `Revendiquer '${claimChoice}' plusieurs fois sur une revendication est interdit.` }, type: "Claiming." });
+const unexpectedErrorClaimingUserNotification = (error) => ({ status: "Failed", message: { en: `Unexpected Error: '${error.message}'.`, fr: `Erreur inatendue: '${error.message}'.` }, type: "Claiming." });
 
 class Claim {
     constructor(claimContract) {
@@ -1537,11 +1661,11 @@ class Claim {
     }
 }
 
-const successRegisteringUserNotification = { status: "Success", message: "Registered.", type: "Registering." };
-const badEmailRegisteringUserNotification = { status: "Failed", message: "Email invalid.", type: "Registering." };
-const unsecurePasswordRegisteringUserNotification = { status: "Failed", message: "Unsecure password.", type: "Registering." };
-const alreadyMemberRegisteringUserNotification = { status: "Failed", message: "Already member of Bangarang.", type: "Registering." };
-const idleMemberRegisteringUserNotification = { status: "Idle", message: "Waiting for Registering Event.", type: "Registering." };
+const successRegisteringUserNotification = { status: "Success", message: { en: "Registered.", fr: `Enregistré.` }, type: "Registering." };
+const badEmailRegisteringUserNotification = { status: "Failed", message: { en: "Email invalid.", fr: `Email invalide.` }, type: "Registering." };
+const unsecurePasswordRegisteringUserNotification = { status: "Failed", message: { en: "Unsecure password.", fr: `Mot de passe pas sécurisé.` }, type: "Registering." };
+const alreadyMemberRegisteringUserNotification = { status: "Failed", message: { en: "Already member of Bangarang.", fr: `Déjà membre de Bangarang.` }, type: "Registering." };
+const idleMemberRegisteringUserNotification = { status: "Idle", message: { en: "Waiting for Registering Event.", fr: `En attente d'événement d'enregistrement.` }, type: "Registering." };
 
 class User {
     constructor(bangarangAdapters) {
@@ -2137,10 +2261,16 @@ class RestBangarangMembersInteractor {
 
 class SvelteBangarangUserInterfaceInteractor {
     goToSigningInMenu() {
-        goto(StaticView.SigningInMenu);
+        let url = "/";
+        const unsubscribeLanguageStore = languageStore.subscribe(language => url = `/${language}/${StaticView.SigningInMenu}`);
+        goto(url);
+        unsubscribeLanguageStore();
     }
     goToClaim(claimId) {
-        goto(linkPrefixes.claimLinkPrefix + claimId);
+        let url = "/";
+        const unsubscribeLanguageStore = languageStore.subscribe(language => url = `/${language}/${linkPrefixes.claimLinkPrefix}${claimId}`);
+        goto(url);
+        unsubscribeLanguageStore();
     }
 }
 
@@ -2403,103 +2533,105 @@ const ClaimSearchBar = create_ssr_component(($$result, $$props, $$bindings, slot
 
 	$$unsubscribe_claimSearchCriteriaStore();
 	$$unsubscribe_languageStore();
-	return `<input class="${"text-xl text-center my-1 px-1 pb-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}" type="${"text"}"${add_attribute("placeholder", new Message(claimSearchBarPlaceholderMessage).getMessage($languageStore), 0)}${add_attribute("value", $claimSearchCriteriaStore, 1)}${add_attribute("this", searchBar, 1)}>`;
+	return `<input class="${"text-center px-1 mx-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border shadow rounded-md"}" type="${"text"}"${add_attribute("placeholder", new Message(claimSearchBarPlaceholderMessage).getMessage($languageStore), 0)}${add_attribute("value", $claimSearchCriteriaStore, 1)}${add_attribute("this", searchBar, 1)}>`;
 });
 
-/* src\client\components\Buttons\GenericButton.svelte generated by Svelte v3.34.0 */
+const documentAddSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+</svg>`;
+const informationCircle = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+</svg>`;
+const chevronDoubleLeft = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+</svg>`;
+const library = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+</svg>`;
+const share = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+</svg>`;
+const home = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+</svg>`;
+const logIn = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+</svg>`;
 
-const GenericButton = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let { textbutton = "CLICK ME!" } = $$props;
-	let { size = "medium" } = $$props;
+/* src\client\components\Destination\GenericDestination.svelte generated by Svelte v3.34.0 */
+
+const GenericDestination = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	
+
+	let { destinationMessage = {
+		en: "Missing Message!",
+		fr: "Message manquant!"
+	} } = $$props;
+
 	let { onClickAction } = $$props;
-	let { customClasses = "" } = $$props;
-	let { color = "light" } = $$props;
-	let { disabled = false } = $$props;
-
-	const textSizeFromSize = size => {
-		if (size === "large") return "text-2xl";
-		return "text-xl";
-	};
-
-	const marginTopFromSize = size => {
-		if (size === "large") return "mt-4";
-		return "";
-	};
-
-	const borderFromSize = size => {
-		if (size === "large") return "border-2";
-		return "border";
-	};
-
-	const buttonThemeFromColorAndDisabled = (color, disabled) => {
-		if (color === "dark" && !disabled) return "text-bangarang-light border-bangarang-light bg-bangarang-dark";
-		if (color === "dark" && disabled) return "text-bangarang-darkEmphasis border-bangarang-darkEmphasis bg-bangarang-darkEmphasis";
-		if (color === "light" && disabled) return "text-bangarang-lightEmphasis border-bangarang-lightEmphasis bg-bangarang-light";
-		return "text-bangarang-dark border-bangarang-dark bg-bangarang-light";
-	};
-
-	if ($$props.textbutton === void 0 && $$bindings.textbutton && textbutton !== void 0) $$bindings.textbutton(textbutton);
-	if ($$props.size === void 0 && $$bindings.size && size !== void 0) $$bindings.size(size);
+	let { svgHtml = "Missing SVG" } = $$props;
+	if ($$props.destinationMessage === void 0 && $$bindings.destinationMessage && destinationMessage !== void 0) $$bindings.destinationMessage(destinationMessage);
 	if ($$props.onClickAction === void 0 && $$bindings.onClickAction && onClickAction !== void 0) $$bindings.onClickAction(onClickAction);
-	if ($$props.customClasses === void 0 && $$bindings.customClasses && customClasses !== void 0) $$bindings.customClasses(customClasses);
-	if ($$props.color === void 0 && $$bindings.color && color !== void 0) $$bindings.color(color);
-	if ($$props.disabled === void 0 && $$bindings.disabled && disabled !== void 0) $$bindings.disabled(disabled);
+	if ($$props.svgHtml === void 0 && $$bindings.svgHtml && svgHtml !== void 0) $$bindings.svgHtml(svgHtml);
+	$$unsubscribe_languageStore();
 
-	return `${disabled
-	? `<button class="${escape(textSizeFromSize(size)) + " " + escape(marginTopFromSize(size)) + " " + escape(customClasses) + " " + escape(buttonThemeFromColorAndDisabled(color, disabled)) + " my-1 px-1 pb-1  " + escape(borderFromSize(size)) + " rounded-md"}" disabled>${escape(textbutton)}</button>`
-	: `<button class="${escape(textSizeFromSize(size)) + " " + escape(marginTopFromSize(size)) + " " + escape(customClasses) + " " + escape(buttonThemeFromColorAndDisabled(color, disabled)) + " my-1 px-1 pb-1  " + escape(borderFromSize(size)) + " rounded-md"}">${escape(textbutton)}</button>`}`;
+	return `<button class="${"flex flex-col items-center px-1 w-20 text-bangarang-lightEmphasis"}">${svgHtml}
+    <p class="${"text-xs"}">${escape(new Message(destinationMessage).getMessage($languageStore))}</p></button>`;
 });
 
-/* src\client\components\Links\Link.svelte generated by Svelte v3.34.0 */
+/* src\client\components\Destination\NavigateToDeclareClaim.svelte generated by Svelte v3.34.0 */
 
-const Link = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let { linkName = "link name not provided to component!" } = $$props;
-	let { linkHref = "missing" } = $$props;
-	let { size } = $$props;
-	let { textAlign = "text-center" } = $$props;
+const NavigateToDeclareClaim = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	const navigateToUrl = url => goto(url);
+	const navigateToDeclareClaim = () => navigateToUrl(`/${$languageStore}/${StaticView.DeclareClaim}`);
+	$$unsubscribe_languageStore();
 
-	const textSizeFromSize = size => {
-		if (size === "small") return "text-xs";
-		if (size === "large") return "text-2xl";
-		return "";
-	};
+	return `${validate_component(GenericDestination, "GenericDestination").$$render(
+		$$result,
+		{
+			destinationMessage: declareClaimTextButtonMessage,
+			onClickAction: navigateToDeclareClaim,
+			svgHtml: documentAddSvg
+		},
+		{},
+		{}
+	)}`;
+});
 
-	if ($$props.linkName === void 0 && $$bindings.linkName && linkName !== void 0) $$bindings.linkName(linkName);
-	if ($$props.linkHref === void 0 && $$bindings.linkHref && linkHref !== void 0) $$bindings.linkHref(linkHref);
-	if ($$props.size === void 0 && $$bindings.size && size !== void 0) $$bindings.size(size);
-	if ($$props.textAlign === void 0 && $$bindings.textAlign && textAlign !== void 0) $$bindings.textAlign(textAlign);
-	return `<a class="${escape(textSizeFromSize(size)) + " " + escape(textAlign) + " text-bangarang-darkEmphasis underline mb-1"}"${add_attribute("href", linkHref, 0)}>${escape(linkName)}</a>`;
+/* src\client\components\Destination\NavigateToBusinessModel.svelte generated by Svelte v3.34.0 */
+
+const NavigateToBusinessModel = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	const navigateToUrl = url => goto(url);
+	const navigateToBusinessModel = () => navigateToUrl(`/${$languageStore}/${StaticView.BusinessModel}`);
+	$$unsubscribe_languageStore();
+
+	return `${validate_component(GenericDestination, "GenericDestination").$$render(
+		$$result,
+		{
+			destinationMessage: faqLinkNameMessage,
+			onClickAction: navigateToBusinessModel,
+			svgHtml: informationCircle
+		},
+		{},
+		{}
+	)}`;
 });
 
 /* src\client\components\Footers\MainMenuFooter.svelte generated by Svelte v3.34.0 */
 
 const MainMenuFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $languageStore, $$unsubscribe_languageStore;
-	validate_store(languageStore, "languageStore");
-	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
-	const navigateToUrl = () => goto(StaticView.DeclareClaim);
-	$$unsubscribe_languageStore();
-
-	return `<footer class="${"flex flex-col mb-1 mx-auto max-w-screen-2xl"}">${validate_component(ClaimSearchBar, "ClaimSearchBar").$$render($$result, {}, {}, {})}
-    ${validate_component(GenericButton, "GenericButton").$$render(
-		$$result,
-		{
-			textbutton: new Message(declareClaimTextButtonMessage).getMessage($languageStore),
-			onClickAction: navigateToUrl
-		},
-		{},
-		{}
-	)}
-    ${validate_component(Link, "Link").$$render(
-		$$result,
-		{
-			linkName: new Message(faqLinkNameMessage).getMessage($languageStore),
-			linkHref: `/${$languageStore}/${StaticView.BusinessModel}`,
-			size: "small"
-		},
-		{},
-		{}
-	)}</footer>`;
+	return `<footer${add_attribute("class", `${footerClass} `, 0)}><section${add_attribute("class", appBarClass, 0)}>${validate_component(NavigateToBusinessModel, "NavigateToBusinessModel").$$render($$result, {}, {}, {})}
+        ${validate_component(ClaimSearchBar, "ClaimSearchBar").$$render($$result, {}, {}, {})}
+        ${validate_component(NavigateToDeclareClaim, "NavigateToDeclareClaim").$$render($$result, {}, {}, {})}</section></footer>`;
 });
 
 /* src\client\views\MainMenuView.svelte generated by Svelte v3.34.0 */
@@ -2516,12 +2648,15 @@ const SearchedClaim = create_ssr_component(($$result, $$props, $$bindings, slots
 	let { claimLink } = $$props;
 	if ($$props.title === void 0 && $$bindings.title && title !== void 0) $$bindings.title(title);
 	if ($$props.claimLink === void 0 && $$bindings.claimLink && claimLink !== void 0) $$bindings.claimLink(claimLink);
-	return `<div class="${"border rounded shadow my-2 p-2 border-bangarang-lightEmphasis flex items-center"}"><a${add_attribute("href", claimLink, 0)} class="${" text-bangarang-dark flex-grow text-justify"}">${escape(title)}</a></div>`;
+	return `<div class="${"self-stretch border rounded shadow my-2 p-2 border-bangarang-lightEmphasis flex items-center"}"><a${add_attribute("href", claimLink, 0)} class="${" text-bangarang-dark flex-grow text-justify"}">${escape(title)}</a></div>`;
 });
 
 /* src\client\components\Lists\SearchedClaims.svelte generated by Svelte v3.34.0 */
 
 const SearchedClaims = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
 	
 	let searchedClaims = new Array();
 
@@ -2529,11 +2664,13 @@ const SearchedClaims = create_ssr_component(($$result, $$props, $$bindings, slot
 		if (searchingClaimsUserNotification.status === "Success" && searchingClaimsUserNotification.retreivedClaims) searchedClaims = searchingClaimsUserNotification.retreivedClaims;
 	});
 
+	$$unsubscribe_languageStore();
+
 	return `${each(searchedClaims, searchedClaim => `${validate_component(SearchedClaim, "SearchedClaim").$$render(
 		$$result,
 		{
 			title: searchedClaim.title,
-			claimLink: "/" + linkPrefixes.claimLinkPrefix + searchedClaim.id
+			claimLink: `/${$languageStore}/${linkPrefixes.claimLinkPrefix}${searchedClaim.id}`
 		},
 		{},
 		{}
@@ -2543,27 +2680,7 @@ const SearchedClaims = create_ssr_component(($$result, $$props, $$bindings, slot
 /* src\client\components\Mains\SearchedClaimsMain.svelte generated by Svelte v3.34.0 */
 
 const SearchedClaimsMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<main class="${"flex-grow overflow-y-auto ml-1 mr-4 mx-auto max-w-screen-2xl"}">${validate_component(SearchedClaims, "SearchedClaims").$$render($$result, {}, {}, {})}</main>`;
-});
-
-/* src\client\components\Icons\BackIcon.svelte generated by Svelte v3.34.0 */
-
-const BackIcon = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<svg class="${"w-4 h-4 mr-1 stroke-current text-bangarang-darkEmphasis"}" xmlns="${"http://www.w3.org/2000/svg"}" fill="${"none"}" viewBox="${"0 0 24 24"}" stroke="${"currentColor"}"><path stroke-linecap="${"round"}" stroke-linejoin="${"round"}" stroke-width="${"2"}" d="${"M10 19l-7-7m0 0l7-7m-7 7h18"}"></path></svg>`;
-});
-
-/* src\client\components\Links\BackToMainMenuLink.svelte generated by Svelte v3.34.0 */
-
-const BackToMainMenuLink = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $$unsubscribe_claimSearchCriteriaStore;
-	let $languageStore, $$unsubscribe_languageStore;
-	validate_store(claimSearchCriteriaStore, "claimSearchCriteriaStore");
-	$$unsubscribe_claimSearchCriteriaStore = subscribe(claimSearchCriteriaStore, value => value);
-	validate_store(languageStore, "languageStore");
-	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
-	$$unsubscribe_claimSearchCriteriaStore();
-	$$unsubscribe_languageStore();
-	return `<span class="${"flex items-center px-2"}">${validate_component(BackIcon, "BackIcon").$$render($$result, {}, {}, {})}<p class="${"text-xs text-bangarang-darkEmphasis underline"}">${escape(new Message(backToMainMenuLinkMessage).getMessage($languageStore))}</p></span>`;
+	return `<main${add_attribute("class", mainClass, 0)}>${validate_component(SearchedClaims, "SearchedClaims").$$render($$result, {}, {}, {})}</main>`;
 });
 
 /* src\client\components\Icons\Spinner.svelte generated by Svelte v3.34.0 */
@@ -2588,17 +2705,22 @@ const Failed = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 /* src\client\components\Notification\GenericTaskNotification.svelte generated by Svelte v3.34.0 */
 
 const GenericTaskNotification = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
 	
 	let { taskNotification } = $$props;
 	if ($$props.taskNotification === void 0 && $$bindings.taskNotification && taskNotification !== void 0) $$bindings.taskNotification(taskNotification);
+	$$unsubscribe_languageStore();
 
-	return `${taskNotification.status === "Executing"
-	? `<p class="${"text-right text-bangarang-lightEmphasis flex items-center justify-end"}">${escape(taskNotification.message)}${validate_component(Spinner, "Spinner").$$render($$result, {}, {}, {})}</p>`
+	return `<p class="${"text-right text-bangarang-lightEmphasis flex items-center justify-end"}">${escape(new Message(taskNotification.message).getMessage($languageStore))}
+    ${taskNotification.status === "Executing"
+	? `${validate_component(Spinner, "Spinner").$$render($$result, {}, {}, {})}`
 	: `${taskNotification.status === "Success"
-		? `<p class="${"text-right text-bangarang-lightEmphasis flex items-center justify-end"}">${escape(taskNotification.message)}${validate_component(Success, "Success").$$render($$result, {}, {}, {})}</p>`
+		? `${validate_component(Success, "Success").$$render($$result, {}, {}, {})}`
 		: `${taskNotification.status === "Failed"
-			? `<p class="${"text-right text-bangarang-lightEmphasis flex items-center justify-end"}">${escape(taskNotification.message)}${validate_component(Failed, "Failed").$$render($$result, {}, {}, {})}</p>`
-			: ``}`}`}`;
+			? `${validate_component(Failed, "Failed").$$render($$result, {}, {}, {})}`
+			: ``}`}`}</p>`;
 });
 
 /* src\client\components\Notification\SearchingClaimsInformation.svelte generated by Svelte v3.34.0 */
@@ -2621,12 +2743,42 @@ const SearchingClaimsInformation = create_ssr_component(($$result, $$props, $$bi
 	)}`;
 });
 
+/* src\client\components\Destination\ResetClaimSearch.svelte generated by Svelte v3.34.0 */
+
+const ResetClaimSearch = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $claimSearchCriteriaStore, $$unsubscribe_claimSearchCriteriaStore;
+	validate_store(claimSearchCriteriaStore, "claimSearchCriteriaStore");
+	$$unsubscribe_claimSearchCriteriaStore = subscribe(claimSearchCriteriaStore, value => $claimSearchCriteriaStore = value);
+	const resetClaimSearch = () => set_store_value(claimSearchCriteriaStore, $claimSearchCriteriaStore = "", $claimSearchCriteriaStore);
+	$$unsubscribe_claimSearchCriteriaStore();
+
+	return `${validate_component(GenericDestination, "GenericDestination").$$render(
+		$$result,
+		{
+			destinationMessage: backToMainMenuLinkMessage,
+			onClickAction: resetClaimSearch,
+			svgHtml: home
+		},
+		{},
+		{}
+	)}`;
+});
+
 /* src\client\components\Footers\SearchedClaimsFooter.svelte generated by Svelte v3.34.0 */
 
 const SearchedClaimsFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<footer class="${"flex flex-col mb-1 mx-auto max-w-screen-2xl"}">${validate_component(ClaimSearchBar, "ClaimSearchBar").$$render($$result, {}, {}, {})}
-    ${validate_component(BackToMainMenuLink, "BackToMainMenuLink").$$render($$result, {}, {}, {})}
-    ${validate_component(SearchingClaimsInformation, "SearchingClaimsInformation").$$render($$result, {}, {}, {})}</footer>`;
+	let $searchingClaimsUserNotificationStore,
+		$$unsubscribe_searchingClaimsUserNotificationStore;
+
+	validate_store(searchingClaimsUserNotificationStore, "searchingClaimsUserNotificationStore");
+	$$unsubscribe_searchingClaimsUserNotificationStore = subscribe(searchingClaimsUserNotificationStore, value => $searchingClaimsUserNotificationStore = value);
+	$$unsubscribe_searchingClaimsUserNotificationStore();
+
+	return `<footer${add_attribute("class", footerClass, 0)}><section${add_attribute("class", appBarClass, 0)}>${validate_component(ResetClaimSearch, "ResetClaimSearch").$$render($$result, {}, {}, {})}
+        ${validate_component(ClaimSearchBar, "ClaimSearchBar").$$render($$result, {}, {}, {})}</section> 
+    ${$searchingClaimsUserNotificationStore.status !== "Idle"
+	? `${validate_component(SearchingClaimsInformation, "SearchingClaimsInformation").$$render($$result, {}, {}, {})}`
+	: ``}</footer>`;
 });
 
 /* src\client\views\SearchClaimsView.svelte generated by Svelte v3.34.0 */
@@ -2697,7 +2849,7 @@ const MainMenu = create_ssr_component(($$result, $$props, $$bindings, slots) => 
 	: `${validate_component(SearchClaimsView, "SearchClaimsView").$$render($$result, {}, {}, {})}`}`;
 });
 
-var component_11 = /*#__PURE__*/Object.freeze({
+var component_9 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     'default': MainMenu,
     preload: preload
@@ -2745,7 +2897,7 @@ const SelectLanguageHeader = create_ssr_component(($$result, $$props, $$bindings
 	let { currentSelectYourLanguageMessage } = $$props;
 	if ($$props.currentSelectYourLanguageMessage === void 0 && $$bindings.currentSelectYourLanguageMessage && currentSelectYourLanguageMessage !== void 0) $$bindings.currentSelectYourLanguageMessage(currentSelectYourLanguageMessage);
 
-	return `<header class="${"flex flex-col flex-grow items-center justify-end"}">${validate_component(MainTitle, "MainTitle").$$render(
+	return `<header${add_attribute("class", headerCenteredClass, 0)}>${validate_component(MainTitle, "MainTitle").$$render(
 		$$result,
 		{
 			title: currentSelectYourLanguageMessage,
@@ -2757,6 +2909,27 @@ const SelectLanguageHeader = create_ssr_component(($$result, $$props, $$bindings
 	)}</header>`;
 });
 
+/* src\client\components\Links\Link.svelte generated by Svelte v3.34.0 */
+
+const Link = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { linkName = "link name not provided to component!" } = $$props;
+	let { linkHref = "missing" } = $$props;
+	let { size } = $$props;
+	let { textAlign = "text-center" } = $$props;
+
+	const textSizeFromSize = size => {
+		if (size === "small") return "text-xs";
+		if (size === "large") return "text-2xl";
+		return "";
+	};
+
+	if ($$props.linkName === void 0 && $$bindings.linkName && linkName !== void 0) $$bindings.linkName(linkName);
+	if ($$props.linkHref === void 0 && $$bindings.linkHref && linkHref !== void 0) $$bindings.linkHref(linkHref);
+	if ($$props.size === void 0 && $$bindings.size && size !== void 0) $$bindings.size(size);
+	if ($$props.textAlign === void 0 && $$bindings.textAlign && textAlign !== void 0) $$bindings.textAlign(textAlign);
+	return `<a class="${escape(textSizeFromSize(size)) + " " + escape(textAlign) + " text-bangarang-darkEmphasis underline mb-1"}"${add_attribute("href", linkHref, 0)}>${escape(linkName)}</a>`;
+});
+
 /* src\client\components\Mains\SelectLanguageMain.svelte generated by Svelte v3.34.0 */
 
 const SelectLanguageMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -2764,7 +2937,7 @@ const SelectLanguageMain = create_ssr_component(($$result, $$props, $$bindings, 
 	let { selectLanguages } = $$props;
 	if ($$props.selectLanguages === void 0 && $$bindings.selectLanguages && selectLanguages !== void 0) $$bindings.selectLanguages(selectLanguages);
 
-	return `<main class="${"flex flex-col flex-grow items-center justify-center"}">${each(SUPPORTED_LANGUAGES, supportedLanguage => `${validate_component(Link, "Link").$$render(
+	return `<main${add_attribute("class", mainClass, 0)}>${each(SUPPORTED_LANGUAGES, supportedLanguage => `${validate_component(Link, "Link").$$render(
 		$$result,
 		{
 			linkName: selectLanguages[supportedLanguage].languageText,
@@ -2806,6 +2979,445 @@ var component_1 = /*#__PURE__*/Object.freeze({
     'default': LanguageSelect
 });
 
+/* src\routes\[language]\index.svelte generated by Svelte v3.34.0 */
+
+var __awaiter$2 = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
+	function adopt(value) {
+		return value instanceof P
+		? value
+		: new P(function (resolve) {
+					resolve(value);
+				});
+	}
+
+	return new (P || (P = Promise))(function (resolve, reject) {
+			function fulfilled(value) {
+				try {
+					step(generator.next(value));
+				} catch(e) {
+					reject(e);
+				}
+			}
+
+			function rejected(value) {
+				try {
+					step(generator["throw"](value));
+				} catch(e) {
+					reject(e);
+				}
+			}
+
+			function step(result) {
+				result.done
+				? resolve(result.value)
+				: adopt(result.value).then(fulfilled, rejected);
+			}
+
+			step((generator = generator.apply(thisArg, _arguments || [])).next());
+		});
+};
+
+function preload$1(page, session) {
+	return __awaiter$2(this, void 0, void 0, function* () {
+		const { language } = page.params;
+		const selectedLanguage = language;
+		return { selectedLanguage };
+	});
+}
+
+const U5Blanguageu5D = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { selectedLanguage } = $$props;
+	if ($$props.selectedLanguage === void 0 && $$bindings.selectedLanguage && selectedLanguage !== void 0) $$bindings.selectedLanguage(selectedLanguage);
+	return `${validate_component(MainMenu, "MainMenu").$$render($$result, { selectedLanguage }, {}, {})}`;
+});
+
+var component_2 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    'default': U5Blanguageu5D,
+    preload: preload$1
+});
+
+/* src\client\components\Titles\HeaderTitle.svelte generated by Svelte v3.34.0 */
+
+const HeaderTitle = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { title } = $$props;
+	if ($$props.title === void 0 && $$bindings.title && title !== void 0) $$bindings.title(title);
+	return `<h1 class="${"text-center my-1 text-2xl text-bangarang-darkEmphasis"}">${escape(title)}</h1>`;
+});
+
+/* src\client\components\Headers\ValuePropositionHeader.svelte generated by Svelte v3.34.0 */
+
+const ValuePropositionHeader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	
+	let { valuePropositionDesignCanvas } = $$props;
+	if ($$props.valuePropositionDesignCanvas === void 0 && $$bindings.valuePropositionDesignCanvas && valuePropositionDesignCanvas !== void 0) $$bindings.valuePropositionDesignCanvas(valuePropositionDesignCanvas);
+	$$unsubscribe_languageStore();
+
+	return `<header${add_attribute("class", headerCenteredClass, 0)}>${validate_component(HeaderTitle, "HeaderTitle").$$render(
+		$$result,
+		{
+			title: new Message(valuePropositionDesignCanvas.title).getMessage($languageStore)
+		},
+		{},
+		{}
+	)}</header>`;
+});
+
+/* src\client\components\Lists\ValuePropositionDesignCanvasList.svelte generated by Svelte v3.34.0 */
+
+const ValuePropositionDesignCanvasList = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	
+	
+	let { valuePropositionDesignCanvas } = $$props;
+	const sections = Object.entries(valuePropositionDesignCanvas);
+	if ($$props.valuePropositionDesignCanvas === void 0 && $$bindings.valuePropositionDesignCanvas && valuePropositionDesignCanvas !== void 0) $$bindings.valuePropositionDesignCanvas(valuePropositionDesignCanvas);
+	$$unsubscribe_languageStore();
+
+	return `${each(sections, ([type, contents]) => `${type !== "audience" && type !== "pageLink" && Array.isArray(contents) && contents.length > 0
+	? `<section class="${"self-stretch"}"><h1 class="${"text-sm mt-4 mb-1 text-bangarang-darkEmphasis font-semibold text-center"}">${escape(new Message(retrieveSubTitleFromType(type)).getMessage($languageStore).toLocaleUpperCase())}</h1>
+            ${contents.length > 1
+		? `<ul class="${"list-disc list-inside"}">${each(contents, content => `<li class="${"text-bangarang-darkEmphasis text-sm"}">${escape(new Message(content).getMessage($languageStore))}</li>`)}
+                </ul>`
+		: `<p class="${"text-bangarang-darkEmphasis text-sm text-center"}">${escape(new Message(contents[0]).getMessage($languageStore))}</p>`}
+        </section>`
+	: ``}`)}`;
+});
+
+/* src\client\components\Mains\ValuePropositionMain.svelte generated by Svelte v3.34.0 */
+
+const ValuePropositionMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	
+	let { valuePropositionDesignCanvas } = $$props;
+	if ($$props.valuePropositionDesignCanvas === void 0 && $$bindings.valuePropositionDesignCanvas && valuePropositionDesignCanvas !== void 0) $$bindings.valuePropositionDesignCanvas(valuePropositionDesignCanvas);
+	return `<main${add_attribute("class", mainWithOverflowClass, 0)}>${validate_component(ValuePropositionDesignCanvasList, "ValuePropositionDesignCanvasList").$$render($$result, { valuePropositionDesignCanvas }, {}, {})}</main>`;
+});
+
+/* src\client\components\Footers\ValuePropositionFooter.svelte generated by Svelte v3.34.0 */
+
+const ValuePropositionFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	$$unsubscribe_languageStore();
+
+	return `<footer${add_attribute("class", footerClass, 0)}>${validate_component(Link, "Link").$$render(
+		$$result,
+		{
+			linkName: new Message(leanCanvasLinkMessage).getMessage($languageStore),
+			linkHref: `/${$languageStore}/${StaticView.LeanCanvas}`,
+			size: "small"
+		},
+		{},
+		{}
+	)}
+    ${validate_component(Link, "Link").$$render(
+		$$result,
+		{
+			linkName: new Message(useBangarangLinkMessage).getMessage($languageStore),
+			linkHref: `/${$languageStore}/${StaticView.MainMenu}`,
+			size: "small"
+		},
+		{},
+		{}
+	)}</footer>`;
+});
+
+/* src\client\views\ValuePropositionView.svelte generated by Svelte v3.34.0 */
+
+const ValuePropositionView = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	
+	let { valuePropositionDesignCanvas } = $$props;
+	if ($$props.valuePropositionDesignCanvas === void 0 && $$bindings.valuePropositionDesignCanvas && valuePropositionDesignCanvas !== void 0) $$bindings.valuePropositionDesignCanvas(valuePropositionDesignCanvas);
+
+	return `${validate_component(ValuePropositionHeader, "ValuePropositionHeader").$$render($$result, { valuePropositionDesignCanvas }, {}, {})}
+${validate_component(ValuePropositionMain, "ValuePropositionMain").$$render($$result, { valuePropositionDesignCanvas }, {}, {})}
+${validate_component(ValuePropositionFooter, "ValuePropositionFooter").$$render($$result, {}, {}, {})}`;
+});
+
+const retreiveValuePropositionFromValuePropositionPageLink = (valuePropositionPageLink) => {
+    const valueProposition = valuePropositionsDesignCanvas.find(valuePropositionDesignCanvas => valuePropositionPageLink.startsWith(valuePropositionDesignCanvas.pageLink));
+    if (valueProposition)
+        return valueProposition;
+    throw new Error(`No value proposition has a valid prefix for the page link '${valuePropositionPageLink}'`);
+};
+
+/* src\routes\[language]\valuePropositions\[valuePropositionPageLink].svelte generated by Svelte v3.34.0 */
+
+var __awaiter$3 = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
+	function adopt(value) {
+		return value instanceof P
+		? value
+		: new P(function (resolve) {
+					resolve(value);
+				});
+	}
+
+	return new (P || (P = Promise))(function (resolve, reject) {
+			function fulfilled(value) {
+				try {
+					step(generator.next(value));
+				} catch(e) {
+					reject(e);
+				}
+			}
+
+			function rejected(value) {
+				try {
+					step(generator["throw"](value));
+				} catch(e) {
+					reject(e);
+				}
+			}
+
+			function step(result) {
+				result.done
+				? resolve(result.value)
+				: adopt(result.value).then(fulfilled, rejected);
+			}
+
+			step((generator = generator.apply(thisArg, _arguments || [])).next());
+		});
+};
+
+function preload$2(page, session) {
+	return __awaiter$3(this, void 0, void 0, function* () {
+		const { valuePropositionPageLink, language } = page.params;
+		const selectedLanguage = language;
+		const valuePropositionDesignCanvas = retreiveValuePropositionFromValuePropositionPageLink(valuePropositionPageLink);
+
+		return {
+			valuePropositionDesignCanvas,
+			selectedLanguage
+		};
+	});
+}
+
+const U5BvaluePropositionPageLinku5D = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	
+	let { valuePropositionDesignCanvas } = $$props;
+	let { selectedLanguage } = $$props;
+	assignLanguage(selectedLanguage);
+	onMount(() => redirectOnUnknownLanguage(selectedLanguage));
+	if ($$props.valuePropositionDesignCanvas === void 0 && $$bindings.valuePropositionDesignCanvas && valuePropositionDesignCanvas !== void 0) $$bindings.valuePropositionDesignCanvas(valuePropositionDesignCanvas);
+	if ($$props.selectedLanguage === void 0 && $$bindings.selectedLanguage && selectedLanguage !== void 0) $$bindings.selectedLanguage(selectedLanguage);
+	return `${validate_component(ValuePropositionView, "ValuePropositionView").$$render($$result, { valuePropositionDesignCanvas }, {}, {})}`;
+});
+
+var component_3 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    'default': U5BvaluePropositionPageLinku5D,
+    preload: preload$2
+});
+
+/* src\client\components\Headers\BusinessModelHeader.svelte generated by Svelte v3.34.0 */
+
+const BusinessModelHeader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	$$unsubscribe_languageStore();
+
+	return `<header${add_attribute("class", headerCenteredClass, 0)}>${validate_component(HeaderTitle, "HeaderTitle").$$render(
+		$$result,
+		{
+			title: new Message(bangarangBusinessModelTitleMessage).getMessage($languageStore)
+		},
+		{},
+		{}
+	)}</header>`;
+});
+
+/* src\client\components\Cards\DescriptionCard.svelte generated by Svelte v3.34.0 */
+
+const DescriptionCard = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	
+	let { descriptionCardContract } = $$props;
+	if ($$props.descriptionCardContract === void 0 && $$bindings.descriptionCardContract && descriptionCardContract !== void 0) $$bindings.descriptionCardContract(descriptionCardContract);
+
+	return `<section class="${"self-stretch mb-2 p-1 border-bangarang-lightEmphasis border rounded shadow"}"><h2 class="${"text-bangarang-dark text-center"}">${escape(descriptionCardContract.title)}</h2>
+    <p class="${"text-bangarang-darkEmphasis text-center font-light italic text-sm"}">${escape(descriptionCardContract.description)}</p>
+    ${descriptionCardContract.bulletPoints !== undefined && descriptionCardContract.bulletPoints.length > 1
+	? `<ul class="${"list-disc list-inside"}">${each(descriptionCardContract.bulletPoints, bulletPoint => `<li class="${"text-bangarang-darkEmphasis text-sm"}">${escape(bulletPoint)}</li>`)}</ul>`
+	: `${descriptionCardContract.bulletPoints !== undefined && descriptionCardContract.bulletPoints.length === 1
+		? `<p class="${"text-bangarang-darkEmphasis text-sm text-center"}">${escape(descriptionCardContract.bulletPoints[0])}</p>`
+		: ``}`}
+    ${descriptionCardContract.links !== undefined && descriptionCardContract.links.length > 0
+	? `${each(descriptionCardContract.links, link => `<p class="${"text-center"}">${validate_component(Link, "Link").$$render(
+			$$result,
+			{
+				linkHref: link.href,
+				linkName: link.name,
+				size: "small"
+			},
+			{},
+			{}
+		)}</p>`)}`
+	: ``}</section>`;
+});
+
+/* src\client\components\Mains\BusinessModelMain.svelte generated by Svelte v3.34.0 */
+
+const BusinessModelMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	
+
+	const BusinessModelValues = [
+		{
+			title: new Message(whatIsBangarangMessages.title).getMessage($languageStore),
+			description: new Message(whatIsBangarangMessages.description).getMessage($languageStore),
+			bulletPoints: whatIsBangarangMessages.bulletPoints.map(bulletPoint => new Message(bulletPoint).getMessage($languageStore))
+		},
+		{
+			title: new Message(definitionOfBangarangMessages.title).getMessage($languageStore),
+			description: new Message(definitionOfBangarangMessages.description).getMessage($languageStore),
+			bulletPoints: definitionOfBangarangMessages.bulletPoints.map(bulletPoint => new Message(bulletPoint).getMessage($languageStore))
+		},
+		{
+			title: new Message(whyThisNameMessages.title).getMessage($languageStore),
+			description: new Message(whyThisNameMessages.description).getMessage($languageStore),
+			bulletPoints: whyThisNameMessages.bulletPoints.map(bulletPoint => new Message(bulletPoint).getMessage($languageStore))
+		}
+	];
+
+	$$unsubscribe_languageStore();
+
+	return `<main${add_attribute("class", `${mainWithOverflowClass}`, 0)}>${each(BusinessModelValues, businessModelValue => `${validate_component(DescriptionCard, "DescriptionCard").$$render(
+		$$result,
+		{
+			descriptionCardContract: businessModelValue
+		},
+		{},
+		{}
+	)}`)}</main>`;
+});
+
+/* src\client\components\Destination\NavigateBackToMainMenu.svelte generated by Svelte v3.34.0 */
+
+const NavigateBackToMainMenu = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	const navigateToUrl = url => goto(url);
+	const navigateToDeclareClaim = () => navigateToUrl(`/${$languageStore}/${StaticView.MainMenu}`);
+	$$unsubscribe_languageStore();
+
+	return `${validate_component(GenericDestination, "GenericDestination").$$render(
+		$$result,
+		{
+			destinationMessage: backToMainMenuLinkMessage,
+			onClickAction: navigateToDeclareClaim,
+			svgHtml: chevronDoubleLeft
+		},
+		{},
+		{}
+	)}`;
+});
+
+/* src\client\components\Destination\NavigateToLeanCanvas.svelte generated by Svelte v3.34.0 */
+
+const NavigateToLeanCanvas = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	const navigateToUrl = url => goto(url);
+	const navigateToBusinessModel = () => navigateToUrl(`/${$languageStore}/${StaticView.LeanCanvas}`);
+	$$unsubscribe_languageStore();
+
+	return `${validate_component(GenericDestination, "GenericDestination").$$render(
+		$$result,
+		{
+			destinationMessage: leanCanvasLinkMessage,
+			onClickAction: navigateToBusinessModel,
+			svgHtml: library
+		},
+		{},
+		{}
+	)}`;
+});
+
+/* src\client\components\Footers\BusinessModelFooter.svelte generated by Svelte v3.34.0 */
+
+const BusinessModelFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `<footer${add_attribute("class", footerClass, 0)}><section${add_attribute("class", appBarClass, 0)}>${validate_component(NavigateBackToMainMenu, "NavigateBackToMainMenu").$$render($$result, {}, {}, {})}
+        ${validate_component(NavigateToLeanCanvas, "NagivateToLeanCanvas").$$render($$result, {}, {}, {})}</section></footer>`;
+});
+
+/* src\client\views\BusinessModelView.svelte generated by Svelte v3.34.0 */
+
+const BusinessModelView = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `${validate_component(BusinessModelHeader, "BusinessModelHeader").$$render($$result, {}, {}, {})}
+${validate_component(BusinessModelMain, "BusinessModelMain").$$render($$result, {}, {}, {})}
+${validate_component(BusinessModelFooter, "BusinessModelFooter").$$render($$result, {}, {}, {})}`;
+});
+
+/* src\routes\[language]\BusinessModel.svelte generated by Svelte v3.34.0 */
+
+var __awaiter$4 = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
+	function adopt(value) {
+		return value instanceof P
+		? value
+		: new P(function (resolve) {
+					resolve(value);
+				});
+	}
+
+	return new (P || (P = Promise))(function (resolve, reject) {
+			function fulfilled(value) {
+				try {
+					step(generator.next(value));
+				} catch(e) {
+					reject(e);
+				}
+			}
+
+			function rejected(value) {
+				try {
+					step(generator["throw"](value));
+				} catch(e) {
+					reject(e);
+				}
+			}
+
+			function step(result) {
+				result.done
+				? resolve(result.value)
+				: adopt(result.value).then(fulfilled, rejected);
+			}
+
+			step((generator = generator.apply(thisArg, _arguments || [])).next());
+		});
+};
+
+function preload$3(page, session) {
+	return __awaiter$4(this, void 0, void 0, function* () {
+		const { language } = page.params;
+		const selectedLanguage = language;
+		return { selectedLanguage };
+	});
+}
+
+const BusinessModel = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { selectedLanguage } = $$props;
+	assignLanguage(selectedLanguage);
+	onMount(() => redirectOnUnknownLanguage(selectedLanguage));
+	if ($$props.selectedLanguage === void 0 && $$bindings.selectedLanguage && selectedLanguage !== void 0) $$bindings.selectedLanguage(selectedLanguage);
+	return `${validate_component(BusinessModelView, "BusinessModelView").$$render($$result, {}, {}, {})}`;
+});
+
+var component_4 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    'default': BusinessModel,
+    preload: preload$3
+});
+
 const currentUserContractStore = writable(uiBangarangUserBuilder.getUser().retrieveUserContract());
 
 /* src\client\components\Headers\SignInHeader.svelte generated by Svelte v3.34.0 */
@@ -2816,7 +3428,7 @@ const SignInHeader = create_ssr_component(($$result, $$props, $$bindings, slots)
 	$$unsubscribe_currentUserContractStore = subscribe(currentUserContractStore, value => $currentUserContractStore = value);
 	$$unsubscribe_currentUserContractStore();
 
-	return `<header class="${"flex flex-col flex-grow justify-end items-center content-center mx-auto max-w-screen-2xl"}">${validate_component(WelcomeTitle, "WelcomeTitle").$$render($$result, {}, {}, {})}
+	return `<header${add_attribute("class", headerEndClass, 0)}>${validate_component(WelcomeTitle, "WelcomeTitle").$$render($$result, {}, {}, {})}
     ${$currentUserContractStore !== undefined
 	? `<h2 class="${"text-2xl text-bangarang-darkEmphasis my-1"}">${escape($currentUserContractStore.username)}</h2>`
 	: ``}</header>`;
@@ -2871,17 +3483,21 @@ const GenericSubmitField = create_ssr_component(($$result, $$props, $$bindings, 
 /* src\client\components\Form\SignInForm.svelte generated by Svelte v3.34.0 */
 
 const SignInForm = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
 	let $signingInNotificationStore, $$unsubscribe_signingInNotificationStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
 	validate_store(signingInNotificationStore, "signingInNotificationStore");
 	$$unsubscribe_signingInNotificationStore = subscribe(signingInNotificationStore, value => $signingInNotificationStore = value);
 
+	$$unsubscribe_languageStore();
 	$$unsubscribe_signingInNotificationStore();
 
 	return `<form class="${"form-example flex flex-col"}">${validate_component(GenericTextField, "GenericTextField").$$render(
 		$$result,
 		{
 			fieldId: "username",
-			fieldName: "Username:",
+			fieldName: new Message(signInFormUsernameMessage).getMessage($languageStore),
 			isRequired: true,
 			isReadOnly: $signingInNotificationStore.status !== "Idle"
 		},
@@ -2892,7 +3508,7 @@ const SignInForm = create_ssr_component(($$result, $$props, $$bindings, slots) =
 		$$result,
 		{
 			fieldId: "password",
-			fieldName: "Password:",
+			fieldName: new Message(signInFormPasswordMessage).getMessage($languageStore),
 			isRequired: true,
 			isReadOnly: $signingInNotificationStore.status !== "Idle"
 		},
@@ -2903,7 +3519,7 @@ const SignInForm = create_ssr_component(($$result, $$props, $$bindings, slots) =
 		$$result,
 		{
 			fieldId: "signin",
-			fieldName: "Sign In",
+			fieldName: new Message(signInFormSubmitMessage).getMessage($languageStore),
 			isReadOnly: $signingInNotificationStore.status !== "Idle"
 		},
 		{},
@@ -2914,7 +3530,12 @@ const SignInForm = create_ssr_component(($$result, $$props, $$bindings, slots) =
 /* src\client\components\Sections\SignInSection.svelte generated by Svelte v3.34.0 */
 
 const SignInSection = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<p class="${"text-bangarang-lightEmphasis"}">Your account credentials</p>
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	$$unsubscribe_languageStore();
+
+	return `<p class="${"text-bangarang-lightEmphasis"}">${escape(new Message(signInFormTitleMessage).getMessage($languageStore))}</p>
 ${validate_component(SignInForm, "SignInForm").$$render($$result, {}, {}, {})}`;
 });
 
@@ -2922,13 +3543,17 @@ ${validate_component(SignInForm, "SignInForm").$$render($$result, {}, {}, {})}`;
 
 const SignInMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	let $currentUserContractStore, $$unsubscribe_currentUserContractStore;
+	let $languageStore, $$unsubscribe_languageStore;
 	validate_store(currentUserContractStore, "currentUserContractStore");
 	$$unsubscribe_currentUserContractStore = subscribe(currentUserContractStore, value => $currentUserContractStore = value);
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
 	$$unsubscribe_currentUserContractStore();
+	$$unsubscribe_languageStore();
 
-	return `${$currentUserContractStore === undefined
-	? `<main class="${"flex flex-col flex-grow justify-center items-center"}">${validate_component(SignInSection, "SignInSection").$$render($$result, {}, {}, {})}</main>`
-	: `<main class="${"flex flex-col flex-grow justify-center items-center"}"><p class="${"invisible"}">SignOut</p></main>`}`;
+	return `<main${add_attribute("class", mainClass, 0)}>${$currentUserContractStore === undefined
+	? `${validate_component(SignInSection, "SignInSection").$$render($$result, {}, {}, {})}`
+	: `<p class="${"invisible"}">${escape(new Message(signOutMessage).getMessage($languageStore))}</p>`}</main>`;
 });
 
 /* src\client\components\Notification\SignInInformation.svelte generated by Svelte v3.34.0 */
@@ -2954,34 +3579,38 @@ const currentClaimIdStore = writable(undefined);
 /* src\client\components\Footers\SignInFooter.svelte generated by Svelte v3.34.0 */
 
 const SignInFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
 	let $signingInNotificationStore, $$unsubscribe_signingInNotificationStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
 	validate_store(signingInNotificationStore, "signingInNotificationStore");
 	$$unsubscribe_signingInNotificationStore = subscribe(signingInNotificationStore, value => $signingInNotificationStore = value);
 	let currentClaimId = undefined;
 	currentClaimIdStore.subscribe(currentClaimIdFromStore => currentClaimId = currentClaimIdFromStore);
 
 	const linkFromCurrentClaimId = currentClaimId => {
-		if (currentClaimId === undefined) return {
-			href: StaticView.MainMenu,
-			name: "<< Back to main menu."
-		};
-
-		return {
-			href: linkPrefixes.claimLinkPrefix + currentClaimId,
-			name: "<< Back to the claim."
-		};
+		return currentClaimId === undefined
+		? {
+				href: `/${$languageStore}/${StaticView.MainMenu}`,
+				name: new Message(backToMainMenuLinkMessage).getMessage($languageStore)
+			}
+		: {
+				href: `/${$languageStore}/${linkPrefixes.claimLinkPrefix}${currentClaimId}`,
+				name: new Message(backToTheClaimMessage).getMessage($languageStore)
+			};
 	};
 
+	$$unsubscribe_languageStore();
 	$$unsubscribe_signingInNotificationStore();
 
-	return `<footer class="${"flex flex-col p-1 mx-auto max-w-screen-2xl"}">${$signingInNotificationStore.status === "Executing"
+	return `<footer${add_attribute("class", footerClass, 0)}>${$signingInNotificationStore.status === "Executing"
 	? `${validate_component(SignInInformation, "SignInInformation").$$render($$result, {}, {}, {})}`
 	: `<section class="${"flex justify-center items-center"}">${validate_component(Link, "Link").$$render(
 			$$result,
 			{
 				size: "small",
-				linkHref: StaticView.Register,
-				linkName: "Would you like to register on Bangarang?",
+				linkHref: `/${$languageStore}/${StaticView.Register}`,
+				linkName: new Message(signInRegisterMessage).getMessage($languageStore),
 				textAlign: "text-center"
 			},
 			{},
@@ -2998,7 +3627,9 @@ const SignInFooter = create_ssr_component(($$result, $$props, $$bindings, slots)
 			{},
 			{}
 		)}
-            ${validate_component(SignInInformation, "SignInInformation").$$render($$result, {}, {}, {})}</section>`}</footer>`;
+            ${$signingInNotificationStore.status !== "Idle"
+		? `${validate_component(SignInInformation, "SignInInformation").$$render($$result, {}, {}, {})}`
+		: ``}</section>`}</footer>`;
 });
 
 /* src\client\views\SignInView.svelte generated by Svelte v3.34.0 */
@@ -3009,966 +3640,7 @@ ${validate_component(SignInMain, "SignInMain").$$render($$result, {}, {}, {})}
 ${validate_component(SignInFooter, "SignInFooter").$$render($$result, {}, {}, {})}`;
 });
 
-/* src\routes\SigningInMenu.svelte generated by Svelte v3.34.0 */
-
-const SigningInMenu = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `${validate_component(SignInView, "SignInView").$$render($$result, {}, {}, {})}`;
-});
-
-var component_2 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    'default': SigningInMenu
-});
-
-/* src\client\components\Inputs\ClaimAsProposalRadioButton.svelte generated by Svelte v3.34.0 */
-
-const ClaimAsProposalRadioButton = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<input type="${"radio"}" name="${"claimType"}" id="${"claimType"}" checked> <label for="${"claimType"}" class="${"text-bangarang-lightEmphasis"}">Claim as a proposal.</label>`;
-});
-
-/* src\client\components\Form\Fields\GenericTextAreaField.svelte generated by Svelte v3.34.0 */
-
-const rows = 10;
-
-const GenericTextAreaField = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let { fieldId } = $$props;
-	let { fieldName } = $$props;
-	let { placeholder } = $$props;
-	let { isRequired } = $$props;
-	let { isReadOnly } = $$props;
-	if ($$props.fieldId === void 0 && $$bindings.fieldId && fieldId !== void 0) $$bindings.fieldId(fieldId);
-	if ($$props.fieldName === void 0 && $$bindings.fieldName && fieldName !== void 0) $$bindings.fieldName(fieldName);
-	if ($$props.placeholder === void 0 && $$bindings.placeholder && placeholder !== void 0) $$bindings.placeholder(placeholder);
-	if ($$props.isRequired === void 0 && $$bindings.isRequired && isRequired !== void 0) $$bindings.isRequired(isRequired);
-	if ($$props.isReadOnly === void 0 && $$bindings.isReadOnly && isReadOnly !== void 0) $$bindings.isReadOnly(isReadOnly);
-
-	return `<label${add_attribute("for", fieldId, 0)} class="${"text-xs text-bangarang-lightEmphasis"}">${escape(fieldName)}</label>
-<textarea ${isReadOnly ? "readonly" : ""}${add_attribute("name", fieldName, 0)}${add_attribute("id", fieldId, 0)} ${isRequired ? "required" : ""}${add_attribute("placeholder", placeholder, 0)}${add_attribute("rows", rows, 0)} class="${"text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}"></textarea>`;
-});
-
-/* src\client\components\Form\NewClaimForm.svelte generated by Svelte v3.34.0 */
-
-const NewClaimForm = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $declaringClaimUserNotificationStore,
-		$$unsubscribe_declaringClaimUserNotificationStore;
-
-	validate_store(declaringClaimUserNotificationStore, "declaringClaimUserNotificationStore");
-	$$unsubscribe_declaringClaimUserNotificationStore = subscribe(declaringClaimUserNotificationStore, value => $declaringClaimUserNotificationStore = value);
-
-	$$unsubscribe_declaringClaimUserNotificationStore();
-
-	return `<form class="${"w-full flex flex-col items-center"}">${validate_component(GenericTextAreaField, "GenericTextAreaField").$$render(
-		$$result,
-		{
-			placeholder: "Describe the claim ...",
-			fieldId: "claimTitle",
-			fieldName: "Claim Title",
-			isRequired: true,
-			isReadOnly: $declaringClaimUserNotificationStore.status !== "Idle"
-		},
-		{},
-		{}
-	)}
-    <fieldset><legend class="${"text-bangarang-lightEmphasis"}">Claim type</legend>
-        ${validate_component(ClaimAsProposalRadioButton, "ClaimAsProposalRadioButton").$$render($$result, {}, {}, {})}</fieldset>
-    ${validate_component(GenericSubmitField, "GenericSubmitField").$$render(
-		$$result,
-		{
-			fieldId: "declare",
-			fieldName: "Declare",
-			isReadOnly: $declaringClaimUserNotificationStore.status !== "Idle"
-		},
-		{},
-		{}
-	)}</form>`;
-});
-
-/* src\client\components\Mains\DeclareClaimMain.svelte generated by Svelte v3.34.0 */
-
-const DeclareClaimMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<main class="${"flex-grow overflow-y-auto flex flex-col items-center justify-center p-1 mx-auto max-w-screen-2xl"}">${validate_component(NewClaimForm, "NewClaimForm").$$render($$result, {}, {}, {})}</main>`;
-});
-
-/* src\client\components\Notification\DeclaringInformation.svelte generated by Svelte v3.34.0 */
-
-const DeclaringInformation = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $declaringClaimUserNotificationStore,
-		$$unsubscribe_declaringClaimUserNotificationStore;
-
-	validate_store(declaringClaimUserNotificationStore, "declaringClaimUserNotificationStore");
-	$$unsubscribe_declaringClaimUserNotificationStore = subscribe(declaringClaimUserNotificationStore, value => $declaringClaimUserNotificationStore = value);
-	$$unsubscribe_declaringClaimUserNotificationStore();
-
-	return `${validate_component(GenericTaskNotification, "GenericTaskNotification").$$render(
-		$$result,
-		{
-			taskNotification: $declaringClaimUserNotificationStore
-		},
-		{},
-		{}
-	)}`;
-});
-
-/* src\client\components\Footers\DeclareClaimFooter.svelte generated by Svelte v3.34.0 */
-
-const DeclareClaimFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $declaringClaimUserNotificationStore,
-		$$unsubscribe_declaringClaimUserNotificationStore;
-
-	validate_store(declaringClaimUserNotificationStore, "declaringClaimUserNotificationStore");
-	$$unsubscribe_declaringClaimUserNotificationStore = subscribe(declaringClaimUserNotificationStore, value => $declaringClaimUserNotificationStore = value);
-	$$unsubscribe_declaringClaimUserNotificationStore();
-
-	return `<footer class="${"flex flex-col mb-1 mx-auto max-w-screen-2xl"}">${$declaringClaimUserNotificationStore.status === "Executing"
-	? `${validate_component(DeclaringInformation, "DeclaringInformation").$$render($$result, {}, {}, {})}`
-	: `<section class="${"flex justify-between items-center"}">${validate_component(Link, "Link").$$render(
-			$$result,
-			{
-				size: "small",
-				linkHref: StaticView.MainMenu,
-				linkName: "<< Back to main menu.",
-				textAlign: "text-left"
-			},
-			{},
-			{}
-		)}
-            ${validate_component(DeclaringInformation, "DeclaringInformation").$$render($$result, {}, {}, {})}</section>`}</footer>`;
-});
-
-/* src\client\views\DeclareClaimView.svelte generated by Svelte v3.34.0 */
-
-const DeclareClaimView = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `${validate_component(DeclareClaimMain, "DeclareClaimMain").$$render($$result, {}, {}, {})}
-${validate_component(DeclareClaimFooter, "DeclareClaimFooter").$$render($$result, {}, {}, {})}`;
-});
-
-/* src\routes\DeclareClaim.svelte generated by Svelte v3.34.0 */
-
-const DeclareClaim = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `${validate_component(DeclareClaimView, "DeclareClaimView").$$render($$result, {}, {}, {})}`;
-});
-
-var component_3 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    'default': DeclareClaim
-});
-
-/* src\client\components\Titles\RegisterTitle.svelte generated by Svelte v3.34.0 */
-
-const RegisterTitle = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<p class="${"text-2xl text-bangarang-darkEmphasis my-1"}">Register on</p>
-<h1 class="${"text-4xl text-bangarang-darkEmphasis my-1"}">BANGARANG</h1>`;
-});
-
-/* src\client\components\Headers\RegisterHeader.svelte generated by Svelte v3.34.0 */
-
-const RegisterHeader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<header class="${"flex flex-col flex-grow justify-end items-center content-center mx-auto max-w-screen-2xl"}">${validate_component(RegisterTitle, "RegisterTitle").$$render($$result, {}, {}, {})}</header>`;
-});
-
-/* src\client\components\Cards\SecurityUserCard.svelte generated by Svelte v3.34.0 */
-
-const SecurityUserCard = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	const message = `The current stage of development of Bangarang implies that the security of the accounts is not guaranteed. Please only create accounts with credentials that can be used for testing and demonstration purposes.`;
-	return `<div class="${"border rounded my-6 border-bangarang-failed bg-bangarang-light flex flex-col items-center"}"><p class="${"m-1 text-bangarang-lightEmphasis flex-grow text-center text-xs"}">${message}</p></div>`;
-});
-
-/* src\client\components\Form\RegisterForm.svelte generated by Svelte v3.34.0 */
-
-const RegisterForm = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $registeringUserNotificationStore,
-		$$unsubscribe_registeringUserNotificationStore;
-
-	validate_store(registeringUserNotificationStore, "registeringUserNotificationStore");
-	$$unsubscribe_registeringUserNotificationStore = subscribe(registeringUserNotificationStore, value => $registeringUserNotificationStore = value);
-
-	$$unsubscribe_registeringUserNotificationStore();
-
-	return `<form class="${"form-example flex flex-col"}">${validate_component(GenericTextField, "GenericTextField").$$render(
-		$$result,
-		{
-			fieldId: "username",
-			fieldName: "Username:",
-			isReadOnly: $registeringUserNotificationStore.status !== "Idle",
-			isRequired: true
-		},
-		{},
-		{}
-	)}
-    ${validate_component(GenericTextField, "GenericTextField").$$render(
-		$$result,
-		{
-			fieldId: "fullname",
-			fieldName: "Fullname:",
-			isReadOnly: $registeringUserNotificationStore.status !== "Idle",
-			isRequired: true
-		},
-		{},
-		{}
-	)}
-    ${validate_component(GenericTextField, "GenericTextField").$$render(
-		$$result,
-		{
-			fieldId: "email",
-			fieldName: "E-mail:",
-			isReadOnly: $registeringUserNotificationStore.status !== "Idle",
-			isRequired: true
-		},
-		{},
-		{}
-	)}
-    ${validate_component(GenericPasswordField, "GenericPasswordField").$$render(
-		$$result,
-		{
-			fieldId: "password",
-			fieldName: "Password:",
-			isReadOnly: $registeringUserNotificationStore.status !== "Idle",
-			isRequired: true
-		},
-		{},
-		{}
-	)}
-    ${validate_component(GenericSubmitField, "GenericSubmitField").$$render(
-		$$result,
-		{
-			fieldId: "register",
-			fieldName: "Register",
-			isReadOnly: $registeringUserNotificationStore.status !== "Idle"
-		},
-		{},
-		{}
-	)}</form>`;
-});
-
-/* src\client\components\Sections\RegisterSection.svelte generated by Svelte v3.34.0 */
-
-const RegisterSection = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `${validate_component(SecurityUserCard, "SecurityUserCard").$$render($$result, {}, {}, {})}
-<p class="${"text-bangarang-lightEmphasis"}">Create your account.</p>
-${validate_component(RegisterForm, "RegisterForm").$$render($$result, {}, {}, {})}`;
-});
-
-/* src\client\components\Mains\RegisterMain.svelte generated by Svelte v3.34.0 */
-
-const RegisterMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `<main class="${"flex flex-col flex-grow items-center justify-center"}">${validate_component(RegisterSection, "RegisterSection").$$render($$result, {}, {}, {})}</main>`;
-});
-
-/* src\client\components\Notification\RegisteringInformation.svelte generated by Svelte v3.34.0 */
-
-const RegisteringInformation = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $registeringUserNotificationStore,
-		$$unsubscribe_registeringUserNotificationStore;
-
-	validate_store(registeringUserNotificationStore, "registeringUserNotificationStore");
-	$$unsubscribe_registeringUserNotificationStore = subscribe(registeringUserNotificationStore, value => $registeringUserNotificationStore = value);
-	$$unsubscribe_registeringUserNotificationStore();
-
-	return `${validate_component(GenericTaskNotification, "GenericTaskNotification").$$render(
-		$$result,
-		{
-			taskNotification: $registeringUserNotificationStore
-		},
-		{},
-		{}
-	)}`;
-});
-
-/* src\client\components\Footers\RegisterFooter.svelte generated by Svelte v3.34.0 */
-
-const RegisterFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $registeringUserNotificationStore,
-		$$unsubscribe_registeringUserNotificationStore;
-
-	validate_store(registeringUserNotificationStore, "registeringUserNotificationStore");
-	$$unsubscribe_registeringUserNotificationStore = subscribe(registeringUserNotificationStore, value => $registeringUserNotificationStore = value);
-	$$unsubscribe_registeringUserNotificationStore();
-
-	return `<footer class="${"flex flex-col p-1 mx-auto max-w-screen-2xl"}">${$registeringUserNotificationStore.status === "Executing"
-	? `${validate_component(RegisteringInformation, "RegisteringInformation").$$render($$result, {}, {}, {})}`
-	: `<section class="${"flex justify-between items-center"}">${validate_component(Link, "Link").$$render(
-			$$result,
-			{
-				size: "small",
-				linkName: "<< Back to Sign In menu.",
-				linkHref: StaticView.SigningInMenu
-			},
-			{},
-			{}
-		)}
-            ${validate_component(RegisteringInformation, "RegisteringInformation").$$render($$result, {}, {}, {})}</section>`}</footer>`;
-});
-
-/* src\client\views\RegisterView.svelte generated by Svelte v3.34.0 */
-
-const RegisterView = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `${validate_component(RegisterHeader, "RegisterHeader").$$render($$result, {}, {}, {})}
-${validate_component(RegisterMain, "RegisterMain").$$render($$result, {}, {}, {})}
-${validate_component(RegisterFooter, "RegisterFooter").$$render($$result, {}, {}, {})}`;
-});
-
-/* src\routes\Register.svelte generated by Svelte v3.34.0 */
-
-const Register = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `${validate_component(RegisterView, "RegisterView").$$render($$result, {}, {}, {})}`;
-});
-
-var component_4 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    'default': Register
-});
-
-/* src\client\components\Links\ClaimShare.svelte generated by Svelte v3.34.0 */
-
-const ClaimShare = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-
-	return `<section class="${"mb-2"}"><p class="${"text-center underline text-sm text-bangarang-darkEmphasis cursor-pointer"}">Would you like to share this claim?</p>
-    ${`${``}`}</section>`;
-});
-
-/* src\client\components\Notification\ClaimingInformation.svelte generated by Svelte v3.34.0 */
-
-const ClaimingInformation = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $claimingUserNotificationStore, $$unsubscribe_claimingUserNotificationStore;
-	validate_store(claimingUserNotificationStore, "claimingUserNotificationStore");
-	$$unsubscribe_claimingUserNotificationStore = subscribe(claimingUserNotificationStore, value => $claimingUserNotificationStore = value);
-	$$unsubscribe_claimingUserNotificationStore();
-
-	return `${validate_component(GenericTaskNotification, "GenericTaskNotification").$$render(
-		$$result,
-		{
-			taskNotification: $claimingUserNotificationStore
-		},
-		{},
-		{}
-	)}`;
-});
-
-/* src\client\components\Footers\ClaimFooter.svelte generated by Svelte v3.34.0 */
-
-const ClaimFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $claimingUserNotificationStore, $$unsubscribe_claimingUserNotificationStore;
-
-	let $declaringClaimUserNotificationStore,
-		$$unsubscribe_declaringClaimUserNotificationStore;
-
-	validate_store(claimingUserNotificationStore, "claimingUserNotificationStore");
-	$$unsubscribe_claimingUserNotificationStore = subscribe(claimingUserNotificationStore, value => $claimingUserNotificationStore = value);
-	validate_store(declaringClaimUserNotificationStore, "declaringClaimUserNotificationStore");
-	$$unsubscribe_declaringClaimUserNotificationStore = subscribe(declaringClaimUserNotificationStore, value => $declaringClaimUserNotificationStore = value);
-	$$unsubscribe_claimingUserNotificationStore();
-	$$unsubscribe_declaringClaimUserNotificationStore();
-
-	return `<footer class="${"flex flex-col p-1 mx-auto max-w-screen-2xl"}">${$claimingUserNotificationStore.status === "Executing"
-	? `${validate_component(ClaimingInformation, "ClaimingInformation").$$render($$result, {}, {}, {})}`
-	: `${$declaringClaimUserNotificationStore.status === "Executing"
-		? `${validate_component(DeclaringInformation, "DeclaringInformation").$$render($$result, {}, {}, {})}`
-		: `${validate_component(ClaimShare, "ClaimShare").$$render($$result, {}, {}, {})}
-        <section class="${"flex justify-between items-center"}">${validate_component(Link, "Link").$$render(
-				$$result,
-				{
-					size: "small",
-					linkHref: StaticView.MainMenu,
-					linkName: "<< Back to main menu.",
-					textAlign: "text-left"
-				},
-				{},
-				{}
-			)}
-            ${$claimingUserNotificationStore.status === "Success" || $claimingUserNotificationStore.status === "Failed"
-			? `${validate_component(ClaimingInformation, "ClaimingInformation").$$render($$result, {}, {}, {})}`
-			: `${$declaringClaimUserNotificationStore.status === "Success" || $declaringClaimUserNotificationStore.status === "Failed"
-				? `${validate_component(DeclaringInformation, "DeclaringInformation").$$render($$result, {}, {}, {})}`
-				: ``}`}</section>`}`}</footer>`;
-});
-
-/* src\client\components\Headers\ClaimHeader.svelte generated by Svelte v3.34.0 */
-
-const ClaimHeader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let { title } = $$props;
-	if ($$props.title === void 0 && $$bindings.title && title !== void 0) $$bindings.title(title);
-	return `<header class="${"flex-grow overflow-y-auto flex flex-col place-content-center p-1 mx-auto max-w-screen-2xl"}"><p class="${" self-center text-lg text-center text-bangarang-lightEmphasis"}">${escape(title)}</p></header>`;
-});
-
-const claiming = (claimTitle, claimChoice) => {
-    claimingUserNotificationStore.set(executingClaimingUserNotification);
-    uiBangarangUserBuilder.getUser().claiming(claimTitle, claimChoice);
-};
-
-/* src\client\components\Buttons\ClaimButton.svelte generated by Svelte v3.34.0 */
-
-const ClaimButton = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $claimingUserNotificationStore, $$unsubscribe_claimingUserNotificationStore;
-
-	let $declaringClaimUserNotificationStore,
-		$$unsubscribe_declaringClaimUserNotificationStore;
-
-	validate_store(claimingUserNotificationStore, "claimingUserNotificationStore");
-	$$unsubscribe_claimingUserNotificationStore = subscribe(claimingUserNotificationStore, value => $claimingUserNotificationStore = value);
-	validate_store(declaringClaimUserNotificationStore, "declaringClaimUserNotificationStore");
-	$$unsubscribe_declaringClaimUserNotificationStore = subscribe(declaringClaimUserNotificationStore, value => $declaringClaimUserNotificationStore = value);
-	
-	let { claimId } = $$props;
-	let { claimingChoice } = $$props;
-	let { userClaimingChoice } = $$props;
-	const onClickAction = () => claiming(claimId, claimingChoice);
-	if ($$props.claimId === void 0 && $$bindings.claimId && claimId !== void 0) $$bindings.claimId(claimId);
-	if ($$props.claimingChoice === void 0 && $$bindings.claimingChoice && claimingChoice !== void 0) $$bindings.claimingChoice(claimingChoice);
-	if ($$props.userClaimingChoice === void 0 && $$bindings.userClaimingChoice && userClaimingChoice !== void 0) $$bindings.userClaimingChoice(userClaimingChoice);
-	$$unsubscribe_claimingUserNotificationStore();
-	$$unsubscribe_declaringClaimUserNotificationStore();
-
-	return `${$claimingUserNotificationStore.status === "Idle" && $declaringClaimUserNotificationStore.status === "Idle"
-	? `${userClaimingChoice === claimingChoice
-		? `${validate_component(GenericButton, "GenericButton").$$render(
-				$$result,
-				{
-					textbutton: claimingChoice,
-					onClickAction,
-					disabled: true
-				},
-				{},
-				{}
-			)}`
-		: `${validate_component(GenericButton, "GenericButton").$$render(
-				$$result,
-				{
-					textbutton: claimingChoice,
-					onClickAction,
-					disabled: false
-				},
-				{},
-				{}
-			)}`}`
-	: `${validate_component(GenericButton, "GenericButton").$$render(
-			$$result,
-			{
-				textbutton: claimingChoice,
-				onClickAction,
-				disabled: true
-			},
-			{},
-			{}
-		)}`}`;
-});
-
-/* src\client\components\Mains\ClaimMain.svelte generated by Svelte v3.34.0 */
-
-const ClaimMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	
-	let { peopleClaimed = 0 } = $$props;
-	let { peopleFor = 0 } = $$props;
-	let { peopleAgainst = 0 } = $$props;
-	let { claimId = "" } = $$props;
-	let { userClaimingChoice = undefined } = $$props;
-
-	//let connectedUserId:string|null =null;
-	//connectedUserStore.subscribe(connectedUser => {(connectedUser === null)? connectedUserId = null: connectedUserId=connectedUser.id})
-	//beforeUpdate(()=> checkingUserAlreadyClaimedOnClaim(claimId))
-	const retreivePercentage = (total, part) => total > 0 ? part / total * 100 : 0;
-
-	if ($$props.peopleClaimed === void 0 && $$bindings.peopleClaimed && peopleClaimed !== void 0) $$bindings.peopleClaimed(peopleClaimed);
-	if ($$props.peopleFor === void 0 && $$bindings.peopleFor && peopleFor !== void 0) $$bindings.peopleFor(peopleFor);
-	if ($$props.peopleAgainst === void 0 && $$bindings.peopleAgainst && peopleAgainst !== void 0) $$bindings.peopleAgainst(peopleAgainst);
-	if ($$props.claimId === void 0 && $$bindings.claimId && claimId !== void 0) $$bindings.claimId(claimId);
-	if ($$props.userClaimingChoice === void 0 && $$bindings.userClaimingChoice && userClaimingChoice !== void 0) $$bindings.userClaimingChoice(userClaimingChoice);
-
-	return `<main class="${"flex flex-col mx-auto max-w-screen-2xl my-2"}"><p class="${"text-center text-bangarang-lightEmphasis my-2"}">${escape(peopleClaimed)}<br>people claimed</p>
-    <section class="${"flex justify-between my-1 mx-4"}"><section class="${"flex flex-col w-1/3"}">${validate_component(ClaimButton, "ClaimButton").$$render(
-		$$result,
-		{
-			claimId,
-			userClaimingChoice,
-			claimingChoice: "Against"
-		},
-		{},
-		{}
-	)}
-            <p class="${"text-center text-bangarang-lightEmphasis"}">${escape(retreivePercentage(peopleClaimed, peopleAgainst).toFixed(2))}%</p></section>
-        <section class="${"flex flex-col w-1/3"}">${validate_component(ClaimButton, "ClaimButton").$$render(
-		$$result,
-		{
-			claimId,
-			userClaimingChoice,
-			claimingChoice: "For"
-		},
-		{},
-		{}
-	)}
-            <p class="${"text-center text-bangarang-lightEmphasis"}">${escape(retreivePercentage(peopleClaimed, peopleFor).toFixed(2))}%</p></section></section></main>`;
-});
-
-/* src\client\views\ClaimView.svelte generated by Svelte v3.34.0 */
-
-const ClaimView = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let { claim } = $$props;
-	
-	if ($$props.claim === void 0 && $$bindings.claim && claim !== void 0) $$bindings.claim(claim);
-
-	return `${validate_component(ClaimHeader, "ClaimHeader").$$render($$result, { title: claim.title }, {}, {})}
-${validate_component(ClaimMain, "ClaimMain").$$render(
-		$$result,
-		{
-			peopleClaimed: claim.peopleClaimed,
-			peopleFor: claim.peopleClaimedFor,
-			peopleAgainst: claim.peopleClaimedAgainst,
-			claimId: claim.id,
-			userClaimingChoice: claim.previousUserClaimChoice
-		},
-		{},
-		{}
-	)}
-${validate_component(ClaimFooter, "ClaimFooter").$$render($$result, {}, {}, {})}`;
-});
-
-const retrievingClaimById = (claimId) => {
-    retrievingClaimUserNotificationStore.set(executingRetrievingClaimUserNotification);
-    uiBangarangUserBuilder.getUser().retrievingClaimById(claimId);
-};
-
-/* src\routes\claims\[claimId].svelte generated by Svelte v3.34.0 */
-
-var __awaiter$2 = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
-	function adopt(value) {
-		return value instanceof P
-		? value
-		: new P(function (resolve) {
-					resolve(value);
-				});
-	}
-
-	return new (P || (P = Promise))(function (resolve, reject) {
-			function fulfilled(value) {
-				try {
-					step(generator.next(value));
-				} catch(e) {
-					reject(e);
-				}
-			}
-
-			function rejected(value) {
-				try {
-					step(generator["throw"](value));
-				} catch(e) {
-					reject(e);
-				}
-			}
-
-			function step(result) {
-				result.done
-				? resolve(result.value)
-				: adopt(result.value).then(fulfilled, rejected);
-			}
-
-			step((generator = generator.apply(thisArg, _arguments || [])).next());
-		});
-};
-
-function preload$1(page, session) {
-	return __awaiter$2(this, void 0, void 0, function* () {
-		const { claimId } = page.params;
-		let claim;
-		retrievingClaimById(claimId);
-
-		retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => {
-			if (retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) {
-				claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice;
-				currentClaimIdStore.set(claim.id);
-			}
-		});
-
-		if (claim) return { claim };
-	});
-}
-
-const U5BclaimIdu5D = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let { claim } = $$props;
-	
-	
-	
-
-	const shouldRetrieveClaimOnSuccessClaimingNotification = claimingUserNotification => {
-		if (claimingUserNotification.status === "Success") retrievingClaimById(claim.id);
-	};
-
-	const shouldAffectClaim = retrievingClaimUserNotification => {
-		if (retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice;
-	};
-
-	claimingUserNotificationStore.subscribe(claimingUserNotification => shouldRetrieveClaimOnSuccessClaimingNotification(claimingUserNotification));
-	retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => shouldAffectClaim(retrievingClaimUserNotification));
-	if ($$props.claim === void 0 && $$bindings.claim && claim !== void 0) $$bindings.claim(claim);
-
-	return `${claim
-	? `${validate_component(ClaimView, "ClaimView").$$render($$result, { claim }, {}, {})}`
-	: ``}`;
-});
-
-var component_5 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    'default': U5BclaimIdu5D,
-    preload: preload$1
-});
-
-/* src\routes\[language]\index.svelte generated by Svelte v3.34.0 */
-
-var __awaiter$3 = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
-	function adopt(value) {
-		return value instanceof P
-		? value
-		: new P(function (resolve) {
-					resolve(value);
-				});
-	}
-
-	return new (P || (P = Promise))(function (resolve, reject) {
-			function fulfilled(value) {
-				try {
-					step(generator.next(value));
-				} catch(e) {
-					reject(e);
-				}
-			}
-
-			function rejected(value) {
-				try {
-					step(generator["throw"](value));
-				} catch(e) {
-					reject(e);
-				}
-			}
-
-			function step(result) {
-				result.done
-				? resolve(result.value)
-				: adopt(result.value).then(fulfilled, rejected);
-			}
-
-			step((generator = generator.apply(thisArg, _arguments || [])).next());
-		});
-};
-
-function preload$2(page, session) {
-	return __awaiter$3(this, void 0, void 0, function* () {
-		const { language } = page.params;
-		const selectedLanguage = language;
-		return { selectedLanguage };
-	});
-}
-
-const U5Blanguageu5D = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let { selectedLanguage } = $$props;
-	if ($$props.selectedLanguage === void 0 && $$bindings.selectedLanguage && selectedLanguage !== void 0) $$bindings.selectedLanguage(selectedLanguage);
-	return `${validate_component(MainMenu, "MainMenu").$$render($$result, { selectedLanguage }, {}, {})}`;
-});
-
-var component_6 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    'default': U5Blanguageu5D,
-    preload: preload$2
-});
-
-/* src\client\components\Titles\HeaderTitle.svelte generated by Svelte v3.34.0 */
-
-const HeaderTitle = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let { title } = $$props;
-	if ($$props.title === void 0 && $$bindings.title && title !== void 0) $$bindings.title(title);
-	return `<h1 class="${"text-center my-1 text-2xl text-bangarang-darkEmphasis"}">${escape(title)}</h1>`;
-});
-
-/* src\client\components\Headers\ValuePropositionHeader.svelte generated by Svelte v3.34.0 */
-
-const ValuePropositionHeader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $languageStore, $$unsubscribe_languageStore;
-	validate_store(languageStore, "languageStore");
-	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
-	
-	let { valuePropositionDesignCanvas } = $$props;
-	if ($$props.valuePropositionDesignCanvas === void 0 && $$bindings.valuePropositionDesignCanvas && valuePropositionDesignCanvas !== void 0) $$bindings.valuePropositionDesignCanvas(valuePropositionDesignCanvas);
-	$$unsubscribe_languageStore();
-
-	return `<header class="${"flex flex-col"}">${validate_component(HeaderTitle, "HeaderTitle").$$render(
-		$$result,
-		{
-			title: new Message(valuePropositionDesignCanvas.title).getMessage($languageStore)
-		},
-		{},
-		{}
-	)}</header>`;
-});
-
-/* src\client\components\Lists\ValuePropositionDesignCanvasList.svelte generated by Svelte v3.34.0 */
-
-const ValuePropositionDesignCanvasList = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $languageStore, $$unsubscribe_languageStore;
-	validate_store(languageStore, "languageStore");
-	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
-	
-	
-	let { valuePropositionDesignCanvas } = $$props;
-	const sections = Object.entries(valuePropositionDesignCanvas);
-	if ($$props.valuePropositionDesignCanvas === void 0 && $$bindings.valuePropositionDesignCanvas && valuePropositionDesignCanvas !== void 0) $$bindings.valuePropositionDesignCanvas(valuePropositionDesignCanvas);
-	$$unsubscribe_languageStore();
-
-	return `${each(sections, ([type, contents]) => `${type !== "audience" && type !== "pageLink" && Array.isArray(contents) && contents.length > 0
-	? `<section><h1 class="${"text-sm mt-4 mb-1 text-bangarang-darkEmphasis font-semibold text-center"}">${escape(new Message(retrieveSubTitleFromType(type)).getMessage($languageStore).toLocaleUpperCase())}</h1>
-            ${contents.length > 1
-		? `<ul class="${"list-disc list-inside"}">${each(contents, content => `<li class="${"text-bangarang-darkEmphasis text-sm"}">${escape(new Message(content).getMessage($languageStore))}</li>`)}
-                </ul>`
-		: `<p class="${"text-bangarang-darkEmphasis text-sm text-center"}">${escape(new Message(contents[0]).getMessage($languageStore))}</p>`}
-        </section>`
-	: ``}`)}`;
-});
-
-/* src\client\components\Mains\ValuePropositionMain.svelte generated by Svelte v3.34.0 */
-
-const ValuePropositionMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	
-	let { valuePropositionDesignCanvas } = $$props;
-	if ($$props.valuePropositionDesignCanvas === void 0 && $$bindings.valuePropositionDesignCanvas && valuePropositionDesignCanvas !== void 0) $$bindings.valuePropositionDesignCanvas(valuePropositionDesignCanvas);
-	return `<main class="${"flex-grow overflow-y-auto"}">${validate_component(ValuePropositionDesignCanvasList, "ValuePropositionDesignCanvasList").$$render($$result, { valuePropositionDesignCanvas }, {}, {})}</main>`;
-});
-
-/* src\client\components\Footers\ValuePropositionFooter.svelte generated by Svelte v3.34.0 */
-
-const ValuePropositionFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $languageStore, $$unsubscribe_languageStore;
-	validate_store(languageStore, "languageStore");
-	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
-	$$unsubscribe_languageStore();
-
-	return `<footer class="${"flex flex-col"}">${validate_component(Link, "Link").$$render(
-		$$result,
-		{
-			linkName: new Message(leanCanvasLinkMessage).getMessage($languageStore),
-			linkHref: `/${$languageStore}/${StaticView.LeanCanvas}`,
-			size: "small"
-		},
-		{},
-		{}
-	)}
-    ${validate_component(Link, "Link").$$render(
-		$$result,
-		{
-			linkName: new Message(useBangarangLinkMessage).getMessage($languageStore),
-			linkHref: `/${$languageStore}/${StaticView.MainMenu}`,
-			size: "small"
-		},
-		{},
-		{}
-	)}</footer>`;
-});
-
-/* src\client\views\ValuePropositionView.svelte generated by Svelte v3.34.0 */
-
-const ValuePropositionView = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	
-	let { valuePropositionDesignCanvas } = $$props;
-	if ($$props.valuePropositionDesignCanvas === void 0 && $$bindings.valuePropositionDesignCanvas && valuePropositionDesignCanvas !== void 0) $$bindings.valuePropositionDesignCanvas(valuePropositionDesignCanvas);
-
-	return `${validate_component(ValuePropositionHeader, "ValuePropositionHeader").$$render($$result, { valuePropositionDesignCanvas }, {}, {})}
-${validate_component(ValuePropositionMain, "ValuePropositionMain").$$render($$result, { valuePropositionDesignCanvas }, {}, {})}
-${validate_component(ValuePropositionFooter, "ValuePropositionFooter").$$render($$result, {}, {}, {})}`;
-});
-
-const retreiveValuePropositionFromValuePropositionPageLink = (valuePropositionPageLink) => {
-    const valueProposition = valuePropositionsDesignCanvas.find(valuePropositionDesignCanvas => valuePropositionPageLink.startsWith(valuePropositionDesignCanvas.pageLink));
-    if (valueProposition)
-        return valueProposition;
-    throw new Error(`No value proposition has a valid prefix for the page link '${valuePropositionPageLink}'`);
-};
-
-/* src\routes\[language]\valuePropositions\[valuePropositionPageLink].svelte generated by Svelte v3.34.0 */
-
-var __awaiter$4 = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
-	function adopt(value) {
-		return value instanceof P
-		? value
-		: new P(function (resolve) {
-					resolve(value);
-				});
-	}
-
-	return new (P || (P = Promise))(function (resolve, reject) {
-			function fulfilled(value) {
-				try {
-					step(generator.next(value));
-				} catch(e) {
-					reject(e);
-				}
-			}
-
-			function rejected(value) {
-				try {
-					step(generator["throw"](value));
-				} catch(e) {
-					reject(e);
-				}
-			}
-
-			function step(result) {
-				result.done
-				? resolve(result.value)
-				: adopt(result.value).then(fulfilled, rejected);
-			}
-
-			step((generator = generator.apply(thisArg, _arguments || [])).next());
-		});
-};
-
-function preload$3(page, session) {
-	return __awaiter$4(this, void 0, void 0, function* () {
-		const { valuePropositionPageLink, language } = page.params;
-		const selectedLanguage = language;
-		const valuePropositionDesignCanvas = retreiveValuePropositionFromValuePropositionPageLink(valuePropositionPageLink);
-
-		return {
-			valuePropositionDesignCanvas,
-			selectedLanguage
-		};
-	});
-}
-
-const U5BvaluePropositionPageLinku5D = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	
-	let { valuePropositionDesignCanvas } = $$props;
-	let { selectedLanguage } = $$props;
-	assignLanguage(selectedLanguage);
-	onMount(() => redirectOnUnknownLanguage(selectedLanguage));
-	if ($$props.valuePropositionDesignCanvas === void 0 && $$bindings.valuePropositionDesignCanvas && valuePropositionDesignCanvas !== void 0) $$bindings.valuePropositionDesignCanvas(valuePropositionDesignCanvas);
-	if ($$props.selectedLanguage === void 0 && $$bindings.selectedLanguage && selectedLanguage !== void 0) $$bindings.selectedLanguage(selectedLanguage);
-	return `${validate_component(ValuePropositionView, "ValuePropositionView").$$render($$result, { valuePropositionDesignCanvas }, {}, {})}`;
-});
-
-var component_7 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    'default': U5BvaluePropositionPageLinku5D,
-    preload: preload$3
-});
-
-/* src\client\components\Headers\BusinessModelHeader.svelte generated by Svelte v3.34.0 */
-
-const BusinessModelHeader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $languageStore, $$unsubscribe_languageStore;
-	validate_store(languageStore, "languageStore");
-	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
-	$$unsubscribe_languageStore();
-
-	return `<header class="${"flex flex-col"}">${validate_component(HeaderTitle, "HeaderTitle").$$render(
-		$$result,
-		{
-			title: new Message(bangarangBusinessModelTitleMessage).getMessage($languageStore)
-		},
-		{},
-		{}
-	)}</header>`;
-});
-
-/* src\client\components\Cards\DescriptionCard.svelte generated by Svelte v3.34.0 */
-
-const DescriptionCard = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	
-	let { descriptionCardContract } = $$props;
-	if ($$props.descriptionCardContract === void 0 && $$bindings.descriptionCardContract && descriptionCardContract !== void 0) $$bindings.descriptionCardContract(descriptionCardContract);
-
-	return `<section class="${"mb-2 p-1 border-bangarang-lightEmphasis border rounded shadow"}"><h2 class="${"text-bangarang-dark text-center"}">${escape(descriptionCardContract.title)}</h2>
-    <p class="${"text-bangarang-darkEmphasis text-center font-light italic text-sm"}">${escape(descriptionCardContract.description)}</p>
-    ${descriptionCardContract.bulletPoints !== undefined && descriptionCardContract.bulletPoints.length > 1
-	? `<ul class="${"list-disc list-inside"}">${each(descriptionCardContract.bulletPoints, bulletPoint => `<li class="${"text-bangarang-darkEmphasis text-sm"}">${escape(bulletPoint)}</li>`)}</ul>`
-	: `${descriptionCardContract.bulletPoints !== undefined && descriptionCardContract.bulletPoints.length === 1
-		? `<p class="${"text-bangarang-darkEmphasis text-sm text-center"}">${escape(descriptionCardContract.bulletPoints[0])}</p>`
-		: ``}`}
-    ${descriptionCardContract.links !== undefined && descriptionCardContract.links.length > 0
-	? `${each(descriptionCardContract.links, link => `<p class="${"text-center"}">${validate_component(Link, "Link").$$render(
-			$$result,
-			{
-				linkHref: link.href,
-				linkName: link.name,
-				size: "small"
-			},
-			{},
-			{}
-		)}</p>`)}`
-	: ``}</section>`;
-});
-
-/* src\client\components\Mains\BusinessModelMain.svelte generated by Svelte v3.34.0 */
-
-const BusinessModelMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $languageStore, $$unsubscribe_languageStore;
-	validate_store(languageStore, "languageStore");
-	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
-	
-
-	const BusinessModelValues = [
-		{
-			title: new Message(whatIsBangarangMessages.title).getMessage($languageStore),
-			description: new Message(whatIsBangarangMessages.description).getMessage($languageStore),
-			bulletPoints: whatIsBangarangMessages.bulletPoints.map(bulletPoint => new Message(bulletPoint).getMessage($languageStore))
-		},
-		{
-			title: new Message(definitionOfBangarangMessages.title).getMessage($languageStore),
-			description: new Message(definitionOfBangarangMessages.description).getMessage($languageStore),
-			bulletPoints: definitionOfBangarangMessages.bulletPoints.map(bulletPoint => new Message(bulletPoint).getMessage($languageStore))
-		},
-		{
-			title: new Message(whyThisNameMessages.title).getMessage($languageStore),
-			description: new Message(whyThisNameMessages.description).getMessage($languageStore),
-			bulletPoints: whyThisNameMessages.bulletPoints.map(bulletPoint => new Message(bulletPoint).getMessage($languageStore))
-		}
-	];
-
-	$$unsubscribe_languageStore();
-
-	return `<main class="${"flex-grow overflow-y-auto"}">${each(BusinessModelValues, businessModelValue => `${validate_component(DescriptionCard, "DescriptionCard").$$render(
-		$$result,
-		{
-			descriptionCardContract: businessModelValue
-		},
-		{},
-		{}
-	)}`)}</main>`;
-});
-
-/* src\client\components\Footers\BusinessModelFooter.svelte generated by Svelte v3.34.0 */
-
-const BusinessModelFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	let $languageStore, $$unsubscribe_languageStore;
-	validate_store(languageStore, "languageStore");
-	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
-	$$unsubscribe_languageStore();
-
-	return `<footer class="${"flex flex-col mb-1"}">${validate_component(Link, "Link").$$render(
-		$$result,
-		{
-			linkName: new Message(leanCanvasLinkMessage).getMessage($languageStore),
-			linkHref: `/${$languageStore}/${StaticView.LeanCanvas}`,
-			size: "small"
-		},
-		{},
-		{}
-	)}
-    ${validate_component(Link, "Link").$$render(
-		$$result,
-		{
-			linkName: new Message(useBangarangLinkMessage).getMessage($languageStore),
-			linkHref: `/${$languageStore}/${StaticView.MainMenu}`,
-			size: "small"
-		},
-		{},
-		{}
-	)}</footer>`;
-});
-
-/* src\client\views\BusinessModelView.svelte generated by Svelte v3.34.0 */
-
-const BusinessModelView = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-	return `${validate_component(BusinessModelHeader, "BusinessModelHeader").$$render($$result, {}, {}, {})}
-${validate_component(BusinessModelMain, "BusinessModelMain").$$render($$result, {}, {}, {})}
-${validate_component(BusinessModelFooter, "BusinessModelFooter").$$render($$result, {}, {}, {})}`;
-});
-
-/* src\routes\[language]\BusinessModel.svelte generated by Svelte v3.34.0 */
+/* src\routes\[language]\SigningInMenu.svelte generated by Svelte v3.34.0 */
 
 var __awaiter$5 = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
 	function adopt(value) {
@@ -4014,18 +3686,203 @@ function preload$4(page, session) {
 	});
 }
 
-const BusinessModel = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+const SigningInMenu = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	let { selectedLanguage } = $$props;
 	assignLanguage(selectedLanguage);
 	onMount(() => redirectOnUnknownLanguage(selectedLanguage));
 	if ($$props.selectedLanguage === void 0 && $$bindings.selectedLanguage && selectedLanguage !== void 0) $$bindings.selectedLanguage(selectedLanguage);
-	return `${validate_component(BusinessModelView, "BusinessModelView").$$render($$result, {}, {}, {})}`;
+	return `${validate_component(SignInView, "SignInView").$$render($$result, {}, {}, {})}`;
 });
 
-var component_8 = /*#__PURE__*/Object.freeze({
+var component_5 = /*#__PURE__*/Object.freeze({
     __proto__: null,
-    'default': BusinessModel,
+    'default': SigningInMenu,
     preload: preload$4
+});
+
+/* src\client\components\Inputs\ClaimAsProposalRadioButton.svelte generated by Svelte v3.34.0 */
+
+const ClaimAsProposalRadioButton = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	$$unsubscribe_languageStore();
+
+	return `<input id="${"claimType"}" type="${"radio"}" name="${"claimType"}" checked>
+<label for="${"claimType"}" class="${"text-bangarang-lightEmphasis"}">${escape(new Message(simpleClaimTypeMessage).getMessage($languageStore))}</label>`;
+});
+
+/* src\client\components\Form\Fields\GenericTextAreaField.svelte generated by Svelte v3.34.0 */
+
+const rows = 10;
+
+const GenericTextAreaField = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { fieldId } = $$props;
+	let { fieldName } = $$props;
+	let { placeholder } = $$props;
+	let { isRequired } = $$props;
+	let { isReadOnly } = $$props;
+	if ($$props.fieldId === void 0 && $$bindings.fieldId && fieldId !== void 0) $$bindings.fieldId(fieldId);
+	if ($$props.fieldName === void 0 && $$bindings.fieldName && fieldName !== void 0) $$bindings.fieldName(fieldName);
+	if ($$props.placeholder === void 0 && $$bindings.placeholder && placeholder !== void 0) $$bindings.placeholder(placeholder);
+	if ($$props.isRequired === void 0 && $$bindings.isRequired && isRequired !== void 0) $$bindings.isRequired(isRequired);
+	if ($$props.isReadOnly === void 0 && $$bindings.isReadOnly && isReadOnly !== void 0) $$bindings.isReadOnly(isReadOnly);
+
+	return `<label${add_attribute("for", fieldId, 0)} class="${"text-xs text-bangarang-lightEmphasis"}">${escape(fieldName)}</label>
+<textarea ${isReadOnly ? "readonly" : ""}${add_attribute("name", fieldName, 0)}${add_attribute("id", fieldId, 0)} ${isRequired ? "required" : ""}${add_attribute("placeholder", placeholder, 0)}${add_attribute("rows", rows, 0)} class="${"text-xl w-full text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"}"></textarea>`;
+});
+
+/* src\client\components\Form\NewClaimForm.svelte generated by Svelte v3.34.0 */
+
+const NewClaimForm = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+
+	let $declaringClaimUserNotificationStore,
+		$$unsubscribe_declaringClaimUserNotificationStore;
+
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	validate_store(declaringClaimUserNotificationStore, "declaringClaimUserNotificationStore");
+	$$unsubscribe_declaringClaimUserNotificationStore = subscribe(declaringClaimUserNotificationStore, value => $declaringClaimUserNotificationStore = value);
+
+	$$unsubscribe_languageStore();
+	$$unsubscribe_declaringClaimUserNotificationStore();
+
+	return `<form class="${"w-full flex flex-col items-center"}">${validate_component(GenericTextAreaField, "GenericTextAreaField").$$render(
+		$$result,
+		{
+			fieldId: "claimTitle",
+			fieldName: new Message(claimTitleFieldNameMessage).getMessage($languageStore),
+			placeholder: new Message(claimTitlePlaceholderMessage).getMessage($languageStore),
+			isRequired: true,
+			isReadOnly: $declaringClaimUserNotificationStore.status !== "Idle"
+		},
+		{},
+		{}
+	)}
+    <fieldset><legend class="${"text-bangarang-lightEmphasis"}">${escape(new Message(claimTypeMessage).getMessage($languageStore))}</legend>
+        ${validate_component(ClaimAsProposalRadioButton, "ClaimAsProposalRadioButton").$$render($$result, {}, {}, {})}</fieldset>
+    ${validate_component(GenericSubmitField, "GenericSubmitField").$$render(
+		$$result,
+		{
+			fieldId: "declare",
+			fieldName: new Message(declareClaimSubmitMessage).getMessage($languageStore),
+			isReadOnly: $declaringClaimUserNotificationStore.status !== "Idle"
+		},
+		{},
+		{}
+	)}</form>`;
+});
+
+/* src\client\components\Mains\DeclareClaimMain.svelte generated by Svelte v3.34.0 */
+
+const DeclareClaimMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `<main${add_attribute("class", mainClass, 0)}>${validate_component(NewClaimForm, "NewClaimForm").$$render($$result, {}, {}, {})}</main>`;
+});
+
+/* src\client\components\Notification\DeclaringInformation.svelte generated by Svelte v3.34.0 */
+
+const DeclaringInformation = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $declaringClaimUserNotificationStore,
+		$$unsubscribe_declaringClaimUserNotificationStore;
+
+	validate_store(declaringClaimUserNotificationStore, "declaringClaimUserNotificationStore");
+	$$unsubscribe_declaringClaimUserNotificationStore = subscribe(declaringClaimUserNotificationStore, value => $declaringClaimUserNotificationStore = value);
+	$$unsubscribe_declaringClaimUserNotificationStore();
+
+	return `${validate_component(GenericTaskNotification, "GenericTaskNotification").$$render(
+		$$result,
+		{
+			taskNotification: $declaringClaimUserNotificationStore
+		},
+		{},
+		{}
+	)}`;
+});
+
+/* src\client\components\Footers\DeclareClaimFooter.svelte generated by Svelte v3.34.0 */
+
+const DeclareClaimFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $declaringClaimUserNotificationStore,
+		$$unsubscribe_declaringClaimUserNotificationStore;
+
+	validate_store(declaringClaimUserNotificationStore, "declaringClaimUserNotificationStore");
+	$$unsubscribe_declaringClaimUserNotificationStore = subscribe(declaringClaimUserNotificationStore, value => $declaringClaimUserNotificationStore = value);
+	$$unsubscribe_declaringClaimUserNotificationStore();
+
+	return `<footer${add_attribute("class", footerClass, 0)}>${$declaringClaimUserNotificationStore.status !== "Executing"
+	? `<section${add_attribute("class", appBarClass, 0)}>${validate_component(NavigateBackToMainMenu, "NavigateBackToMainMenu").$$render($$result, {}, {}, {})}</section>
+        ${$declaringClaimUserNotificationStore.status !== "Idle"
+		? `${validate_component(DeclaringInformation, "DeclaringInformation").$$render($$result, {}, {}, {})}`
+		: ``}`
+	: `${validate_component(DeclaringInformation, "DeclaringInformation").$$render($$result, {}, {}, {})}`}</footer>`;
+});
+
+/* src\client\views\DeclareClaimView.svelte generated by Svelte v3.34.0 */
+
+const DeclareClaimView = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `${validate_component(DeclareClaimMain, "DeclareClaimMain").$$render($$result, {}, {}, {})}
+${validate_component(DeclareClaimFooter, "DeclareClaimFooter").$$render($$result, {}, {}, {})}`;
+});
+
+/* src\routes\[language]\DeclareClaim.svelte generated by Svelte v3.34.0 */
+
+var __awaiter$6 = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
+	function adopt(value) {
+		return value instanceof P
+		? value
+		: new P(function (resolve) {
+					resolve(value);
+				});
+	}
+
+	return new (P || (P = Promise))(function (resolve, reject) {
+			function fulfilled(value) {
+				try {
+					step(generator.next(value));
+				} catch(e) {
+					reject(e);
+				}
+			}
+
+			function rejected(value) {
+				try {
+					step(generator["throw"](value));
+				} catch(e) {
+					reject(e);
+				}
+			}
+
+			function step(result) {
+				result.done
+				? resolve(result.value)
+				: adopt(result.value).then(fulfilled, rejected);
+			}
+
+			step((generator = generator.apply(thisArg, _arguments || [])).next());
+		});
+};
+
+function preload$5(page, session) {
+	return __awaiter$6(this, void 0, void 0, function* () {
+		const { language } = page.params;
+		const selectedLanguage = language;
+		return { selectedLanguage };
+	});
+}
+
+const DeclareClaim = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { selectedLanguage } = $$props;
+	assignLanguage(selectedLanguage);
+	onMount(() => redirectOnUnknownLanguage(selectedLanguage));
+	if ($$props.selectedLanguage === void 0 && $$bindings.selectedLanguage && selectedLanguage !== void 0) $$bindings.selectedLanguage(selectedLanguage);
+	return `${validate_component(DeclareClaimView, "DeclareClaimView").$$render($$result, {}, {}, {})}`;
+});
+
+var component_6 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    'default': DeclareClaim,
+    preload: preload$5
 });
 
 /* src\client\components\Titles\MainSubTitle.svelte generated by Svelte v3.34.0 */
@@ -4042,6 +3899,50 @@ const MainSubTitle = create_ssr_component(($$result, $$props, $$bindings, slots)
 	if ($$props.title === void 0 && $$bindings.title && title !== void 0) $$bindings.title(title);
 	if ($$props.theme === void 0 && $$bindings.theme && theme !== void 0) $$bindings.theme(theme);
 	return `<h2 class="${"text-xl m-4 " + escape(colorFromTheme(theme)) + " font-medium text-right"}">${escape(title)}</h2>`;
+});
+
+/* src\client\components\Buttons\GenericButton.svelte generated by Svelte v3.34.0 */
+
+const GenericButton = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { textbutton = "CLICK ME!" } = $$props;
+	let { size = "medium" } = $$props;
+	let { onClickAction } = $$props;
+	let { customClasses = "" } = $$props;
+	let { color = "light" } = $$props;
+	let { disabled = false } = $$props;
+
+	const textSizeFromSize = size => {
+		if (size === "large") return "text-2xl";
+		return "text-xl";
+	};
+
+	const marginTopFromSize = size => {
+		if (size === "large") return "mt-4";
+		return "";
+	};
+
+	const borderFromSize = size => {
+		if (size === "large") return "border-2";
+		return "border";
+	};
+
+	const buttonThemeFromColorAndDisabled = (color, disabled) => {
+		if (color === "dark" && !disabled) return "text-bangarang-light border-bangarang-light bg-bangarang-dark";
+		if (color === "dark" && disabled) return "text-bangarang-darkEmphasis border-bangarang-darkEmphasis bg-bangarang-darkEmphasis";
+		if (color === "light" && disabled) return "text-bangarang-lightEmphasis border-bangarang-lightEmphasis bg-bangarang-light";
+		return "text-bangarang-dark border-bangarang-dark bg-bangarang-light";
+	};
+
+	if ($$props.textbutton === void 0 && $$bindings.textbutton && textbutton !== void 0) $$bindings.textbutton(textbutton);
+	if ($$props.size === void 0 && $$bindings.size && size !== void 0) $$bindings.size(size);
+	if ($$props.onClickAction === void 0 && $$bindings.onClickAction && onClickAction !== void 0) $$bindings.onClickAction(onClickAction);
+	if ($$props.customClasses === void 0 && $$bindings.customClasses && customClasses !== void 0) $$bindings.customClasses(customClasses);
+	if ($$props.color === void 0 && $$bindings.color && color !== void 0) $$bindings.color(color);
+	if ($$props.disabled === void 0 && $$bindings.disabled && disabled !== void 0) $$bindings.disabled(disabled);
+
+	return `${disabled
+	? `<button class="${escape(textSizeFromSize(size)) + " " + escape(marginTopFromSize(size)) + " " + escape(customClasses) + " " + escape(buttonThemeFromColorAndDisabled(color, disabled)) + " my-1 px-1 pb-1  " + escape(borderFromSize(size)) + " rounded-md"}" disabled>${escape(textbutton)}</button>`
+	: `<button class="${escape(textSizeFromSize(size)) + " " + escape(marginTopFromSize(size)) + " " + escape(customClasses) + " " + escape(buttonThemeFromColorAndDisabled(color, disabled)) + " my-1 px-1 pb-1  " + escape(borderFromSize(size)) + " rounded-md"}">${escape(textbutton)}</button>`}`;
 });
 
 /* src\client\components\Mains\LandingPageMain.svelte generated by Svelte v3.34.0 */
@@ -4062,7 +3963,7 @@ const LandingPageMain = create_ssr_component(($$result, $$props, $$bindings, slo
 	if ($$props.supportingHeadLine === void 0 && $$bindings.supportingHeadLine && supportingHeadLine !== void 0) $$bindings.supportingHeadLine(supportingHeadLine);
 	$$unsubscribe_languageStore();
 
-	return `<main class="${"flex-grow overflow-y-auto flex flex-col items-center justify-evenly bg-bangarang-dark"}"><section>${mainHeadLine
+	return `<main${add_attribute("class", mainClass, 0)}><section>${mainHeadLine
 	? `${validate_component(MainTitle, "MainTitle").$$render(
 			$$result,
 			{
@@ -4111,7 +4012,7 @@ const LandingPageView = create_ssr_component(($$result, $$props, $$bindings, slo
 
 /* src\routes\[language]\landingPages\[audience]\[landingPageId].svelte generated by Svelte v3.34.0 */
 
-var __awaiter$6 = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
+var __awaiter$7 = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
 	function adopt(value) {
 		return value instanceof P
 		? value
@@ -4147,8 +4048,8 @@ var __awaiter$6 = undefined && undefined.__awaiter || function (thisArg, _argume
 		});
 };
 
-function preload$5(page, session) {
-	return __awaiter$6(this, void 0, void 0, function* () {
+function preload$6(page, session) {
+	return __awaiter$7(this, void 0, void 0, function* () {
 		const { audience, landingPageId, language } = page.params;
 		const valueProposition = retreiveValuePropositionFromValuePropositionPageLink(audience);
 		const mainHeadLine = valueProposition.pains[landingPageId - 1];
@@ -4189,10 +4090,10 @@ const U5BlandingPageIdu5D = create_ssr_component(($$result, $$props, $$bindings,
 	)}`;
 });
 
-var component_9 = /*#__PURE__*/Object.freeze({
+var component_7 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     'default': U5BlandingPageIdu5D,
-    preload: preload$5
+    preload: preload$6
 });
 
 /* src\client\components\Headers\LeanCanvasHeader.svelte generated by Svelte v3.34.0 */
@@ -4203,7 +4104,7 @@ const LeanCanvasHeader = create_ssr_component(($$result, $$props, $$bindings, sl
 	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
 	$$unsubscribe_languageStore();
 
-	return `<header class="${"flex flex-col"}">${validate_component(HeaderTitle, "HeaderTitle").$$render(
+	return `<header${add_attribute("class", headerCenteredClass, 0)}>${validate_component(HeaderTitle, "HeaderTitle").$$render(
 		$$result,
 		{
 			title: new Message(leanCanvasTitleMessage).getMessage($languageStore)
@@ -4221,7 +4122,7 @@ const LeanCanvasMain = create_ssr_component(($$result, $$props, $$bindings, slot
 	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
 	$$unsubscribe_languageStore();
 
-	return `<main class="${"flex-grow overflow-y-auto"}">${each(leanCanvas($languageStore), leanCanvasPart => `${validate_component(MainTitle, "MainTitle").$$render(
+	return `<main${add_attribute("class", `${mainWithOverflowClass}`, 0)}>${each(leanCanvas($languageStore), leanCanvasPart => `${validate_component(MainTitle, "MainTitle").$$render(
 		$$result,
 		{
 			title: leanCanvasPart.partName,
@@ -4233,34 +4134,33 @@ const LeanCanvasMain = create_ssr_component(($$result, $$props, $$bindings, slot
         ${each(leanCanvasPart.sections, section => `${validate_component(DescriptionCard, "DescriptionCard").$$render($$result, { descriptionCardContract: section }, {}, {})}`)}`)}</main>`;
 });
 
-/* src\client\components\Footers\LeanCanvasFooter.svelte generated by Svelte v3.34.0 */
+/* src\client\components\Destination\NavigateToMainMenu.svelte generated by Svelte v3.34.0 */
 
-const LeanCanvasFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+const NavigateToMainMenu = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	let $languageStore, $$unsubscribe_languageStore;
 	validate_store(languageStore, "languageStore");
 	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	const navigateToUrl = url => goto(url);
+	const navigateToDeclareClaim = () => navigateToUrl(`/${$languageStore}/${StaticView.MainMenu}`);
 	$$unsubscribe_languageStore();
 
-	return `<footer class="${"flex flex-col"}">${validate_component(Link, "Link").$$render(
+	return `${validate_component(GenericDestination, "GenericDestination").$$render(
 		$$result,
 		{
-			linkName: new Message(faqLinkNameMessage).getMessage($languageStore),
-			linkHref: `/${$languageStore}/${StaticView.BusinessModel}`,
-			size: "small"
+			destinationMessage: backToMainMenuLinkMessage,
+			onClickAction: navigateToDeclareClaim,
+			svgHtml: home
 		},
 		{},
 		{}
-	)}
-    ${validate_component(Link, "Link").$$render(
-		$$result,
-		{
-			linkName: new Message(useBangarangLinkMessage).getMessage($languageStore),
-			linkHref: `/${$languageStore}/${StaticView.MainMenu}`,
-			size: "small"
-		},
-		{},
-		{}
-	)}</footer>`;
+	)}`;
+});
+
+/* src\client\components\Footers\LeanCanvasFooter.svelte generated by Svelte v3.34.0 */
+
+const LeanCanvasFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `<footer${add_attribute("class", footerClass, 0)}><section${add_attribute("class", appBarClass, 0)}>${validate_component(NavigateToBusinessModel, "NavigateToBusinessModel").$$render($$result, {}, {}, {})}
+        ${validate_component(NavigateToMainMenu, "NavigateToMainMenu").$$render($$result, {}, {}, {})}</section></footer>`;
 });
 
 /* src\client\views\LeanCanvasView.svelte generated by Svelte v3.34.0 */
@@ -4273,7 +4173,7 @@ ${validate_component(LeanCanvasFooter, "LeanCanvasFooter").$$render($$result, {}
 
 /* src\routes\[language]\LeanCanvas.svelte generated by Svelte v3.34.0 */
 
-var __awaiter$7 = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
+var __awaiter$8 = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
 	function adopt(value) {
 		return value instanceof P
 		? value
@@ -4309,8 +4209,8 @@ var __awaiter$7 = undefined && undefined.__awaiter || function (thisArg, _argume
 		});
 };
 
-function preload$6(page, session) {
-	return __awaiter$7(this, void 0, void 0, function* () {
+function preload$7(page, session) {
+	return __awaiter$8(this, void 0, void 0, function* () {
 		const { language } = page.params;
 		const selectedLanguage = language;
 		return { selectedLanguage };
@@ -4325,10 +4225,592 @@ const LeanCanvas = create_ssr_component(($$result, $$props, $$bindings, slots) =
 	return `${validate_component(LeanCanvasView, "LeanCanvasView").$$render($$result, {}, {}, {})}`;
 });
 
-var component_10 = /*#__PURE__*/Object.freeze({
+var component_8 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     'default': LeanCanvas,
-    preload: preload$6
+    preload: preload$7
+});
+
+/* src\client\components\Titles\RegisterTitle.svelte generated by Svelte v3.34.0 */
+
+const RegisterTitle = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	$$unsubscribe_languageStore();
+
+	return `<p class="${"text-2xl text-bangarang-darkEmphasis my-1"}">${escape(new Message(registerOnBangarangTitleMessage).getMessage($languageStore))}</p>
+<h1 class="${"text-4xl text-bangarang-darkEmphasis my-1"}">${escape(new Message(bangarang).getMessage($languageStore))}</h1>`;
+});
+
+/* src\client\components\Headers\RegisterHeader.svelte generated by Svelte v3.34.0 */
+
+const RegisterHeader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `<header${add_attribute("class", headerEndClass, 0)}>${validate_component(RegisterTitle, "RegisterTitle").$$render($$result, {}, {}, {})}</header>`;
+});
+
+/* src\client\components\Cards\SecurityUserCard.svelte generated by Svelte v3.34.0 */
+
+const SecurityUserCard = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	const message = new Message(registerSecurityMessage).getMessage($languageStore);
+	$$unsubscribe_languageStore();
+	return `<div class="${"border rounded my-6 border-bangarang-failed bg-bangarang-light flex flex-col items-center"}"><p class="${"m-1 text-bangarang-lightEmphasis flex-grow text-center text-xs"}">${message}</p></div>`;
+});
+
+/* src\client\components\Form\RegisterForm.svelte generated by Svelte v3.34.0 */
+
+const RegisterForm = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+
+	let $registeringUserNotificationStore,
+		$$unsubscribe_registeringUserNotificationStore;
+
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	validate_store(registeringUserNotificationStore, "registeringUserNotificationStore");
+	$$unsubscribe_registeringUserNotificationStore = subscribe(registeringUserNotificationStore, value => $registeringUserNotificationStore = value);
+
+	$$unsubscribe_languageStore();
+	$$unsubscribe_registeringUserNotificationStore();
+
+	return `<form class="${"form-example flex flex-col"}">${validate_component(GenericTextField, "GenericTextField").$$render(
+		$$result,
+		{
+			fieldId: "username",
+			fieldName: new Message(registerFormUsernameMessage).getMessage($languageStore),
+			isReadOnly: $registeringUserNotificationStore.status !== "Idle",
+			isRequired: true
+		},
+		{},
+		{}
+	)}
+    ${validate_component(GenericTextField, "GenericTextField").$$render(
+		$$result,
+		{
+			fieldId: "fullname",
+			fieldName: new Message(registerFormFullnameMessage).getMessage($languageStore),
+			isReadOnly: $registeringUserNotificationStore.status !== "Idle",
+			isRequired: true
+		},
+		{},
+		{}
+	)}
+    ${validate_component(GenericTextField, "GenericTextField").$$render(
+		$$result,
+		{
+			fieldId: "email",
+			fieldName: new Message(registerFormEmailMessage).getMessage($languageStore),
+			isReadOnly: $registeringUserNotificationStore.status !== "Idle",
+			isRequired: true
+		},
+		{},
+		{}
+	)}
+    ${validate_component(GenericPasswordField, "GenericPasswordField").$$render(
+		$$result,
+		{
+			fieldId: "password",
+			fieldName: new Message(registerFormPasswordMessage).getMessage($languageStore),
+			isReadOnly: $registeringUserNotificationStore.status !== "Idle",
+			isRequired: true
+		},
+		{},
+		{}
+	)}
+    ${validate_component(GenericSubmitField, "GenericSubmitField").$$render(
+		$$result,
+		{
+			fieldId: "register",
+			fieldName: new Message(registerFormSubmitMessage).getMessage($languageStore),
+			isReadOnly: $registeringUserNotificationStore.status !== "Idle"
+		},
+		{},
+		{}
+	)}</form>`;
+});
+
+/* src\client\components\Sections\RegisterSection.svelte generated by Svelte v3.34.0 */
+
+const RegisterSection = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	$$unsubscribe_languageStore();
+
+	return `${validate_component(SecurityUserCard, "SecurityUserCard").$$render($$result, {}, {}, {})}
+<p class="${"text-bangarang-lightEmphasis"}">${escape(new Message(registerFormTitleMessage).getMessage($languageStore))}</p>
+${validate_component(RegisterForm, "RegisterForm").$$render($$result, {}, {}, {})}`;
+});
+
+/* src\client\components\Mains\RegisterMain.svelte generated by Svelte v3.34.0 */
+
+const RegisterMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `<main${add_attribute("class", mainClass, 0)}>${validate_component(RegisterSection, "RegisterSection").$$render($$result, {}, {}, {})}</main>`;
+});
+
+/* src\client\components\Notification\RegisteringInformation.svelte generated by Svelte v3.34.0 */
+
+const RegisteringInformation = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $registeringUserNotificationStore,
+		$$unsubscribe_registeringUserNotificationStore;
+
+	validate_store(registeringUserNotificationStore, "registeringUserNotificationStore");
+	$$unsubscribe_registeringUserNotificationStore = subscribe(registeringUserNotificationStore, value => $registeringUserNotificationStore = value);
+	$$unsubscribe_registeringUserNotificationStore();
+
+	return `${validate_component(GenericTaskNotification, "GenericTaskNotification").$$render(
+		$$result,
+		{
+			taskNotification: $registeringUserNotificationStore
+		},
+		{},
+		{}
+	)}`;
+});
+
+/* src\client\components\Destination\NavigateToSignInMenu.svelte generated by Svelte v3.34.0 */
+
+const NavigateToSignInMenu = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	const navigateToUrl = url => goto(url);
+	const navigateToDeclareClaim = () => navigateToUrl(`/${$languageStore}/${StaticView.SigningInMenu}`);
+	$$unsubscribe_languageStore();
+
+	return `${validate_component(GenericDestination, "GenericDestination").$$render(
+		$$result,
+		{
+			destinationMessage: backToSignInMenuMessage,
+			onClickAction: navigateToDeclareClaim,
+			svgHtml: logIn
+		},
+		{},
+		{}
+	)}`;
+});
+
+/* src\client\components\Footers\RegisterFooter.svelte generated by Svelte v3.34.0 */
+
+const RegisterFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $registeringUserNotificationStore,
+		$$unsubscribe_registeringUserNotificationStore;
+
+	validate_store(registeringUserNotificationStore, "registeringUserNotificationStore");
+	$$unsubscribe_registeringUserNotificationStore = subscribe(registeringUserNotificationStore, value => $registeringUserNotificationStore = value);
+	$$unsubscribe_registeringUserNotificationStore();
+
+	return `<footer${add_attribute("class", footerClass, 0)}>${$registeringUserNotificationStore.status !== "Executing"
+	? `<section${add_attribute("class", appBarClass, 0)}>${validate_component(NavigateToSignInMenu, "NavigateToSignInMenu").$$render($$result, {}, {}, {})}</section> 
+        ${$registeringUserNotificationStore.status !== "Idle"
+		? `${validate_component(RegisteringInformation, "RegisteringInformation").$$render($$result, {}, {}, {})}`
+		: ``}`
+	: `${validate_component(RegisteringInformation, "RegisteringInformation").$$render($$result, {}, {}, {})}`}</footer>`;
+});
+
+/* src\client\views\RegisterView.svelte generated by Svelte v3.34.0 */
+
+const RegisterView = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	return `${validate_component(RegisterHeader, "RegisterHeader").$$render($$result, {}, {}, {})}
+${validate_component(RegisterMain, "RegisterMain").$$render($$result, {}, {}, {})}
+${validate_component(RegisterFooter, "RegisterFooter").$$render($$result, {}, {}, {})}`;
+});
+
+/* src\routes\[language]\Register.svelte generated by Svelte v3.34.0 */
+
+var __awaiter$9 = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
+	function adopt(value) {
+		return value instanceof P
+		? value
+		: new P(function (resolve) {
+					resolve(value);
+				});
+	}
+
+	return new (P || (P = Promise))(function (resolve, reject) {
+			function fulfilled(value) {
+				try {
+					step(generator.next(value));
+				} catch(e) {
+					reject(e);
+				}
+			}
+
+			function rejected(value) {
+				try {
+					step(generator["throw"](value));
+				} catch(e) {
+					reject(e);
+				}
+			}
+
+			function step(result) {
+				result.done
+				? resolve(result.value)
+				: adopt(result.value).then(fulfilled, rejected);
+			}
+
+			step((generator = generator.apply(thisArg, _arguments || [])).next());
+		});
+};
+
+function preload$8(page, session) {
+	return __awaiter$9(this, void 0, void 0, function* () {
+		const { language } = page.params;
+		const selectedLanguage = language;
+		return { selectedLanguage };
+	});
+}
+
+const Register = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { selectedLanguage } = $$props;
+	assignLanguage(selectedLanguage);
+	onMount(() => redirectOnUnknownLanguage(selectedLanguage));
+	if ($$props.selectedLanguage === void 0 && $$bindings.selectedLanguage && selectedLanguage !== void 0) $$bindings.selectedLanguage(selectedLanguage);
+	return `${validate_component(RegisterView, "RegisterView").$$render($$result, {}, {}, {})}`;
+});
+
+var component_10 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    'default': Register,
+    preload: preload$8
+});
+
+/* src\client\components\Destination\ClaimShare.svelte generated by Svelte v3.34.0 */
+
+const ClaimShare = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { copyUriToClipboard } = $$props;
+	if ($$props.copyUriToClipboard === void 0 && $$bindings.copyUriToClipboard && copyUriToClipboard !== void 0) $$bindings.copyUriToClipboard(copyUriToClipboard);
+
+	return `${validate_component(GenericDestination, "GenericDestination").$$render(
+		$$result,
+		{
+			onClickAction: copyUriToClipboard,
+			destinationMessage: shareClaimMessage,
+			svgHtml: share
+		},
+		{},
+		{}
+	)}`;
+});
+
+/* src\client\components\Notification\ClaimingInformation.svelte generated by Svelte v3.34.0 */
+
+const ClaimingInformation = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $claimingUserNotificationStore, $$unsubscribe_claimingUserNotificationStore;
+	validate_store(claimingUserNotificationStore, "claimingUserNotificationStore");
+	$$unsubscribe_claimingUserNotificationStore = subscribe(claimingUserNotificationStore, value => $claimingUserNotificationStore = value);
+	$$unsubscribe_claimingUserNotificationStore();
+
+	return `${validate_component(GenericTaskNotification, "GenericTaskNotification").$$render(
+		$$result,
+		{
+			taskNotification: $claimingUserNotificationStore
+		},
+		{},
+		{}
+	)}`;
+});
+
+/* src\client\components\Footers\ClaimFooter.svelte generated by Svelte v3.34.0 */
+
+const ClaimFooter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $claimingUserNotificationStore, $$unsubscribe_claimingUserNotificationStore;
+
+	let $declaringClaimUserNotificationStore,
+		$$unsubscribe_declaringClaimUserNotificationStore;
+
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(claimingUserNotificationStore, "claimingUserNotificationStore");
+	$$unsubscribe_claimingUserNotificationStore = subscribe(claimingUserNotificationStore, value => $claimingUserNotificationStore = value);
+	validate_store(declaringClaimUserNotificationStore, "declaringClaimUserNotificationStore");
+	$$unsubscribe_declaringClaimUserNotificationStore = subscribe(declaringClaimUserNotificationStore, value => $declaringClaimUserNotificationStore = value);
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	let URICopiedToClipboard = false;
+	let URICopyToClipboardError = undefined;
+
+	const copyUriToClipboard = () => {
+		navigator.clipboard.writeText(window.location.href).then(() => {
+			URICopiedToClipboard = true;
+		}).catch(error => {
+			URICopiedToClipboard = false;
+			URICopyToClipboardError = error;
+		});
+	};
+
+	$$unsubscribe_claimingUserNotificationStore();
+	$$unsubscribe_declaringClaimUserNotificationStore();
+	$$unsubscribe_languageStore();
+
+	return `<footer${add_attribute("class", footerClass, 0)}>${$claimingUserNotificationStore.status !== "Executing" && $declaringClaimUserNotificationStore.status !== "Executing"
+	? `<section${add_attribute("class", appBarClass, 0)}>${validate_component(NavigateBackToMainMenu, "NavigateBackToMainMenu").$$render($$result, {}, {}, {})}
+            ${URICopiedToClipboard
+		? `<p class="${"text-center w-1/2 text-xs text-bangarang-success"}">${escape(new Message(claimCopiedSuccessMessage).getMessage($languageStore))}</p>`
+		: `${URICopyToClipboardError !== undefined
+			? `<p class="${"text-center w-1/2 text-xs text-bangarang-failed"}">${escape(`${new Message(claimCopiedErrorMessage).getMessage($languageStore)}: ${URICopyToClipboardError.message}`)}</p>`
+			: ``}`}
+            ${validate_component(ClaimShare, "ClaimShare").$$render($$result, { copyUriToClipboard }, {}, {})}</section>
+        ${$claimingUserNotificationStore.status !== "Idle"
+		? `${validate_component(ClaimingInformation, "ClaimingInformation").$$render($$result, {}, {}, {})}`
+		: `${$declaringClaimUserNotificationStore.status !== "Idle"
+			? `${validate_component(DeclaringInformation, "DeclaringInformation").$$render($$result, {}, {}, {})}`
+			: ``}`}`
+	: `${$declaringClaimUserNotificationStore.status === "Executing"
+		? `${validate_component(DeclaringInformation, "DeclaringInformation").$$render($$result, {}, {}, {})}`
+		: `${$claimingUserNotificationStore.status === "Executing"
+			? `${validate_component(ClaimingInformation, "ClaimingInformation").$$render($$result, {}, {}, {})}`
+			: ``}`}`}</footer>`;
+});
+
+/* src\client\components\Headers\ClaimHeader.svelte generated by Svelte v3.34.0 */
+
+const ClaimHeader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { title } = $$props;
+	if ($$props.title === void 0 && $$bindings.title && title !== void 0) $$bindings.title(title);
+	return `<header${add_attribute("class", headerCenteredClass, 0)}><p class="${" self-center text-lg text-center text-bangarang-lightEmphasis"}">${escape(title)}</p></header>`;
+});
+
+const claiming = (claimTitle, claimChoice) => {
+    claimingUserNotificationStore.set(executingClaimingUserNotification);
+    uiBangarangUserBuilder.getUser().claiming(claimTitle, claimChoice);
+};
+
+/* src\client\components\Buttons\ClaimButton.svelte generated by Svelte v3.34.0 */
+
+const ClaimButton = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $claimingUserNotificationStore, $$unsubscribe_claimingUserNotificationStore;
+
+	let $declaringClaimUserNotificationStore,
+		$$unsubscribe_declaringClaimUserNotificationStore;
+
+	validate_store(claimingUserNotificationStore, "claimingUserNotificationStore");
+	$$unsubscribe_claimingUserNotificationStore = subscribe(claimingUserNotificationStore, value => $claimingUserNotificationStore = value);
+	validate_store(declaringClaimUserNotificationStore, "declaringClaimUserNotificationStore");
+	$$unsubscribe_declaringClaimUserNotificationStore = subscribe(declaringClaimUserNotificationStore, value => $declaringClaimUserNotificationStore = value);
+	
+	let { claimId } = $$props;
+	let { claimingChoice } = $$props;
+	let { claimingChoiceMessage } = $$props;
+	let { userClaimingChoice } = $$props;
+	const onClickAction = () => claiming(claimId, claimingChoice);
+	if ($$props.claimId === void 0 && $$bindings.claimId && claimId !== void 0) $$bindings.claimId(claimId);
+	if ($$props.claimingChoice === void 0 && $$bindings.claimingChoice && claimingChoice !== void 0) $$bindings.claimingChoice(claimingChoice);
+	if ($$props.claimingChoiceMessage === void 0 && $$bindings.claimingChoiceMessage && claimingChoiceMessage !== void 0) $$bindings.claimingChoiceMessage(claimingChoiceMessage);
+	if ($$props.userClaimingChoice === void 0 && $$bindings.userClaimingChoice && userClaimingChoice !== void 0) $$bindings.userClaimingChoice(userClaimingChoice);
+	$$unsubscribe_claimingUserNotificationStore();
+	$$unsubscribe_declaringClaimUserNotificationStore();
+
+	return `${$claimingUserNotificationStore.status === "Idle" && $declaringClaimUserNotificationStore.status === "Idle"
+	? `${userClaimingChoice === claimingChoice
+		? `${validate_component(GenericButton, "GenericButton").$$render(
+				$$result,
+				{
+					textbutton: claimingChoiceMessage,
+					onClickAction,
+					disabled: true
+				},
+				{},
+				{}
+			)}`
+		: `${validate_component(GenericButton, "GenericButton").$$render(
+				$$result,
+				{
+					textbutton: claimingChoiceMessage,
+					onClickAction,
+					disabled: false
+				},
+				{},
+				{}
+			)}`}`
+	: `${validate_component(GenericButton, "GenericButton").$$render(
+			$$result,
+			{
+				textbutton: claimingChoiceMessage,
+				onClickAction,
+				disabled: true
+			},
+			{},
+			{}
+		)}`}`;
+});
+
+/* src\client\components\Mains\ClaimMain.svelte generated by Svelte v3.34.0 */
+
+const ClaimMain = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let $languageStore, $$unsubscribe_languageStore;
+	validate_store(languageStore, "languageStore");
+	$$unsubscribe_languageStore = subscribe(languageStore, value => $languageStore = value);
+	
+	let { peopleClaimed = 0 } = $$props;
+	let { peopleFor = 0 } = $$props;
+	let { peopleAgainst = 0 } = $$props;
+	let { claimId = "" } = $$props;
+	let { userClaimingChoice = undefined } = $$props;
+	const retreivePercentage = (total, part) => total > 0 ? part / total * 100 : 0;
+	if ($$props.peopleClaimed === void 0 && $$bindings.peopleClaimed && peopleClaimed !== void 0) $$bindings.peopleClaimed(peopleClaimed);
+	if ($$props.peopleFor === void 0 && $$bindings.peopleFor && peopleFor !== void 0) $$bindings.peopleFor(peopleFor);
+	if ($$props.peopleAgainst === void 0 && $$bindings.peopleAgainst && peopleAgainst !== void 0) $$bindings.peopleAgainst(peopleAgainst);
+	if ($$props.claimId === void 0 && $$bindings.claimId && claimId !== void 0) $$bindings.claimId(claimId);
+	if ($$props.userClaimingChoice === void 0 && $$bindings.userClaimingChoice && userClaimingChoice !== void 0) $$bindings.userClaimingChoice(userClaimingChoice);
+	$$unsubscribe_languageStore();
+
+	return `<main${add_attribute("class", mainClass, 0)}><p class="${"text-center text-bangarang-lightEmphasis my-2"}">${escape(peopleClaimed)}<br>${escape(new Message(peopleClaimedMessage).getMessage($languageStore))}</p>
+    <section class="${"flex justify-between my-1 mx-4"}"><section class="${"flex flex-col w-1/3"}">${validate_component(ClaimButton, "ClaimButton").$$render(
+		$$result,
+		{
+			claimId,
+			userClaimingChoice,
+			claimingChoice: "Against",
+			claimingChoiceMessage: new Message(claimAgainstMessage).getMessage($languageStore)
+		},
+		{},
+		{}
+	)}
+            <p class="${"text-center text-bangarang-lightEmphasis"}">${escape(retreivePercentage(peopleClaimed, peopleAgainst).toFixed(2))}%</p></section>
+        <section class="${"flex flex-col w-1/3"}">${validate_component(ClaimButton, "ClaimButton").$$render(
+		$$result,
+		{
+			claimId,
+			userClaimingChoice,
+			claimingChoice: "For",
+			claimingChoiceMessage: new Message(claimForMessage).getMessage($languageStore)
+		},
+		{},
+		{}
+	)}
+            <p class="${"text-center text-bangarang-lightEmphasis"}">${escape(retreivePercentage(peopleClaimed, peopleFor).toFixed(2))}%</p></section></section></main>`;
+});
+
+/* src\client\views\ClaimView.svelte generated by Svelte v3.34.0 */
+
+const ClaimView = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { claim } = $$props;
+	
+	if ($$props.claim === void 0 && $$bindings.claim && claim !== void 0) $$bindings.claim(claim);
+
+	return `${validate_component(ClaimHeader, "ClaimHeader").$$render($$result, { title: claim.title }, {}, {})}
+${validate_component(ClaimMain, "ClaimMain").$$render(
+		$$result,
+		{
+			peopleClaimed: claim.peopleClaimed,
+			peopleFor: claim.peopleClaimedFor,
+			peopleAgainst: claim.peopleClaimedAgainst,
+			claimId: claim.id,
+			userClaimingChoice: claim.previousUserClaimChoice
+		},
+		{},
+		{}
+	)}
+${validate_component(ClaimFooter, "ClaimFooter").$$render($$result, {}, {}, {})}`;
+});
+
+const retrievingClaimById = (claimId) => {
+    retrievingClaimUserNotificationStore.set(executingRetrievingClaimUserNotification);
+    uiBangarangUserBuilder.getUser().retrievingClaimById(claimId);
+};
+
+/* src\routes\[language]\claims\[claimId].svelte generated by Svelte v3.34.0 */
+
+var __awaiter$a = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
+	function adopt(value) {
+		return value instanceof P
+		? value
+		: new P(function (resolve) {
+					resolve(value);
+				});
+	}
+
+	return new (P || (P = Promise))(function (resolve, reject) {
+			function fulfilled(value) {
+				try {
+					step(generator.next(value));
+				} catch(e) {
+					reject(e);
+				}
+			}
+
+			function rejected(value) {
+				try {
+					step(generator["throw"](value));
+				} catch(e) {
+					reject(e);
+				}
+			}
+
+			function step(result) {
+				result.done
+				? resolve(result.value)
+				: adopt(result.value).then(fulfilled, rejected);
+			}
+
+			step((generator = generator.apply(thisArg, _arguments || [])).next());
+		});
+};
+
+function preload$9(page, session) {
+	return __awaiter$a(this, void 0, void 0, function* () {
+		const { claimId, language } = page.params;
+		const selectedLanguage = language;
+		const claim = yield retrieveClaim(claimId);
+		return { claim, selectedLanguage };
+	});
+}
+
+function retrieveClaim(claimId) {
+	return __awaiter$a(this, void 0, void 0, function* () {
+		return new Promise(resolve => {
+				retrievingClaimById(claimId);
+
+				retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => {
+					if (retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) {
+						const claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice;
+						currentClaimIdStore.set(claim.id);
+						resolve(claim);
+					}
+
+					if (retrievingClaimUserNotification.status === "Failed") {
+						resolve(undefined);
+					}
+				});
+			});
+	});
+}
+
+const U5BclaimIdu5D = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	
+	
+	
+	let { claim } = $$props;
+	let { selectedLanguage } = $$props;
+	assignLanguage(selectedLanguage);
+	onMount(() => redirectOnUnknownLanguage(selectedLanguage));
+
+	const shouldRetrieveClaimOnSuccessClaimingNotification = claimingUserNotification => {
+		if (claimingUserNotification.status === "Success" && claim) retrievingClaimById(claim.id);
+	};
+
+	const shouldAffectClaim = retrievingClaimUserNotification => {
+		if (retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice;
+	};
+
+	claimingUserNotificationStore.subscribe(claimingUserNotification => shouldRetrieveClaimOnSuccessClaimingNotification(claimingUserNotification));
+	retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => shouldAffectClaim(retrievingClaimUserNotification));
+	if ($$props.claim === void 0 && $$bindings.claim && claim !== void 0) $$bindings.claim(claim);
+	if ($$props.selectedLanguage === void 0 && $$bindings.selectedLanguage && selectedLanguage !== void 0) $$bindings.selectedLanguage(selectedLanguage);
+
+	return `${claim
+	? `${validate_component(ClaimView, "ClaimView").$$render($$result, { claim }, {}, {})}`
+	: ``}`;
+});
+
+var component_11 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    'default': U5BclaimIdu5D,
+    preload: preload$9
 });
 
 // This file is generated by Sapper — do not edit it!
@@ -4358,43 +4840,10 @@ const manifest = {
 		},
 
 		{
-			// SigningInMenu.svelte
-			pattern: /^\/SigningInMenu\/?$/,
-			parts: [
-				{ name: "SigningInMenu", file: "SigningInMenu.svelte", component: component_2 }
-			]
-		},
-
-		{
-			// DeclareClaim.svelte
-			pattern: /^\/DeclareClaim\/?$/,
-			parts: [
-				{ name: "DeclareClaim", file: "DeclareClaim.svelte", component: component_3 }
-			]
-		},
-
-		{
-			// Register.svelte
-			pattern: /^\/Register\/?$/,
-			parts: [
-				{ name: "Register", file: "Register.svelte", component: component_4 }
-			]
-		},
-
-		{
-			// claims/[claimId].svelte
-			pattern: /^\/claims\/([^/]+?)\/?$/,
-			parts: [
-				null,
-				{ name: "claims_$claimId", file: "claims/[claimId].svelte", component: component_5, params: match => ({ claimId: d(match[1]) }) }
-			]
-		},
-
-		{
 			// [language]/index.svelte
 			pattern: /^\/([^/]+?)\/?$/,
 			parts: [
-				{ name: "$language", file: "[language]/index.svelte", component: component_6, params: match => ({ language: d(match[1]) }) }
+				{ name: "$language", file: "[language]/index.svelte", component: component_2, params: match => ({ language: d(match[1]) }) }
 			]
 		},
 
@@ -4404,7 +4853,7 @@ const manifest = {
 			parts: [
 				null,
 				null,
-				{ name: "$language$93_valuePropositions_$91valuePropositionPageLink", file: "[language]/valuePropositions/[valuePropositionPageLink].svelte", component: component_7, params: match => ({ language: d(match[1]), valuePropositionPageLink: d(match[2]) }) }
+				{ name: "$language$93_valuePropositions_$91valuePropositionPageLink", file: "[language]/valuePropositions/[valuePropositionPageLink].svelte", component: component_3, params: match => ({ language: d(match[1]), valuePropositionPageLink: d(match[2]) }) }
 			]
 		},
 
@@ -4413,7 +4862,25 @@ const manifest = {
 			pattern: /^\/([^/]+?)\/BusinessModel\/?$/,
 			parts: [
 				null,
-				{ name: "$language_BusinessModel", file: "[language]/BusinessModel.svelte", component: component_8, params: match => ({ language: d(match[1]) }) }
+				{ name: "$language_BusinessModel", file: "[language]/BusinessModel.svelte", component: component_4, params: match => ({ language: d(match[1]) }) }
+			]
+		},
+
+		{
+			// [language]/SigningInMenu.svelte
+			pattern: /^\/([^/]+?)\/SigningInMenu\/?$/,
+			parts: [
+				null,
+				{ name: "$language_SigningInMenu", file: "[language]/SigningInMenu.svelte", component: component_5, params: match => ({ language: d(match[1]) }) }
+			]
+		},
+
+		{
+			// [language]/DeclareClaim.svelte
+			pattern: /^\/([^/]+?)\/DeclareClaim\/?$/,
+			parts: [
+				null,
+				{ name: "$language_DeclareClaim", file: "[language]/DeclareClaim.svelte", component: component_6, params: match => ({ language: d(match[1]) }) }
 			]
 		},
 
@@ -4424,7 +4891,7 @@ const manifest = {
 				null,
 				null,
 				null,
-				{ name: "$language$93_landingPages_$91audience$93_$91landingPageId", file: "[language]/landingPages/[audience]/[landingPageId].svelte", component: component_9, params: match => ({ language: d(match[1]), audience: d(match[2]), landingPageId: d(match[3]) }) }
+				{ name: "$language$93_landingPages_$91audience$93_$91landingPageId", file: "[language]/landingPages/[audience]/[landingPageId].svelte", component: component_7, params: match => ({ language: d(match[1]), audience: d(match[2]), landingPageId: d(match[3]) }) }
 			]
 		},
 
@@ -4433,7 +4900,7 @@ const manifest = {
 			pattern: /^\/([^/]+?)\/LeanCanvas\/?$/,
 			parts: [
 				null,
-				{ name: "$language_LeanCanvas", file: "[language]/LeanCanvas.svelte", component: component_10, params: match => ({ language: d(match[1]) }) }
+				{ name: "$language_LeanCanvas", file: "[language]/LeanCanvas.svelte", component: component_8, params: match => ({ language: d(match[1]) }) }
 			]
 		},
 
@@ -4442,7 +4909,26 @@ const manifest = {
 			pattern: /^\/([^/]+?)\/MainMenu\/?$/,
 			parts: [
 				null,
-				{ name: "$language_MainMenu", file: "[language]/MainMenu.svelte", component: component_11, params: match => ({ language: d(match[1]) }) }
+				{ name: "$language_MainMenu", file: "[language]/MainMenu.svelte", component: component_9, params: match => ({ language: d(match[1]) }) }
+			]
+		},
+
+		{
+			// [language]/Register.svelte
+			pattern: /^\/([^/]+?)\/Register\/?$/,
+			parts: [
+				null,
+				{ name: "$language_Register", file: "[language]/Register.svelte", component: component_10, params: match => ({ language: d(match[1]) }) }
+			]
+		},
+
+		{
+			// [language]/claims/[claimId].svelte
+			pattern: /^\/([^/]+?)\/claims\/([^/]+?)\/?$/,
+			parts: [
+				null,
+				null,
+				{ name: "$language$93_claims_$91claimId", file: "[language]/claims/[claimId].svelte", component: component_11, params: match => ({ language: d(match[1]), claimId: d(match[2]) }) }
 			]
 		}
 	],
@@ -4566,7 +5052,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 
-function __awaiter$8(thisArg, _arguments, P, generator) {
+function __awaiter$b(thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -4578,7 +5064,7 @@ function __awaiter$8(thisArg, _arguments, P, generator) {
 
 function get_server_route_handler(routes) {
     function handle_route(route, req, res, next) {
-        return __awaiter$8(this, void 0, void 0, function* () {
+        return __awaiter$b(this, void 0, void 0, function* () {
             req.params = route.params(route.pattern.exec(req.path));
             const method = req.method.toLowerCase();
             // 'delete' cannot be exported from a module because it is a keyword,
@@ -8928,7 +9414,7 @@ function get_page_handler(manifest, session_getter) {
     }
     function handle_page(page, req, res, status = 200, error = null) {
         var _a, _b;
-        return __awaiter$8(this, void 0, void 0, function* () {
+        return __awaiter$b(this, void 0, void 0, function* () {
             const is_service_worker_index = req.path === '/service-worker-index.html';
             const build_info = get_build_info();
             res.setHeader('Content-Type', 'text/html');

@@ -4,8 +4,9 @@
     import { StaticView } from '../../port/interactors/BangarangUserInterfaceInteractor';
     import { languageStore } from '../../stores/languageStore';
     import Link from '../Links/Link.svelte'
+import { footerClass } from '../Styles/componentStyles';
 </script>
-<footer class="flex flex-col">
+<footer class={footerClass}>
     <Link 
         linkName={new Message(leanCanvasLinkMessage).getMessage($languageStore)} 
         linkHref={`/${$languageStore}/${StaticView.LeanCanvas}`}

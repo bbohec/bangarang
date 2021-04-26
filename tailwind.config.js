@@ -8,8 +8,9 @@ module.exports = {
     extend: {
       colors: {
         bangarang: {
-          light:'#ffffff',
-          lightEmphasis:'#aaaaaa',
+          light:'#FFFFFF',
+          veryLightEmphasis:'#EEEEEE',
+          lightEmphasis:'#AAAAAA',
           darkEmphasis:'#555555',
           dark:'#000000',
           success:'#48C948',

@@ -2,114 +2,111 @@
   "bundler": "rollup",
   "shimport": "2.0.4",
   "assets": {
-    "main": "client.df96235b.js"
+    "main": "client.0baba4b8.js"
   },
   "css": {},
   "dependencies": {
     "index.svelte": [
-      "index.78b61ec3.js",
-      "MainMenu.36688461.js",
-      "WelcomeTitle.2230a8de.js",
-      "messages.5ed29594.js",
-      "linkPrefixes.50c0e772.js",
-      "GenericTaskNotification.bbb9e756.js",
-      "GenericButton.5a6b42b3.js",
-      "Link.075f64e6.js"
+      "index.9d4648c3.js",
+      "MainMenu.6ac82912.js",
+      "WelcomeTitle.18a1614a.js",
+      "componentStyles.182aa5c8.js",
+      "GenericTaskNotification.50cba161.js",
+      "GenericDestination.a7615412.js",
+      "NavigateToBusinessModel.c1c88e25.js"
     ],
     "languageSelect.svelte": [
-      "LanguageSelect.c4429c75.js",
-      "messages.5ed29594.js",
-      "linkPrefixes.50c0e772.js",
-      "MainTitle.35eb0e45.js",
-      "Link.075f64e6.js"
-    ],
-    "signingInMenu.svelte": [
-      "SigningInMenu.e7c9191a.js",
-      "GenericTaskNotification.bbb9e756.js",
-      "linkPrefixes.50c0e772.js",
-      "WelcomeTitle.2230a8de.js",
-      "messages.5ed29594.js",
-      "GenericPasswordField.4c7ac525.js",
-      "GenericSubmitField.90eef316.js",
-      "Link.075f64e6.js",
-      "currentClaimIdStore.b9e54e15.js"
-    ],
-    "declareClaim.svelte": [
-      "DeclareClaim.ddfd3887.js",
-      "GenericTaskNotification.bbb9e756.js",
-      "linkPrefixes.50c0e772.js",
-      "GenericSubmitField.90eef316.js",
-      "Link.075f64e6.js",
-      "DeclaringInformation.16b783fd.js"
-    ],
-    "register.svelte": [
-      "Register.1f98571b.js",
-      "GenericTaskNotification.bbb9e756.js",
-      "linkPrefixes.50c0e772.js",
-      "GenericPasswordField.4c7ac525.js",
-      "GenericSubmitField.90eef316.js",
-      "Link.075f64e6.js"
-    ],
-    "claims/[claimId].svelte": [
-      "[claimId].79d04321.js",
-      "currentClaimIdStore.b9e54e15.js",
-      "GenericTaskNotification.bbb9e756.js",
-      "linkPrefixes.50c0e772.js",
-      "Link.075f64e6.js",
-      "DeclaringInformation.16b783fd.js",
-      "GenericButton.5a6b42b3.js"
+      "LanguageSelect.1fd1e158.js",
+      "componentStyles.182aa5c8.js",
+      "MainTitle.fec1be94.js",
+      "Link.c7170b46.js"
     ],
     "[language]/index.svelte": [
-      "index.b10adce7.js",
-      "MainMenu.36688461.js",
-      "WelcomeTitle.2230a8de.js",
-      "messages.5ed29594.js",
-      "linkPrefixes.50c0e772.js",
-      "GenericTaskNotification.bbb9e756.js",
-      "GenericButton.5a6b42b3.js",
-      "Link.075f64e6.js"
+      "index.4441a3a9.js",
+      "MainMenu.6ac82912.js",
+      "WelcomeTitle.18a1614a.js",
+      "componentStyles.182aa5c8.js",
+      "GenericTaskNotification.50cba161.js",
+      "GenericDestination.a7615412.js",
+      "NavigateToBusinessModel.c1c88e25.js"
     ],
     "[language]/valuePropositions/[valuePropositionPageLink].svelte": [
-      "[valuePropositionPageLink].1336044a.js",
-      "messages.5ed29594.js",
-      "linkPrefixes.50c0e772.js",
-      "HeaderTitle.265239bd.js",
-      "Link.075f64e6.js",
-      "retreiveValuePropositionFromValuePropositionPageLink.47401cce.js"
+      "[valuePropositionPageLink].74cf02d8.js",
+      "componentStyles.182aa5c8.js",
+      "HeaderTitle.f8c6c9e9.js",
+      "Link.c7170b46.js",
+      "retreiveValuePropositionFromValuePropositionPageLink.ac69c749.js"
     ],
     "[language]/BusinessModel.svelte": [
-      "BusinessModel.3d43525d.js",
-      "messages.5ed29594.js",
-      "linkPrefixes.50c0e772.js",
-      "HeaderTitle.265239bd.js",
-      "DescriptionCard.3943de95.js",
-      "Link.075f64e6.js"
+      "BusinessModel.2fe0d5f7.js",
+      "componentStyles.182aa5c8.js",
+      "HeaderTitle.f8c6c9e9.js",
+      "DescriptionCard.d83d86af.js",
+      "Link.c7170b46.js",
+      "NavigateBackToMainMenu.b0af017a.js",
+      "GenericDestination.a7615412.js"
+    ],
+    "[language]/SigningInMenu.svelte": [
+      "SigningInMenu.6a64d512.js",
+      "GenericTaskNotification.50cba161.js",
+      "componentStyles.182aa5c8.js",
+      "WelcomeTitle.18a1614a.js",
+      "GenericPasswordField.f854751e.js",
+      "GenericSubmitField.2fe3bfd1.js",
+      "Link.c7170b46.js",
+      "currentClaimIdStore.8e93b0ea.js"
+    ],
+    "[language]/DeclareClaim.svelte": [
+      "DeclareClaim.257846c2.js",
+      "GenericTaskNotification.50cba161.js",
+      "componentStyles.182aa5c8.js",
+      "GenericSubmitField.2fe3bfd1.js",
+      "DeclaringInformation.d579199e.js",
+      "NavigateBackToMainMenu.b0af017a.js",
+      "GenericDestination.a7615412.js"
     ],
     "[language]/landingPages/[audience]/[landingPageId].svelte": [
-      "[landingPageId].e0048d45.js",
-      "MainTitle.35eb0e45.js",
-      "GenericButton.5a6b42b3.js",
-      "linkPrefixes.50c0e772.js",
-      "messages.5ed29594.js",
-      "retreiveValuePropositionFromValuePropositionPageLink.47401cce.js"
+      "[landingPageId].0c546b85.js",
+      "MainTitle.fec1be94.js",
+      "GenericButton.391815b2.js",
+      "componentStyles.182aa5c8.js",
+      "retreiveValuePropositionFromValuePropositionPageLink.ac69c749.js"
     ],
     "[language]/LeanCanvas.svelte": [
-      "LeanCanvas.5084e403.js",
-      "messages.5ed29594.js",
-      "linkPrefixes.50c0e772.js",
-      "HeaderTitle.265239bd.js",
-      "MainTitle.35eb0e45.js",
-      "DescriptionCard.3943de95.js",
-      "Link.075f64e6.js"
+      "LeanCanvas.3731f0ac.js",
+      "componentStyles.182aa5c8.js",
+      "HeaderTitle.f8c6c9e9.js",
+      "MainTitle.fec1be94.js",
+      "DescriptionCard.d83d86af.js",
+      "Link.c7170b46.js",
+      "NavigateToBusinessModel.c1c88e25.js",
+      "GenericDestination.a7615412.js"
     ],
     "[language]/MainMenu.svelte": [
-      "MainMenu.36688461.js",
-      "WelcomeTitle.2230a8de.js",
-      "messages.5ed29594.js",
-      "linkPrefixes.50c0e772.js",
-      "GenericTaskNotification.bbb9e756.js",
-      "GenericButton.5a6b42b3.js",
-      "Link.075f64e6.js"
+      "MainMenu.6ac82912.js",
+      "WelcomeTitle.18a1614a.js",
+      "componentStyles.182aa5c8.js",
+      "GenericTaskNotification.50cba161.js",
+      "GenericDestination.a7615412.js",
+      "NavigateToBusinessModel.c1c88e25.js"
+    ],
+    "[language]/Register.svelte": [
+      "Register.93959049.js",
+      "componentStyles.182aa5c8.js",
+      "GenericTaskNotification.50cba161.js",
+      "GenericPasswordField.f854751e.js",
+      "GenericSubmitField.2fe3bfd1.js",
+      "GenericDestination.a7615412.js"
+    ],
+    "[language]/claims/[claimId].svelte": [
+      "[claimId].6f38420e.js",
+      "currentClaimIdStore.8e93b0ea.js",
+      "GenericTaskNotification.50cba161.js",
+      "componentStyles.182aa5c8.js",
+      "GenericDestination.a7615412.js",
+      "DeclaringInformation.d579199e.js",
+      "NavigateBackToMainMenu.b0af017a.js",
+      "GenericButton.391815b2.js"
     ]
   }
 }

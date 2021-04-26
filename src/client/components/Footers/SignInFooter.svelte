@@ -5,23 +5,30 @@
     import {signingInNotificationStore} from "../../stores/signInStore"
     import { linkPrefixes } from "../../navigation/linkPrefixes";
     import { StaticView } from "../../port/interactors/BangarangUserInterfaceInteractor";
+import { languageStore } from "../../stores/languageStore";
+import { backToMainMenuLinkMessage, backToTheClaimMessage, signInRegisterMessage } from "../../logic/messages";
+import { Message } from "../../logic/language";
+import { footerClass } from "../Styles/componentStyles";
     let currentClaimId:string|undefined=undefined;
     currentClaimIdStore.subscribe(currentClaimIdFromStore =>currentClaimId=currentClaimIdFromStore)
     const linkFromCurrentClaimId = (currentClaimId:string|undefined):{href:string,name:string} => {
-        if(currentClaimId===undefined)return {href:StaticView.MainMenu,name:"<< Back to main menu."}
-        return {href:linkPrefixes.claimLinkPrefix+currentClaimId,name:"<< Back to the claim."}
+        return (currentClaimId===undefined)? 
+            {href:`/${$languageStore}/${StaticView.MainMenu}`,name:new Message(backToMainMenuLinkMessage).getMessage($languageStore)}:
+            {href:`/${$languageStore}/${linkPrefixes.claimLinkPrefix}${currentClaimId}`,name:new Message(backToTheClaimMessage).getMessage($languageStore)}
     }
 </script>
-<footer class="flex flex-col p-1 mx-auto max-w-screen-2xl">
+<footer class={footerClass}>
     {#if $signingInNotificationStore.status === "Executing"}
         <SignInInformation/>
     {:else}
         <section class="flex justify-center items-center">
-            <Link size="small" linkHref={StaticView.Register} linkName="Would you like to register on Bangarang?" textAlign={"text-center"}/>
+            <Link size="small" linkHref={`/${$languageStore}/${StaticView.Register}`} linkName={new Message(signInRegisterMessage).getMessage($languageStore)} textAlign={"text-center"}/>
         </section>
         <section class="flex justify-between items-center">
             <Link size="small" linkHref={linkFromCurrentClaimId(currentClaimId).href} linkName={linkFromCurrentClaimId(currentClaimId).name} textAlign={"text-left"}/>
-            <SignInInformation/>
+            {#if $signingInNotificationStore.status !== "Idle"}
+                <SignInInformation/>
+            {/if}
         </section>
     {/if}
 </footer>

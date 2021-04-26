@@ -1,19 +1,11 @@
 <script lang="ts">
-    import { Message } from "../../logic/language";
-    import { leanCanvasLinkMessage, useBangarangLinkMessage } from "../../logic/messages";
-    import { StaticView } from "../../port/interactors/BangarangUserInterfaceInteractor";
-    import { languageStore } from "../../stores/languageStore";
-    import Link from "../Links/Link.svelte"
+    import NavigateBackToMainMenu from "../Destination/NavigateBackToMainMenu.svelte"
+    import NagivateToLeanCanvas from "../Destination/NavigateToLeanCanvas.svelte"
+    import { appBarClass, footerClass } from "../Styles/componentStyles";
 </script>
-<footer class="flex flex-col mb-1">
-    <Link 
-        linkName={new Message(leanCanvasLinkMessage).getMessage($languageStore)} 
-        linkHref={`/${$languageStore}/${StaticView.LeanCanvas}`}
-        size="small"    
-    />
-    <Link 
-        linkName={new Message(useBangarangLinkMessage).getMessage($languageStore)}
-        linkHref={`/${$languageStore}/${StaticView.MainMenu}`}
-        size="small"
-    />
+<footer class={footerClass}>
+    <section class={appBarClass}>
+        <NavigateBackToMainMenu/>
+        <NagivateToLeanCanvas/>
+    </section>
 </footer>

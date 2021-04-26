@@ -23,7 +23,7 @@
     }
 </script>
 <input 
-    class="text-xl text-center my-1 px-1 pb-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md" 
+    class="text-center px-1 mx-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border shadow rounded-md" 
     type="text" 
     placeholder={new Message(claimSearchBarPlaceholderMessage).getMessage($languageStore)} 
     bind:value={$claimSearchCriteriaStore} 

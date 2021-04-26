@@ -473,24 +473,24 @@ export const bangarangContactFormMessage:MessageContract={
     fr:`Formulaire de contact Bangarang.`
 }
 export const declareClaimTextButtonMessage:MessageContract = {
-    en:`Declare new claim`,
-    fr:`Déclarer une nouvelle revendication`
+    en:`Declare claim`,
+    fr:`Déclarer une revendication`
 }
 export const bangarangBusinessModelTitleMessage:MessageContract = {
     en:`Bangarang Business Model`,
     fr:`Le Business Model de Bangarang`
 }
 export const faqLinkNameMessage:MessageContract={
-    en:`What is Bangarang?`,
-    fr:`C'est quoi Bangarang?`
+    en:`FAQ`,
+    fr:`Questions fréquentes`
 }
 export const claimSearchBarPlaceholderMessage:MessageContract={
-    en:`Find a claim...`,
-    fr:"Chercher une revendication..."
+    en:`Find ...`,
+    fr:"Rechercher ..."
 }
 export const backToMainMenuLinkMessage:MessageContract={
-    en:`Back to main menu.`,
-    fr:`Retour au menu principal.`
+    en:`Main menu`,
+    fr:`Menu principal`
 }
 export const selectLanguages:SelectLanguage = {
     en:{
@@ -615,8 +615,118 @@ export const retrieveSubTitleFromType = (type:string):MessageContract => {
     if (type === 'gains')return {en:`You can acheive more`,fr:`Tu pourras ainsi aller au delà`}
     return {en:`!!!ERROR UNKNOWN TYPE!!!`,fr:`!!!ERREUR TYPE INCONU!!!`}
 }
-
 export const callToActionMessage:MessageContract={
     en:`I claim!`,
     fr:`Je revendique!`
 }
+export const claimTypeMessage:MessageContract={
+    en:`Claim type`,
+    fr:`Type de revendication`
+}
+export const claimTitlePlaceholderMessage:MessageContract={
+    en:`Describe the claim ...`,
+    fr:`Décris la revendication...`
+}
+export const claimTitleFieldNameMessage:MessageContract={
+    en:`Claim Title`,
+    fr:`Titre de la Revendication.`
+}
+export const declareClaimSubmitMessage:MessageContract={
+    en:`Declare`,
+    fr:`Déclarer`
+}
+export const simpleClaimTypeMessage:MessageContract={
+    en:`Claim as a proposal.`,
+    fr:`Revendication considérée comme unique proposition.`
+}
+export const signOutMessage:MessageContract={
+    en:`SignOut`,
+    fr:`Déconnexion`
+}
+export const signInFormTitleMessage:MessageContract={
+    en:`Your account credentials`,
+    fr:`Tes identifiants`
+}
+export const signInFormUsernameMessage:MessageContract={
+    en:`Username:`,
+    fr:`Nom du compte:`
+}
+export const signInFormPasswordMessage:MessageContract={
+    en:`Password:`,
+    fr:`Mot de passe:`
+}
+export const signInFormSubmitMessage:MessageContract={
+    en:`Sign In`,
+    fr:`Connexion`
+}
+export const signInRegisterMessage:MessageContract={
+    en:`Would you like to register on Bangarang?`,
+    fr:`Veux-tu t'enregistrer sur Bangarang?`
+}
+export const backToTheClaimMessage:MessageContract={
+    en:`Back to the claim.`,
+    fr:`Retourner sur la revendication.`
+}
+export const backToSignInMenuMessage:MessageContract={
+    en:`Sign In`,
+    fr:`Connexion`
+}
+export const registerOnBangarangTitleMessage:MessageContract={
+    en:`Register on`,
+    fr:`Enregistres-toi sur`
+}
+export const registerSecurityMessage:MessageContract={
+    en:`The current stage of development of Bangarang implies that the security of the accounts is not guaranteed. Please only create accounts with credentials that can be used for testing and demonstration purposes.`,
+    fr:`Le stage actuel de développement de Bangarang implique que la sécurité des comptes n'est pas garantie. Ne crées un compte qu'avec des identifiants qui peuvent être utilisées à des fins de test ou de démo.`
+}
+export const registerFormTitleMessage:MessageContract={
+    en:`Create your account.`,
+    fr:`Crées ton compte.`
+}
+export const registerFormUsernameMessage:MessageContract={
+    en:`Username:`,
+    fr:`Nom d'utilisateur:`
+}
+export const registerFormFullnameMessage:MessageContract={
+    en:`Fullname:`,
+    fr:`Nom/Prénom:`
+}
+export const registerFormEmailMessage:MessageContract={
+    en:`E-mail:`,
+    fr:`E-mail:`
+}
+export const registerFormPasswordMessage:MessageContract={
+    en:`Password:`,
+    fr:`Mot de passe:`
+}
+export const registerFormSubmitMessage:MessageContract={
+    en:`Register`,
+    fr:`S'inscrire`
+}
+export const peopleClaimedMessage:MessageContract={
+    en:`people claimed`,
+    fr:`personnes ont revendiqués`
+}
+export const claimAgainstMessage:MessageContract={
+    en:`Against`,
+    fr:`Contre`
+}
+export const claimForMessage:MessageContract={
+    en:`For`,
+    fr:`Pour`
+}
+export const shareClaimMessage:MessageContract={
+    en:`Share claim`,
+    fr:`Partager la revendication`
+}
+export const claimCopiedSuccessMessage:MessageContract={
+    en:`Claim address copied to clipboard.`,
+    fr:`Lien de partage de la revendication copié dans le presse-papier.`
+}
+export const claimCopiedErrorMessage:MessageContract={
+    en:`Failed to copy claim address to clipboard`,
+    fr:`Erreur lors de la copie de la revendication dans le presse-papier`
+}
+
+
+

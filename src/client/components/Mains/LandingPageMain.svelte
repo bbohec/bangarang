@@ -5,14 +5,15 @@
     import { StaticView } from '../../port/interactors/BangarangUserInterfaceInteractor';
     import { languageStore } from '../../stores/languageStore';
     import {painRelieversToSupportingHeadLine} from '../../logic/valueProposition/valuePropositions'
-import { Message } from '../../logic/language';
-import { callToActionMessage } from '../../logic/messages';
+    import { Message } from '../../logic/language';
+    import { callToActionMessage } from '../../logic/messages';
+    import { mainClass } from '../Styles/componentStyles';
     export let mainHeadLine:string|undefined
     export let supportingHeadLine:string|undefined
     const theme:"light"|"dark"="dark"
     const navigateToBangarang = ():void=> {window.location.href = `/${$languageStore}/${StaticView.MainMenu}`}
 </script>
-<main class="flex-grow overflow-y-auto flex flex-col items-center justify-evenly bg-bangarang-dark">
+<main class={mainClass}>
     <section>
         {#if mainHeadLine}
             <MainTitle title={mainHeadLine} size="large" {theme}/>

@@ -5,6 +5,9 @@
     import ClaimAsProposalRadioButton from "../Inputs/ClaimAsProposalRadioButton.svelte"
     import GenericTextAreaField from "./Fields/GenericTextAreaField.svelte"
     import GenericSubmitField from "./Fields/GenericSubmitField.svelte"
+    import { Message } from "../../logic/language";
+    import { claimTitleFieldNameMessage, claimTitlePlaceholderMessage, claimTypeMessage, declareClaimSubmitMessage } from "../../logic/messages";
+    import { languageStore } from "../../stores/languageStore";
     let claimChoice:ClaimType="Simple"
     const eventHandler:svelte.JSX.FormEventHandler<HTMLFormElement> = (event: Event & {currentTarget: EventTarget & HTMLFormElement;})=> {
         const target = event.target as typeof event.target & {
@@ -14,10 +17,20 @@
     }
 </script>
 <form class="w-full flex flex-col items-center" on:submit|preventDefault={eventHandler}>
-    <GenericTextAreaField placeholder="Describe the claim ..." fieldId=claimTitle fieldName="Claim Title" isRequired={true} isReadOnly={$declaringClaimUserNotificationStore.status !== "Idle"}/>
+    <GenericTextAreaField 
+        fieldId=claimTitle 
+        fieldName={new Message(claimTitleFieldNameMessage).getMessage($languageStore)} 
+        placeholder={new Message(claimTitlePlaceholderMessage).getMessage($languageStore)} 
+        isRequired={true} 
+        isReadOnly={$declaringClaimUserNotificationStore.status !== "Idle"}
+    />
     <fieldset>
-        <legend class="text-bangarang-lightEmphasis">Claim type</legend>
+        <legend class="text-bangarang-lightEmphasis">{new Message(claimTypeMessage).getMessage($languageStore)}</legend>
         <ClaimAsProposalRadioButton/>
     </fieldset>
-    <GenericSubmitField fieldId=declare fieldName=Declare isReadOnly={$declaringClaimUserNotificationStore.status !== "Idle"}/>
+    <GenericSubmitField 
+        fieldId=declare 
+        fieldName= {new Message(declareClaimSubmitMessage).getMessage($languageStore)}
+        isReadOnly={$declaringClaimUserNotificationStore.status !== "Idle"}
+    />
 </form>

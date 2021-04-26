@@ -78,8 +78,8 @@ describe(`Feature : Retrieving Claim
             expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.claimWithMemberPreviousClaimChoice).deep.equal(expectedClaimWithMemberPreviousClaimChoice)
             expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.claimWithMemberPreviousClaimChoice?.previousUserClaimChoice).deep.equal(expectedClaimChoice)
         })
-        it(`And the user has a '${retrievingClaimNotificationType}' notification with '${successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).status}' status and '${successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).message}' message.`,()=> {
-            expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.message).equal(successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).message)
+        it(`And the user has a '${retrievingClaimNotificationType}' notification with '${successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).status}' status and '${successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).message.en}' message.`,()=> {
+            expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.message.en).equal(successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).message.en)
             expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.status).equal(successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).status)
         })
     })
@@ -106,8 +106,8 @@ describe(`Feature : Retrieving Claim
             expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.claimWithMemberPreviousClaimChoice).deep.equal(expectedClaimWithMemberPreviousClaimChoice)
             expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.claimWithMemberPreviousClaimChoice?.previousUserClaimChoice).deep.equal(expectedClaimChoice)
         })
-        it(`And the user has a '${retrievingClaimNotificationType}' notification with '${successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).status}' status and '${successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).message}' message.`,()=> {
-            expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.message).equal(successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).message)
+        it(`And the user has a '${retrievingClaimNotificationType}' notification with '${successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).status}' status and '${successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).message.en}' message.`,()=> {
+            expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.message.en).equal(successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).message.en)
             expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.status).equal(successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).status)
         })
     })
@@ -134,8 +134,8 @@ describe(`Feature : Retrieving Claim
             expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.claimWithMemberPreviousClaimChoice).deep.equal(expectedClaimWithMemberPreviousClaimChoice)
             expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.claimWithMemberPreviousClaimChoice?.previousUserClaimChoice).deep.equal(expectedClaimChoice)
         })
-        it(`And the user has a '${retrievingClaimNotificationType}' notification with '${successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).status}' status and '${successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).message}' message.`,()=> {
-            expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.message).equal(successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).message)
+        it(`And the user has a '${retrievingClaimNotificationType}' notification with '${successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).status}' status and '${successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).message.en}' message.`,()=> {
+            expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.message.en).equal(successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).message.en)
             expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.status).equal(successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).status)
         })
     })
@@ -163,8 +163,8 @@ describe(`Feature : Retrieving Claim
             expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.claimWithMemberPreviousClaimChoice).deep.equal(expectedClaimWithMemberPreviousClaimChoice)
             expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.claimWithMemberPreviousClaimChoice?.previousUserClaimChoice).deep.equal(expectedClaimChoice)
         })
-        it(`And the user has a '${retrievingClaimNotificationType}' notification with '${successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).status}' status and '${successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).message}' message.`,()=> {
-            expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.message).equal(successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).message)
+        it(`And the user has a '${retrievingClaimNotificationType}' notification with '${successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).status}' status and '${successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).message.en}' message.`,()=> {
+            expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.message.en).equal(successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).message.en)
             expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.status).equal(successRetrievingClaimUserNotification(expectedClaimWithMemberPreviousClaimChoice).status)
         })
     })
@@ -185,8 +185,8 @@ describe(`Feature : Retrieving Claim
         it(`Then the retrieved claim is undefined`,()=>{
             expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.claimWithMemberPreviousClaimChoice).is.undefined
         })
-        it(`And the user has a '${retrievingClaimNotificationType}' notification with '${claimNotDeclaredRetrievingClaimUserNotification.status}' status and '${claimNotDeclaredRetrievingClaimUserNotification.message}' message.`,()=> {
-            expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.message).equal(claimNotDeclaredRetrievingClaimUserNotification.message)
+        it(`And the user has a '${retrievingClaimNotificationType}' notification with '${claimNotDeclaredRetrievingClaimUserNotification.status}' status and '${claimNotDeclaredRetrievingClaimUserNotification.message.en}' message.`,()=> {
+            expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.message.en).equal(claimNotDeclaredRetrievingClaimUserNotification.message.en)
             expect(retrievingClaimUserNotificationInteractor.currentUserNotification?.status).equal(claimNotDeclaredRetrievingClaimUserNotification.status)
         })
 

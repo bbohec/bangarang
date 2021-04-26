@@ -219,7 +219,7 @@ describe(`Feature: Claiming
                     .then(()=>done())
             })
             it(`Then the user has a '${notificationType}' notification with '${scenario.expectedNotification.status}' status and '${scenario.expectedNotification.message}' message.`,()=> {
-                expect(claimingUserNotificationInteractor.currentUserNotification?.message).equal(scenario.expectedNotification.message)
+                expect(claimingUserNotificationInteractor.currentUserNotification?.message.en).equal(scenario.expectedNotification.message.en)
                 expect(claimingUserNotificationInteractor.currentUserNotification?.status).equal(scenario.expectedNotification.status)
             })
             scenario.claimChecks.forEach(claimCheck => checkClaimValue(bangarangClaimInteractor, scenario.expectedClaim,claimCheck.propertyName,claimCheck.increased))

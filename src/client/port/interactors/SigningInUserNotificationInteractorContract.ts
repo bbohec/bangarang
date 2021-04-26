@@ -7,8 +7,8 @@ export interface SigningInUserNotificationContract extends UserNotificationContr
     type:SigningInNotificationType
 }
 export type SigningInNotificationType="Signing In"
-export const idleSigningInNotification:SigningInUserNotificationContract = {status:"Idle", message:"Waiting for SigningIn Event.",type:"Signing In"}
-export const executingSigningInNotification:SigningInUserNotificationContract = {status:"Executing", message:"Executing signing in use case.",type:"Signing In"}
-export const successSigningInNotification:SigningInUserNotificationContract = {status:"Success", message:"Signed In",type:"Signing In"}
-export const alreadySignedInSigningInNotification:SigningInUserNotificationContract = {status:"Failed", message:"You are already signed in. Please signout.",type:"Signing In"}
-export const badCredentialsSigningInNotification:SigningInUserNotificationContract = {status:"Failed", message:"Bad credentials. Please verify your credentials or register to Bangarang.",type:"Signing In"}
+export const idleSigningInNotification:SigningInUserNotificationContract = {status:"Idle", message:{en:"Waiting for SigningIn Event.",fr:`En attente d'un événément de connexion.`},type:"Signing In"}
+export const executingSigningInNotification:SigningInUserNotificationContract = {status:"Executing", message:{en:"Signing In...",fr:`Connexion en cours...`},type:"Signing In"}
+export const successSigningInNotification:SigningInUserNotificationContract = {status:"Success", message:{en:"Signed In.",fr:`Connecté.`},type:"Signing In"}
+export const alreadySignedInSigningInNotification:SigningInUserNotificationContract = {status:"Failed", message:{en:"Already signed in.",fr:`Déjà connecté.`},type:"Signing In"}
+export const badCredentialsSigningInNotification:SigningInUserNotificationContract = {status:"Failed", message:{en:"Bad credentials. Verify credentials or register to Bangarang.",fr:`Mauvais identifiants. Vérifier les identifiants ou s'enregistrer sur Bangarang.`},type:"Signing In"}
