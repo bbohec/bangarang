@@ -7,13 +7,12 @@
     import {painRelieversToSupportingHeadLine} from '../../logic/valueProposition/valuePropositions'
     import { Message } from '../../logic/language';
     import { callToActionMessage } from '../../logic/messages';
-    import { mainClass } from '../Styles/componentStyles';
     export let mainHeadLine:string|undefined
     export let supportingHeadLine:string|undefined
     const theme:"light"|"dark"="dark"
     const navigateToBangarang = ():void=> {window.location.href = `/${$languageStore}/${StaticView.MainMenu}`}
 </script>
-<main class={mainClass}>
+<main class={"flex flex-col flex-grow m-auto p-1 justify-center items-center max-w-screen-md"}>
     <section>
         {#if mainHeadLine}
             <MainTitle title={mainHeadLine} size="large" {theme}/>

@@ -1,7 +1,6 @@
 <script lang="ts">
-    import { headerEndClass } from "../Styles/componentStyles";
     import RegisterTitle from "../Titles/RegisterTitle.svelte"
 </script>
-<header class={headerEndClass}>
+<header class={"flex flex-col flex-grow mx-auto px-1 justify-end items-center max-w-screen-md"}>
     <RegisterTitle/>
 </header>

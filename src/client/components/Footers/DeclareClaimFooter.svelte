@@ -2,11 +2,11 @@
     import DeclaringInformation from "../Notification/DeclaringInformation.svelte"
     import { declaringClaimUserNotificationStore } from "../../stores/declaringClaimStore";
     import NavigateBackToMainMenu from "../Destination/NavigateBackToMainMenu.svelte"
-    import { appBarClass, footerClass } from "../Styles/componentStyles";
+    
 </script>
-<footer class={footerClass}>
+<footer class={"flex flex-col pt-2 pb-16 lg:pb-1 bg-bangarang-veryLightEmphasis"}>
     {#if $declaringClaimUserNotificationStore.status !== "Executing"}
-        <section class={appBarClass}>
+        <section class={"flex w-full max-w-screen-md justify-between m-auto"}>
             <NavigateBackToMainMenu/>
         </section>
         {#if $declaringClaimUserNotificationStore.status !== "Idle"}

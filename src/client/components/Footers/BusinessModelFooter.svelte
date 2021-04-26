@@ -1,10 +1,9 @@
 <script lang="ts">
     import NavigateBackToMainMenu from "../Destination/NavigateBackToMainMenu.svelte"
     import NagivateToLeanCanvas from "../Destination/NavigateToLeanCanvas.svelte"
-    import { appBarClass, footerClass } from "../Styles/componentStyles";
 </script>
-<footer class={footerClass}>
-    <section class={appBarClass}>
+<footer class={"flex flex-col pt-2 pb-16 lg:pb-1 bg-bangarang-veryLightEmphasis"}>
+    <section class={"flex w-full max-w-screen-md justify-between m-auto"}>
         <NavigateBackToMainMenu/>
         <NagivateToLeanCanvas/>
     </section>

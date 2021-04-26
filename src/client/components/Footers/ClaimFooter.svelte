@@ -5,7 +5,7 @@
     import ClaimingInformation from "../Notification/ClaimingInformation.svelte"
     import DeclaringInformation from "../Notification/DeclaringInformation.svelte";
     import NavigateBackToMainMenu from "../Destination/NavigateBackToMainMenu.svelte"
-    import { appBarClass, footerClass } from "../Styles/componentStyles";
+    
 import { claimCopiedErrorMessage, claimCopiedSuccessMessage } from "../../logic/messages";
 import { Message } from "../../logic/language";
 import { languageStore } from "../../stores/languageStore";
@@ -20,9 +20,9 @@ import { languageStore } from "../../stores/languageStore";
             });   
     }
 </script>
-<footer class={footerClass}>
+<footer class={"flex flex-col pt-2 pb-16 lg:pb-1 bg-bangarang-veryLightEmphasis"}>
     {#if $claimingUserNotificationStore.status !== "Executing" && $declaringClaimUserNotificationStore.status !== "Executing"}
-        <section class={appBarClass}>
+        <section class={"flex w-full max-w-screen-md justify-between m-auto"}>
             <NavigateBackToMainMenu/>
             {#if URICopiedToClipboard}
                 <p class="text-center w-1/2 text-xs text-bangarang-success">{new Message(claimCopiedSuccessMessage).getMessage($languageStore)}</p>

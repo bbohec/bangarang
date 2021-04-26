@@ -5,10 +5,9 @@
     import {signingInNotificationStore} from "../../stores/signInStore"
     import { linkPrefixes } from "../../navigation/linkPrefixes";
     import { StaticView } from "../../port/interactors/BangarangUserInterfaceInteractor";
-import { languageStore } from "../../stores/languageStore";
-import { backToMainMenuLinkMessage, backToTheClaimMessage, signInRegisterMessage } from "../../logic/messages";
-import { Message } from "../../logic/language";
-import { footerClass } from "../Styles/componentStyles";
+    import { languageStore } from "../../stores/languageStore";
+    import { backToMainMenuLinkMessage, backToTheClaimMessage, signInRegisterMessage } from "../../logic/messages";
+    import { Message } from "../../logic/language";
     let currentClaimId:string|undefined=undefined;
     currentClaimIdStore.subscribe(currentClaimIdFromStore =>currentClaimId=currentClaimIdFromStore)
     const linkFromCurrentClaimId = (currentClaimId:string|undefined):{href:string,name:string} => {
@@ -17,7 +16,7 @@ import { footerClass } from "../Styles/componentStyles";
             {href:`/${$languageStore}/${linkPrefixes.claimLinkPrefix}${currentClaimId}`,name:new Message(backToTheClaimMessage).getMessage($languageStore)}
     }
 </script>
-<footer class={footerClass}>
+<footer class={"flex flex-col pt-2 pb-16 lg:pb-1 bg-bangarang-veryLightEmphasis"}>
     {#if $signingInNotificationStore.status === "Executing"}
         <SignInInformation/>
     {:else}
