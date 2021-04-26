@@ -1,6 +1,6 @@
 <script lang="ts">
     import SearchedClaims from "../Lists/SearchedClaims.svelte"
 </script>
-<main class="flex-grow overflow-y-auto ml-1 mr-4 mx-auto max-w-screen-2xl">
+<main class={"flex flex-col flex-grow m-auto p-1 justify-center items-center max-w-screen-md"}>
     <SearchedClaims/>
 </main>

@@ -9,11 +9,11 @@ export interface DeclaringClaimUserNotificationContract extends UserNotification
     type:DeclaringClaimNotificationType
     claimToDeclare?:ClaimContract
 }
-export const idleDeclaringClaimUserNotification:DeclaringClaimUserNotificationContract = {status:"Idle", message:"Waiting for claim declaration event.",type:"Declaring claim."}
-export const executingDeclaringClaimUserNotification=(claimToDeclare:ClaimContract):DeclaringClaimUserNotificationContract => ({status:"Executing", message:"Declaring claim...",type:"Declaring claim.",claimToDeclare})
-export const successDeclaringClaimUserNotification:DeclaringClaimUserNotificationContract = {status:"Success", message:"Declared.",type:"Declaring claim."}
-export const claimWithoutTitleDeclaringClaimUserNotification:DeclaringClaimUserNotificationContract = {status:"Failed", message:"A claim must have a title.",type:"Declaring claim."}
-export const claimWithoutTypeDeclaringClaimUserNotification:DeclaringClaimUserNotificationContract = {status:"Failed", message:"A claim must have a type.",type:"Declaring claim."}
-export const claimAlreadyExistDeclaringClaimUserNotification = (claimTitle:string):DeclaringClaimUserNotificationContract => ({status:"Failed", message:`The claim "${claimTitle}" already exist`,type:"Declaring claim."})
+export const idleDeclaringClaimUserNotification:DeclaringClaimUserNotificationContract = {status:"Idle", message:{en:"Waiting for claim declaration event.",fr:`En attente d'événement de déclaration.`},type:"Declaring claim."}
+export const executingDeclaringClaimUserNotification=(claimToDeclare:ClaimContract):DeclaringClaimUserNotificationContract => ({status:"Executing", message:{en:"Declaring claim...",fr:`Déclaration en cours...`},type:"Declaring claim.",claimToDeclare})
+export const successDeclaringClaimUserNotification:DeclaringClaimUserNotificationContract = {status:"Success", message:{en:"Declared.",fr:`Déclaré.`},type:"Declaring claim."}
+export const claimWithoutTitleDeclaringClaimUserNotification:DeclaringClaimUserNotificationContract = {status:"Failed", message:{en:"A claim must have a title.",fr:`Une revendication doit avoir un titre.`},type:"Declaring claim."}
+export const claimWithoutTypeDeclaringClaimUserNotification:DeclaringClaimUserNotificationContract = {status:"Failed", message:{en:"A claim must have a type.",fr:`Une revendication doit avoir un type.`},type:"Declaring claim."}
+export const claimAlreadyExistDeclaringClaimUserNotification = (claimTitle:string):DeclaringClaimUserNotificationContract => ({status:"Failed", message:{en:`The claim "${claimTitle}" already exist.`,fr:`La revendication "${claimTitle}" existe déjà.`},type:"Declaring claim."})
 
 

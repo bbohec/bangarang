@@ -9,7 +9,7 @@
 </script>
 {#each sections as [type,contents] }
     {#if type !== "audience" && type !== "pageLink" && Array.isArray(contents) && contents.length > 0}
-        <section>
+        <section class="self-stretch">
             <h1 class="text-sm mt-4 mb-1 text-bangarang-darkEmphasis font-semibold text-center">{new Message(retrieveSubTitleFromType(type)).getMessage($languageStore).toLocaleUpperCase()}</h1>
             {#if contents.length > 1 }
                 <ul class="list-disc list-inside">

@@ -6,6 +6,3 @@ export const claiming = (claimTitle:string,claimChoice:ClaimChoice):void => {
     claimingUserNotificationStore.set(executingClaimingUserNotification)
     uiBangarangUserBuilder.getUser().claiming(claimTitle,claimChoice)
 }
-
-
-

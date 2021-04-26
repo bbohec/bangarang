@@ -4,7 +4,6 @@
     import { definitionOfBangarangMessages, whatIsBangarangMessages, whyThisNameMessages } from "../../logic/messages";
     import { languageStore } from "../../stores/languageStore";
     import DescriptionCard from "../Cards/DescriptionCard.svelte"
-    console.log($languageStore)
     const BusinessModelValues:Array<DescriptionCardContract> = [
         {
             title:new Message(whatIsBangarangMessages.title).getMessage($languageStore),
@@ -23,7 +22,7 @@
         }
     ];
 </script>
-<main class="flex-grow overflow-y-auto">
+<main class={"flex flex-col flex-grow m-auto p-1 items-center max-w-screen-md overflow-y-auto"}>
     {#each BusinessModelValues as businessModelValue }
         <DescriptionCard descriptionCardContract={businessModelValue}/>
     {/each}

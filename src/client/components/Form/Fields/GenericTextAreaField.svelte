@@ -17,5 +17,5 @@
     required={isRequired} 
     {placeholder}
     {rows} 
-    class="text-xl text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"
+    class="text-xl w-full text-center mx-5 my-1 text-bangarang-dark placeholder-bangarang-darkEmphasis border-bangarang-lightEmphasis border rounded-md"
 ></textarea>

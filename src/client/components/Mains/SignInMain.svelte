@@ -1,13 +1,14 @@
 <script lang="ts">
+    import { Message } from "../../logic/language";
+    import { signOutMessage } from "../../logic/messages";
     import { currentUserContractStore } from "../../stores/currentUserContract";
+    import { languageStore } from "../../stores/languageStore";
     import SignInSection from "../Sections/SignInSection.svelte"
 </script>
-{#if $currentUserContractStore === undefined}
-    <main class="flex flex-col flex-grow justify-center items-center">
+<main class={"flex flex-col flex-grow m-auto p-1 justify-center items-center max-w-screen-md"}>
+    {#if $currentUserContractStore === undefined}    
         <SignInSection/>
-    </main>
-{:else}
-    <main class="flex flex-col flex-grow justify-center items-center">
-        <p class="invisible">SignOut</p>
-    </main>
-{/if}
+    {:else}
+        <p class="invisible">{new Message(signOutMessage).getMessage($languageStore)}</p>
+    {/if}     
+</main>

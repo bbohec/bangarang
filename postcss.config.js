@@ -6,10 +6,8 @@ const presetEnv = require('postcss-preset-env')({
     'nesting-rules': true, // Optional, not necessary. Read details about it  [here](https://tabatkins.github.io/specs/css-nesting/#motivation) 
   },
 });
-
 const plugins =
   process.env.NODE_ENV === 'production'
     ? [postcssImport, tailwind, presetEnv, cssnano]
     : [postcssImport, tailwind, presetEnv];
-
 module.exports = { plugins };

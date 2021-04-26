@@ -5,6 +5,8 @@
     import HeaderTitle from '../Titles/HeaderTitle.svelte'
     export let valuePropositionDesignCanvas:ValuePropositionDesignCanvasContract
 </script>
-<header class="flex flex-col">
-    <HeaderTitle title={new Message(valuePropositionDesignCanvas.title).getMessage($languageStore)}/>
+<header class={"flex flex-col flex-grow mx-auto px-1 justify-center items-center max-w-screen-md"}>
+    <HeaderTitle 
+        title={new Message(valuePropositionDesignCanvas.title).getMessage($languageStore)}
+    />
 </header>

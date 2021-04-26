@@ -262,9 +262,9 @@ describe(`Feature: Searching Claims
                 [${scenarioExpectedNotification.retreivedClaims?.map(claim=>claim.title)}]`,()=>{
                 expect(searchingClaimsUserNotificationInteractor.currentNotification?.retreivedClaims).to.deep.equal(scenarioExpectedNotification.retreivedClaims)
             })
-            it(`And the user has a '${scenarioExpectedNotification.type}' notification with '${scenarioExpectedNotification.status}' status and '${scenarioExpectedNotification.message}' message.`,()=>{
+            it(`And the user has a '${scenarioExpectedNotification.type}' notification with '${scenarioExpectedNotification.status}' status and '${scenarioExpectedNotification.message.en}' message.`,()=>{
                 expect(searchingClaimsUserNotificationInteractor.currentNotification?.status).equal(scenarioExpectedNotification.status)
-                expect(searchingClaimsUserNotificationInteractor.currentNotification?.message).equal(scenarioExpectedNotification.message)
+                expect(searchingClaimsUserNotificationInteractor.currentNotification?.message.en).equal(scenarioExpectedNotification.message.en)
                 expect(searchingClaimsUserNotificationInteractor.currentNotification?.type).equal(scenarioExpectedNotification.type)
             })
         })

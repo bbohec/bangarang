@@ -8,6 +8,7 @@ export type MessageContract= {[Lang in Language]:string}
 export class Message {
     constructor(private messageContract:MessageContract){}
     public getMessage(language:Language) {
+        console.log(language)
         return this.messageContract[language]
     }
 }

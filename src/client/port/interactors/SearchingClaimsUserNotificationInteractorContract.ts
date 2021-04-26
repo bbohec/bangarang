@@ -10,10 +10,10 @@ export interface SearchingClaimsUserNotificationContract extends UserNotificatio
     retreivedClaims?:ClaimContract[]
 }
 export type SearchingClaimsNotificationType="Searching Claims"
-export const executingSearchingClaimsUserNotification:SearchingClaimsUserNotificationContract ={status:"Executing", message:`Searching claims...`, type:"Searching Claims"}
-export const idleSearchingClaimsUserNotification:SearchingClaimsUserNotificationContract ={status:"Idle", message:`Waiting for searching claims event.`, type:"Searching Claims"}
-export const successSearchingClaimsUserNotification=(retreivedClaims:ClaimContract[]):SearchingClaimsUserNotificationContract => ({status:"Success", message:`${retreivedClaims.length} claims found.`, type:"Searching Claims",retreivedClaims})
-export const unexpectedErrorSearchingClaimsUserNotification=(error:Error):SearchingClaimsUserNotificationContract => ({status:"Failed", message:`Unexpected error '${error.message}'.`, type:"Searching Claims"})
+export const executingSearchingClaimsUserNotification:SearchingClaimsUserNotificationContract ={status:"Executing", message:{en:`Searching claims...`,fr:`Recherche de revendications en cours...`}, type:"Searching Claims"}
+export const idleSearchingClaimsUserNotification:SearchingClaimsUserNotificationContract ={status:"Idle", message:{en:`Waiting for searching claims event.`,fr:`En attente d'événement de recherche de revendication.`}, type:"Searching Claims"}
+export const successSearchingClaimsUserNotification=(retreivedClaims:ClaimContract[]):SearchingClaimsUserNotificationContract => ({status:"Success", message:{en:`${retreivedClaims.length} claims found.`,fr:`${retreivedClaims.length} revendications trouvées.`}, type:"Searching Claims",retreivedClaims})
+export const unexpectedErrorSearchingClaimsUserNotification=(error:Error):SearchingClaimsUserNotificationContract => ({status:"Failed", message:{en:`Unexpected error '${error.message}'.`,fr:`Erreur innatendue: '${error.message}'`}, type:"Searching Claims"})
 /*
 export const claimNotDeclaredRetrievingClaimUserNotification:RetrievingClaimUserNotificationContract = ({status:"Failed", message:"The claim is not declared on Bangarang.",type:"Retrieving claim."})
 */

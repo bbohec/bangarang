@@ -4,7 +4,7 @@
     import { languageStore } from "../../stores/languageStore";
     import {leanCanvas} from "../../logic/messages"
 </script>
-<main class="flex-grow overflow-y-auto">
+<main class={"flex flex-col flex-grow m-auto p-1 items-center max-w-screen-md overflow-y-auto"}>
     {#each leanCanvas($languageStore) as leanCanvasPart}
         <MainTitle title={leanCanvasPart.partName} position="center"/>
         {#each leanCanvasPart.sections as section}

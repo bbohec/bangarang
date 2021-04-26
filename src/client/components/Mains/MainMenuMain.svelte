@@ -3,7 +3,7 @@
     import BangarangDescription from "../Descriptions/BangarangDescription.svelte"
     import DemoPreviewCard from "../Cards/DemoPreviewCard.svelte"
 </script>
-<main class="flex-grow overflow-y-auto flex flex-col items-center justify-center mx-auto max-w-screen-2xl p-1">
+<main class={"flex flex-col flex-grow m-auto p-1 justify-center items-center max-w-screen-md"}>
     <WelcomeTitle/>
     <BangarangDescription/>
     <DemoPreviewCard/>
