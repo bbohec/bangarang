@@ -3,10 +3,12 @@
 	export async function preload(page:any, session:any) {
         const { claimId,language } = page.params;
 		const selectedLanguage:string = language
-        const claim = await retrieveClaim(claimId)
-        return {claim,selectedLanguage}
+        return retrieveClaim(claimId)
+            .then(claim => {
+                return {claim,selectedLanguage}
+            })
 	}
-    async function retrieveClaim(claimId:string):Promise<ClaimContractWithMemberPreviousClaimChoice|undefined> {
+    function retrieveClaim(claimId:string):Promise<ClaimContractWithMemberPreviousClaimChoice|undefined> {
         return retrievingClaimById(claimId)
             .then(()=>{
                 let claim:ClaimContractWithMemberPreviousClaimChoice|undefined
@@ -33,6 +35,7 @@
     import { onMount } from "svelte";
     export let claim:ClaimContractWithMemberPreviousClaimChoice | undefined
 	export let selectedLanguage:string
+    console.log(claim)
     assignLanguage(selectedLanguage)
 	onMount(()=>redirectOnUnknownLanguage(selectedLanguage))
     const shouldRetrieveClaimOnSuccessClaimingNotification=(claimingUserNotification: ClaimingUserNotificationContract)=> {

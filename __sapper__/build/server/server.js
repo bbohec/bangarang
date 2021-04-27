@@ -567,7 +567,6 @@ class Message {
         this.messageContract = messageContract;
     }
     getMessage(language) {
-        console.log(language);
         return this.messageContract[language];
     }
 }
@@ -4748,25 +4747,25 @@ function preload$9(page, session) {
 	return __awaiter$a(this, void 0, void 0, function* () {
 		const { claimId, language } = page.params;
 		const selectedLanguage = language;
-		const claim = yield retrieveClaim(claimId);
-		return { claim, selectedLanguage };
+
+		return retrieveClaim(claimId).then(claim => {
+			return { claim, selectedLanguage };
+		});
 	});
 }
 
 function retrieveClaim(claimId) {
-	return __awaiter$a(this, void 0, void 0, function* () {
-		return retrievingClaimById(claimId).then(() => {
-			let claim;
+	return retrievingClaimById(claimId).then(() => {
+		let claim;
 
-			retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => {
-				if (retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) {
-					claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice;
-					currentClaimIdStore.set(claim.id);
-				}
-			});
-
-			return claim;
+		retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => {
+			if (retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) {
+				claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice;
+				currentClaimIdStore.set(claim.id);
+			}
 		});
+
+		return claim;
 	});
 }
 
@@ -4776,6 +4775,7 @@ const U5BclaimIdu5D = create_ssr_component(($$result, $$props, $$bindings, slots
 	
 	let { claim } = $$props;
 	let { selectedLanguage } = $$props;
+	console.log(claim);
 	assignLanguage(selectedLanguage);
 	onMount(() => redirectOnUnknownLanguage(selectedLanguage));
 
