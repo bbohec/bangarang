@@ -6,20 +6,19 @@
         const claim = await retrieveClaim(claimId)
         return {claim,selectedLanguage}
 	}
-    async function retrieveClaim(claimId:string) {
-        return new Promise<ClaimContractWithMemberPreviousClaimChoice|undefined>(resolve=> {
-            retrievingClaimById(claimId) 
-            retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => {
-                if(retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) {
-                    const claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice
-                    currentClaimIdStore.set(claim.id)
-                    resolve(claim)
-                }
-                if(retrievingClaimUserNotification.status === "Failed") {
-                    resolve(undefined)
-                }
+    async function retrieveClaim(claimId:string):Promise<ClaimContractWithMemberPreviousClaimChoice|undefined> {
+        return retrievingClaimById(claimId)
+            .then(()=>{
+                let claim:ClaimContractWithMemberPreviousClaimChoice|undefined
+                retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => {
+                    if(retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) {
+                        claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice
+                        currentClaimIdStore.set(claim.id)
+                    }
+                })
+                return claim
             })
-        })
+            
     }
 </script>
 <script lang="ts">
