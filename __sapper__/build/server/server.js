@@ -4745,52 +4745,38 @@ var __awaiter$a = undefined && undefined.__awaiter || function (thisArg, _argume
 
 function preload$9(page, session) {
 	return __awaiter$a(this, void 0, void 0, function* () {
-		const { claimId, language } = page.params;
-		const selectedLanguage = language;
-
-		return retrieveClaim(claimId).then(claim => {
-			return { claim, selectedLanguage };
-		});
-	});
-}
-
-function retrieveClaim(claimId) {
-	return retrievingClaimById(claimId).then(() => {
-		let claim;
-
-		retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => {
-			if (retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) {
-				claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice;
-				currentClaimIdStore.set(claim.id);
-			}
-		});
-
-		return claim;
+		const { language, claimId } = page.params;
+		return { language, claimId };
 	});
 }
 
 const U5BclaimIdu5D = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+	let { language } = $$props;
+	let { claimId } = $$props;
 	
 	
 	
-	let { claim } = $$props;
-	let { selectedLanguage } = $$props;
-	console.log(claim);
-	assignLanguage(selectedLanguage);
-	onMount(() => redirectOnUnknownLanguage(selectedLanguage));
+	assignLanguage(language);
+	onMount(() => redirectOnUnknownLanguage(language));
+	let claim;
+	currentClaimIdStore.set(claimId);
 
 	const shouldRetrieveClaimOnSuccessClaimingNotification = claimingUserNotification => {
-		if (claimingUserNotification.status === "Success" && claim) retrievingClaimById(claim.id);
+		if (claimingUserNotification.status === "Success") retrievingClaimById(claimId);
 	};
+
+	retrievingClaimById(claimId);
+	claimingUserNotificationStore.subscribe(claimingUserNotification => shouldRetrieveClaimOnSuccessClaimingNotification(claimingUserNotification));
 
 	const shouldAffectClaim = retrievingClaimUserNotification => {
-		if (retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice;
+		if (retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) {
+			claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice;
+		}
 	};
 
-	claimingUserNotificationStore.subscribe(claimingUserNotification => shouldRetrieveClaimOnSuccessClaimingNotification(claimingUserNotification));
 	retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => shouldAffectClaim(retrievingClaimUserNotification));
-	if ($$props.claim === void 0 && $$bindings.claim && claim !== void 0) $$bindings.claim(claim);
-	if ($$props.selectedLanguage === void 0 && $$bindings.selectedLanguage && selectedLanguage !== void 0) $$bindings.selectedLanguage(selectedLanguage);
+	if ($$props.language === void 0 && $$bindings.language && language !== void 0) $$bindings.language(language);
+	if ($$props.claimId === void 0 && $$bindings.claimId && claimId !== void 0) $$bindings.claimId(claimId);
 
 	return `${claim
 	? `${validate_component(ClaimView, "ClaimView").$$render($$result, { claim }, {}, {})}`
