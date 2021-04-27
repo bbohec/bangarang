@@ -4746,7 +4746,22 @@ var __awaiter$a = undefined && undefined.__awaiter || function (thisArg, _argume
 function preload$9(page, session) {
 	return __awaiter$a(this, void 0, void 0, function* () {
 		const { language, claimId } = page.params;
-		return { language, claimId };
+
+		/*return retrievingClaimById(claimId)
+        .then(()=>{
+            retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => {
+                let claim:ClaimContractWithMemberPreviousClaimChoice|undefined
+                if(retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) {
+                    claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice
+                    currentClaimIdStore.set(claim.id)
+                }
+                return { language,claimId,claim };
+            })
+            
+        })*/
+		const claim = undefined;
+
+		return { language, claimId, claim };
 	});
 }
 
@@ -4758,14 +4773,14 @@ const U5BclaimIdu5D = create_ssr_component(($$result, $$props, $$bindings, slots
 	
 	assignLanguage(language);
 	onMount(() => redirectOnUnknownLanguage(language));
-	let claim;
+	let { claim } = $$props;
 	currentClaimIdStore.set(claimId);
 
 	const shouldRetrieveClaimOnSuccessClaimingNotification = claimingUserNotification => {
 		if (claimingUserNotification.status === "Success") retrievingClaimById(claimId);
 	};
 
-	retrievingClaimById(claimId);
+	if (!claim) retrievingClaimById(claimId);
 	claimingUserNotificationStore.subscribe(claimingUserNotification => shouldRetrieveClaimOnSuccessClaimingNotification(claimingUserNotification));
 
 	const shouldAffectClaim = retrievingClaimUserNotification => {
@@ -4777,6 +4792,7 @@ const U5BclaimIdu5D = create_ssr_component(($$result, $$props, $$bindings, slots
 	retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => shouldAffectClaim(retrievingClaimUserNotification));
 	if ($$props.language === void 0 && $$bindings.language && language !== void 0) $$bindings.language(language);
 	if ($$props.claimId === void 0 && $$bindings.claimId && claimId !== void 0) $$bindings.claimId(claimId);
+	if ($$props.claim === void 0 && $$bindings.claim && claim !== void 0) $$bindings.claim(claim);
 
 	return `${claim
 	? `${validate_component(ClaimView, "ClaimView").$$render($$result, { claim }, {}, {})}`

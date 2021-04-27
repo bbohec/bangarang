@@ -2,18 +2,20 @@
     import {currentClaimIdStore} from "../../../client/stores/currentClaimIdStore"
     export async function preload(page:any, session:any) {
         const { language,claimId } = page.params;
-        return retrievingClaimById(claimId)
+        /*return retrievingClaimById(claimId)
                 .then(()=>{
-                    let claim:ClaimContractWithMemberPreviousClaimChoice|undefined
                     retrievingClaimUserNotificationStore.subscribe(retrievingClaimUserNotification => {
+                        let claim:ClaimContractWithMemberPreviousClaimChoice|undefined
                         if(retrievingClaimUserNotification.status === "Success" && retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice) {
                             claim = retrievingClaimUserNotification.claimWithMemberPreviousClaimChoice
                             currentClaimIdStore.set(claim.id)
                         }
+                        return { language,claimId,claim };
                     })
-                    return { language,claimId,claim };
-                })
-		
+                    
+                })*/
+        const claim = undefined
+        return { language,claimId,claim };
 	}
 	/*
     export async function preload(page:any, session:any) {
