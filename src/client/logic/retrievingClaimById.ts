@@ -1,9 +1,9 @@
 import { uiBangarangUserBuilder } from "../adapters/uiPrimaryAdapter"
 import { retrievingClaimUserNotificationStore } from "../stores/retrievingClaimStore"
 import { executingRetrievingClaimUserNotification } from "../port/interactors/RetrievingClaimUserNotificationInteractorContract"
-export const retrievingClaimById = (claimId:string):void => {
+export const retrievingClaimById = (claimId:string):Promise<void> => {
     retrievingClaimUserNotificationStore.set(executingRetrievingClaimUserNotification)
-    uiBangarangUserBuilder.getUser().retrievingClaimById(claimId)
+    return uiBangarangUserBuilder.getUser().retrievingClaimById(claimId)
 }
 
 
