@@ -12,14 +12,21 @@
     const theme:"light"|"dark"="dark"
     const navigateToBangarang = ():void=> {window.location.href = `/${$languageStore}/${StaticView.MainMenu}`}
 </script>
-<main class={"flex flex-col flex-grow m-auto p-1 justify-center items-center max-w-screen-md"}>
-    <section>
-        {#if mainHeadLine}
-            <MainTitle title={mainHeadLine} size="large" {theme}/>
-        {/if}
-        {#if supportingHeadLine}
-            <MainSubTitle title={painRelieversToSupportingHeadLine($languageStore,supportingHeadLine)} {theme}/>
-        {/if}
-    </section>
-    <GenericButton textbutton={new Message(callToActionMessage).getMessage($languageStore)} customClasses="w-11/12" size="large" color="dark" onClickAction={navigateToBangarang}/>
+<main class={"flex flex-col flex-grow m-auto p-3 justify-evenly max-w-screen-md"}>
+    {#if mainHeadLine}
+        <MainTitle 
+            title={mainHeadLine} 
+            size="large" 
+            customClasses="w-3/4"
+            {theme}
+        />
+    {/if}
+    {#if supportingHeadLine}
+        <MainSubTitle 
+            title={painRelieversToSupportingHeadLine($languageStore,supportingHeadLine)}
+            customClasses="w-3/4 self-end"
+            {theme}
+        />
+    {/if}
+    <GenericButton buttonType="Contained Button" textLabel={new Message(callToActionMessage).getMessage($languageStore)} customClasses="w-56 self-center" onClickAction={navigateToBangarang}/>
 </main>

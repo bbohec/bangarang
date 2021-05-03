@@ -17,12 +17,14 @@
 ## 03/05/2021 — Day 33
 - ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
 - ✔️ Stand Up
-- 👉 UI style rework
-    - 👉 Claim Lists / Separator / Cards — Svelte truncate !
-    -  Claim Button
-    -  Declare Claim View
-    -  Landing Pages 
-    -  Notification snack bar
+- ❌ UI style rework
+    - ✔️ Claim Lists / Separator / Cards — Svelte truncate !
+    - ✔️ Claim Button
+    - ✔️ Declare Claim View
+    - ✔️ Landing Pages 
+    - ❌ Form Buttons
+    - ❌ Demo/warning text
+    - ❌ Notification snack bar
 -  Summary.
 
 ## 30/04/2021 — Day 32

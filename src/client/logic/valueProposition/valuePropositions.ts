@@ -285,6 +285,6 @@ export const valuePropositionsDesignCanvas:ValuePropositionDesignCanvasContract[
 ]
 
 export const painRelieversToSupportingHeadLine = (language:Language, supportingHeadLine:string):string => new Message({
-    en:`Use Bangarang and ${supportingHeadLine.toLocaleLowerCase()}`,
-    fr:`Utilisez Bangarang et ${supportingHeadLine.toLocaleLowerCase()}`
+    en: supportingHeadLine,
+    fr:supportingHeadLine
 }).getMessage(language)
