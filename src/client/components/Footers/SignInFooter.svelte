@@ -1,33 +1,25 @@
 <script lang="ts">
-    import Link from "../Links/Link.svelte";
-    import SignInInformation from "../Notification/SignInInformation.svelte"
+    import SignInInformation from "../AppBarComponents/Notifications/SignInInformation.svelte"
     import {currentClaimIdStore} from "../../stores/currentClaimIdStore"
     import {signingInNotificationStore} from "../../stores/signInStore"
-    import { linkPrefixes } from "../../navigation/linkPrefixes";
-    import { StaticView } from "../../port/interactors/BangarangUserInterfaceInteractor";
-    import { languageStore } from "../../stores/languageStore";
-    import { backToMainMenuLinkMessage, backToTheClaimMessage, signInRegisterMessage } from "../../logic/messages";
-    import { Message } from "../../logic/language";
-    let currentClaimId:string|undefined=undefined;
-    currentClaimIdStore.subscribe(currentClaimIdFromStore =>currentClaimId=currentClaimIdFromStore)
-    const linkFromCurrentClaimId = (currentClaimId:string|undefined):{href:string,name:string} => {
-        return (currentClaimId===undefined)? 
-            {href:`/${$languageStore}/${StaticView.MainMenu}`,name:new Message(backToMainMenuLinkMessage).getMessage($languageStore)}:
-            {href:`/${$languageStore}/${linkPrefixes.claimLinkPrefix}${currentClaimId}`,name:new Message(backToTheClaimMessage).getMessage($languageStore)}
-    }
+    import NavigateToRegisterMenu from "../AppBarComponents/Actions/NavigateToRegisterMenu.svelte"
+    import NavigateToMainMenu from '../AppBarComponents/Actions/NavigateToMainMenu.svelte'
+    import NavigateToCurrentClaim from '../AppBarComponents/Actions/NavigateToCurrentClaim.svelte'
 </script>
 <footer class={"flex flex-col pt-2 pb-16 lg:pb-1 bg-bangarang-veryLightEmphasis"}>
-    {#if $signingInNotificationStore.status === "Executing"}
-        <SignInInformation/>
-    {:else}
-        <section class="flex justify-center items-center">
-            <Link size="small" linkHref={`/${$languageStore}/${StaticView.Register}`} linkName={new Message(signInRegisterMessage).getMessage($languageStore)} textAlign={"text-center"}/>
-        </section>
-        <section class="flex justify-between items-center">
-            <Link size="small" linkHref={linkFromCurrentClaimId(currentClaimId).href} linkName={linkFromCurrentClaimId(currentClaimId).name} textAlign={"text-left"}/>
-            {#if $signingInNotificationStore.status !== "Idle"}
-                <SignInInformation/>
-            {/if}
-        </section>
-    {/if}
+        <section class={"flex w-full max-w-screen-md justify-between md:justify-around lg:justify-evenly m-auto"}>
+            {#if $signingInNotificationStore.status !== "Executing"}
+                {#if $currentClaimIdStore === undefined}
+                    <NavigateToMainMenu/>
+                {:else}
+                    <NavigateToCurrentClaim currentClaimId={$currentClaimIdStore}/>
+                {/if} 
+                {#if $signingInNotificationStore.status !== "Idle"}
+                    <SignInInformation/>
+                {/if}   
+                <NavigateToRegisterMenu/>
+            {:else}
+                <SignInInformation/> 
+            {/if}   
+        </section> 
 </footer>

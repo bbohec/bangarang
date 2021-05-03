@@ -1,25 +1,42 @@
 # Bangarang — Product Development Log
 - Official video >> subscribe to form in order to be informed about demo & launch
 - ? Builder placement on clean architecture
+-  Pull Req.
 - Error management
 - BDD > Feature scenarios:
     - Declaring Multiple Proposal Claim.
     - Signing Out.
+    - Hot Claims
     - Unregistering. (remove claims)
-    - Delete Account
+    - proxy claim as
+- SSR enhancements
 - ❌ To-do / Not Finished
 - 👉 Doing
 - ✔️ Done
 
-## 30/04/2021 — Day 32
--  Twitch Live https://www.twitch.tv/benjaminbohec + announces
--  Stand Up — Done i18n
--  UI style rework
-    -  Sign In Footer
-    -  Value Proposition Footer
+## 03/05/2021 — Day 33
+- ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
+- ✔️ Stand Up
+- 👉 UI style rework
+    - 👉 Claim Lists / Separator / Cards — Svelte truncate !
+    -  Claim Button
+    -  Declare Claim View
+    -  Landing Pages 
     -  Notification snack bar
--  Pull Req.
 -  Summary.
+
+## 30/04/2021 — Day 32
+- ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
+- ✔️ Stand Up
+- ❌ UI style rework
+    - ✔️ Sign In Footer
+    - ✔️ Value Proposition Footer
+    - ❌ Claim Lists / Separator / Cards — Svelte truncate !
+    - ❌ Claim Button
+    - ❌ Declare Claim View
+    - ❌ Landing Pages 
+    - ❌ Notification snack bar
+- ✔️ Summary.
 
 ## 26/04/2021 — Day 31
 - ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces

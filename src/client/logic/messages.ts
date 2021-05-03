@@ -660,12 +660,12 @@ export const signInFormSubmitMessage:MessageContract={
     fr:`Connexion`
 }
 export const signInRegisterMessage:MessageContract={
-    en:`Would you like to register on Bangarang?`,
-    fr:`Veux-tu t'enregistrer sur Bangarang?`
+    en:`Register`,
+    fr:`S'enregister`
 }
 export const backToTheClaimMessage:MessageContract={
-    en:`Back to the claim.`,
-    fr:`Retourner sur la revendication.`
+    en:`Claim`,
+    fr:`Revendication`
 }
 export const backToSignInMenuMessage:MessageContract={
     en:`Sign In`,
