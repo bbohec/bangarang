@@ -1,18 +1,17 @@
 <script lang="ts">
-    import DeclaringInformation from "../Notification/DeclaringInformation.svelte"
+    import DeclaringInformation from "../AppBarComponents/Notifications/DeclaringInformation.svelte"
     import { declaringClaimUserNotificationStore } from "../../stores/declaringClaimStore";
-    import NavigateBackToMainMenu from "../Destination/NavigateBackToMainMenu.svelte"
-    
+    import NavigateBackToMainMenu from "../AppBarComponents/Actions/NavigateBackToMainMenu.svelte"
 </script>
 <footer class={"flex flex-col pt-2 pb-16 lg:pb-1 bg-bangarang-veryLightEmphasis"}>
-    {#if $declaringClaimUserNotificationStore.status !== "Executing"}
-        <section class={"flex w-full max-w-screen-md justify-between m-auto"}>
+    <section class={"flex w-full max-w-screen-md justify-between md:justify-around lg:justify-evenly m-auto"}>
+        {#if $declaringClaimUserNotificationStore.status !== "Executing"}
             <NavigateBackToMainMenu/>
-        </section>
-        {#if $declaringClaimUserNotificationStore.status !== "Idle"}
-            <DeclaringInformation/>
+            {#if $declaringClaimUserNotificationStore.status !== "Idle"}
+                <DeclaringInformation/>
+            {/if}
+        {:else}
+            <DeclaringInformation/> 
         {/if}
-    {:else}
-        <DeclaringInformation/> 
-    {/if}
+    </section>
 </footer>

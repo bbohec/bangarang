@@ -16,7 +16,7 @@
         declaringClaim(target.claimTitle.value)
     }
 </script>
-<form class="w-full flex flex-col items-center" on:submit|preventDefault={eventHandler}>
+<form class="flex flex-col w-full h-full justify-evenly" on:submit|preventDefault={eventHandler}>
     <GenericTextAreaField 
         fieldId=claimTitle 
         fieldName={new Message(claimTitleFieldNameMessage).getMessage($languageStore)} 
@@ -24,10 +24,13 @@
         isRequired={true} 
         isReadOnly={$declaringClaimUserNotificationStore.status !== "Idle"}
     />
-    <fieldset>
-        <legend class="text-bangarang-lightEmphasis">{new Message(claimTypeMessage).getMessage($languageStore)}</legend>
-        <ClaimAsProposalRadioButton/>
-    </fieldset>
+    <section>
+        <fieldset>
+            <legend class="text-bangarang-lightEmphasis">{new Message(claimTypeMessage).getMessage($languageStore)}</legend>
+            <ClaimAsProposalRadioButton/>
+        </fieldset>
+    </section>
+    
     <GenericSubmitField 
         fieldId=declare 
         fieldName= {new Message(declareClaimSubmitMessage).getMessage($languageStore)}

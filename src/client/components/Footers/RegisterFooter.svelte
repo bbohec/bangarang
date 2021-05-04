@@ -1,17 +1,17 @@
 <script lang="ts">
-    import RegisteringInformation from "../Notification/RegisteringInformation.svelte"
     import { registeringUserNotificationStore } from "../../stores/registeringStore";
-    import NavigateToSignInMenu from "../Destination/NavigateToSignInMenu.svelte"
+    import RegisteringInformation from "../AppBarComponents/Notifications/RegisteringInformation.svelte"
+    import NavigateToSignInMenu from "../AppBarComponents/Actions/NavigateToSignInMenu.svelte"
 </script>
 <footer class={"flex flex-col pt-2 pb-16 lg:pb-1 bg-bangarang-veryLightEmphasis"}>
-    {#if $registeringUserNotificationStore.status !== "Executing"}
-        <section class={"flex w-full max-w-screen-md justify-between m-auto"}>
+    <section class={"flex w-full max-w-screen-md justify-between md:justify-around lg:justify-evenly m-auto"}>
+        {#if $registeringUserNotificationStore.status !== "Executing"}
             <NavigateToSignInMenu/>
-        </section> 
-        {#if $registeringUserNotificationStore.status !== "Idle"}
-            <RegisteringInformation/>
-        {/if}   
-    {:else}
-        <RegisteringInformation/>   
-    {/if}
+            {#if $registeringUserNotificationStore.status !== "Idle"}
+                <RegisteringInformation/>
+            {/if}   
+        {:else}
+            <RegisteringInformation/>   
+        {/if}
+    </section> 
 </footer>

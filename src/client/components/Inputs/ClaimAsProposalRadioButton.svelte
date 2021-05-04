@@ -7,6 +7,7 @@
     id="claimType"      
     type="radio" 
     name="claimType" 
+    class="ml-5 mr-1"
     checked
 >
 <label 

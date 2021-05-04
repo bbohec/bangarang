@@ -11,10 +11,10 @@
     export let userClaimingChoice:ClaimChoice=undefined
     const retreivePercentage = (total:number,part:number):number => (total>0)?part/total*100:0
 </script>
-<main class={"flex flex-col flex-grow m-auto p-1 justify-center items-center max-w-screen-md"}>
+<main class={"flex flex-col w-full m-auto p-1 justify-center items-center max-w-screen-md"}>
     <p class="text-center text-bangarang-lightEmphasis my-2">{peopleClaimed}<br>{new Message(peopleClaimedMessage).getMessage($languageStore)}</p>
-    <section class="flex justify-between my-1 mx-4">
-        <section class="flex flex-col w-1/3">
+    <section class="flex self-stretch justify-around lg:justify-evenly">
+        <section class="flex flex-col w-24">
             <ClaimButton 
                 {claimId} 
                 {userClaimingChoice} 
@@ -23,7 +23,7 @@
             />
             <p class="text-center text-bangarang-lightEmphasis">{retreivePercentage(peopleClaimed,peopleAgainst).toFixed(2)}%</p>
         </section>
-        <section class="flex flex-col w-1/3">
+        <section class="flex flex-col w-24">
             <ClaimButton 
                 {claimId}
                 {userClaimingChoice}

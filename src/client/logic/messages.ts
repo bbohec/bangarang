@@ -616,20 +616,20 @@ export const retrieveSubTitleFromType = (type:string):MessageContract => {
     return {en:`!!!ERROR UNKNOWN TYPE!!!`,fr:`!!!ERREUR TYPE INCONU!!!`}
 }
 export const callToActionMessage:MessageContract={
-    en:`I claim!`,
-    fr:`Je revendique!`
+    en:`Claim`,
+    fr:`Revendiquer`
 }
 export const claimTypeMessage:MessageContract={
-    en:`Claim type`,
-    fr:`Type de revendication`
+    en:`Claim type:`,
+    fr:`Type de revendication:`
 }
 export const claimTitlePlaceholderMessage:MessageContract={
     en:`Describe the claim ...`,
     fr:`Décris la revendication...`
 }
 export const claimTitleFieldNameMessage:MessageContract={
-    en:`Claim Title`,
-    fr:`Titre de la Revendication.`
+    en:`Claim title:`,
+    fr:`Titre de la revendication:`
 }
 export const declareClaimSubmitMessage:MessageContract={
     en:`Declare`,
@@ -660,12 +660,12 @@ export const signInFormSubmitMessage:MessageContract={
     fr:`Connexion`
 }
 export const signInRegisterMessage:MessageContract={
-    en:`Would you like to register on Bangarang?`,
-    fr:`Veux-tu t'enregistrer sur Bangarang?`
+    en:`Register`,
+    fr:`S'enregister`
 }
 export const backToTheClaimMessage:MessageContract={
-    en:`Back to the claim.`,
-    fr:`Retourner sur la revendication.`
+    en:`Claim`,
+    fr:`Revendication`
 }
 export const backToSignInMenuMessage:MessageContract={
     en:`Sign In`,
