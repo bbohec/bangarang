@@ -30,10 +30,10 @@
             <ClaimAsProposalRadioButton/>
         </fieldset>
     </section>
-    
     <GenericSubmitField 
         fieldId=declare 
         fieldName= {new Message(declareClaimSubmitMessage).getMessage($languageStore)}
         isReadOnly={$declaringClaimUserNotificationStore.status !== "Idle"}
+        buttonType="Contained Button"
     />
 </form>

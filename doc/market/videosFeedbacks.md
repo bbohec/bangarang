@@ -1,5 +1,25 @@
 # Videos Feedbacks
 
+## Day 34
+- Video Analytics
+    - Views 2k (458 unique on 90 days)
+    - Total hours of play 130h
+    - Average viewing time 3:52 m
+    - 39 > +3 subs > 42 subs
+- Feedback population type
+    - Short Video Demo
+    - Style Theme / Accessibility
+    - Troll : Stop Bangarang 
+    - Onbehalf Claim / Claim priority
+    - ++ Restyling
+    - Find audiences
+- Google Analytics Bangarang
+    - FR
+    - 249 Users
+    - 3m30
+    - https://bangarang.sometimesuseful.com/
+- Google Form > +0
+
 ## Day 23
 - Video Analytics
     - Views 1.63k (629 unique)

@@ -12,10 +12,10 @@
 </script>
 {#if $claimingUserNotificationStore.status === "Idle" && $declaringClaimUserNotificationStore.status === "Idle"}
     {#if userClaimingChoice === claimingChoice}
-        <GenericButton buttonType="Contained Button" textLabel={claimingChoiceMessage} onClickAction={onClickAction} disabled={true}/>
+        <GenericButton buttonType="Text button" textLabel={claimingChoiceMessage} onClickAction={onClickAction} disabled={true}/>
     {:else}
         <GenericButton buttonType="Contained Button" textLabel={claimingChoiceMessage} onClickAction={onClickAction} disabled={false}/> 
     {/if}
 {:else} 
-    <GenericButton buttonType="Contained Button" textLabel={claimingChoiceMessage} onClickAction={onClickAction} disabled={true}/>
+    <GenericButton buttonType="Text button" textLabel={claimingChoiceMessage} onClickAction={onClickAction} disabled={true}/>
 {/if}

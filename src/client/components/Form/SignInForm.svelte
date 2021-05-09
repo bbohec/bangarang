@@ -32,6 +32,7 @@
     <GenericSubmitField 
         fieldId=signin 
         fieldName={new Message(signInFormSubmitMessage).getMessage($languageStore)}
-        isReadOnly={$signingInNotificationStore.status !== "Idle"
-    }/>
+        isReadOnly={$signingInNotificationStore.status !== "Idle"}
+        buttonType="Contained Button"
+    />
 </form>

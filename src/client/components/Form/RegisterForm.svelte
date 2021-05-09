@@ -46,5 +46,6 @@ import { languageStore } from "../../stores/languageStore";
         fieldId=register
         fieldName={new Message(registerFormSubmitMessage).getMessage($languageStore)}
         isReadOnly={$registeringUserNotificationStore.status !== "Idle"}
+        buttonType="Contained Button"
     />
 </form>
