@@ -1,7 +1,7 @@
 # Bangarang — Product Development Log
 - Official video >> subscribe to form in order to be informed about demo & launch
 - ? Builder placement on clean architecture
--  Pull Req.
+- Pull Req.
 - Error management
 - BDD > Feature scenarios:
     - Declaring Multiple Proposal Claim.
@@ -14,6 +14,30 @@
 - 👉 Doing
 - ✔️ Done
 
+## 10/05/2021 - 35
+-  Twitch Live https://www.twitch.tv/benjaminbohec + announces
+-  Stand Up
+-  UI style rework
+    -  Demo/warning text
+    -  Notification snack bar
+-  User Case Strategy Pattern
+-  Official video >> subscribe to form in order to be informed about demo & launch
+-  Summary.
+
+## 07/05/2021 — Day 34
+- ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
+- ✔️ Stand Up
+- ✔️ Feedback
+- ❌ UI style rework
+    - ✔️ Disabled button
+    - ✔️ Form Buttons
+    - ❌ Demo/warning text
+    - ❌ Notification snack bar
+- ❌ User Case Strategy Pattern
+- ✔️ “Mike Codeur” TDD Video
+- ✔️ Summary.
+
+
 ## 03/05/2021 — Day 33
 - ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
 - ✔️ Stand Up
@@ -25,7 +49,7 @@
     - ❌ Form Buttons
     - ❌ Demo/warning text
     - ❌ Notification snack bar
--  Summary.
+- ✔️ Summary.
 
 ## 30/04/2021 — Day 32
 - ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces

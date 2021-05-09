@@ -17,14 +17,14 @@
         <MainTitle 
             title={mainHeadLine} 
             size="large" 
-            customClasses="w-3/4"
+            customClasses="w-11/12"
             {theme}
         />
     {/if}
     {#if supportingHeadLine}
         <MainSubTitle 
             title={painRelieversToSupportingHeadLine($languageStore,supportingHeadLine)}
-            customClasses="w-3/4 self-end"
+            customClasses="w-11/12 self-end"
             {theme}
         />
     {/if}
