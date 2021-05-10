@@ -87,7 +87,7 @@ describe(`Feature: Registering
                 }
             })
             it(`Given the user is not signed in as '${scenario.userContract.username}'.`,()=>{
-                expect(user.retrieveUserContract()).to.be.undefined
+                expect(user.retrieveSignedInUserContract()).to.be.undefined
             })
             if (!scenario.alreadyHaveBangarangMember)it(`And there is no '${scenario.userContract.username}' Bangarang member'`,()=> {
                     expect(()=>{scenario.bangarangMemberInteractor.specificFindMemberFromUsername(scenario.userContract.username)})
@@ -108,7 +108,6 @@ describe(`Feature: Registering
             | username | password           | email         | fullname  |
             | ${scenario.userContract.username}  | ${scenario.userPassword}   |  ${scenario.userContract.email} | ${scenario.userContract.fullname}  |`,(done)=> {
                 user.registering(scenario.userContract,scenario.userPassword).then(()=>done())
-                
             })
             if (scenario.alreadyHaveBangarangMember) {
                 const bangarangMember = scenario.alreadyHaveBangarangMember

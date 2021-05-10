@@ -165,6 +165,7 @@ describe(`Feature: Claiming
         }
     ]
     async function initScenario (scenario:Scenario):Promise<void>{
+        bangarangUserInterfaceInteractor.resetSignedInUserContract()
         userBuilder.resetUser()
         bangarangMembersInteractor.specificWithMembers([userContract]);
         bangarangMembersInteractor.specificWithMembersClaims([]);
@@ -181,8 +182,8 @@ describe(`Feature: Claiming
         ${scenario.description}`,()=> {
             before(()=>initScenario(scenario))
             it(`Given the user is ${(!scenario.userSignedIn)?"not ":""}signed in`,()=>{
-                if(!scenario.userSignedIn)expect(userBuilder.getUser().retrieveUserContract()).to.be.undefined
-                else expect(userBuilder.getUser().retrieveUserContract()).deep.equal(userContract)
+                if(!scenario.userSignedIn)expect(userBuilder.getUser().retrieveSignedInUserContract()).to.be.undefined
+                else expect(userBuilder.getUser().retrieveSignedInUserContract()).deep.equal(userContract)
             })
             if (scenario.claimDeclared){ 
                 if(scenario.previousClaimChoice)it(`And the claim with id '${scenario.expectedClaim.id}' is declared on Bangarang with the following values:

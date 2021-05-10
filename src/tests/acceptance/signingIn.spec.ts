@@ -28,7 +28,7 @@ describe(`Feature: Signing In
             .withSigningInUserNotificationInteractor(fakeSigningInUserNotificationInteractor)
             .getUser()
         it(`Given the user is not signed in`,()=> {
-            expect(user.retrieveUserContract()).to.be.undefined
+            expect(user.retrieveSignedInUserContract()).to.be.undefined
         })
         it(`And there is '${expectedUser.username}' Bangarang member with password '${expectedUserPassword}'`,()=> {
             expect(bangarangMembersInteractor.specificFindMemberFromUsername(expectedUser.username)).deep.equal(expectedUser)
@@ -40,7 +40,7 @@ describe(`Feature: Signing In
         it(`Then the user is signed in as a Bangarang member with the following information:
             | username | user fullname |
             | ${expectedUser.username}  | ${expectedUser.fullname}      |`,()=> {
-            expect(user.retrieveUserContract()).deep.equal(expectedUser)
+            expect(user.retrieveSignedInUserContract()).deep.equal(expectedUser)
         })
         /*
         it(`And the user is Signed In`,()=> {
@@ -64,7 +64,7 @@ describe(`Feature: Signing In
             .getUser()
         before(()=>user.signingIn(expectedUser.username,expectedUserPassword))
         it(`Given the user is already SignedIn`,()=>{
-            expect(user.retrieveUserContract()).deep.equal(expectedUser)
+            expect(user.retrieveSignedInUserContract()).deep.equal(expectedUser)
         })
         it(`When the user signin as '${expectedUser.username}' with password '${expectedUserPassword}'`,(done)=> {
             user.signingIn(expectedUser.username,expectedUserPassword).then(()=> done())
@@ -83,7 +83,7 @@ describe(`Feature: Signing In
             .withSigningInUserNotificationInteractor(fakeSigningInUserNotificationInteractor)
             .getUser()
         it(`Given the user is not signed in`,()=>{
-            expect(user.retrieveUserContract()).to.be.undefined
+            expect(user.retrieveSignedInUserContract()).to.be.undefined
         })
         it(`And there is no '${expectedUser.username}' Bangarang member'`,()=> {
             expect(()=>{bangarangMembersInteractor.specificFindMemberFromUsername(expectedUser.username)})
@@ -109,7 +109,7 @@ describe(`Feature: Signing In
             .withSigningInUserNotificationInteractor(fakeSigningInUserNotificationInteractor)
             .getUser()
         it(`Given the user is not signed in`,()=>{
-            expect(user.retrieveUserContract()).to.be.undefined
+            expect(user.retrieveSignedInUserContract()).to.be.undefined
         })
         it(`And there is '${expectedUser.username}' Bangarang member with password '${expectedUserPassword}'`,()=> {
             expect(bangarangMembersInteractor.specificFindMemberFromUsername(expectedUser.username)).deep.equal(expectedUser)

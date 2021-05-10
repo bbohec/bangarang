@@ -3,6 +3,10 @@
 - ? Builder placement on clean architecture
 - Pull Req.
 - Error management
+- Fake adapter env instead of Rest/GCP adapter
+-  Bug switching between searched claim & declared claim on claiming.
+-  UI style rework
+    -  Notification snack bar
 - BDD > Feature scenarios:
     - Declaring Multiple Proposal Claim.
     - Signing Out.
@@ -14,17 +18,34 @@
 - 👉 Doing
 - ✔️ Done
 
-## 10/05/2021 - 35
+## 2021/05/14 – 36
 -  Twitch Live https://www.twitch.tv/benjaminbohec + announces
 -  Stand Up
--  UI style rework
-    -  Demo/warning text
-    -  Notification snack bar
--  User Case Strategy Pattern
 -  Official video >> subscribe to form in order to be informed about demo & launch
+    -  Montage
+    -  Cleaning
+    -  Test
+    -  Publish
 -  Summary.
 
-## 07/05/2021 — Day 34
+## 2021/05/10 – 35
+- ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
+- ✔️ Stand Up
+- ✔️ UI style rework
+    - ✔️ Demo/warning text
+    - ✔️ Reverse Claim FOR/AGAINST
+- ✔️ User Case Strategy Pattern
+- ❌ Official video >> subscribe to form in order to be informed about demo & launch
+    - ✔️ Brainstorming
+    - ✔️ Story Board
+    - ✔️ Sequences sources
+    - ❌ Montage
+    - ❌ Cleaning
+    - ❌ Test
+    - ❌ Publish
+- ✔️ Summary.
+
+## 2021/05/07 — Day 34
 - ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
 - ✔️ Stand Up
 - ✔️ Feedback
@@ -34,11 +55,11 @@
     - ❌ Demo/warning text
     - ❌ Notification snack bar
 - ❌ User Case Strategy Pattern
-- ✔️ “Mike Codeur” TDD Video
+- ✔️ “Mike Coder” TDD Video
 - ✔️ Summary.
 
 
-## 03/05/2021 — Day 33
+## 2021/05/03 — Day 33
 - ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
 - ✔️ Stand Up
 - ❌ UI style rework
@@ -51,7 +72,7 @@
     - ❌ Notification snack bar
 - ✔️ Summary.
 
-## 30/04/2021 — Day 32
+## 2021/04/30 — Day 32
 - ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
 - ✔️ Stand Up
 - ❌ UI style rework
@@ -64,7 +85,7 @@
     - ❌ Notification snack bar
 - ✔️ Summary.
 
-## 26/04/2021 — Day 31
+## 2021/04/26 — Day 31
 - ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
 - ✔️ Stand Up — Done i18n
 - ✔️ Multi-language — /!\ FR /!\
@@ -75,7 +96,7 @@
 - ❌ Pull Req.
 - ✔️ Summary.
 
-## 23/04/2021 — Day 30
+## 2021/04/23 — Day 30
 - ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
 - ✔️ Stand Up — Done translating FR
 - ❌ Multi-language — /!\ FR /!\
@@ -83,7 +104,7 @@
 - ❌ UI style rework
 - ✔️ Summary.
 
-## 19/04/2021 — Day 29
+## 2021/04/19 — Day 29
 - ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
 - ✔️ Stand Up
 - ❌ Multi-language — /!\ FR /!\
@@ -91,7 +112,7 @@
 - ❌ UI style rework
 - ✔️ Summary.
 
-## 16/04/2021 — Day 28
+## 2021/04/16 — Day 28
 - ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
 - ✔️ Stand Up
 - ✔️ Signing In Rework

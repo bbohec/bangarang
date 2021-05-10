@@ -7,5 +7,5 @@ export const signingIn = (userInputUsername:string,userInputPassword:string):voi
     uiBangarangUserBuilder
         .getUser()
         .signingIn(userInputUsername,userInputPassword)
-        .then(()=> currentUserContractStore.set(uiBangarangUserBuilder.getUser().retrieveUserContract()))
+        .then(()=> currentUserContractStore.set(uiBangarangUserBuilder.getUser().retrieveSignedInUserContract()))
 }

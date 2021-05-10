@@ -2,7 +2,14 @@ import { BangarangUserInterfaceInteractorContract, StaticView } from "../port/in
 import { goto } from '@sapper/app';
 import { linkPrefixes } from "../navigation/linkPrefixes";
 import { languageStore } from "../stores/languageStore";
+import type { UserContract } from "../port/UserContact";
 export class SvelteBangarangUserInterfaceInteractor implements BangarangUserInterfaceInteractorContract {
+    applySignedInUserContract(userContract: UserContract | undefined): void {
+        this.signedInUserContract = userContract
+    }
+    retrieveSignedInUserContract(): UserContract | undefined {
+        return this.signedInUserContract
+    }
     goToSigningInMenu() {
         let url = "/"
         const unsubscribeLanguageStore = languageStore.subscribe(language=> url=`/${language}/${StaticView.SigningInMenu}`)
@@ -15,4 +22,5 @@ export class SvelteBangarangUserInterfaceInteractor implements BangarangUserInte
         goto(url)
         unsubscribeLanguageStore()
     }
+    private signedInUserContract: UserContract | undefined = undefined
 }

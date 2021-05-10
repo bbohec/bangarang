@@ -15,5 +15,6 @@ export const successDeclaringClaimUserNotification:DeclaringClaimUserNotificatio
 export const claimWithoutTitleDeclaringClaimUserNotification:DeclaringClaimUserNotificationContract = {status:"Failed", message:{en:"A claim must have a title.",fr:`Une revendication doit avoir un titre.`},type:"Declaring claim."}
 export const claimWithoutTypeDeclaringClaimUserNotification:DeclaringClaimUserNotificationContract = {status:"Failed", message:{en:"A claim must have a type.",fr:`Une revendication doit avoir un type.`},type:"Declaring claim."}
 export const claimAlreadyExistDeclaringClaimUserNotification = (claimTitle:string):DeclaringClaimUserNotificationContract => ({status:"Failed", message:{en:`The claim "${claimTitle}" already exist.`,fr:`La revendication "${claimTitle}" existe déjà.`},type:"Declaring claim."})
+export const unexpectedErrorDeclaringClaimUserNotification = (error:Error):DeclaringClaimUserNotificationContract => ({status:"Failed", message:{en:`Unexpected error: "${error.message}".`,fr:`Erreur inatendue: "${error.message}".`},type:"Declaring claim."})
 
 

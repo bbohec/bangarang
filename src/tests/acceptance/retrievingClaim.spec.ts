@@ -63,7 +63,7 @@ describe(`Feature : Retrieving Claim
         const expectedClaimChoice:ClaimChoice=undefined
         before(()=>initScenario([expectedClaim],expectedClaimChoice,[],[],false))
         it(`Given the user is signed in`,()=>{
-            expect(userBuilder.getUser().retrieveUserContract()).is.undefined
+            expect(userBuilder.getUser().retrieveSignedInUserContract()).is.undefined
         })
         it(`And the claim '${expectedClaim.title}' with id '${expectedClaim.id}' is declared on Bangarang`,()=>{
             return bangarangClaimInteractor.claimById(expectedClaim.id )
@@ -87,7 +87,7 @@ describe(`Feature : Retrieving Claim
         const expectedClaimChoice:ClaimChoice=undefined
         before(()=>initScenario([expectedClaim],expectedClaimChoice,[expectedUser],[],true))
         it(`Given the user is signed in`,()=>{
-            expect(userBuilder.getUser().retrieveUserContract()).deep.equal(expectedUser)
+            expect(userBuilder.getUser().retrieveSignedInUserContract()).deep.equal(expectedUser)
         })
         it(`And the user has not claimed on claim '${expectedClaim.title}'`, ()=>{
             return bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(expectedUser.username,expectedClaim.title)
@@ -115,7 +115,7 @@ describe(`Feature : Retrieving Claim
         const expectedClaimChoice:ClaimChoice="For"
         before(()=>initScenario([expectedClaim],expectedClaimChoice,[expectedUser],[{memberUsername:expectedUser.username,claimId:expectedClaim.id,claimChoice:expectedClaimChoice}],true))
         it(`Given the user is signed in`,()=>{
-            expect(userBuilder.getUser().retrieveUserContract()).deep.equal(expectedUser)
+            expect(userBuilder.getUser().retrieveSignedInUserContract()).deep.equal(expectedUser)
         })
         it(`And the user has claimed '${expectedClaimChoice}' on claim '${expectedClaim.title}'`, ()=>{
             return bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(expectedUser.username,expectedClaim.id)
@@ -143,7 +143,7 @@ describe(`Feature : Retrieving Claim
         const expectedClaimChoice:ClaimChoice="Against"
         before(()=>initScenario([expectedClaim],expectedClaimChoice,[expectedUser],[{memberUsername:expectedUser.username,claimId:expectedClaim.id,claimChoice:expectedClaimChoice}],true))
         it(`Given the user is signed in`,()=>{
-            expect(userBuilder.getUser().retrieveUserContract()).deep.equal(expectedUser)
+            expect(userBuilder.getUser().retrieveSignedInUserContract()).deep.equal(expectedUser)
         })
         it(`And the user has claimed '${expectedClaimChoice}' on claim '${expectedClaim.title}'`, ()=>{
             return bangarangMembersInteractor.retrievePreviousMemberClaimChoiceOnClaim(expectedUser.username,expectedClaim.id)
@@ -171,7 +171,7 @@ describe(`Feature : Retrieving Claim
     describe(`Scenario: Claim not found`,()=>{
         before(()=>initScenario([],"Against",[expectedUser],[{memberUsername:"user",claimId:"claim",claimChoice:"Against"}],true))
         it(`Given the user is signed in`,()=>{
-            expect(userBuilder.getUser().retrieveUserContract()).deep.equal(expectedUser)
+            expect(userBuilder.getUser().retrieveSignedInUserContract()).deep.equal(expectedUser)
         })
         it(`And the claim '${expectedClaim.title}' is not declared on Bangarang`,()=>{
             return bangarangClaimInteractor.claimById(expectedClaim.id)

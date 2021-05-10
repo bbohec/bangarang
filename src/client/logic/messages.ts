@@ -727,6 +727,9 @@ export const claimCopiedErrorMessage:MessageContract={
     en:`Failed to copy claim address to clipboard`,
     fr:`Erreur lors de la copie de la revendication dans le presse-papier`
 }
-
+export const declareClaimHeaderMessage:MessageContract={
+    en:`Declare claim`,
+    fr:`Déclarer une revendication`
+}
 
 
