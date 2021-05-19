@@ -39,6 +39,7 @@
             - https://youtu.be/UD7FwN_n2qU : 1:20-1:32
             - https://youtu.be/4qfy5Y2tJGc : 3:45
             - https://youtu.be/nM0L3F4CxZU : 0:36
+            - "On en a gros!" 
         - *You can't / Be careful*
             - https://youtu.be/chZYNhRJuP8 : 0:08
         - *look on Judah* + 99F Mask + Music
@@ -52,7 +53,7 @@
                     - https://youtu.be/6UwAlEbfGgY
                     - https://youtu.be/4qfy5Y2tJGc : 2:40
                 - Tiananmen char
-                    - https://youtu.be/QSn_6q62ar4
+                    - https://youtu.be/4-1ikwGaRvM
                 - Protests
                     - https://youtu.be/8oJMGgaww70
         - *Fear / freeze / surprise / choc*   
@@ -60,7 +61,6 @@
         - *Think + revelation + 'TILT'*
             - https://youtu.be/LczGSoibRe8 3:11 
         - *I will do*
-            - https://youtu.be/24cQfQJ79Rs
             - https://youtu.be/xchGAzcDNlw 2:05
         - *scene dude on computer / smartphone* + music
             - SOUND : https://youtu.be/ier9rGcVnFs 2:30 > 2:50

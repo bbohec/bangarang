@@ -4,13 +4,11 @@
 - Pull Req.
 - Error management
 - Fake adapter env instead of Rest/GCP adapter
--  Bug switching between searched claim & declared claim on claiming.
 -  UI style rework
     -  Notification snack bar
 - BDD > Feature scenarios:
     - Declaring Multiple Proposal Claim.
     - Signing Out.
-    - Hot Claims
     - Unregistering. (remove claims)
     - proxy claim as
 - SSR enhancements
@@ -18,15 +16,38 @@
 - 👉 Doing
 - ✔️ Done
 
-## 2021/05/14 – 36
+## 2021/05/21 – 38
 -  Twitch Live https://www.twitch.tv/benjaminbohec + announces
 -  Stand Up
 -  Official video >> subscribe to form in order to be informed about demo & launch
+    -  Test feedback
+-  Official video >> subscribe to form in order to be informed about demo & launch
     -  Montage
     -  Cleaning
-    -  Test
     -  Publish
+-  Bug switching between searched claim & declared claim on claiming.
+-  Hot Claims
 -  Summary.
+
+## 2021/05/17 – 37
+- ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
+- ✔️ Stand Up
+- ❌ Official video >> subscribe to form in order to be informed about demo & launch
+    - ✔️ Montage
+    - ✔️ Cleaning
+    - ❌ Test
+    - ❌ Publish
+- ✔️ Summary.
+
+## 2021/05/14 – 36
+- ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
+- ✔️ Stand Up
+- ❌ Official video >> subscribe to form in order to be informed about demo & launch
+    - ❌ Montage
+    - ❌ Cleaning
+    - ❌ Test
+    - ❌ Publish
+- ❌ Summary.
 
 ## 2021/05/10 – 35
 - ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
