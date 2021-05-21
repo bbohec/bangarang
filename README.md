@@ -1,3 +1,10 @@
+# Summary
+- [What is Bangarang?](#what-is-bangarang)
+- [Does Bangarang have a demo?](#does-bangarang-have-a-demo)
+- [How to deploy a new Bangarang instance?](#how-to-deploy-a-new-bangarang-instance)
+- [Bangarang development practice.](#bangarang-development-practice)
+
+
 # What is Bangarang?
 Bangarang is an open source and free direct democratic claim system. It allows anybody to declare or search for claim and claiming for them.
 
