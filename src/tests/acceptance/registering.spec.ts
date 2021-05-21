@@ -130,7 +130,7 @@ describe(`Feature: Registering
                     expect(()=>{scenario.bangarangMemberInteractor.specificFindMemberPasswordFromUsername(scenario.userContract.username)})
                         .to.throw(credentialsMissing(scenario.userContract.username))
                 })
-            it(`And the user has a '${registeringNotificationType}' notification with '${scenario.expectedNotification.status}' status and '${scenario.expectedNotification.message}' message.`,()=> {
+            it(`And the user has a '${registeringNotificationType}' notification with '${scenario.expectedNotification.status}' status and '${scenario.expectedNotification.message.en}' message.`,()=> {
                 expect(scenario.registeringUserNotificationInteractor.currentUserNotification?.message.en).equal(scenario.expectedNotification.message.en)
                 expect(scenario.registeringUserNotificationInteractor.currentUserNotification?.status).equal(scenario.expectedNotification.status)
             })

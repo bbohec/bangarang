@@ -9,8 +9,7 @@ import type { User } from '../../client/businessLogic/entities/User';
 describe(`Feature: Searching Claims
     As a guest or a Bangarang Member,
     In order to claim or share a claim,
-    I want to find claims
-    `,()=> {
+    I want to find claims`,()=> {
     interface SearchingClaimsScenarioInterface {
         scenarioTitle:string,
         expectedDeclaredClaims:ClaimContract[],
@@ -246,7 +245,8 @@ describe(`Feature: Searching Claims
         searchingClaimsUserNotificationInteractor.currentNotification=undefined
     }
     scenarios.forEach((scenario,index)=> {
-        describe(`Scenario ${index+1}: ${scenario.scenarioTitle}`,()=>{
+        describe(`
+        Scenario ${index+1}: ${scenario.scenarioTitle}`,()=>{
             const scenarioExpectedNotification = successSearchingClaimsUserNotification(scenario.retreivedClaims)
             const expectedDeclaredClaimsTitles = scenario.expectedDeclaredClaims.map(claim => claim.title);
             before(()=>initScenario(scenario.expectedDeclaredClaims))

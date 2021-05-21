@@ -8,17 +8,18 @@ import { FakeSigningInUserNotificationInteractor } from '../../client/adapters/F
 import { SigningInNotificationType, successSigningInNotification, alreadySignedInSigningInNotification, badCredentialsSigningInNotification } from '../../client/port/interactors/SigningInUserNotificationInteractorContract';
 import { FakeBangarangClaimInteractor } from "../../client/adapters/FakeBangarangClaimInteractor";
 import { bangarangMemberNotFoundError } from '../../client/port/interactors/BangarangMembersInteractorContract';
-describe(`Feature: Signing In
+describe(`
+Feature: Signing In
     As a guest
     In order to claim
-    I want to sign in Bangarang
-    `,()=> {
+    I want to sign in Bangarang`,()=> {
     const fakeBangarangClaimInteractor = new FakeBangarangClaimInteractor()
     const fakeSigningInUserNotificationInteractor = new FakeSigningInUserNotificationInteractor()
     const expectedUserPassword = "Password";
     const expectedUser:UserContract= {username:"johndoe",fullname:"",email:""}
     const signingInNotificationType:SigningInNotificationType = "Signing In"
-    describe(`Scenario: User Signing In`,()=> {
+    describe(`
+    Scenario: User Signing In`,()=> {
         const bangarangMembersInteractor = new FakeBangarangMembersInteractor();
         bangarangMembersInteractor.specificWithMembers([expectedUser])
         bangarangMembersInteractor.specificWithCredentials([{username:expectedUser.username,password:expectedUserPassword}])
@@ -48,12 +49,13 @@ describe(`Feature: Signing In
                 .then(isSignedIn => expect(isSignedIn).is.true) 
         })
         */
-        it(`And the user has a '${signingInNotificationType}' notification with '${successSigningInNotification.status}' status and '${successSigningInNotification.message}' message.`,()=> {
+        it(`And the user has a '${signingInNotificationType}' notification with '${successSigningInNotification.status}' status and '${successSigningInNotification.message.en}' message.`,()=> {
             expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.message.en).equal(successSigningInNotification.message.en)
             expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.status).equal(successSigningInNotification.status)
         })
     })
-    describe(`Scenario: User already signed in`,()=>{
+    describe(`
+    Scenario: User already signed in`,()=>{
         const bangarangMembersInteractor = new FakeBangarangMembersInteractor()
         bangarangMembersInteractor.specificWithMembers([expectedUser])
         bangarangMembersInteractor.specificWithCredentials([{username:expectedUser.username,password:expectedUserPassword}])
@@ -69,12 +71,13 @@ describe(`Feature: Signing In
         it(`When the user signin as '${expectedUser.username}' with password '${expectedUserPassword}'`,(done)=> {
             user.signingIn(expectedUser.username,expectedUserPassword).then(()=> done())
         })
-        it(`Then the user has a '${signingInNotificationType}' notification with '${alreadySignedInSigningInNotification.status}' status and '${alreadySignedInSigningInNotification.message}' message.`,()=> {
+        it(`Then the user has a '${signingInNotificationType}' notification with '${alreadySignedInSigningInNotification.status}' status and '${alreadySignedInSigningInNotification.message.en}' message.`,()=> {
             expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.message.en).equal(alreadySignedInSigningInNotification.message.en)
             expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.status).equal(alreadySignedInSigningInNotification.status)
         })
     })
-    describe(`Scenario: User is not a Bangarang member`,()=>{
+    describe(`
+    Scenario: User is not a Bangarang member`,()=>{
         const bangarangMembersInteractor = new FakeBangarangMembersInteractor()
         bangarangMembersInteractor.specificWithCredentials([{username:expectedUser.username,password:expectedUserPassword}])
         const user:User = new UserBuilder()
@@ -92,12 +95,13 @@ describe(`Feature: Signing In
         it(`When the user signin as '${expectedUser.username}' with password '${expectedUserPassword}'`,(done)=> {
             user.signingIn(expectedUser.username,expectedUserPassword).then(()=> done())
         })
-        it(`Then the user has a '${signingInNotificationType}' notification with '${badCredentialsSigningInNotification.status}' status and '${badCredentialsSigningInNotification.message}' message.`,()=> {
+        it(`Then the user has a '${signingInNotificationType}' notification with '${badCredentialsSigningInNotification.status}' status and '${badCredentialsSigningInNotification.message.en}' message.`,()=> {
             expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.message.en).equal(badCredentialsSigningInNotification.message.en)
             expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.status).equal(badCredentialsSigningInNotification.status)
         })
     })
-    describe(`Scenario: Bad credentials`,()=>{
+    describe(`
+    Scenario: Bad credentials`,()=>{
         const bangarangMembersInteractor = new FakeBangarangMembersInteractor()
         bangarangMembersInteractor.specificWithMembers([expectedUser])
         bangarangMembersInteractor.specificWithCredentials([{username:expectedUser.username,password:expectedUserPassword}])
@@ -118,7 +122,7 @@ describe(`Feature: Signing In
         it(`When the user signin as '${expectedUser.username}' with password '${badPassword}'`,(done)=> {
             user.signingIn(expectedUser.username,badPassword).then(()=> done())
         })
-        it(`Then the user has a '${signingInNotificationType}' notification with '${badCredentialsSigningInNotification.status}' status and '${badCredentialsSigningInNotification.message}' message.`,()=> {
+        it(`Then the user has a '${signingInNotificationType}' notification with '${badCredentialsSigningInNotification.status}' status and '${badCredentialsSigningInNotification.message.en}' message.`,()=> {
             expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.status).equal(badCredentialsSigningInNotification.status)
             expect(fakeSigningInUserNotificationInteractor.currentUserNotification?.message.en).equal(badCredentialsSigningInNotification.message.en)
         })

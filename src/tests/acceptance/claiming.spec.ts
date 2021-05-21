@@ -219,7 +219,7 @@ describe(`Feature: Claiming
                 userBuilder.getUser().claiming(scenario.expectedClaim.id,scenario.userChoice)
                     .then(()=>done())
             })
-            it(`Then the user has a '${notificationType}' notification with '${scenario.expectedNotification.status}' status and '${scenario.expectedNotification.message}' message.`,()=> {
+            it(`Then the user has a '${notificationType}' notification with '${scenario.expectedNotification.status}' status and '${scenario.expectedNotification.message.en}' message.`,()=> {
                 expect(claimingUserNotificationInteractor.currentUserNotification?.message.en).equal(scenario.expectedNotification.message.en)
                 expect(claimingUserNotificationInteractor.currentUserNotification?.status).equal(scenario.expectedNotification.status)
             })
@@ -233,7 +233,7 @@ describe(`Feature: Claiming
                         })
                 })  
             }
-            it(`The user view is "${scenario.expectedView}".`,()=>{
+            it(`And the user view is "${scenario.expectedView}".`,()=>{
                 expect(bangarangUserInterfaceInteractor.currentView).equal(scenario.expectedView)
             })
         })
