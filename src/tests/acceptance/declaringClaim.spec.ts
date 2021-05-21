@@ -1,7 +1,7 @@
 import 'mocha';
 import {expect} from "chai";
 import type { ClaimContract } from '../../client/port/ClaimContract';
-import { UserBuilder } from '../../client/businessLogic/UserBuilder';
+import { UserBuilder } from '../../client/businessLogic/entities/UserBuilder';
 import { FakeDeclaringClaimUserNotificationInteractor } from '../../client/adapters/FakeDeclaringClaimUserNotificationInteractor';
 import { FakeBangarangClaimInteractor } from '../../client/adapters/FakeBangarangClaimInteractor';
 import { FakeBangarangUserInterfaceInteractor } from '../../client/adapters/FakeBangarangUserInterfaceInteractor';

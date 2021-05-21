@@ -1,8 +1,8 @@
 import 'mocha';
 import {expect} from "chai";
 import type { UserContract } from '../../client/port/UserContact';
-import type { User } from '../../client/businessLogic/User';
-import { UserBuilder } from '../../client/businessLogic/UserBuilder';
+import type { User } from '../../client/businessLogic/entities/User';
+import { UserBuilder } from '../../client/businessLogic/entities/UserBuilder';
 import { FakeBangarangMembersInteractor } from '../../client/adapters/FakeBangarangMembersInteractor';
 import { FakeSigningInUserNotificationInteractor } from '../../client/adapters/FakeSigningInUserNotificationInteractor';
 import { SigningInNotificationType, successSigningInNotification, alreadySignedInSigningInNotification, badCredentialsSigningInNotification } from '../../client/port/interactors/SigningInUserNotificationInteractorContract';

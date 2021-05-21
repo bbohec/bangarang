@@ -4,7 +4,7 @@ import type { ClaimContract, ClaimContractWithMemberPreviousClaimChoice } from '
 import type { UserContract } from '../../client/port/UserContact';
 import type { MemberClaim } from '../../client/port/MemberClaim';
 import type { ClaimChoice } from '../../client/port/ClaimChoice';
-import { UserBuilder } from '../../client/businessLogic/UserBuilder';
+import { UserBuilder } from '../../client/businessLogic/entities/UserBuilder';
 import { FakeBangarangClaimInteractor } from '../../client/adapters/FakeBangarangClaimInteractor';
 import { FakeBangarangMembersInteractor } from '../../client/adapters/FakeBangarangMembersInteractor';
 import { FakeRetrievingClaimUserNotificationInteractor } from "../../client/adapters/FakeRetrievingClaimUserNotificationInteractor";

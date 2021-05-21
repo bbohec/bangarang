@@ -118,8 +118,6 @@ Production adapters that have to implement the Port of the Business Logic are cr
 - The express server have Rest routes used by client business logic in order to execute GCP Adapter methods.
 - It is planned to defined command/query use cases on backend.
 
-
-
 # Projet Tree Information
 ```
 .
@@ -133,7 +131,8 @@ Production adapters that have to implement the Port of the Business Logic are cr
 │   ├───assets---------------------/!\ Specific Sapper /!\
 │   ├───client
 │   │   ├───adapters---------------Clean Architecture - Client Adapters (Primary & Secondary)
-│   │   ├───businessLogic----------Clean Architecture - Business Logic/Core
+│   │   ├───businessLogic
+│   │   │   ├───entities-----------Clean Architecture - Business Logic/Core - Entities
 │   │   │   └───commands-----------Clean Architecture - Business Logic/Core - Use Cases
 │   │   ├───components-------------Svelte Components
 │   │   ├───interfaces-------------UI/Svelte Specific interfaces excluded from Clean Architecture

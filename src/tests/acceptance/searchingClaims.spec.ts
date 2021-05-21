@@ -3,9 +3,9 @@ import {expect} from "chai";
 import type { ClaimContract } from '../../client/port/ClaimContract';
 import { FakeBangarangClaimInteractor } from '../../client/adapters/FakeBangarangClaimInteractor';
 import { FakeSearchingClaimsUserNotificationInteractor } from '../../client/adapters/FakeSearchingClaimsUserNotificationInteractor';
-import { SearchingClaimsUserNotificationContract, successSearchingClaimsUserNotification } from '../../client/port/interactors/SearchingClaimsUserNotificationInteractorContract';
-import { UserBuilder } from '../../client/businessLogic/UserBuilder';
-import type { User } from '../../client/businessLogic/User';
+import {  successSearchingClaimsUserNotification } from '../../client/port/interactors/SearchingClaimsUserNotificationInteractorContract';
+import { UserBuilder } from '../../client/businessLogic/entities/UserBuilder';
+import type { User } from '../../client/businessLogic/entities/User';
 describe(`Feature: Searching Claims
     As a guest or a Bangarang Member,
     In order to claim or share a claim,

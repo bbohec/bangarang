@@ -3,8 +3,7 @@ import type { ClaimContract } from "../../port/ClaimContract";
 import type { Command, CommandName } from "../../port/Command";
 import { successDeclaringClaimUserNotification, claimAlreadyExistDeclaringClaimUserNotification, claimWithoutTitleDeclaringClaimUserNotification, unexpectedErrorDeclaringClaimUserNotification } from "../../port/interactors/DeclaringClaimUserNotificationInteractorContract";
 import { claimNotDeclaredRetrievingClaimUserNotification } from "../../port/interactors/RetrievingClaimUserNotificationInteractorContract";
-import { Claim } from "../Claim";
-
+import { Claim } from "../entities/Claim";
 export class DeclaringClaim implements Command{
     constructor (
         private bangarangAdapters:BangarangAdaptersContract,

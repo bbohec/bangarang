@@ -1,14 +1,14 @@
-import type { ClaimContract, ClaimTitle, ClaimType, Identifier } from "../port/ClaimContract";
-import type { BangarangAdaptersContract } from "../port/BangarangAdaptersContract";
-import type { UserContract } from "../port/UserContact";
-import type { ClaimChoice } from "../port/ClaimChoice";
-import type { CommandName } from "../port/Command";
-import { Registering } from "./commands/registering";
-import { Claiming } from "./commands/claiming";
-import { SearchingClaims } from "./commands/searchingClaims";
-import { RetrievingClaimById } from "./commands/retrievingClaimById";
-import { DeclaringClaim } from "./commands/declaringClaim";
-import { SigningIn } from "./commands/signingIn";
+import type { ClaimContract, ClaimTitle, ClaimType, Identifier } from "../../port/ClaimContract";
+import type { BangarangAdaptersContract } from "../../port/BangarangAdaptersContract";
+import type { UserContract } from "../../port/UserContact";
+import type { ClaimChoice } from "../../port/ClaimChoice";
+import type { CommandName } from "../../port/Command";
+import { Registering } from "../commands/registering";
+import { Claiming } from "../commands/claiming";
+import { SearchingClaims } from "../commands/searchingClaims";
+import { RetrievingClaimById } from "../commands/retrievingClaimById";
+import { DeclaringClaim } from "../commands/declaringClaim";
+import { SigningIn } from "../commands/signingIn";
 export class User  {
     constructor(bangarangAdapters: BangarangAdaptersContract) {
         this.bangarangAdapters = bangarangAdapters;

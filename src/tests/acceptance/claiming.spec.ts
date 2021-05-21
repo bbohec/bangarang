@@ -2,7 +2,7 @@ import 'mocha';
 import {expect} from "chai";
 import type { ClaimChoice } from '../../client/port/ClaimChoice';
 import type { ClaimContract } from '../../client/port/ClaimContract';
-import { UserBuilder } from '../../client/businessLogic/UserBuilder';
+import { UserBuilder } from '../../client/businessLogic/entities/UserBuilder';
 import { FakeBangarangMembersInteractor } from '../../client/adapters/FakeBangarangMembersInteractor';
 import { FakeBangarangClaimInteractor } from '../../client/adapters/FakeBangarangClaimInteractor';
 import { FakeBangarangUserInterfaceInteractor } from '../../client/adapters/FakeBangarangUserInterfaceInteractor';

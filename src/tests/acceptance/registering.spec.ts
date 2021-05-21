@@ -1,7 +1,7 @@
 import 'mocha';
 import {expect} from "chai";
 import type { UserContract } from '../../client/port/UserContact';
-import { UserBuilder } from '../../client/businessLogic/UserBuilder';
+import { UserBuilder } from '../../client/businessLogic/entities/UserBuilder';
 import { FakeBangarangMembersInteractor } from '../../client/adapters/FakeBangarangMembersInteractor';
 import { bangarangMemberNotFoundError } from '../../client/port/interactors/BangarangMembersInteractorContract';
 import { FakeRegisteringUserNotificationInteractor } from '../../client/adapters/FakeRegisteringUserNotificationInteractor';

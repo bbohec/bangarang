@@ -2,8 +2,7 @@ import type { BangarangAdaptersContract } from "../../port/BangarangAdaptersCont
 import type { ClaimChoice } from "../../port/ClaimChoice";
 import type { Command, CommandName } from "../../port/Command";
 import { mustBeSignedInClaimingUserNotification, claimNotDeclaredClaimingUserNotification, unexpectedErrorClaimingUserNotification, multipleTimesClaimingUserNotification, successClaimingUserNotification, ClaimingUserNotificationContract } from "../../port/interactors/ClaimingUserNotificationInteractorContract";
-import type { UserContract } from "../../port/UserContact";
-import { Claim } from "../Claim";
+import { Claim } from "../entities/Claim";
 
 export class Claiming implements Command {
     constructor(
