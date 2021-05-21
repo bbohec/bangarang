@@ -1,8 +1,7 @@
-import type { ClaimChoice } from "../port/ClaimChoice";
-import type { ClaimContract, ClaimType } from "../port/ClaimContract";
-import type { BangarangClaimInteractorContract } from "../port/interactors/BangarangClaimInteractorContract";
-import type { BangarangMembersInteractorContract } from "../port/interactors/BangarangMembersInteractorContract";
-
+import type { ClaimChoice } from "../../port/ClaimChoice";
+import type { ClaimContract, ClaimType } from "../../port/ClaimContract";
+import type { BangarangClaimInteractorContract } from "../../port/interactors/BangarangClaimInteractorContract";
+import type { BangarangMembersInteractorContract } from "../../port/interactors/BangarangMembersInteractorContract";
 export class Claim {
     constructor(claimContract:ClaimContract) {
         this.title=claimContract.title

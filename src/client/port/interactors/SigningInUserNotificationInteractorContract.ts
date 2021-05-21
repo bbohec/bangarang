@@ -12,3 +12,4 @@ export const executingSigningInNotification:SigningInUserNotificationContract = 
 export const successSigningInNotification:SigningInUserNotificationContract = {status:"Success", message:{en:"Signed In.",fr:`Connecté.`},type:"Signing In"}
 export const alreadySignedInSigningInNotification:SigningInUserNotificationContract = {status:"Failed", message:{en:"Already signed in.",fr:`Déjà connecté.`},type:"Signing In"}
 export const badCredentialsSigningInNotification:SigningInUserNotificationContract = {status:"Failed", message:{en:"Bad credentials. Verify credentials or register to Bangarang.",fr:`Mauvais identifiants. Vérifier les identifiants ou s'enregistrer sur Bangarang.`},type:"Signing In"}
+export const unexpectedErrorSigningInNotification=(error:Error):SigningInUserNotificationContract => ({status:"Failed", message:{en:`Unexpected error : '${error.message}'`,fr:`Erreur inatendue : '${error.message}'`},type:"Signing In"})

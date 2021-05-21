@@ -1,7 +1,7 @@
 import 'mocha';
 import {expect} from "chai";
 import type { UserContract } from '../../client/port/UserContact';
-import { UserBuilder } from '../../client/businessLogic/UserBuilder';
+import { UserBuilder } from '../../client/businessLogic/entities/UserBuilder';
 import { FakeBangarangMembersInteractor } from '../../client/adapters/FakeBangarangMembersInteractor';
 import { bangarangMemberNotFoundError } from '../../client/port/interactors/BangarangMembersInteractorContract';
 import { FakeRegisteringUserNotificationInteractor } from '../../client/adapters/FakeRegisteringUserNotificationInteractor';
@@ -87,7 +87,7 @@ describe(`Feature: Registering
                 }
             })
             it(`Given the user is not signed in as '${scenario.userContract.username}'.`,()=>{
-                expect(user.retrieveUserContract()).to.be.undefined
+                expect(user.retrieveSignedInUserContract()).to.be.undefined
             })
             if (!scenario.alreadyHaveBangarangMember)it(`And there is no '${scenario.userContract.username}' Bangarang member'`,()=> {
                     expect(()=>{scenario.bangarangMemberInteractor.specificFindMemberFromUsername(scenario.userContract.username)})
@@ -108,7 +108,6 @@ describe(`Feature: Registering
             | username | password           | email         | fullname  |
             | ${scenario.userContract.username}  | ${scenario.userPassword}   |  ${scenario.userContract.email} | ${scenario.userContract.fullname}  |`,(done)=> {
                 user.registering(scenario.userContract,scenario.userPassword).then(()=>done())
-                
             })
             if (scenario.alreadyHaveBangarangMember) {
                 const bangarangMember = scenario.alreadyHaveBangarangMember
@@ -131,7 +130,7 @@ describe(`Feature: Registering
                     expect(()=>{scenario.bangarangMemberInteractor.specificFindMemberPasswordFromUsername(scenario.userContract.username)})
                         .to.throw(credentialsMissing(scenario.userContract.username))
                 })
-            it(`And the user has a '${registeringNotificationType}' notification with '${scenario.expectedNotification.status}' status and '${scenario.expectedNotification.message}' message.`,()=> {
+            it(`And the user has a '${registeringNotificationType}' notification with '${scenario.expectedNotification.status}' status and '${scenario.expectedNotification.message.en}' message.`,()=> {
                 expect(scenario.registeringUserNotificationInteractor.currentUserNotification?.message.en).equal(scenario.expectedNotification.message.en)
                 expect(scenario.registeringUserNotificationInteractor.currentUserNotification?.status).equal(scenario.expectedNotification.status)
             })

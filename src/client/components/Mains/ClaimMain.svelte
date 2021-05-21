@@ -16,21 +16,21 @@
     <section class="flex self-stretch justify-around lg:justify-evenly">
         <section class="flex flex-col w-24">
             <ClaimButton 
-                {claimId} 
-                {userClaimingChoice} 
-                claimingChoice= "Against"
-                claimingChoiceMessage={new Message(claimAgainstMessage).getMessage($languageStore)}
-            />
-            <p class="text-center text-bangarang-lightEmphasis">{retreivePercentage(peopleClaimed,peopleAgainst).toFixed(2)}%</p>
-        </section>
-        <section class="flex flex-col w-24">
-            <ClaimButton 
                 {claimId}
                 {userClaimingChoice}
                 claimingChoice="For"
                 claimingChoiceMessage={new Message(claimForMessage).getMessage($languageStore)}
             />
             <p class="text-center text-bangarang-lightEmphasis">{retreivePercentage(peopleClaimed,peopleFor).toFixed(2)}%</p>
+        </section>
+        <section class="flex flex-col w-24">
+            <ClaimButton 
+                {claimId} 
+                {userClaimingChoice} 
+                claimingChoice= "Against"
+                claimingChoiceMessage={new Message(claimAgainstMessage).getMessage($languageStore)}
+            />
+            <p class="text-center text-bangarang-lightEmphasis">{retreivePercentage(peopleClaimed,peopleAgainst).toFixed(2)}%</p>
         </section>
     </section>
 </main>

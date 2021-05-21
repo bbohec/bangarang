@@ -1,6 +1,5 @@
 import type { DescriptionCardContract } from "../interfaces/DescriptionCardContract";
-import { linkPrefixes } from "../navigation/linkPrefixes";
-import { StaticView } from "../port/interactors/BangarangUserInterfaceInteractor";
+import { linkPrefixes, StaticView } from "../port/interactors/BangarangUserInterfaceInteractor";
 import type { Language, MessageContract, SelectLanguage } from "./language";
 import { Message} from "./language";
 import { valuePropositionsDesignCanvas } from "./valueProposition/valuePropositions";
@@ -727,6 +726,9 @@ export const claimCopiedErrorMessage:MessageContract={
     en:`Failed to copy claim address to clipboard`,
     fr:`Erreur lors de la copie de la revendication dans le presse-papier`
 }
-
+export const declareClaimHeaderMessage:MessageContract={
+    en:`Declare claim`,
+    fr:`Déclarer une revendication`
+}
 
 

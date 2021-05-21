@@ -1,7 +1,7 @@
 import 'mocha';
 import {expect} from "chai";
 import type { ClaimContract } from '../../client/port/ClaimContract';
-import { UserBuilder } from '../../client/businessLogic/UserBuilder';
+import { UserBuilder } from '../../client/businessLogic/entities/UserBuilder';
 import { FakeDeclaringClaimUserNotificationInteractor } from '../../client/adapters/FakeDeclaringClaimUserNotificationInteractor';
 import { FakeBangarangClaimInteractor } from '../../client/adapters/FakeBangarangClaimInteractor';
 import { FakeBangarangUserInterfaceInteractor } from '../../client/adapters/FakeBangarangUserInterfaceInteractor';
@@ -10,8 +10,7 @@ import { bangarangClaimNotFoundById } from '../../client/port/interactors/Bangar
 describe(`Feature: Declaring Claim
     As a guest or a Bangarang Member
     In order to claim or share a claim
-    I want to declare a claim
-    `,()=> {
+    I want to declare a claim`,()=> {
     const bangarangClaimInteractor = new FakeBangarangClaimInteractor()
     const declaringClaimNotificationType:DeclaringClaimNotificationType="Declaring claim."
     const fakeDeclaringClaimUserNotificationInteractor = new FakeDeclaringClaimUserNotificationInteractor()
@@ -19,7 +18,8 @@ describe(`Feature: Declaring Claim
     const expectedClaimView = expectedClaim.id
     const declaringClaimMenuView = "declaring claim menu"
     const fakeBangarangUserInterfaceInteractor = new FakeBangarangUserInterfaceInteractor()
-    describe(`Scenario: Declaring Simple Claim`,()=>{
+    describe(`
+    Scenario: Declaring Simple Claim`,()=>{
         before(()=>initScenario([]))
         it(`Given the user current view is the "${declaringClaimMenuView}"`,()=> {
             expect(fakeBangarangUserInterfaceInteractor.currentView).equal(declaringClaimMenuView)
@@ -47,7 +47,8 @@ describe(`Feature: Declaring Claim
             expect(fakeBangarangUserInterfaceInteractor.currentView).equal(expectedClaimView)
         })
     })
-    describe(`Scenario: Claim with same title already exist`,()=>{
+    describe(`
+    Scenario: Claim with same title already exist`,()=>{
         before(()=>initScenario([expectedClaim]))
         it(`Given the user current view is the "${declaringClaimMenuView}"`,()=> {
             expect(fakeBangarangUserInterfaceInteractor.currentView).equal(declaringClaimMenuView)
@@ -70,7 +71,8 @@ describe(`Feature: Declaring Claim
             expect(fakeBangarangUserInterfaceInteractor.currentView).equal(expectedClaimView)
         })
     })
-    describe(`Scenario: Claim with same title uppercase already exist`,()=>{
+    describe(`
+    Scenario: Claim with same title uppercase already exist`,()=>{
         before(()=>initScenario([expectedClaim]))
         const upperCaseClaim:ClaimContract={title:expectedClaim.title.toUpperCase(),type:"Simple",peopleClaimed:0,peopleClaimedFor:0,peopleClaimedAgainst:0,id:"354sf6546sd464sdfsdf"}
         it(`Given the user current view is the "${declaringClaimMenuView}"`,()=> {
@@ -95,7 +97,8 @@ describe(`Feature: Declaring Claim
             expect(fakeBangarangUserInterfaceInteractor.currentView).equal(expectedClaimView)
         })
     })
-    describe(`Scenario: Claim with empty title`,()=>{
+    describe(`
+    Scenario: Claim with empty title`,()=>{
         before(()=>initScenario([]))
         const claimWithoutTitle:ClaimContract={title:'',type:"Simple",peopleClaimed:0,peopleClaimedFor:0,peopleClaimedAgainst:0,id:""}
         it(`Given the user current view is the "${declaringClaimMenuView}"`,()=> {

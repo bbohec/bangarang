@@ -1,6 +1,5 @@
 import type { ClaimContract } from "../port/ClaimContract";
-import type { UserContract } from "../port/UserContact";
-import { UserBuilder } from "../businessLogic/UserBuilder";
+import { UserBuilder } from "../businessLogic/entities/UserBuilder";
 import { FakeBangarangClaimInteractor } from "./FakeBangarangClaimInteractor";
 import { RestInteractor } from "./RestInteractor";
 import { RestBangarangClaimInteractor } from "./RestBangarangClaimInteractor";

@@ -1,26 +1,25 @@
-import type { UserContract } from '../port/UserContact';
-import type { BangarangAdaptersContract } from '../port/BangarangAdaptersContract';
-import type { BangarangMembersInteractorContract } from '../port/interactors/BangarangMembersInteractorContract';
-import type { RegisteringUserNotificationInteractorContract } from '../port/interactors/RegisteringUserNotificationInteractorContract';
+import type { BangarangAdaptersContract } from '../../port/BangarangAdaptersContract';
+import type { BangarangMembersInteractorContract } from '../../port/interactors/BangarangMembersInteractorContract';
+import type { RegisteringUserNotificationInteractorContract } from '../../port/interactors/RegisteringUserNotificationInteractorContract';
+import type { BangarangClaimInteractorContract } from '../../port/interactors/BangarangClaimInteractorContract';
+import type { SearchingClaimsUserNotificationInteractorContract } from '../../port/interactors/SearchingClaimsUserNotificationInteractorContract';
+import type { ClaimingUserNotificationInteractorContract } from '../../port/interactors/ClaimingUserNotificationInteractorContract';
+import type { BangarangUserInterfaceInteractorContract } from '../../port/interactors/BangarangUserInterfaceInteractor';
+import type { SigningInUserNotificationInteractorContract } from '../../port/interactors/SigningInUserNotificationInteractorContract';
+import type { RetrievingClaimUserNotificationInteractorContract } from '../../port/interactors/RetrievingClaimUserNotificationInteractorContract';
+import type { DeclaringClaimUserNotificationInteractorContract } from '../../port/interactors/DeclaringClaimUserNotificationInteractorContract';
 import { User } from './User';
-import { FakeBangarangClaimInteractor } from '../adapters/FakeBangarangClaimInteractor';
-import { FakeBangarangMembersInteractor } from '../adapters/FakeBangarangMembersInteractor';
-import { FakeBangarangUserInterfaceInteractor } from '../adapters/FakeBangarangUserInterfaceInteractor';
-import { FakeDeclaringClaimUserNotificationInteractor } from '../adapters/FakeDeclaringClaimUserNotificationInteractor';
-import { FakeSigningInUserNotificationInteractor } from '../adapters/FakeSigningInUserNotificationInteractor';
-import { FakeSearchingClaimsUserNotificationInteractor } from '../adapters/FakeSearchingClaimsUserNotificationInteractor';
-import { FakeRetrievingClaimUserNotificationInteractor } from '../adapters/FakeRetrievingClaimUserNotificationInteractor';
-import { FakeClaimingUserNotificationInteractor } from '../adapters/FakeClaimingUserNotificationInteractor';
-import { FakeRegisteringUserNotificationInteractor } from '../adapters/FakeRegisteringUserNotificationInteractor';
-import type { BangarangClaimInteractorContract } from '../port/interactors/BangarangClaimInteractorContract';
-import type { SearchingClaimsUserNotificationInteractorContract } from '../port/interactors/SearchingClaimsUserNotificationInteractorContract';
-import type { ClaimingUserNotificationInteractorContract } from '../port/interactors/ClaimingUserNotificationInteractorContract';
-import type { BangarangUserInterfaceInteractorContract } from '../port/interactors/BangarangUserInterfaceInteractor';
-import type { SigningInUserNotificationInteractorContract } from '../port/interactors/SigningInUserNotificationInteractorContract';
-import type { RetrievingClaimUserNotificationInteractorContract } from '../port/interactors/RetrievingClaimUserNotificationInteractorContract';
-import type { DeclaringClaimUserNotificationInteractorContract } from '../port/interactors/DeclaringClaimUserNotificationInteractorContract';
-import { FakePasswordInteractor } from '../adapters/FakePasswordInteractor';
-import { InternalEmailInteractor } from '../adapters/InternalEmailInteractor';
+import { FakeBangarangClaimInteractor } from '../../adapters/FakeBangarangClaimInteractor';
+import { FakeBangarangMembersInteractor } from '../../adapters/FakeBangarangMembersInteractor';
+import { FakeBangarangUserInterfaceInteractor } from '../../adapters/FakeBangarangUserInterfaceInteractor';
+import { FakeDeclaringClaimUserNotificationInteractor } from '../../adapters/FakeDeclaringClaimUserNotificationInteractor';
+import { FakeSigningInUserNotificationInteractor } from '../../adapters/FakeSigningInUserNotificationInteractor';
+import { FakeSearchingClaimsUserNotificationInteractor } from '../../adapters/FakeSearchingClaimsUserNotificationInteractor';
+import { FakeRetrievingClaimUserNotificationInteractor } from '../../adapters/FakeRetrievingClaimUserNotificationInteractor';
+import { FakeClaimingUserNotificationInteractor } from '../../adapters/FakeClaimingUserNotificationInteractor';
+import { FakeRegisteringUserNotificationInteractor } from '../../adapters/FakeRegisteringUserNotificationInteractor';
+import { FakePasswordInteractor } from '../../adapters/FakePasswordInteractor';
+import { InternalEmailInteractor } from '../../adapters/InternalEmailInteractor';
 export class UserBuilder {
     withDeclaringClaimUserNotificationInteractor(declaringClaimUserNotificationInteractor: DeclaringClaimUserNotificationInteractorContract):UserBuilder  {
         this.bangarangAdapters.declaringClaimUserNotificationInteractor=declaringClaimUserNotificationInteractor
