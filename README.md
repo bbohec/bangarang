@@ -17,6 +17,8 @@
         - [Front-end details](#front-end-details)
         - [Back-end details](#back-end-details)
 - [Project Tree Information](#project-tree-information)
+- [Features Status](#features)
+- [Technical Integration Status](#technical-integration)
 
 # What is Bangarang?
 Bangarang is an open source and free direct democratic claim system. It allows anybody to declare or search for claim and claiming for them.
