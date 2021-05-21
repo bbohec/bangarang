@@ -24,7 +24,7 @@
 Bangarang is an open source and free direct democratic claim system. It allows anybody to declare or search for claim and claiming for them.
 
 This project uses an iterative product management approach.
-Previous dev sessions are available in French as DevLog on [YouTube](https://youtube.com/playlist?list=PL4jAusJfrmMvdqkbimRpmuUCGdz311dO- "Bangarang DevLog Playlist").
+Previous dev sessions are available in French as [DeVLOG](doc/market/devlog.md) on [YouTube](https://youtube.com/playlist?list=PL4jAusJfrmMvdqkbimRpmuUCGdz311dO- "Bangarang DevLog Playlist").
 
 # Does Bangarang have a demo?
 The current production instance of Bangarang is available [here](https://bangarang.sometimesuseful.com/ "Bangarang WebApp").

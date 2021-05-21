@@ -27,8 +27,9 @@
     - ❌ Publish
 - ❌ Bug switching between searched claim & declared claim on claiming.
 - ❌ Hot Claims
-- 👉 Project Documentation
--  Summary.
+- ✔️ Project Documentation
+- ✔️ Project Cleaning
+- ✔️ Summary.
 
 ## 2021/05/17 – 37
 - ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
