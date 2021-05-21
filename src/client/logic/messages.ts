@@ -1,6 +1,5 @@
 import type { DescriptionCardContract } from "../interfaces/DescriptionCardContract";
-import { linkPrefixes } from "../navigation/linkPrefixes";
-import { StaticView } from "../port/interactors/BangarangUserInterfaceInteractor";
+import { linkPrefixes, StaticView } from "../port/interactors/BangarangUserInterfaceInteractor";
 import type { Language, MessageContract, SelectLanguage } from "./language";
 import { Message} from "./language";
 import { valuePropositionsDesignCanvas } from "./valueProposition/valuePropositions";

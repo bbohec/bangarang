@@ -158,6 +158,11 @@ var StaticView;
     StaticView["LeanCanvas"] = "LeanCanvas";
     StaticView["Register"] = "Register";
 })(StaticView || (StaticView = {}));
+var linkPrefixes;
+(function (linkPrefixes) {
+    linkPrefixes["claimLinkPrefix"] = "claims/";
+    linkPrefixes["valuePropositionLinkPrefix"] = "valuePropositions/";
+})(linkPrefixes || (linkPrefixes = {}));
 
 const subscriber_queue = [];
 /**
@@ -580,11 +585,6 @@ function redirectOnUnknownLanguage(language) {
         goto(url);
     }
 }
-
-const linkPrefixes = {
-    claimLinkPrefix: "claims/",
-    valuePropositionLinkPrefix: "valuePropositions/"
-};
 
 const valuePropositionsDesignCanvas = [
     {

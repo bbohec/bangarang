@@ -3,8 +3,20 @@
 - [What is Bangarang?](#what-is-bangarang)
 - [Does Bangarang have a demo?](#does-bangarang-have-a-demo)
 - [How to deploy a new Bangarang instance?](#how-to-deploy-a-new-bangarang-instance)
+    - [Install Bangarang](#install-bangarang)
+    - [Develop Bangarang](#develop-bangarang)
+    - [Build Bangarang](#build-bangarang)
+    - [Run Bangarang](#run-bangarang)
 - [Bangarang development practice.](#bangarang-development-practice)
-
+    - [Bangarang architecture](#bangarang-architecture)
+    - [Language](#language)
+    - [Testing library](#testing-library)
+    - [Business logic change](#business-logic-change)
+    - [Technology change](#technology-change)
+    - [Production Architecture](#production-architecture)
+        - [Frontend details](#frontend-details)
+        - [Backend details](#backend-details)
+- [Projet Tree Information](#projet-tree-information)
 
 # What is Bangarang?
 Bangarang is an open source and free direct democratic claim system. It allows anybody to declare or search for claim and claiming for them.
@@ -36,15 +48,17 @@ GCP_DATASTORE_KIND_PREFIX='{"gcpKindPrefix":"**OPTIONAL GCP KIND PREFIX**"}'
 > Bangarang server will crash during starting if some environment variables are missing.
 
 ## Install Bangarang
-> `npm install`
+`npm install`
 ## Develop Bangarang
 Bangarang will be executed on a dev/watch way.
-> `npm run dev`
+
+`npm run dev`
 ## Build Bangarang
 The build prepare Bangarang optimized artifacts (reduced Tailwind CSS).
-> `npm run build`
+
+`npm run build`
 ## Run Bangarang
-> `npm run start`
+`npm run start`
 
 
 
@@ -67,7 +81,7 @@ Bangarang is principally developed with Typescript. But it is also implementing 
 ## Testing library
 Bangarang is using [Mocha](https://mochajs.org/) and [Chai](https://www.chaijs.com/) testing and assertion libraries.
 
-## Work on business logic
+## Business logic change
 Current Bangarang business logic can be tested through the following command:
 > `npm run test:acceptance`
 
@@ -80,7 +94,7 @@ Each feature is described by BDD example scenarios that are at the end translate
 - if a part of the business logic don't have easy obvious implementation then specific unit test suite can be applied in a more TDD baby step approach order to absorb the difficulty.
 >  217 passing (110ms)
 
-## Work on technology
+## Technology change
 Current Bangarang technologies can be tested through the integration test suite by executing the following command:
 > `npm run test:integration`
 
@@ -103,3 +117,35 @@ Production adapters that have to implement the Port of the Business Logic are cr
 ### Backend details
 - The express server have Rest routes used by client business logic in order to execute GCP Adapter methods.
 - It is planned to defined command/query use cases on backend.
+
+
+
+# Projet Tree Information
+```
+.
+├───.vscode------------------------Specific VS Code
+├───doc
+│   ├───dev------------------------Technical/Developer Documentation
+│   ├───market---------------------Marketing / Product Documentation
+│   ├───ui-------------------------User Interface Documentation
+│   └───ux-------------------------User Experience Documentation
+├───src
+│   ├───assets---------------------/!\ Specific Sapper /!\
+│   ├───client
+│   │   ├───adapters---------------Clean Architecture - Client Adapters (Primary & Secondary)
+│   │   ├───businessLogic----------Clean Architecture - Business Logic/Core
+│   │   │   └───commands-----------Clean Architecture - Business Logic/Core - Use Cases
+│   │   ├───components-------------Svelte Components
+│   │   ├───interfaces-------------UI/Svelte Specific interfaces excluded from Clean Architecture
+│   │   ├───logic------------------UI/Svelte Specific logic excluded from Clean Architecture
+│   │   ├───port-------------------Clean Architecture - Ports/Interfaces
+│   │   ├───stores-----------------Svelte Stores
+│   │   └───views------------------Svelte Specific View Components
+│   ├───node_modules---------------/!\ Specific Sapper /!\
+│   ├───routes---------------------Sapper Routes
+│   └───tests
+│       ├───acceptance-------------Business Logic / Core Tests
+│       └───integration------------Integration / Adapter Tests
+├───static-------------------------Sapper Static Files
+└───__sapper__---------------------/!\ Specific Sapper /!\
+```

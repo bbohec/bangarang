@@ -1,6 +1,5 @@
-import { BangarangUserInterfaceInteractorContract, StaticView } from "../port/interactors/BangarangUserInterfaceInteractor";
+import { BangarangUserInterfaceInteractorContract, linkPrefixes, StaticView } from "../port/interactors/BangarangUserInterfaceInteractor";
 import { goto } from '@sapper/app';
-import { linkPrefixes } from "../navigation/linkPrefixes";
 import { languageStore } from "../stores/languageStore";
 import type { UserContract } from "../port/UserContact";
 export class SvelteBangarangUserInterfaceInteractor implements BangarangUserInterfaceInteractorContract {
