@@ -17,16 +17,17 @@
 - ✔️ Done
 
 ## 2021/05/21 – 38
--  Twitch Live https://www.twitch.tv/benjaminbohec + announces
--  Stand Up
--  Official video >> subscribe to form in order to be informed about demo & launch
-    -  Test feedback
--  Official video >> subscribe to form in order to be informed about demo & launch
-    -  Montage
-    -  Cleaning
-    -  Publish
--  Bug switching between searched claim & declared claim on claiming.
--  Hot Claims
+- ✔️ Twitch Live https://www.twitch.tv/benjaminbohec + announces
+- ✔️ Stand Up
+- ✔️ Official video >> subscribe to form in order to be informed about demo & launch
+    - ✔️ Test feedback > Pause Bangarang
+- ❌ Official video >> subscribe to form in order to be informed about demo & launch
+    - ❌ Montage
+    - ❌ Cleaning
+    - ❌ Publish
+- ❌ Bug switching between searched claim & declared claim on claiming.
+- ❌ Hot Claims
+- 👉 Project Documentation
 -  Summary.
 
 ## 2021/05/17 – 37

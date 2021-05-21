@@ -8,3 +8,6 @@ ATDD
 Jaunes
 Gilets
 DaVinci
+DevLog
+Datastore
+Rollup
