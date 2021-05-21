@@ -4,7 +4,6 @@
     import { goto } from '@sapper/app';
     //"self-stretch border rounded shadow my-2 p-2 border-bangarang-lightEmphasis flex items-center"
     const navigateToClaim = ():void =>{
-        console.log(claimLink)
         goto(claimLink)
     }
     const maxTitleLength = 150
