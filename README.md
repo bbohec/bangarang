@@ -1,4 +1,5 @@
 # Summary
+- [Summary.](#summary)
 - [What is Bangarang?](#what-is-bangarang)
 - [Does Bangarang have a demo?](#does-bangarang-have-a-demo)
 - [How to deploy a new Bangarang instance?](#how-to-deploy-a-new-bangarang-instance)
